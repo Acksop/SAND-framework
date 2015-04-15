@@ -1,11 +1,9 @@
-<h1>Site1.debian-07.formation.dev</h1>
-<?php
+<?php 
 
-ini_set('display_errors', 1);
+define("APPLICATION_PATH", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."application");
+define("CLASSES_PATH", APPLICATION_PATH.DIRECTORY_SEPARATOR."classes");
 
-require_once 'test0.php';
-require_once 'test1.php';
+require CLASSES_PATH.DIRECTORY_SEPARATOR."application.class.php";
 
-for ($i=0;$i<10;$i++) {
-    echo $i;
-}
+$poo_v1 = new Applications();
+$poo_v1->launch();

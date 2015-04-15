@@ -11,4 +11,3 @@ if (isset($_GET['debugger_connect']) && $_GET['debugger_connect'] == 1) {
         echo "No connector is installed.";
     }
 }
-
