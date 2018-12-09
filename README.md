@@ -4,7 +4,7 @@ Cette architecture MVC Objet est composée d'un layout HTML5 Standard
 
 Les urls d'accès sont de type www.domain.tld/page/varname1/varvalue1/varname2/varvalue2/ ...
 
-Afin de créér une nouvelle page vous devez créér trois fichiers contenant divers variables, dont voici les commandes:
+Afin de créer une nouvelle page vous devez instancier trois fichiers contenant diverses variables, dont voici les commandes:
 
 
 "application > include > controlleurs > mapage.php" contenant:
@@ -21,9 +21,9 @@ params : paramètre(s) supplémentaire(s)
 ```
 
 "application > include > vues > mapage.phtml" contenant
->les blocs html qui seront afficher dans le layout standard
+>les blocs html qui seront affichés dans le layout standard
 
-Je ne peut que vous proposer de regarder dans le dossier layout afin de comprendre comment cela est afficher!
+Je ne peut que vous proposer de regarder dans le dossier layout afin de comprendre comment cela est affiché!
 
 
 
