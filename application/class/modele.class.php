@@ -12,8 +12,6 @@ class Modele{
 			if(preg_match("#[ ]*([a-zA-Z_]*)[ ]*[:][ ]*([a-zA-Z ]*[ ]*)#",$ligne,$matches)){
 				$this->page[$matches[1]] = $matches[2];
 			}
-		}
-			include MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.php';
 		}else{
 			$this->page['name'] = $base_param['name'];
 			$this->page['description'] = $base_param['description'];
