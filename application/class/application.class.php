@@ -4,6 +4,9 @@ define( "CONTROLLERS_PATH" , APPLICATION_PATH . DIRECTORY_SEPARATOR . "include" 
 
 require CLASSES_PATH.DIRECTORY_SEPARATOR."url.class.php";
 require CLASSES_PATH.DIRECTORY_SEPARATOR."controlleur.class.php";
+require CLASSES_PATH.DIRECTORY_SEPARATOR."bdd.class.php";
+
+require APPLICATION_PATH . DIRECTORY_SEPARATOR . "parameters.php";
 
 class Application
 {

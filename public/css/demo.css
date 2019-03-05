@@ -30,7 +30,7 @@ body {
 }
 
 a {
-	color: #c2575b;
+	color: #bfb451;
 	text-decoration: none;
 
 	-webkit-transition: 0.15s color ease;
@@ -40,7 +40,7 @@ a {
 	        transition: 0.15s color ease;
 }
 	a:hover {
-		color: #f76f76;
+		color: #dbd055;
 	}
 
 h1,
@@ -64,7 +64,7 @@ h2 {
 	}
 		.meny ul li {
 			display: inline-block;
-			width: 200px;
+			width: 350px;
 			list-style: none;
 			font-size: 20px;
 			padding: 3px 10px;

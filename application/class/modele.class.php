@@ -13,6 +13,7 @@ class Modele{
                     $this->page[$matches[1]] = $matches[2];
                 }
             }
+            $this->page['url_params'] = $base_param['params'];
 		}else{
 			$this->page['name'] = $base_param['name'];
 			$this->page['description'] = $base_param['description'];
