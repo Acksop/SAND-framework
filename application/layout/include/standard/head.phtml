@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8">
 
-  <title><?php echo $name ?></title>
-  <meta name="description" content= <?php echo '"'.$description.'"' ?> >
+  <title><?php echo $name; ?></title>
+  <meta name="description" content= "<?php echo $description; ?>" >
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
 
-  echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."top-css.pthml"
+  <?php include LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."top-css.phtml"; ?>
 
 </head>

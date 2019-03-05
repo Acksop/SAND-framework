@@ -4,6 +4,7 @@ define( "CONTROLLERS_PATH" , APPLICATION_PATH . DIRECTORY_SEPARATOR . "include" 
 
 require CLASSES_PATH.DIRECTORY_SEPARATOR."url.class.php";
 require CLASSES_PATH.DIRECTORY_SEPARATOR."controlleur.class.php";
+
 class Application
 {
 	public $url;
@@ -11,8 +12,9 @@ class Application
 	public function __construct(){
 		$this->url = new Url();
 	}
-	
+
 	public function launch(){
+
 		$controlleur = new Controlleur($this);
 		print( $controlleur->vue->ecran );
 	}

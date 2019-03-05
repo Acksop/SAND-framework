@@ -1,8 +1,8 @@
 <?php
-define('LAYOUT_TEMPLATE',dirname(__FILE__).DIRECTORY_SEPARATOR.'include'.DIRECTORY_SEPARATOR.'standart');
+define('LAYOUT_TEMPLATE',dirname(__FILE__).DIRECTORY_SEPARATOR.'include'.DIRECTORY_SEPARATOR.'standard');
 
-
- echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."head.pthml"
+require LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."head.phtml";
+?>
 
 
 <body>
@@ -11,21 +11,18 @@ define('LAYOUT_TEMPLATE',dirname(__FILE__).DIRECTORY_SEPARATOR.'include'.DIRECTO
        chromium.org/developers/how-tos/chrome-frame-getting-started -->
   <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
   
+  <?php include LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."header.phtml"; ?>
 
-  <header>
-   echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."header.pthml"
-  </header>
+  <div class="contents">
+    <?php include LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."body.phtml"; ?>
+  </div>
 
 
-   echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."body.pthml" 
-
-  <footer>
-		echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."header.pthml"
-  </footer>
+  <?php include LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."footer.phtml"; ?>
 
 
   <!-- JavaScript at the bottom for fast page loading -->
-	echo LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."bottom-javascript.pthml"
+  <?php include LAYOUT_TEMPLATE.DIRECTORY_SEPARATOR."bottom-javascript.phtml"; ?>
   
 </body>
 </html>
