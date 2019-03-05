@@ -12,8 +12,8 @@ class Controlleur{
 	public $vue;
 	
 	public function __construct($application){
-		
 		$this->modele = new Modele( $application->url->page );
+
 		$this->vue = new Vue( $this );
 		
 		

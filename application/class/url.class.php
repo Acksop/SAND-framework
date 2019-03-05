@@ -6,7 +6,7 @@ class Url
 	
 	
 	public function __construct(){
-		
+
 	$page = array();
 	$page['name'] = 'accueil';
 	$page['description'] = "";
@@ -41,15 +41,13 @@ class Url
 	}
 	
 	//verification de l'existence de la page dans les controlleurs
-	
+
 	$pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
 	
 	if(!file_exists($pageFile)){
 		$page['name'] = 'error';
 	}
-	
 	$this->page = $page;
-	
-	
+
 	}
 }
