@@ -1,5 +1,8 @@
 <?php
 
+namespace MVC\Classe;
+
+
 class Dumper{
 
     public static function dump($var){

@@ -1,5 +1,7 @@
 <?php
 
+namespace MVC\Classe;
+
 class Modele{
 	
 	public $page;
