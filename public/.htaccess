@@ -19,7 +19,7 @@
     # Options +SymLinksIfOwnerMatch
 
     # (4)
-    RewriteBase /
+    RewriteBase /fiches3pro/public/
 
     # (5)
     # RewriteOptions <options>

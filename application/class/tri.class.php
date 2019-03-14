@@ -7,11 +7,6 @@
  */
 class Tri{
 
-    public static function cmpVlanInArray($a, $b)
-    {
-        return Tri::cmp($a["n_vlan"], $b["n_vlan"]);
-    }
-
     public static function cmp($a,$b){
         if ($a == $b) {
             return 0;
