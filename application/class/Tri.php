@@ -1,10 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: roy
- * Date: 05/03/2019
- * Time: 16:08
- */
+
+namespace MVC\Classe;
+
 class Tri{
 
     public static function cmp($a,$b){
