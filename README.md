@@ -25,12 +25,4 @@ params : paramètre(s) supplémentaire(s)
 
 Je ne peut que vous proposer de regarder dans le dossier layout afin de comprendre comment cela est affiché!
 
-
-L'architecture vient avec quelques features externe:
- - (fonts) fontawesome et entypo
- - (css) bootstrapp
- - (js) jquery
- - (template) meny.js pour le template standard
-
-
 pour le reste, c'est a vous de voir, mais c'est une architecture fonctionnelle à 2.5 vitesses
