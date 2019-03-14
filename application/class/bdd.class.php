@@ -4,9 +4,18 @@ class Bdd
 {
     public $bdd;
 
-    public function __construct()
+    public function __construct($bdd = 'fiches3')
     {
-        $this->bdd = new PDO(DSN, USER, PASS);
+        switch($bdd) {
+            case 'fiches3':
+                $this->bdd = new PDO(DSN_FICHES, USER_FICHES, PASS_FICHES);
+            break;
+            case 'abitop':
+                $this->bdd = new PDO(DSN_ABITOP, USER_ABITOP, PASS_ABITOP);
+            break;
+            default:
+                $this->bdd = new PDO(DSN_FICHES, USER_FICHES, PASS_FICHES);
+        }
     }
 
     public function faireUneRequete($sql)

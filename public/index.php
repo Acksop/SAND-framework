@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+
 define("APPLICATION_PATH", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."application");
 define("CLASSES_PATH", APPLICATION_PATH.DIRECTORY_SEPARATOR."class");
 
