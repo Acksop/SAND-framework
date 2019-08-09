@@ -4,5 +4,41 @@
             "MVC\\Classe\\":"./application/class",
             "MVC\\Objets\\":"./application/objets"
         }
+    },
+    "require": {
+
+        "php": "^7.1.3",
+        "windwalker/renderer": "~3.0",
+        "illuminate/view": "5.*",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "sensio/framework-extra-bundle": "^5.4",
+        "symfony/cache",
+        "symfony/cache-contracts",
+        "symfony/config",
+        "symfony/console": "4.3.*",
+        "symfony/debug",
+        "symfony/dependency-injection",
+        "symfony/dotenv": "4.3.*",
+        "symfony/event-dispacher",
+        "symfony/event-dispacher-contracts",
+        "symfony/filesytem",
+        "symfony/finder",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "4.3.*",
+        "symfony/http-foundation",
+        "symfony/http-kernel",
+        "symfony/mime",
+        "symfony/polyfill-intl-idn",
+        "symfony/polyfill-mbstring",
+        "symfony/polyfill-php72",
+        "symfony/polyfill-php73",
+        "symfony/routing",
+        "symfony/service-contracts",
+        "symfony/translation-contracts",
+        "symfony/twig-bridge",
+        "symfony/twig-bundle": "4.3.*",
+        "symfony/var-exporter",
+        "symfony/yaml": "4.3.*"
     }
 }

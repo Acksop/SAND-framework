@@ -14,4 +14,8 @@ class Syf43 {
         $modularApp = ob_get_clean();
         echo $modularApp;
     }
+
+    public static function twigLoader($name){
+        require MODULES_PATH . DIRECTORY_SEPARATOR . "setup" . DIRECTORY_SEPARATOR . $name . ".twig.class.php";
+    }
 }
