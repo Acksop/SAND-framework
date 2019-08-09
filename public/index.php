@@ -5,8 +5,8 @@ ini_set('display_errors', 1);
 
 define("APPLICATION_PATH", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."application");
 define("VENDOR_PATH", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."vendor");
+define("MODULES_PATH", APPLICATION_PATH.DIRECTORY_SEPARATOR."modules");
 
-//require APPLICATION_PATH.DIRECTORY_SEPARATOR."autoloader.php";
 require VENDOR_PATH.DIRECTORY_SEPARATOR."autoload.php";
 
 $poo_v1 = new \MVC\Classe\Application();
