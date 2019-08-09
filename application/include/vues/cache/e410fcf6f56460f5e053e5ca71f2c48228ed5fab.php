@@ -1,0 +1,1 @@
+<h1>ERREUR poo_v1</h1><?php /**PATH D:\Dépots Git\MVC---Objet\application\include\vues\templating/error.blade.php ENDPATH**/ ?>
