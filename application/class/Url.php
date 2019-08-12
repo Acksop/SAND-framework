@@ -45,11 +45,13 @@ class Url
         //vérification du nombre de parametres: s'il n'existe pas autant de clé que
         // de valeurs on sort de la fonction et on renvoie une page d'erreur.
         $numParts = count($urlParts);
+
         if ( $numParts%2 != 0 ) {
             if( !in_array($page['name'], $this->registre->getIndex()) ){
                 $page['name'] = 'error';
                 $page['params'] = array();
-                return $page;
+                $this->page = $page;
+                return;
             }
         }else if ( $numParts != 0 ){
             $values = array();
@@ -67,7 +69,6 @@ class Url
                 $page['params'] = array_combine($keys, $values);
             }
         }
-
         //verification de l'existence de la page dans les controlleurs
         if($page['control']){
             $pageFile = TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
