@@ -8,7 +8,7 @@
     "require": {
 
         "php": "^7.1.3",
-        "windwalker/renderer": "~3.0",
-        "illuminate/view": "5.*"
+        "windwalker/renderer": "3.*",
+        "illuminate/view": "4.*"
     }
 }
