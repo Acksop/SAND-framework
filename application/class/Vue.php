@@ -15,24 +15,25 @@ class Vue{
         $templateData = array();
 		extract( $baseControlleur->modele->page );
 
-		//print_r($name);
-
 		ob_start();
+
+		//l'inclusion du controlleur doit renvoyer le tableau $templateData
         require CONTROLLER_PATH.DIRECTORY_SEPARATOR.$name.'.php';
 
         $paths = new \SplPriorityQueue;
+
         $paths->insert(VIEW_PATH.DIRECTORY_SEPARATOR."system", 100);
-        $paths->insert(VIEW_PATH.DIRECTORY_SEPARATOR."templating", 200);
-        //$paths->insert('path/to/theme', 300);
+        $paths->insert(VIEW_PATH.DIRECTORY_SEPARATOR."layout", 200);
+        $paths->insert(VIEW_PATH.DIRECTORY_SEPARATOR."view", 300);
+
         $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH.DIRECTORY_SEPARATOR."cache"));
+
+        //de base on ajoute les parametres du .model et ceux provenant de l'url
+        foreach($baseControlleur->modele->page as $key => $value){
+            $templateData[$key] = $value;
+        }
         echo $renderer->render( $name , $templateData);
 
-
-        /*require VIEW_PATH.DIRECTORY_SEPARATOR.$name.'.phtml';
-		$this->block_body = ob_get_clean();
-
-		ob_start();
-		require LAYOUT_PATH.DIRECTORY_SEPARATOR."standard.phtml";*/
         $this->ecran = ob_get_clean();
 
 	}

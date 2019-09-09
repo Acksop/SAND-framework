@@ -1,6 +1,6 @@
-# MVC - en Programmation Orienté Objet
+# Modular Symfony Application
 ---
-Cette architecture MVC Objet est composée d'un layout HTML5 Standard
+Cette architecture MVC Objet est composée d'un layout Blade (Laravel)
 
 Les urls d'accès sont de type www.domain.tld/page/varname1/varvalue1/varname2/varvalue2/ ...
 
@@ -10,7 +10,7 @@ Afin de créer une nouvelle page vous devez instancier trois fichiers contenant 
 "application > include > controlleurs > mapage.php" contenant:
 > les commandes permettant de gérer un formulaire
 > un ou plusieurs accès à la base de données
-> les variables ainsi instanciées permettent l'affichage dans la vue
+> les variables instanciées dans $templateData permettent l'affichage dans la vue blade
 
 "application > include > modeles > mapage.model" contenant
 >les variables spécifiques à la page de l'application exemple:
@@ -19,10 +19,9 @@ name : le nom de mapage
 description : ma description pour les moteur de recherche
 params : paramètre(s) supplémentaire(s)
 ```
+"application > include > vues > view > mapage.blade.php contenant
+> le layout blade a instancier
 
-"application > include > vues > mapage.phtml" contenant
->les blocs html qui seront affichés dans le layout standard
-
-Je ne peut que vous proposer de regarder dans le dossier layout afin de comprendre comment cela est affiché!
-
-pour le reste, c'est a vous de voir, mais c'est une architecture fonctionnelle à 2.5 vitesses
+pour les modules symfony, c'est un peu plus compliqué il faut instancier ces trois précédents fichiers en faisant appel la class Modular,
+ne pas oublier de référencer le module dans le dossier modules > setup > registre.model
+et faire correspondre le nom du dossier avec le registre, ici l'exemple est syf43.

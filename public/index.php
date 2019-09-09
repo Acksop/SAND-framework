@@ -9,5 +9,5 @@ define("MODULES_PATH", APPLICATION_PATH.DIRECTORY_SEPARATOR."modules");
 
 require VENDOR_PATH.DIRECTORY_SEPARATOR."autoload.php";
 
-$poo_v1 = new \MVC\Classe\Application();
-$poo_v1->launch();
+$poo_v5 = new \MVC\Classe\Application();
+$poo_v5->launch();

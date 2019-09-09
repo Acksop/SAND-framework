@@ -17,6 +17,7 @@ class Application
 	public function launch(){
 
 		$controlleur = new Controlleur($this);
+		//si la page n'est un controlleur d'action alors on affiche l'écran
 		if(!$this->url->page['control']) {
             print($controlleur->vue->ecran);
         }

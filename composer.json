@@ -9,6 +9,7 @@
 
         "php": "^7.1.3",
         "windwalker/renderer": "3.*",
-        "illuminate/view": "4.*"
+        "illuminate/view": "4.*",
+        "hybridauth/hybridauth": "~3.0"
     }
 }

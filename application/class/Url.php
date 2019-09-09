@@ -10,8 +10,10 @@ class Url
 	
 	public function __construct(){
 
+	    //on créé le registre des modules symfony
 	    $this->registre = new \MVC\Classe\ModularRegister();
 
+	    //définition des parametres de base
         $page = array();
         $page['name'] = 'accueil';
         $page['description'] = "";
@@ -42,18 +44,19 @@ class Url
 
         }
 
-        //vérification du nombre de parametres: s'il n'existe pas autant de clé que
-        // de valeurs on sort de la fonction et on renvoie une page d'erreur.
+        //vérification du nombre de parametres:
         $numParts = count($urlParts);
-
+        //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony
         if ( $numParts%2 != 0 ) {
+            //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi un erreur
             if( !in_array($page['name'], $this->registre->getIndex()) ){
                 $page['name'] = 'error';
                 $page['params'] = array();
                 $this->page = $page;
                 return;
             }
-        }else if ( $numParts != 0 ){
+        //cas d'utilisation normal : il existe autant de clé que de valeurs
+        } else if ( $numParts != 0 ) {
             $values = array();
             $keys = array();
             foreach( $urlParts as $key => $value ){
