@@ -2,9 +2,10 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/../MVC---Objetapplication/objets" isTestSource="false" packagePrefix="MVC\Objets\" />
-      <sourceFolder url="file://$MODULE_DIR$/../MVC---Objetapplication/class" isTestSource="false" packagePrefix="MVC\Classe\" />
+      <sourceFolder url="file://$MODULE_DIR$/../MVC-Modular-WindWalkerapplication/objets" isTestSource="false" packagePrefix="MVC\Objets\" />
+      <sourceFolder url="file://$MODULE_DIR$/../MVC-Modular-WindWalkerapplication/class" isTestSource="false" packagePrefix="MVC\Classe\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hybridauth/hybridauth" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/events" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/filesystem" />

@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('body')
 
 @section('sidebar')
     @parent
