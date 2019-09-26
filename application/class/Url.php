@@ -85,4 +85,33 @@ class Url
         $this->page = $page;
 
     }
+
+    static public function link_rewrite($isControlPatern, $page, $params = array())
+    {
+        if ($isControlPatern) {
+            return self::controlLink_rewrite($page, $params);
+        } else {
+            return self::link_rewrite_slashParam($page, $params);
+        }
+    }
+
+    static private function link_rewrite_slashParam($page, $params = array())
+    {
+        $stringParams = '';
+        foreach ($params as $key => $values) {
+            $stringParams .= "/" . $key . "/" . $values;
+        }
+        return '/' . $page . $stringParams;
+
+    }
+
+    static private function controlLink_rewrite($page, $params = array())
+    {
+        $stringParams = '';
+        foreach ($params as $key => $values) {
+            $stringParams .= "/" . $key . "/" . $values;
+        }
+        return '/' . 'control' . '/' . $page . $stringParams;
+    }
+
 }
