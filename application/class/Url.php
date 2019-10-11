@@ -2,24 +2,25 @@
 
 namespace MVC\Classe;
 
+//require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."define-constantes.php";
+
 class Url
 {
-	public $page;
-	public $registre;
-	
-	
-	public function __construct(){
+    public $page;
+    public $registre;
 
-	    //on créé le registre des modules symfony
-	    $this->registre = new \MVC\Classe\ModularRegister();
 
-	    //définition des parametres de base
+    public function __construct(){
+
+        //on créé le registre des modules symfony
+        $this->registre = new \MVC\Classe\ModularRegister();
+
+        //définition des parametres de base
         $page = array();
         $page['name'] = 'accueil';
         $page['description'] = "";
         $page['params'] = array();
         $page['control'] = false;
-
 
 
         $url = parse_url($_SERVER['REQUEST_URI']);
@@ -55,11 +56,11 @@ class Url
                 $this->page = $page;
                 return;
             }
-        //cas d'utilisation normal : il existe autant de clé que de valeurs
+            //cas d'utilisation normal : il existe autant de clé que de valeurs
         } else if ( $numParts != 0 ) {
             $values = array();
             $keys = array();
-            foreach( $urlParts as $key => $value ){
+            foreach($urlParts as $key => $value ){
                 if($key%2 == 0) {
                     $values[] = $value;
                 } else {

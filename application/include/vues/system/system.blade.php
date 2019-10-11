@@ -7,17 +7,17 @@
     @section('top-css')
     @endsection
 
-    @section('top-javascript')
-    @endsection
-
 </head>
 
 <body>
 
+@section('top-javascript')
+@show
+
 @yield('body')
 
 @section('bottom-javascript')
-@endsection
+@show
 
 </body>
 

@@ -21,7 +21,8 @@
                 <li>
                     <strong>{{$adapter->getUserProfile()->displayName }}</strong> from
                     <i>{{ $name }}</i>
-                    <span>(<a href="{{$config['callback'] }}?logout={{ $name }}" ; ?>">Log Out</a>)</span>
+                    <span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
+                              ; ?>">Log Out</a>)</span>
                 </li>
             @endforeach
         </ul>
