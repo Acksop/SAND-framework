@@ -7,6 +7,24 @@ namespace MVC\Classe;
 class Session
 {
 
+    static public function start()
+    {
+        session_start();
+        return;
+    }
+
+    static public function setUserProfile($userProfile)
+    {
+        $_SESSION['userProfile'] = $userProfile;
+        return;
+    }
+
+    static public function setToken($token)
+    {
+        $_SESSION['userToken'] = $token;
+        return;
+    }
+
     static public function isRegistered()
     {
         if (isset($_SESSION['userProfile'])) {
