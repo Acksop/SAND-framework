@@ -24,14 +24,24 @@ class Request
             case 'POST':
                 break;
             case 'PUT':
-                $this->data = json_decode(file_get_contents("php://input"), true);
+                //$this->data['GET'] = ...
+                //POST DATA except enctype="multipart/form-data"
+                $this->data['POST'] = json_decode(file_get_contents("php://input"), true);
             case 'DELETE':
+                //$this->data['GET'] = ...
+                //POST DATA except enctype="multipart/form-data"
+                $this->data['POST'] = json_decode(file_get_contents("php://input"), true);
                 break;
             default:
                 // Requête invalide
                 header("HTTP/1.0 405 Method Not Allowed");
                 break;
         }
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 
 }
