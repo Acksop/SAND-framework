@@ -104,7 +104,7 @@ class Response
 
     public function setGetParamsUrl($url, $params = array())
     {
-        $this->url = $url . (strpos($this->url, '?') ? '' : '?') . http_build_query($params);
+        $this->url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
         return $this;
     }
 
