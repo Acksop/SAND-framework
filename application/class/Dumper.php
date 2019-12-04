@@ -7,7 +7,11 @@ class Dumper{
 
     public static function dump($var){
         echo "<pre>";
-        print_r($var);
+        if (is_bool($var)) {
+            echo ($var) ? "true" : "false";
+        } else {
+            print_r($var);
+        }
         echo "</pre>";
     }
 

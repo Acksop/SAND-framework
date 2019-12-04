@@ -9,40 +9,19 @@ class Controlleur{
 	
 	public function __construct($application){
 
-
-        $requete = new MVC\Classe\Request();
-
-        switch ($requete->method) {
+        switch ($application->http->method) {
             //cas des requètes PUT et DELETE
             case 'PUT':
             case 'DELETE':
-                require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . 'HttpReponse.php';
-                $reponseHttp = lcfirst($application->url->page['name']) . 'HttpReponse';
-                $response = new $reponseHttp($application->url, $requete->getData());
-                if ($requete->method == 'DELETE') {
-                    $reponseHttp->delete();
-                } else {
-                    $reponseHttp->put();
-                }
-                break;
-            //cas des requètes POST et GET
             case 'POST':
             case 'GET':
-                if (!file_exists(CONTROLLER_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '')) {
+                if ($application->browser->isAppRequest()) {
                     require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . 'HttpReponse.php';
-                    $reponseHttp = lcfirst($application->url->page['name']) . 'HttpReponse';
-                    $response = new $reponseHttp($application->url, $requete->getData());
-                    if ($requete->method == 'POST') {
-                        $reponseHttp->post();
-                    } else {
-                        $reponseHttp->get();
-                    }
+                    $this->callHttpResponse($application);
                     break;
                 }
 
-
             default:
-
                 if ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
@@ -54,5 +33,25 @@ class Controlleur{
 
 
 	}
+
+    public function callHttpResponse($application)
+    {
+        $reponseHttp = "\\" . $application->url->page['name'] . 'HttpReponse';
+
+        //FIXME:
+        //Le passage par le contructeur dans le cas d'une instanciation dynamique ne fonctionne pas
+        //$reponse = new $reponseHttp($application->url, $application->http->getData());
+        //il faut passer par une fonction personnelle permettant l'instanciation des variables
+
+        $reponse = new $reponseHttp();
+        $reponse->instanciate($application->url, $application->http->getData());
+        $method = strtolower($application->http->method);
+
+        $this->vue = new VueVide();
+        ob_start();
+        $reponse->$method();
+        $this->vue->ecran = ob_get_clean();
+        return;
+    }
 	
 }

@@ -4,11 +4,11 @@
 namespace MVC\Classe;
 
 
-class Request
+class HttpMethod
 {
 
     public $method;
-    public $data;
+    protected $data;
 
     public function __construct()
     {
@@ -26,11 +26,11 @@ class Request
             case 'PUT':
                 //$this->data['GET'] = ...
                 //POST DATA except enctype="multipart/form-data"
-                $this->data['POST'] = json_decode(file_get_contents("php://input"), true);
+                $this->data = json_decode(file_get_contents("php://input"), true);
             case 'DELETE':
                 //$this->data['GET'] = ...
                 //POST DATA except enctype="multipart/form-data"
-                $this->data['POST'] = json_decode(file_get_contents("php://input"), true);
+                $this->data = json_decode(file_get_contents("php://input"), true);
                 break;
             default:
                 // Requête invalide
