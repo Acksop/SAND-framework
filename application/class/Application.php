@@ -6,10 +6,15 @@ require APPLICATION_PATH . DIRECTORY_SEPARATOR . "parameters.php";
 
 class Application
 {
+    public $http;
 	public $url;
+    public $browser;
+
 	
 	public function __construct(){
-		$this->url = new Url();
+        $this->http = new HttpMethod();
+        $this->browser = new Browser();
+        $this->url = new Url($this->http->method, $this->browser->isAppRequest());
 	}
 
 	public function launch(){
