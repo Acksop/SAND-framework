@@ -1,0 +1,14 @@
+home_route:
+  path:     /
+  defaults: { controller: 'FooController::indexAction' }
+
+foo_route:
+  path:     /foo
+  defaults: { controller: 'FooController::indexAction' }
+
+foo_placeholder_route:
+  path:     /foo/{id}
+  defaults: { controller: 'FooController::loadAction' }
+  requirements:
+    id: '[0-9]+'
+
