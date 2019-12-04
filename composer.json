@@ -16,6 +16,7 @@
       "ext-curl": "*",
         "windwalker/renderer": "3.*",
         "illuminate/view": "4.*",
-        "hybridauth/hybridauth": "~3.0"
+      "hybridauth/hybridauth": "~3.0",
+      "neitanod/forceutf8": "^2.0"
     }
 }

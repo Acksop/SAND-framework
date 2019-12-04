@@ -11,12 +11,12 @@ class Bdd
         switch($bdd) {
             case 'bdd1':
                 $this->bdd = new PDO(DSN_BDD1, USER_BDD1, PASS_BDD1);
-            break;
+                break;
             case 'bdd2':
                 $this->bdd = new PDO(DSN_BDD2, USER_BDD2, PASS_BDD2);
-            break;
+                break;
             default:
-                $this->bdd = new PDO(DSN_FICHES, USER_FICHES, PASS_FICHES);
+                $this->bdd = new PDO(DSN_BDD_DEFAULT, USER_BDD_DEFAULT, PASS_BDD_DEFAULT);
         }
     }
 
@@ -30,6 +30,9 @@ class Bdd
 
         $tab = array();
         foreach($res as $key => $row){
+            if (is_string($row)) {
+                $row = Caracter::normalise_ChaineDeCaracteresDownload($row);
+            }
             $tab[$key] = $row;
         }
         return $tab;
