@@ -10,13 +10,17 @@
         }
     },
     "require": {
-
-        "php": "^7.1.3",
+      "php": "^7.1.3",
       "ext-json": "*",
       "ext-curl": "*",
-        "windwalker/renderer": "3.*",
-        "illuminate/view": "4.*",
+      "windwalker/renderer": "3.*",
+      "illuminate/view": "4.*",
       "hybridauth/hybridauth": "~3.0",
-      "neitanod/forceutf8": "^2.0"
+      "neitanod/forceutf8": "^2.0",
+      "symfony/routing": "3.4.36",
+      "symfony/http-foundation": "~2.8",
+      "symfony/yaml": "~4.0",
+      "symfony/expression-language": "~3.0",
+      "symfony/config": "3.3.2"
     }
 }

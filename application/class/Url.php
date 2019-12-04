@@ -101,9 +101,9 @@ class Url
 
         if (!file_exists($pageFile)) {
             if ($appRequest) {
-                $page['name'] = 'error';
-            } else {
                 $page['name'] = 'Error';
+            } else {
+                $page['name'] = 'error';
             }
         }
         $this->page = $page;
