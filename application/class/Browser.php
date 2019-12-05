@@ -12,7 +12,6 @@ class Browser
 
     public function __construct()
     {
-
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->user = $this->get_browser_name();
     }

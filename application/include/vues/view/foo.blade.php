@@ -1,18 +1,16 @@
-@extends('body')
+<html>
+<head>
+    <title>App Name</title>
+</head>
+<body>
 
-@section('sidebar')
-    @parent
-
-    <p>This is appended to the master sidebar.</p>
-@endsection
-
-@section('content')
-    <h1>Foo</h1>
-    <br/><br/><br/>
-    <a href="{{ \MVC\Classe\Url::link_rewrite(false, 'authentification', []) }}">S'authentifier ?</a>
-    <hr/>
-    Variable Loader:
-    {{ $id ? $id : 'init' }}
-
-@endsection
-
+<div class="container">
+    Foo Controlleur
+    @if (isset($id))
+        {{$id}}
+    @else
+        id not exist
+    @endif
+</div>
+</body>
+</html>
