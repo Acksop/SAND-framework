@@ -28,7 +28,7 @@ class Controlleur{
                     $conduitRoute = "\\" . $conduit[0];
                     $method = strtolower($conduit[1]);
                     $class = new $conduitRoute();
-                    $class = $class->initialize($application->route);
+                    $class->initialize($application->route);
                     $this->vue = new VueVide();
                     $this->vue->ecran = $class->$method();
 

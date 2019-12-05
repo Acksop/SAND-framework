@@ -18,7 +18,6 @@ class Dispacher
     public function __construct()
     {
 
-        //echo $_SERVER['REQUEST_URI'];
         //Avoid callback from empty homepage
         if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '') {
             $this->route = NULL;
