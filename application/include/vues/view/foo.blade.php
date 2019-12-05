@@ -1,16 +1,16 @@
-<html>
-<head>
-    <title>App Name</title>
-</head>
-<body>
+@extends('body')
 
-<div class="container">
+@section('sidebar')
+    @parent
+
+    <p>This is appended to the master sidebar.</p>
+@endsection
+
+@section('content')
     Foo Controlleur
     @if (isset($id))
         {{$id}}
     @else
         id not exist
     @endif
-</div>
-</body>
-</html>
+@endsection

@@ -17,6 +17,6 @@ class Conduit extends Action
                 }
             }
         }
-        return $this;
+        return;
     }
 }
