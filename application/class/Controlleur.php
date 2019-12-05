@@ -22,7 +22,18 @@ class Controlleur{
                 }
 
             default:
-                if ($application->url->page['control']) {
+                if ($application->route != NULL) {
+                    $conduit = explode('::', $application->route['controller']);
+                    require CONDUIT_PATH . DIRECTORY_SEPARATOR . $conduit[0] . '.php';
+                    $conduitRoute = "\\" . $conduit[0];
+                    $method = strtolower($conduit[1]);
+                    $class = new $conduitRoute();
+                    $class->initialize($application->route);
+                    $this->vue = new VueVide();
+                    ob_start();
+                    $class->$method();
+                    $this->vue->ecran = ob_get_clean();
+                } else if ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 } else {
