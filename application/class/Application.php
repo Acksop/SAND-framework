@@ -19,6 +19,7 @@ class Application
 
         $dispacher = new Dispacher();
         $this->route = $dispacher->route;
+        //$this->route = NULL;
     }
 
     public function launch(){

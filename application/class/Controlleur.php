@@ -28,11 +28,10 @@ class Controlleur{
                     $conduitRoute = "\\" . $conduit[0];
                     $method = strtolower($conduit[1]);
                     $class = new $conduitRoute();
-                    $class->initialize($application->route);
+                    $class = $class->initialize($application->route);
                     $this->vue = new VueVide();
-                    ob_start();
-                    $class->$method();
-                    $this->vue->ecran = ob_get_clean();
+                    $this->vue->ecran = $class->$method();
+
                 } else if ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
@@ -59,9 +58,7 @@ class Controlleur{
         $method = strtolower($application->http->method);
 
         $this->vue = new VueVide();
-        ob_start();
-        $reponse->$method();
-        $this->vue->ecran = ob_get_clean();
+        $this->vue->ecran = $reponse->$method();
         return;
     }
 	
