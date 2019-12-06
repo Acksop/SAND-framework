@@ -25,5 +25,5 @@ $app = new MVC\Classe\Modular($name,'wordpress',$url_params);
  */
 
 
-echo $app->load('wordpress'); die();
+//echo $app->load('wordpress'); die();
 $templateData = array('app' => $app);
