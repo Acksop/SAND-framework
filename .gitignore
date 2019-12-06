@@ -1,3 +1,11 @@
-vendor
-_relicats
 /composer.lock
+/vendor/*
+/_relicats
+/public/prestashop/install-dev/theme/*
+/public/prestashop/js/*
+/public/prestashop/themes/*
+/public/wordpress/wp-admin/css/*
+/public/wordpress/wp-admin/js/*
+/public/wordpress/wp-content/themes/*
+/public/wordpress/wp-includes/css/*
+/public/wordpress/wp-includes/js/*

@@ -1,0 +1,45 @@
+/**
+ * List used for the stroll menu
+ */
+ul.stroll {
+    position: relative;
+    width: 250px;
+    height: 800px;
+    margin: 0rem;
+    padding: 0rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    list-style: none;
+    line-height: 0.5rem;
+}
+ul.stroll li.stroll {
+    position: relative;
+    padding: 10px;
+    margin: 0rem;
+    background: #eee;
+    color: #252525;
+    font-size: 18px;
+    z-index: 2;
+}
+ul.stroll li.actived {
+    background: #ddd !important;
+}
+ul.stroll li.stroll:nth-child(odd) {
+    background: #fff;
+}
+
+.bd-highlight{
+    margin: 0.25rem;
+}
+
+.btn-search{
+    background: #bfb451;
+    border-color: #bfb451;
+}
+.btn-search:hover{
+    background: #978c44;
+    border-color: #978c44;
+}
+.search_link{
+    color: #000;
+}
