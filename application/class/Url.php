@@ -56,22 +56,39 @@ class Url
                 $page['params'] = array();
                 $this->page = $page;
                 return;
+            }else {
+                foreach ($urlParts as $key => $value) {
+                    $values[] = $value;
+                    $keys[] = $key;
+                }
+                $page['params'] = $values;
             }
+
             //cas d'utilisation normal : il existe autant de clé que de valeurs
         } else if ( $numParts != 0 ) {
-            $values = array();
-            $keys = array();
-            foreach($urlParts as $key => $value ){
-                if($key%2 == 0) {
+            // si c'est un module alors on charge un a un les parametres
+            if( in_array($page['name'], $this->registre->getIndex()) ){
+                foreach ($urlParts as $key => $value) {
                     $values[] = $value;
-                } else {
-                    $keys[] = $value;
+                    $keys[] = $key;
                 }
-            }
-            if($page['control']){
-                $page['params'] = array_combine($values, $keys);
-            }else {
-                $page['params'] = array_combine($keys, $values);
+                $page['params'] = $values;
+            // sinon c'est une page normal du framework
+            } else {
+                $values = array();
+                $keys = array();
+                foreach ($urlParts as $key => $value) {
+                    if ($key % 2 == 0) {
+                        $values[] = $value;
+                    } else {
+                        $keys[] = $value;
+                    }
+                }
+                if ($page['control']) {
+                    $page['params'] = array_combine($values, $keys);
+                } else {
+                    $page['params'] = array_combine($keys, $values);
+                }
             }
         }
         //verification de l'existence de la page dans les controlleurs
