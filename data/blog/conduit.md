@@ -1,4 +1,9 @@
 # Le conduit
+
+>Le conduit est une nouveautée de l'application, celle permet de réaliser 
+un controlleur similaire a Symfony qui est dénomé ici Conduit car il prend 
+en paramètre une route défini dans le fichier routing.yml.
+
 Cette fonctionnalité permet de choisir la route indépendamment du moteur.
 il faut instancier le fichier `application/config/files/routing.yml`
 avec la route de base et les routes que vous voulez conduire, par exemple:
