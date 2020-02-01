@@ -5,7 +5,10 @@
  */
 $config = [
 //Location where to redirect users once they authenticate with a provider
-    'callback' => 'http://localhost:8080/' . \MVC\Classe\Url::link_rewrite(false, 'compte', []),
+    //Ne fonctionne pas car on est sur un serveur a l'intérieur d'un réseau personnel
+    //'callback' => $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/" . \MVC\Classe\Url::link_rewrite(false, 'compte', []),
+    'callback' => PATH_URL . \MVC\Classe\Url::link_rewrite(false, 'compte', []),
+
 
 //Providers specifics
     'providers' => [
