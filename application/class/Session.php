@@ -25,6 +25,26 @@ class Session
         return;
     }
 
+    static public function setStorage($hybriauthStorage)
+    {
+        $_SESSION['storage'] = $hybriauthStorage;
+        return;
+    }
+    static public function getStorage()
+    {
+        return $_SESSION['storage'] ;
+    }
+
+    static public function setHybridAuth($hybriauth)
+    {
+        $_SESSION['auth'] = $hybriauth;
+        return;
+    }
+    static public function getHybridAuth()
+    {
+        return $_SESSION['auth'] ;
+    }
+
     static public function isRegistered()
     {
         if (isset($_SESSION['userProfile'])) {

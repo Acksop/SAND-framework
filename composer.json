@@ -15,7 +15,7 @@
       "ext-curl": "*",
       "windwalker/renderer": "3.*",
       "illuminate/view": "4.*",
-      "hybridauth/hybridauth": "~3.0",
+      "hybridauth/hybridauth": "^3.2",
       "neitanod/forceutf8": "^2.0",
       "symfony/routing": "3.4.36",
       "symfony/http-foundation": "~2.8",

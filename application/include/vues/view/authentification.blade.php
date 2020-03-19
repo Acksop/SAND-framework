@@ -13,7 +13,8 @@
         @foreach ($hybridauth->getProviders() as $name)
             @if (!isset($adapters[$name]))
                 <li>
-                    <a href="#" onclick="javascript:auth_popup('{{ $name }}');">
+                    <!--<a href="#" onclick="javascript:auth_popup('{{ $name }}');">-->
+                    <a href="{{ \MVC\Classe\Url::link_rewrite(false, 'authentificate', ['provider' => $name]) }}">
                         Sign in with {{ $name }}
                     </a>
                 </li>

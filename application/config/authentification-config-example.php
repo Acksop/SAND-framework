@@ -29,7 +29,7 @@ $config = [
 
         'Twitter' => [
             'enabled' => true,
-            'keys' => ['key' => '155718820-WdUWfYpQA4AIa57Cayt3sIXiR90mre31h5S9gUvj', 'secret' => 'nc1w9VLRmnXVl4GkqC8vvUFORzPIdWBz2PE9B5eAF8Idv'],
+            'keys' => ['key' => 'gnsmsVW0EkdpSVeqwCOG7V1H5', 'secret' => 'cdv71bFMUV4OBpkjFIwPNOlbRBQhrAaWBTmLF8aPzZBeMf3PyQ'],
         ]
     ],
     //optional : set debug mode
