@@ -5,17 +5,20 @@
 
 require CONFIG_PATH . DIRECTORY_SEPARATOR . "authentification-config-example.php";
 
-$hybridauth = new Hybridauth\Hybridauth($config);
-$adapters = $hybridauth->getConnectedAdapters();
+//$hybridauth = new Hybridauth\Hybridauth($config);
+$hybridauth = \MVC\Classe\Session::getHybridAuth();
+//$adapters = $hybridauth->getConnectedAdapters();
 
-$templateData['adapters'] = $adapters;
+$adapter = $hybridauth->getAdapter(\MVC\Classe\Session::getStorage()->get('provider'));
 
-/*$templateData['extractedData'] = [
-    'token' => $_SESSION['userToken'],
-    'identifier' => $_SESSION['userProfile']->identifier,
-    'email' => $_SESSION['userProfile']->email,
-    'first_name' => $_SESSION['userProfile']->firstName,
-    'last_name' => $_SESSION['userProfile']->lastName,
-    'photoURL' => strtok($_SESSION['userProfile']->photoURL, '?'),
-];*/
-$templateData['extractedData'] = [];
+    \MVC\Classe\Dumper::dump($adapter);
+
+$isConnected = $adapter->isConnected();
+//Retrieve the user's profile
+$userProfile = $adapter->getUserProfile();
+
+//Inspect profile's public attributes
+    \MVC\Classe\Dumper::dump($isConnected);
+    \MVC\Classe\Dumper::dump($userProfile);
+
+$templateData['adapters'] = [\MVC\Classe\Session::getStorage()->get('provider')=>$adapter];

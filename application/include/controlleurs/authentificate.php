@@ -1,7 +1,4 @@
 <?php
-/**
- * A simple example that shows how to use multiple providers, opening provider authentication in a pop-up.
- */
 
 use MVC\Classe\Dumper;
 
@@ -64,7 +61,7 @@ try {
     if ($url_params['provider'] = $storage->get('provider')) {
 
 
-
+        \MVC\Classe\Session::setHybridAuth($hybridauth);
         $hybridauth->authenticate($url_params['provider']);
         //Suite à l'authentification il ne permet plus de modifier la page il redirige directement sur le callback
 

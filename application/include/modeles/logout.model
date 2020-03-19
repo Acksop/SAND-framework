@@ -1,0 +1,4 @@
+name : logout
+page_title: Hybrid Authentification de l'application
+description : La page d'authentification
+params : params
