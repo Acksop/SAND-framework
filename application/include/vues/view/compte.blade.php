@@ -4,6 +4,7 @@
     @parent
 
     <p>This is appended to the master sidebar.</p>
+    <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'authentification', []) }}">Authentification</a>
 @endsection
 
 @section('content')
@@ -16,7 +17,7 @@
             @foreach ($adapters as $name => $adapter)
                 <li>
                      from <i>{{ $name }}</i>
-                    {{ \MVC\Classe\Dumper::dump($adapter) }}
+                    {{ \MVC\Classe\Dumper::dump($adapter->getUserProfile()) }}
                     <!--<span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
                               ">Log Out</a>)</span>-->
                     <span>(<a href="{{ \MVC\Classe\Url::link_rewrite( false, 'logout', ['logout'=>$name ]) }}">Log Out</a>)</span>
