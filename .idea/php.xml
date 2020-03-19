@@ -31,8 +31,8 @@
       <path value="$PROJECT_DIR$/vendor/neitanod/forceutf8" />
       <path value="$PROJECT_DIR$/vendor/symfony/cache" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
-      <path value="$PROJECT_DIR$/vendor/johnpbloch/wordpress-core-installer" />
-      <path value="$PROJECT_DIR$/vendor/johnpbloch/wordpress" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php70" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

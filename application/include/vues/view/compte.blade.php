@@ -10,19 +10,16 @@
 
     <h1>Compte utilisateur</h1>
 
-    @foreach ($extractedData as $key => $value)
-        {{ $key }} :: {{ $value }}
-    @endforeach
-
     @if ($adapters)
         <h1>You are logged in:</h1>
         <ul>
             @foreach ($adapters as $name => $adapter)
                 <li>
-                    <strong>{{$adapter->getUserProfile()->displayName }}</strong> from
-                    <i>{{ $name }}</i>
-                    <span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
-                              ; ?>">Log Out</a>)</span>
+                     from <i>{{ $name }}</i>
+                    {{ \MVC\Classe\Dumper::dump($adapter) }}
+                    <!--<span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
+                              ">Log Out</a>)</span>-->
+                    <span>(<a href="{{ \MVC\Classe\Url::link_rewrite( false, 'logout', ['logout'=>$name ]) }}">Log Out</a>)</span>
                 </li>
             @endforeach
         </ul>
