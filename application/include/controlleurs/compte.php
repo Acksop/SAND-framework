@@ -5,11 +5,11 @@
 
 require CONFIG_PATH . DIRECTORY_SEPARATOR . "authentification-config-example.php";
 
-//$hybridauth = new Hybridauth\Hybridauth($config);
-$hybridauth = \MVC\Classe\Session::getHybridAuth();
-//$adapters = $hybridauth->getConnectedAdapters();
+$hybridauth = new Hybridauth\Hybridauth($config);
+$hybridauth->authenticate(\MVC\Classe\Session::getStorage()->get('provider'));
+$adapters = $hybridauth->getConnectedAdapters();
 
-$adapter = $hybridauth->getAdapter(\MVC\Classe\Session::getStorage()->get('provider'));
+/*$adapter = $hybridauth->getAdapter(\MVC\Classe\Session::getStorage()->get('provider'));
 
     \MVC\Classe\Dumper::dump($adapter);
 
@@ -22,3 +22,5 @@ $userProfile = $adapter->getUserProfile();
     \MVC\Classe\Dumper::dump($userProfile);
 
 $templateData['adapters'] = [\MVC\Classe\Session::getStorage()->get('provider')=>$adapter];
+*/
+$templateData['adapters'] = $adapters;
