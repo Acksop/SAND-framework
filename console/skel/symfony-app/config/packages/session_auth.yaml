@@ -1,0 +1,42 @@
+#session_auth:
+#  #Activation du user_provider interne
+#  #par défaut TRUE
+#  use_default_provider : false
+#  #Le Provider doit implémenter Symfony\Component\Security\Core\User\UserProviderInterface
+#  #par défaut est utilise Besancon\AuthBundle\Security\User\AuthUserProvider
+#  #cette valeur n'est nécessaire que lorsque use_default_provider est a false
+#  #provider: Besancon\AuthBundle\Security\User\AuthUserProvider
+#  provider:  App\Security\AuthUserProvider
+#  #Namespace de l'entité utilisateur
+#  #L'entité doit implémenter Symfony\Component\Security\Core\User\UserInterface
+#  #par défaut est utilise Besancon\AuthBundle\Security\User\AuthUser
+#  #user_entity: App\Besancon\AuthBundle\Security\User\AuthUser
+#  user_entity: App\Classes\AuthUser
+#  #nom de la route correspondant à la page d'accueil de l'application
+#  #par défaut est à NULL
+#  homepage: "index"
+#  #tag du service personnalisé permettant de gérer l'authentification
+#  #par défaut est à bes_auth.authentification (service par défaut)
+#  authentication_service: App\Security\Authentification
+#  #authentication_service: bes_auth.authentification
+#  #Mode d'authentification Cas ou Rsa
+#  #obligatoire pas de valeur par défaut
+#  type_auth: '%type_auth%'
+#  #Configuration pour le mode Cas
+#  #obligatoire si mode Cas choisi
+#  cas:
+#    #Serveur Cas
+#    hostname: "seshat25.ac-besancon.fr"
+#    #Port Cas
+#    port: 443
+#    #Uri Cas
+#    uri: ""
+#  #Configuration pour le mode Rsa
+#  #obligatoire si mode Rsa choisi
+#  rsa :
+#    #Url de déconnexion Rsa
+#    logout_url: http://webphppreprod3.in.ac-besancon.fr:8383/login/ct_logout.jsp
+#
+#parameters:
+#  type_auth: Session
+
