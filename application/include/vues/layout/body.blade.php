@@ -14,7 +14,7 @@
             <a href="{{ \MVC\Classe\Url::module_link_rewrite( 'wordpress', ['']) }}">Blog</a>
             <a href="{{ \MVC\Classe\Url::module_link_rewrite( 'phplist', ['']) }}">Newsletter</a>
         @endif
-        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'admin-test', []) }}">Symfony 5.1</a>
+        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'symfony', []) }}">Symfony 5.1</a>
 
         <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a>
         <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}">CGU</a>
