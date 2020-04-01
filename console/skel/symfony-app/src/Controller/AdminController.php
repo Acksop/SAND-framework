@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/admin-test/admin", name="admin")
+     * @Route("/symfony/admin", name="admin")
      */
     public function adminAction()
     {

@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/admin-test", name="homepage")
+     * @Route("/symfony", name="homepage")
      */
     public function indexAction()
     {
@@ -23,7 +23,7 @@ class DefaultController extends AbstractController
     }
     
     /**
-     * @Route("/admin-test/page1", name="page1")
+     * @Route("/symfony/page1", name="page1")
      */
     public function page1Action()
     {
@@ -33,7 +33,7 @@ class DefaultController extends AbstractController
         ]);
     }
     /**
-     * @Route("/admin-test/page2", name="page2")
+     * @Route("/symfony/page2", name="page2")
      */
     public function page2Action()
     {
