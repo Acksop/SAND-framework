@@ -87,7 +87,7 @@ class module
         print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
         print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/'.$name.'.php');
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module_symfony.php '.CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = preg_replace('%MODULE%',$name,$controlleur);
         file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
@@ -107,7 +107,9 @@ class module
         include dirname(__FILE__).DIRECTORY_SEPARATOR.'symfony.class.php';
         symfony::stabilize();
 
-        $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name.' -Rf');
+        $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/src '.MODULES_PATH.'/'.$name.'/ -Rf');
+        $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/config '.MODULES_PATH.'/'.$name.'/ -Rf');
+        $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/* '.MODULES_PATH.'/'.$name.'/ -Rf');
         $symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
