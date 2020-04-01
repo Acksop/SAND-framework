@@ -103,7 +103,7 @@ class module
         include dirname(__FILE__).DIRECTORY_SEPARATOR.'symfony.class.php';
         symfony::stabilize();
 
-        $symfony_root = shell_exec('cp -fr '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name);
+        $symfony_root = shell_exec('cp -r '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name);
         $symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
         print 'n\'oublier pas d\'ajouter:\n'
