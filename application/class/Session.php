@@ -23,6 +23,16 @@ class Session
         $_SESSION['userProfile'] = $userProfile;
         return;
     }
+    static public function setId($id)
+    {
+        $_SESSION['id'] = $id;
+        return;
+    }
+    static public function setUserName($username)
+    {
+        $_SESSION['username'] = $username;
+        return;
+    }
 
     static public function setToken($token)
     {
