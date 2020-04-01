@@ -9,11 +9,11 @@ class module
 
     static public function add(){
         print "adding module...\n\n";
-        print "Quel est le module a ajouter?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
+        print "Quel est le module a ajouter ?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n>";
         $module = trim(fgets(STDIN));
         switch($module){
             case 1:
-                print "Quel est le nom du module symfony à ajouter (default:symfony) ? ";
+                print "Quel est le nom du module symfony à ajouter (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
                 if($name !== '' && preg_match('#(.)+#',$name)){
                     module::addSymfony($name);
@@ -22,7 +22,7 @@ class module
                 }
                 break;
             case 2:
-                print "Quel est la version de Wordpress à ajouter (default:5.4) ? ";
+                print "Quel est la version de Wordpress à ajouter (default : 5.4) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)#',$version)){
                     module::addWordpress($version);
@@ -31,7 +31,7 @@ class module
                 }
                 break;
             case 3:
-                print "Quel est la version de Prestashop à ajouter (default:1.7.5.0) ? ";
+                print "Quel est la version de Prestashop à ajouter (default : 1.7.5.0) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPrestashop($version);
@@ -40,12 +40,12 @@ class module
                 }
                 break;
             case 4:
-                print "Quel est la version de PhpList à ajouter (default:3.5.2) ? ";
+                print "Quel est la version de PhpList à ajouter (default : v.3.4.2) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPhplist($version);
                 }else{
-                    module::addPhplist('3.5.2');
+                    module::addPhplist('v.3.4.2');
                 }
                 break;
             default:
@@ -235,7 +235,7 @@ class module
         print $git_view_retval;
     }
 
-    static public function addPhplist($version = '3.5.2'){
+    static public function addPhplist($version = 'v.3.4.2'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/phpList/phplist3.git phplist');
         print $git_clone;
