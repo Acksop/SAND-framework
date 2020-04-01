@@ -15,7 +15,7 @@ General settings for language and database
 // to find your language
 // this is the language for the frontend pages. In the admin pages you can
 // choose your language by using the dropdown in the pages.
-$language_module = 'english.inc';
+$language_module = 'Français.inc';
 
 // what is your Mysql database server
 $database_host = 'HOST_HOSTNAME';
@@ -420,7 +420,7 @@ Miscellaneous
 // set the default system language. If the language cannot be detected, it will fall back to
 // this one. It has to be the "ISO code" of the language.
 // to find what languages are available here, check out http://translate.phplist.com/
-$default_system_language = 'en';
+$default_system_language = 'fr';
 
 //# use Precedence
 // according to the email standards, the Precedence header is outdated, and should not be used
