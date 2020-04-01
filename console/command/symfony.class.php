@@ -10,7 +10,7 @@ class symfony
 
     static public function stabilize(){
         print "stabilize symfony module...\n\n";
-        $symfony_module = shell_exec('cp -f '.CONSOLE_PATH.'/skel/symfony '.VENDOR_PATH);
+        $symfony_module = shell_exec('cp -fr '.CONSOLE_PATH.'/skel/symfony '.VENDOR_PATH);
     }
 
 }
