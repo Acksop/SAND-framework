@@ -31,21 +31,21 @@ class module
                 }
                 break;
             case 3:
-                print "Quel est la version de Prestashop à ajouter (default:1.7.6.0) ? ";
+                print "Quel est la version de Prestashop à ajouter (default:1.7.5.0) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPrestashop($version);
                 }else{
-                    module::addPrestashop('1.7.6.0');
+                    module::addPrestashop('1.7.5.0');
                 }
                 break;
             case 4:
-                print "Quel est la version de PhpList à ajouter (default:3.4.2) ? ";
+                print "Quel est la version de PhpList à ajouter (default:3.5.2) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPhplist($version);
                 }else{
-                    module::addPhplist('3.4.2');
+                    module::addPhplist('3.5.2');
                 }
                 break;
             default:
@@ -180,7 +180,7 @@ class module
         print $git_view_retval;
     }
 
-    static public function addPrestashop($version = '1.7.6.4'){
+    static public function addPrestashop($version = '1.7.5.0'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/PrestaShop/PrestaShop.git prestashop');
         print $git_clone;
@@ -233,7 +233,7 @@ class module
         print $git_view_retval;
     }
 
-    static public function addPhplist($version = '3.4.2'){
+    static public function addPhplist($version = '3.5.2'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/phpList/phplist3.git phplist');
         print $git_clone;
@@ -294,14 +294,14 @@ class module
             $pass = 'sand';
         }
 
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/html_public/lists/config/config.php');
-        $config = file_get_contents(MODULES_PATH.'/phplist/html_public/lists/config/config.php');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
         $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
         $config = preg_replace('%HOST_USERNAME%',$user,$config);
         $config = preg_replace('%HOST_NAME%',$host_name,$config);
         $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
         $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
-        file_put_contents(MODULES_PATH.'/phplist/html_public/lists/config/config.php',$config);
+        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nphplist : Application permettant de générer une newsletter phplist"
