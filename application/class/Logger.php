@@ -15,6 +15,7 @@ class Logger
         $browser = new Browser();
         $date = date("F j, Y, g:i a");
         $what = PHP_EOL . '[' . $date . ' by ' . $browser->user . ']' . PHP_EOL . $browser->userAgent . PHP_EOL . $what;
+        //$what = PHP_EOL . '[' . $date . ' by ]' . PHP_EOL . $what;
         if (is_file($file)) {
             file_put_contents($file, PHP_EOL . $what, FILE_APPEND | LOCK_EX);
         } else {

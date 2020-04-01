@@ -16,11 +16,10 @@ class Controlleur{
             case 'POST':
             case 'GET':
                 if ($application->browser->isAppRequest()) {
-                    require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . 'HttpReponse.php';
+                    require $application->url->pageFile;
                     $this->callHttpResponse($application);
-                    break;
+                    die();
                 }
-
             default:
                 if ($application->route != NULL) {
                     $conduit = explode('::', $application->route['controller']);
@@ -56,6 +55,8 @@ class Controlleur{
         $reponse = new $reponseHttp();
         $reponse->instanciate($application->url, $application->http->getData());
         $method = strtolower($application->http->method);
+
+        Logger::addLog('http11'," $reponseHttp app {$application->http->method} request! ( ".get_class($reponse)."->$method() )");
 
         $this->vue = new VueVide();
         $this->vue->ecran = $reponse->$method();

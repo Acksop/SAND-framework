@@ -7,6 +7,7 @@ namespace MVC\Classe;
 class Url
 {
     public $page;
+    public $pageFile;
     public $registre;
 
 
@@ -37,6 +38,12 @@ class Url
         }else{
             $page['name'] = 'accueil';
         }
+
+        //il se peut que l'on ait des variable avec ? dans l'url
+        $urlQuery = explode('?' , $page['name'] );
+        $page['name'] = $urlQuery[0];
+
+        $page['name'] = strtolower($page['name']);
 
         if($page['name'] == 'control'){
             $page['control'] = true;
@@ -91,6 +98,8 @@ class Url
                 }
             }
         }
+        $page['name'] = lcfirst($page['name']);
+        $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
         //verification de l'existence de la page dans les controlleurs
         if($page['control']){
             $pageFile = TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
@@ -124,6 +133,7 @@ class Url
             }
         }
         $this->page = $page;
+        $this->pageFile = $pageFile;
 
     }
 
@@ -134,6 +144,15 @@ class Url
         } else {
             return self::link_rewrite_slashParam($page, $params);
         }
+    }
+
+    static public function module_link_rewrite($page, $params = array())
+    {
+        $stringParams = '';
+        foreach ($params as $values) {
+            $stringParams .= "/" . $values;
+        }
+        return '/' . $page . $stringParams;
     }
 
     static private function link_rewrite_slashParam($page, $params = array())

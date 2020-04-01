@@ -12,6 +12,11 @@ class Session
         session_start();
         return;
     }
+    static public function destroy()
+    {
+        session_destroy();
+        return;
+    }
 
     static public function setUserProfile($userProfile)
     {
@@ -48,7 +53,16 @@ class Session
     static public function isRegistered()
     {
         if (isset($_SESSION['userProfile'])) {
-            return;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    static public function redirectIfNotRegistered()
+    {
+        if (isset($_SESSION['userProfile'])) {
+            return ;
         } else {
             header("location : " . Url::link_rewrite(false, 'error', []));
             die('Ooops, something was wrong...');
