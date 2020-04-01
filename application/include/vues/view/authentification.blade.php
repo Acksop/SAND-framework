@@ -13,7 +13,6 @@
         @foreach ($hybridauth->getProviders() as $name)
             @if (!isset($adapters[$name]))
                 <li>
-                    <!--<a href="#" onclick="javascript:auth_popup('{{ $name }}');">-->
                     <a href="{{ \MVC\Classe\Url::link_rewrite(false, 'authentificate', ['provider' => $name]) }}">
                         Sign in with {{ $name }}
                     </a>
@@ -24,12 +23,5 @@
 @endsection
 
 @section('top-javascript')
-    <script>
-        function auth_popup(provider) {
-            // replace 'path/to/hybridauth' with the real path to this script
-            var authWindow = window.open('{{ \MVC\Classe\Url::link_rewrite(true, 'authentification-callback-example', []) }}/provider/' + provider, 'authWindow', 'width=600,height=400,scrollbars=yes');
-            return false;
-        }
-    </script>
 @endsection
 

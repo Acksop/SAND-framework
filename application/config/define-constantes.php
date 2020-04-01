@@ -10,3 +10,5 @@ define("MODELS_PATH", APPLICATION_PATH . DIRECTORY_SEPARATOR . "include" . DIREC
 define("VIEW_PATH", APPLICATION_PATH . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR . "vues");
 define("CONTROLLER_PATH", APPLICATION_PATH . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR . "controlleurs");
 define("TRAITEMENT_PATH", APPLICATION_PATH . DIRECTORY_SEPARATOR . "traitements");
+define("PUBLIC_PATH", dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "public");
+define("CONSOLE_PATH", dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . "console");

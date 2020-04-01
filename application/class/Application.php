@@ -15,6 +15,7 @@ class Application
     public function __construct(){
         $this->http = new HttpMethod();
         $this->browser = new Browser();
+
         $this->url = new Url($this->http->method, $this->browser->isAppRequest());
 
         $dispacher = new Dispacher();

@@ -2,6 +2,10 @@
 <?php
 //var_dump($argv);
 
+define("VENDOR_PATH", dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."vendor");
+require VENDOR_PATH.DIRECTORY_SEPARATOR."autoload.php";
+
+
 if(isset($argv[1])) {
     $option = explode(':', $argv[1]);
     $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . $option[0] . ".class.php";

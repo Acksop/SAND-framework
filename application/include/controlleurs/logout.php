@@ -20,26 +20,12 @@ try {
             // Disconnect the adapter
             $adapter = $hybridauth->getAdapter($url_params['logout']);
             $adapter->disconnect();
+            \MVC\Classe\Session::destroy();
             header("location: ".MVC\Classe\Url::link_rewrite(false,'accueil'));
         } else {
             $error = $url_params['logout'];
         }
     }
-
-    //
-    // Handle invalid provider errors
-    //
-    if ($error !== false) {
-        error_log('HybridAuth Error: Provider ' . json_encode($error) . ' not found or not enabled in $config');
-        // Close the pop-up window
-        echo "
-            <script>
-                window.opener.location.reload();
-                window.close();
-            </script>";
-        exit;
-    }
-
 
 
 } catch (Exception $e) {

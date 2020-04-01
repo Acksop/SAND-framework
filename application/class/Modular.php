@@ -51,7 +51,18 @@ class Modular{
                         default:
                     }
                 }
-
+                break;
+            case "phplist":
+                if(isset($options[0])) {
+                    switch ($options[0]) {
+                        case 'admin':
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'lists'. DIRECTORY_SEPARATOR . $options[0] ;
+                            break;
+                        default:
+                    }
+                }else{
+                    $this->subapp_dir = DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'lists';
+                }
                 break;
         }
     }
@@ -69,6 +80,9 @@ class Modular{
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
             case "prestashop":
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
+                break;
+            case "phplist":
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
                 break;
         }

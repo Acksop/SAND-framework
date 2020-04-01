@@ -1,5 +1,5 @@
 name : prestashop
-page_title : Accueil de l'application modulaire
-description : zatou stra bracadabla
-params : params
+page_title : module_title
+description : module_description
+params : module_params
 
