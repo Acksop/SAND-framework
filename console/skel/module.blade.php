@@ -1,1 +1,1 @@
-{{$app->load();}}
+{{$app->load('MODULE')}}
