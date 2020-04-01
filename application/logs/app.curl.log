@@ -1,0 +1,16 @@
+
+[April 1, 2020, 8:55 am by Firefox]
+Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+curl -i -k -X GET -H 'Content-Type: application/json' -d '{"myval":25}' https://www.sand-framework.infoartsmedia.org/accueil/var10/val10
+
+[April 1, 2020, 8:55 am by Firefox]
+Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+curl -i -k -X POST -H 'Content-Type: application/json' -d '{"myval":25}' https://www.sand-framework.infoartsmedia.org/accueil/var10/val10
+
+[April 1, 2020, 8:55 am by Firefox]
+Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+curl -i -k -X PUT -H 'Content-Type: application/json' -d '{"myval":25}' https://www.sand-framework.infoartsmedia.org/accueil/var10/val10
+
+[April 1, 2020, 8:55 am by Firefox]
+Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+curl -i -k -X DELETE -H 'Content-Type: application/json' -d '{"myval":25}' https://www.sand-framework.infoartsmedia.org/accueil/var10/val10

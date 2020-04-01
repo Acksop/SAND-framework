@@ -1,0 +1,16 @@
+
+[April 1, 2020, 8:55 am by [App] Curl]
+curl/7.64.0
+ \AccueilHttpReponse app GET request! ( AccueilHttpReponse->get() )
+
+[April 1, 2020, 8:55 am by [App] Curl]
+curl/7.64.0
+ \AccueilHttpReponse app POST request! ( AccueilHttpReponse->post() )
+
+[April 1, 2020, 8:55 am by [App] Curl]
+curl/7.64.0
+ \AccueilHttpReponse app PUT request! ( AccueilHttpReponse->put() )
+
+[April 1, 2020, 8:55 am by [App] Curl]
+curl/7.64.0
+ \AccueilHttpReponse app DELETE request! ( AccueilHttpReponse->delete() )
