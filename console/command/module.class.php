@@ -31,12 +31,12 @@ class module
                 }
                 break;
             case 3:
-                print "Quel est la version de Prestashop à ajouter (default:1.7.5.0) ? ";
+                print "Quel est la version de Prestashop à ajouter (default:1.7.6.0) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPrestashop($version);
                 }else{
-                    module::addPrestashop('1.7.6.4');
+                    module::addPrestashop('1.7.6.0');
                 }
                 break;
             case 4:
@@ -83,6 +83,10 @@ class module
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project symfony/website-skeleton '.$name);
         print $git_clone;
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/'.$name.' -R');
+        print $git_chmod;
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
+        print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = preg_replace('%MODULE%',$name,$controlleur);
@@ -106,10 +110,10 @@ class module
         $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name.' -Rf');
         $symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
-        print "n'oubliez pas d'ajouter:\n"
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"
-            ."\n au fichier /application/modules/setup/registre.model\n"
-            ."\n et de créer la base de données!";
+            ."\n "
+            ."\n et de créer la base de données!\n";
 
     }
     static public function removeSymfony($name = 'symfony'){
@@ -134,7 +138,7 @@ class module
         print $git_fetch;
         $git_checkout = shell_exec('cd '.MODULES_PATH.'/wordpress && git checkout tags/'.$version.' -b actual-branch');
         print $git_checkout;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wordpress');
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wordpress -R');
         print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/wordpress -R');
         print $git_chown;
@@ -156,15 +160,15 @@ class module
         file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
         print $git_view;
 
-        print "n'oubliez pas d'ajouter:\n"
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nwordpress : Application permettant de générer un blog wordpress"
-            ."\n au fichier /application/modules/setup/registre.model\n"
-            ."\n et de créer la base de données!";
+            ."\n "
+            ."\n et de créer la base de données!\n";
 
     }
     static public function removeWordpress(){
 
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/wordpress', $git_clone_retval);
+        $git_clone = system('sudo rm -Rf '.MODULES_PATH.'/wordpress', $git_clone_retval);
         print $git_clone_retval;
         $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/wordpress', $git_ln_1_retval);
         print $git_ln_1_retval;
@@ -210,10 +214,10 @@ class module
         file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
         print $git_view;
 
-        print "n'oubliez pas d'ajouter:\n"
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nprestashop : Application permettant de générer une site e-commerce prestashop"
-            ."\n au fichier /application/modules/setup/registre.model\n"
-            ."\n et de créer la base de données!";
+            ."\n "
+            ."\n et de créer la base de données!\n";
     }
     static public function removePrestashop(){
 
@@ -241,7 +245,7 @@ class module
         print $composer_update;
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
         print $git_ln_1;
-        $git_chmod = shell_exec('sudo chmod 777 '.MODULES_PATH.'/phplist -R');
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist -R');
         print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phplist -R');
         print $git_chown;
@@ -261,10 +265,48 @@ class module
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
 
-        print "n'oubliez pas d'ajouter:\n"
+        print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
+        $host = trim(fgets(STDIN));
+        if($host !== '' && preg_match('#(.)+#',$host)){
+            $host = $host;
+        }else{
+            $host = '192.168.1.70';
+        }
+        print "Quel est le nom de la base de donnees (default:SAND_phplist) ? ";
+        $host_name = trim(fgets(STDIN));
+        if($host_name !== '' && preg_match('#(.)+#',$host_name)){
+            $host_name = $host_name;
+        }else{
+            $host_name = 'SAND_phplist';
+        }
+        print "Quel est le user de la base de donnees (default:sand) ? ";
+        $user = trim(fgets(STDIN));
+        if($user !== '' && preg_match('#(.)+#',$user)){
+            $user = $user;
+        }else{
+            $user = 'sand';
+        }
+        print "Quel est le pass de la base de donnees (default:sand) ? ";
+        $pass = trim(fgets(STDIN));
+        if($pass !== '' && preg_match('#(.)+#',$pass)){
+            $pass = $pass;
+        }else{
+            $pass = 'sand';
+        }
+
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/html_public/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.'/phplist/html_public/lists/config/config.php');
+        $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
+        $config = preg_replace('%HOST_USERNAME%',$user,$config);
+        $config = preg_replace('%HOST_NAME%',$host_name,$config);
+        $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
+        $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
+        file_put_contents(MODULES_PATH.'/phplist/html_public/lists/config/config.php',$config);
+
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nphplist : Application permettant de générer une newsletter phplist"
-            ."\n au fichier /application/modules/setup/registre.model\n"
-            ."\n et de créer la base de données!";
+            ."\n "
+            ."\n et de créer la base de données!\n";
     }
     static public function removePhplist(){
 

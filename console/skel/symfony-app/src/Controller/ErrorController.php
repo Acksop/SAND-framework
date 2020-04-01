@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ErrorController extends AbstractController
 {
     /**
-     * @Route("/admin-test/unauthorized", name="unauthorized")
+     * @Route("/symfony/unauthorized", name="unauthorized")
      */
     public function indexAction()
     {
