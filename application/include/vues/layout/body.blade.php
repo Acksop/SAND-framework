@@ -14,8 +14,7 @@
             <a href="{{ \MVC\Classe\Url::module_link_rewrite( 'wordpress', ['']) }}">Blog</a>
             <a href="{{ \MVC\Classe\Url::module_link_rewrite( 'phplist', ['']) }}">Newsletter</a>
         @endif
-        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'syf43', []) }}">Symfony 4.3</a>
-        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'syf51', []) }}">Symfony 5.0.99</a>
+        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'admin-test', []) }}">Symfony 5.1</a>
 
         <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a>
         <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}">CGU</a>
