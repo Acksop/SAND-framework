@@ -103,13 +103,13 @@ class module
         include dirname(__FILE__).DIRECTORY_SEPARATOR.'symfony.class.php';
         symfony::stabilize();
 
-        $symfony_root = shell_exec('cp -r '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name);
+        $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name.' -Rf');
         $symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
-        print 'n\'oublier pas d\'ajouter:\n'
-            .'\n'.$name.' : Application permettant d\'intégrer un module avec symfony'
-            .'\n au fichier /application/modules/setup/registre.model\n'
-            .'\n et de créer la base de données!';
+        print "n'oubliez pas d'ajouter:\n"
+            ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"
+            ."\n au fichier /application/modules/setup/registre.model\n"
+            ."\n et de créer la base de données!";
 
     }
     static public function removeSymfony($name = 'symfony'){
@@ -156,10 +156,10 @@ class module
         file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
         print $git_view;
 
-        print 'n\'oublier pas d\'ajouter:\n'
-            .'\nwordpress : Application permettant de générer un blog wordpress'
-            .'\n au fichier /application/modules/setup/registre.model\n'
-            .'\n et de créer la base de données!';
+        print "n'oubliez pas d'ajouter:\n"
+            ."\nwordpress : Application permettant de générer un blog wordpress"
+            ."\n au fichier /application/modules/setup/registre.model\n"
+            ."\n et de créer la base de données!";
 
     }
     static public function removeWordpress(){
@@ -210,10 +210,10 @@ class module
         file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
         print $git_view;
 
-        print 'n\'oublier pas d\'ajouter:\n'
-            .'\nprestashop : Application permettant de générer une site e-commerce prestashop'
-            .'\n au fichier /application/modules/setup/registre.model\n'
-            .'\n et de créer la base de données!';
+        print "n'oubliez pas d'ajouter:\n"
+            ."\nprestashop : Application permettant de générer une site e-commerce prestashop"
+            ."\n au fichier /application/modules/setup/registre.model\n"
+            ."\n et de créer la base de données!";
     }
     static public function removePrestashop(){
 
@@ -261,10 +261,10 @@ class module
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
 
-        print 'n\'oublier pas d\'ajouter:\n'
-            .'\nphplist : Application permettant de générer une newsletter phplist'
-            .'\n au fichier /application/modules/setup/registre.model\n'
-            .'\n et de créer la base de données!';
+        print "n'oubliez pas d'ajouter:\n"
+            ."\nphplist : Application permettant de générer une newsletter phplist"
+            ."\n au fichier /application/modules/setup/registre.model\n"
+            ."\n et de créer la base de données!";
     }
     static public function removePhplist(){
 
