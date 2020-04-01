@@ -9,160 +9,246 @@ class module
 
     static public function add(){
         print "adding module...\n\n";
+        print "Quel est le module a ajouter?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
+        $module = trim(fgets(STDIN));
+        switch($module){
+            case 1:
+                print "Quel est le nom du module symfony à ajouter (default:symfony) ? ";
+                $name = trim(fgets(STDIN));
+                if(preg_match('#(.)*#',$name)){
+                    module::addSymfony($name);
+                }else{
+                    module::addSymfony('symfony');
+                }
+                break;
+            case 2:
+                print "Quel est la version de Wordpress à ajouter (default:5.4) ? ";
+                $version = trim(fgets(STDIN));
+                if(preg_match('#(.)\.(.)#',$version)){
+                    module::addWordpress($version);
+                }else{
+                    module::addWordpress('5.4');
+                }
+                break;
+            case 3:
+                print "Quel est la version de Prestashop à ajouter (default:1.7.5.0) ? ";
+                $version = trim(fgets(STDIN));
+                if(preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
+                    module::addPrestashop($version);
+                }else{
+                    module::addPrestashop('1.7.6.4');
+                }
+                break;
+            case 4:
+                print "Quel est la version de PhpList à ajouter (default:3.4.2) ? ";
+                $version = trim(fgets(STDIN));
+                if(preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
+                    module::addPhplist($version);
+                }else{
+                    module::addPhplist('3.4.2');
+                }
+                break;
+            default:
+        }
     }
 
     static public function remove(){
         print "removing module...\n\n";
+        print "Quel est le module a ajouter?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
+        $module = trim(fgets(STDIN));
+        switch($module){
+            case 1:
+                print "Quel est le nom du module symfony à ajouter (default:symfony) ? ";
+                $name = trim(fgets(STDIN));
+                if(preg_match('#(.)*#',$name)){
+                    module::removeSymfony($name);
+                }else{
+                    module::removeSymfony('symfony');
+                }
+                break;
+            case 2:
+                module::removeWordpress();
+                break;
+            case 3:
+                module::removePrestashop();
+                break;
+            case 4:
+                module::removePhplist();
+                break;
+            default:
+        }
     }
 
-    static private function addSymfony(){
-        /*
-         * composer create-project symfony/website-skeleton my_module_name
-         *
-         * add symbolic links (not necessary, it comes with the way you progam on sand-module)
-         *
-         * add controlleur method
-         * add model file
-         * add blade view
-         */
+    static private function addSymfony($name = 'symfony'){
+
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project symfony/website-skeleton '.$name);
+        print $git_clone;
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/'.$name.'.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
+        $controlleur = preg_replace('%MODULE%',$name,$controlleur);
+        file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
+        print $git_controlleur;
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/'.$name.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
+        $modele = preg_replace('%MODULE%',$name,$modele);
+        file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
+        print $git_modele;
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
+        $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.blade.php');
+        $vue = preg_replace('%MODULE%',$name,$vue);
+        file_put_contents(VIEW_PATH.'/view/'.$name.'.blade.php', $vue);
+        print $git_view;
+    }
+    static public function removeSymfony($name = 'symfony'){
+
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/'.$name, $git_clone_retval);
+        print $git_clone_retval;
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/'.$name, $git_ln_1_retval);
+        print $git_ln_1_retval;
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/'.$name.'.php', $git_controlleur_retval);
+        print $git_controlleur_retval;
+        $git_modele = system('rm -f '.MODELS_PATH.'/'.$name.'.model', $git_modele_retval);
+        print $git_modele_retval;
+        $git_view = system('rm -f '.VIEW_PATH.'/view/'.$name.'.blade.php', $git_view_retval);
+        print $git_view_retval;
     }
 
-    static public function addWordpress(){
+    static public function addWordpress($version = '5.4'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/WordPress/WordPress.git wordpress');
-        echo $git_clone;
+        print $git_clone;
         $git_fetch = shell_exec('cd '.MODULES_PATH.'/wordpress && git fetch --all --tags');
-        echo $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/wordpress && git checkout tags/5.4 -b actual-branch');
-        echo $git_checkout;
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/wordpress && git checkout tags/'.$version.' -b actual-branch');
+        print $git_checkout;
         $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wordpress');
-        echo $git_chmod;
+        print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/wordpress -R');
-        echo $git_chown;
+        print $git_chown;
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wordpress/ wordpress');
-        echo $git_ln_1;
+        print $git_ln_1;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wordpress.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/wordpress.php');
         $controlleur = preg_replace('%MODULE%','wordpress',$controlleur);
         file_put_contents(CONTROLLERS_PATH.'/wordpress.php', $controlleur);
-        echo $git_controlleur;
+        print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wordpress.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/wordpress.model');
-        $controlleur = preg_replace('%MODULE%','wordpress',$controlleur);
-        file_put_contents(MODELS_PATH.'/wordpress.model', $controlleur);
-        echo $git_modele;
+        $modele = file_get_contents(MODELS_PATH.'/wordpress.model');
+        $modele = preg_replace('%MODULE%','wordpress',$modele);
+        file_put_contents(MODELS_PATH.'/wordpress.model', $modele);
+        print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wordpress.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/wordpress.blade.php');
-        $controlleur = preg_replace('%MODULE%','wordpress',$controlleur);
-        file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $controlleur);
-        echo $git_view;
+        $vue = file_get_contents(VIEW_PATH.'/view/wordpress.blade.php');
+        $vue = preg_replace('%MODULE%','wordpress',$vue);
+        file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
+        print $git_view;
 
     }
     static public function removeWordpress(){
 
         $git_clone = system('rm -Rf '.MODULES_PATH.'/wordpress', $git_clone_retval);
-        echo $git_clone_retval;
+        print $git_clone_retval;
         $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/wordpress', $git_ln_1_retval);
-        echo $git_ln_1_retval;
+        print $git_ln_1_retval;
         $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/wordpress.php', $git_controlleur_retval);
-        echo $git_controlleur_retval;
+        print $git_controlleur_retval;
         $git_modele = system('rm -f '.MODELS_PATH.'/wordpress.model', $git_modele_retval);
-        echo $git_modele_retval;
+        print $git_modele_retval;
         $git_view = system('rm -f '.VIEW_PATH.'/view/wordpress.blade.php', $git_view_retval);
-        echo $git_view_retval;
+        print $git_view_retval;
     }
 
-    static public function addPrestashop(){
+    static public function addPrestashop($version = '1.7.6.4'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/PrestaShop/PrestaShop.git prestashop');
-        echo $git_clone;
+        print $git_clone;
         $git_fetch = shell_exec('cd '.MODULES_PATH.'/prestashop && git fetch --all --tags');
-        echo $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/prestashop && git checkout tags/1.7.5.0 -b actual-branch ');
-        echo $git_checkout;
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/prestashop && git checkout tags/'.$version.' -b actual-branch ');
+        print $git_checkout;
         $composer_update = shell_exec('cd '.MODULES_PATH.'/prestashop && composer update');
-        echo $composer_update;
+        print $composer_update;
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/prestashop/ prestashop');
-        echo $git_ln_1;
+        print $git_ln_1;
         $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/prestashop -R');
-        echo $git_chmod;
+        print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/prestashop -R');
-        echo $git_chown;
+        print $git_chown;
         $git_ln_2 = shell_exec('cd '.MODULES_PATH.'/prestashop && ln -s ../prestashop/ prestashop');
-        echo $git_ln_2;
+        print $git_ln_2;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/prestashop.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/prestashop.php');
         $controlleur = preg_replace('%MODULE%','prestashop',$controlleur);
         file_put_contents(CONTROLLERS_PATH.'/prestashop.php', $controlleur);
-        echo $git_controlleur;
+        print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/prestashop.model');
         $controlleur = file_get_contents(MODELS_PATH.'/prestashop.model');
         $controlleur = preg_replace('%MODULE%','prestashop',$controlleur);
         file_put_contents(MODELS_PATH.'/prestashop.model', $controlleur);
-        echo $git_modele;
+        print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/prestashop.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/prestashop.blade.php');
         $controlleur = preg_replace('%MODULE%','prestashop',$controlleur);
         file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
-        echo $git_view;
+        print $git_view;
     }
     static public function removePrestashop(){
 
         $git_clone = system('rm -Rf '.MODULES_PATH.'/prestashop', $git_clone_retval);
-        echo $git_clone_retval;
+        print $git_clone_retval;
         $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/prestashop', $git_ln_1_retval);
-        echo $git_ln_1_retval;
+        print $git_ln_1_retval;
         $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/prestashop.php', $git_controlleur_retval);
-        echo $git_controlleur_retval;
+        print $git_controlleur_retval;
         $git_modele = system('rm -f '.MODELS_PATH.'/prestashop.model', $git_modele_retval);
-        echo $git_modele_retval;
+        print $git_modele_retval;
         $git_view = system('rm -f '.VIEW_PATH.'/view/prestashop.blade.php', $git_view_retval);
-        echo $git_view_retval;
+        print $git_view_retval;
     }
 
-    static public function addPhplist(){
+    static public function addPhplist($version = '3.4.2'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/phpList/phplist3.git phplist');
-        echo $git_clone;
+        print $git_clone;
         $git_fetch = shell_exec('cd '.MODULES_PATH.'/phplist && git fetch --all --tags');
-        echo $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phplist && git checkout tags/3.4.2 -b actual-branch ');
-        echo $git_checkout;
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phplist && git checkout tags/'.$version.' -b actual-branch ');
+        print $git_checkout;
         $composer_update = shell_exec('cd '.MODULES_PATH.'/phplist && composer update');
-        echo $composer_update;
+        print $composer_update;
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
-        echo $git_ln_1;
+        print $git_ln_1;
         $git_chmod = shell_exec('sudo chmod 777 '.MODULES_PATH.'/phplist -R');
-        echo $git_chmod;
+        print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phplist -R');
-        echo $git_chown;
+        print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phplist.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/phplist.php');
         $controlleur = preg_replace('%MODULE%','phplist',$controlleur);
         file_put_contents(CONTROLLERS_PATH.'/phplist.php', $controlleur);
-        echo $git_controlleur;
+        print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phplist.model');
         $controlleur = file_get_contents(MODELS_PATH.'/phplist.model');
         $controlleur = preg_replace('%MODULE%','phplist',$controlleur);
         file_put_contents(MODELS_PATH.'/phplist.model', $controlleur);
-        echo $git_modele;
+        print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phplist.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/phplist.blade.php');
         $controlleur = preg_replace('%MODULE%','phplist',$controlleur);
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
-        echo $git_view;
+        print $git_view;
     }
     static public function removePhplist(){
 
         $git_clone = system('rm -Rf '.MODULES_PATH.'/phplist', $git_clone_retval);
-        echo $git_clone_retval;
+        print $git_clone_retval;
         $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phplist', $git_ln_1_retval);
-        echo $git_ln_1_retval;
+        print $git_ln_1_retval;
         $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phplist.php', $git_controlleur_retval);
-        echo $git_controlleur_retval;
+        print $git_controlleur_retval;
         $git_modele = system('rm -f '.MODELS_PATH.'/phplist.model', $git_modele_retval);
-        echo $git_modele_retval;
+        print $git_modele_retval;
         $git_view = system('rm -f '.VIEW_PATH.'/view/phplist.blade.php', $git_view_retval);
-        echo $git_view_retval;
+        print $git_view_retval;
     }
 }
