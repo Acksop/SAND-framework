@@ -15,7 +15,7 @@ class module
             case 1:
                 print "Quel est le nom du module symfony à ajouter (default:symfony) ? ";
                 $name = trim(fgets(STDIN));
-                if(preg_match('#(.)*#',$name)){
+                if($name !== '' && preg_match('#(.)+#',$name)){
                     module::addSymfony($name);
                 }else{
                     module::addSymfony('symfony');
@@ -24,7 +24,7 @@ class module
             case 2:
                 print "Quel est la version de Wordpress à ajouter (default:5.4) ? ";
                 $version = trim(fgets(STDIN));
-                if(preg_match('#(.)\.(.)#',$version)){
+                if($version !== '' && preg_match('#(.)\.(.)#',$version)){
                     module::addWordpress($version);
                 }else{
                     module::addWordpress('5.4');
@@ -33,7 +33,7 @@ class module
             case 3:
                 print "Quel est la version de Prestashop à ajouter (default:1.7.5.0) ? ";
                 $version = trim(fgets(STDIN));
-                if(preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
+                if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPrestashop($version);
                 }else{
                     module::addPrestashop('1.7.6.4');
@@ -42,7 +42,7 @@ class module
             case 4:
                 print "Quel est la version de PhpList à ajouter (default:3.4.2) ? ";
                 $version = trim(fgets(STDIN));
-                if(preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
+                if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
                     module::addPhplist($version);
                 }else{
                     module::addPhplist('3.4.2');
@@ -54,13 +54,13 @@ class module
 
     static public function remove(){
         print "removing module...\n\n";
-        print "Quel est le module a ajouter?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
+        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
         $module = trim(fgets(STDIN));
         switch($module){
             case 1:
-                print "Quel est le nom du module symfony à ajouter (default:symfony) ? ";
+                print "Quel est le nom du module symfony à supprimer (default:symfony) ? ";
                 $name = trim(fgets(STDIN));
-                if(preg_match('#(.)*#',$name)){
+                if($name !== '' && preg_match('#(.)+#',$name)){
                     module::removeSymfony($name);
                 }else{
                     module::removeSymfony('symfony');
@@ -95,9 +95,22 @@ class module
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
         $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.blade.php');
-        $vue = preg_replace('%MODULE%',$name,$vue);
+        $vue = preg_replace('%MODULE%','symfony',$vue);
         file_put_contents(VIEW_PATH.'/view/'.$name.'.blade.php', $vue);
         print $git_view;
+
+        //stabilize symfony application
+        include dirname(__FILE__).DIRECTORY_SEPARATOR.'symfony.class.php';
+        symfony::stabilize();
+
+        $symfony_root = shell_exec('cp -f '.CONSOLE_PATH.'/skel/symfony-app '.MODULES_PATH.'/'.$name);
+        $symfony_composer = shell_exec('cd '.MODULES_PATH.' && composer update');
+
+        print 'n\'oublier pas d\'ajouter:\n'
+            .'\n'.$name.' : Application permettant d\'intégrer un module avec symfony'
+            .'\n au fichier /application/modules/setup/registre.model\n'
+            .'\n et de créer la base de données!';
+
     }
     static public function removeSymfony($name = 'symfony'){
 
@@ -142,6 +155,11 @@ class module
         $vue = preg_replace('%MODULE%','wordpress',$vue);
         file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
         print $git_view;
+
+        print 'n\'oublier pas d\'ajouter:\n'
+            .'\nwordpress : Application permettant de générer un blog wordpress'
+            .'\n au fichier /application/modules/setup/registre.model\n'
+            .'\n et de créer la base de données!';
 
     }
     static public function removeWordpress(){
@@ -191,6 +209,11 @@ class module
         $controlleur = preg_replace('%MODULE%','prestashop',$controlleur);
         file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
         print $git_view;
+
+        print 'n\'oublier pas d\'ajouter:\n'
+            .'\nprestashop : Application permettant de générer une site e-commerce prestashop'
+            .'\n au fichier /application/modules/setup/registre.model\n'
+            .'\n et de créer la base de données!';
     }
     static public function removePrestashop(){
 
@@ -237,6 +260,11 @@ class module
         $controlleur = preg_replace('%MODULE%','phplist',$controlleur);
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
+
+        print 'n\'oublier pas d\'ajouter:\n'
+            .'\nphplist : Application permettant de générer une newsletter phplist'
+            .'\n au fichier /application/modules/setup/registre.model\n'
+            .'\n et de créer la base de données!';
     }
     static public function removePhplist(){
 
