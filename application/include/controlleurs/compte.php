@@ -12,7 +12,8 @@ $hybridauth->authenticate(\MVC\Classe\Session::getStorage()->get('provider'));
 $adapters = $hybridauth->getConnectedAdapters();
 foreach ($adapters as $adapter){
  $userProfile[] = $adapter->getUserProfile();
-
+    \MVC\Classe\Session::setId($adapter->getUserProfile()->identifier);
+    \MVC\Classe\Session::setUserName($adapter->getUserProfile()->displayName);
 }
 \MVC\Classe\Session::setUserProfile($userProfile);
 
