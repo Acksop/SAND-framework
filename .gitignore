@@ -1,6 +1,7 @@
 /composer.lock
 /vendor/*
 /_relicats
+/.idea
 
 /application/modules/phplist
 /application/modules/symfony
