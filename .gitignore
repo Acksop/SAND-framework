@@ -1,6 +1,12 @@
 /composer.lock
 /vendor/*
 /_relicats
+
+/application/modules/phplist
+/application/modules/symfony
+/application/modules/wordpress
+/application/modules/prestashop
+
 /public/prestashop/install-dev/theme/*
 /public/prestashop/js/*
 /public/prestashop/themes/*
