@@ -269,9 +269,11 @@ class module
         print $git_checkout;
         $composer_update = shell_exec('cd '.MODULES_PATH.'/phplist && composer update');
         print $composer_update;*/
-        $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist/'.$version.'/phplist-'.$version.'.zip/download');
+        $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist/'.$version.'/phplist-'.$version.'.tgz/download');
         //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist-development/'.$version.'/phplist-'.$version.'.tgz/download');
-        $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && tar -xvf phplist-'.$version.'.tar.gz');
+        $wget_sourceforge = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist-'.$version.'.tar.gz');
+        $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && gunzip ./phplist-'.$version.'.tar.gz');
+        $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && tar -xvf ./phplist-'.$version.'.tar');
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && mv phplist-'.$version.' phplist');
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
         print $git_ln_1;
@@ -295,7 +297,7 @@ class module
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
 
-        /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
+        print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
         $host = trim(fgets(STDIN));
         if($host !== '' && preg_match('#(.)+#',$host)){
             $host = $host;
@@ -322,16 +324,16 @@ class module
             $pass = $pass;
         }else{
             $pass = 'sand';
-        }*/
+        }
 
-        /*$config_skel = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config_skel = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
         $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
         $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
         $config = preg_replace('%HOST_USERNAME%',$user,$config);
         $config = preg_replace('%HOST_NAME%',$host_name,$config);
         $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
         $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
-        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
+        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nphplist : Application permettant de générer une newsletter phplist"
