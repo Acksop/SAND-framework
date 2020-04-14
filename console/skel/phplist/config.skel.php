@@ -15,7 +15,7 @@ General settings for language and database
 // to find your language
 // this is the language for the frontend pages. In the admin pages you can
 // choose your language by using the dropdown in the pages.
-$language_module = 'Français.inc';
+$language_module = 'french.inc';
 
 // what is your Mysql database server
 $database_host = 'HOST_HOSTNAME';
