@@ -277,9 +277,12 @@ class module
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && mv phplist-'.$version.' phplist');
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
         print $git_ln_1;
+        $upload_images = shell_exec('cd '.PUBLIC_PATH.' && mkdir uploadimages');
+        print $upload_images;
         $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist -R');
-        print $git_chmod;
+        $git_chmod = shell_exec('sudo chmod 775 '.PUBLIC_PATH.'/uploadimages');
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phplist -R');
+        $git_chown = shell_exec('sudo chown acksop:www-data '.PUBLIC_PATH.'/uploadimages');
         print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phplist.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/phplist.php');
@@ -345,6 +348,8 @@ class module
         $git_clone = system('rm -Rf '.MODULES_PATH.'/phplist', $git_clone_retval);
         print $git_clone_retval;
         $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phplist', $git_ln_1_retval);
+        print $git_ln_1_retval;
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/uploadimages', $git_ln_1_retval);
         print $git_ln_1_retval;
         $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phplist.php', $git_controlleur_retval);
         print $git_controlleur_retval;
