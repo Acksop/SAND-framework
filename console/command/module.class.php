@@ -9,7 +9,7 @@ class module
 
     static public function add(){
         print "adding module...\n\n";
-        print "Quel est le module a ajouter ?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n>";
+        print "Quel est le module a ajouter ?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
         $module = trim(fgets(STDIN));
         switch($module){
             case 1:
@@ -40,12 +40,30 @@ class module
                 }
                 break;
             case 4:
-                print "Quel est la version de PhpList à ajouter (default : v.3.4.2) ? ";
+                print "Quel est la version de PhpList à ajouter (default : release-3.5.2) ? ";
                 $version = trim(fgets(STDIN));
-                if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
+                if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
                     module::addPhplist($version);
                 }else{
-                    module::addPhplist('v.3.4.2');
+                    module::addPhplist('release-3.5.2');
+                }
+                break;
+            case 5:
+                print "Quel est la version de Wanewletter à ajouter (default : release-3.0.1) ? ";
+                $version = trim(fgets(STDIN));
+                if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
+                    module::addWanewsletter($version);
+                }else{
+                    module::addWanewsletter('release-3.0.1');
+                }
+                break;
+            case 6:
+                print "Quel est la version de PHPmyNewletter à ajouter (default : v2.0.5) ? ";
+                $version = trim(fgets(STDIN));
+                if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
+                    module::addPHPMyNewsletter($version);
+                }else{
+                    module::addPHPMyNewsletter('v2.0.5');
                 }
                 break;
             default:
@@ -54,11 +72,11 @@ class module
 
     static public function remove(){
         print "removing module...\n\n";
-        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList ";
+        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
         $module = trim(fgets(STDIN));
         switch($module){
             case 1:
-                print "Quel est le nom du module symfony à supprimer (default:symfony) ? ";
+                print "Quel est le nom du module symfony à supprimer (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
                 if($name !== '' && preg_match('#(.)+#',$name)){
                     module::removeSymfony($name);
@@ -74,6 +92,12 @@ class module
                 break;
             case 4:
                 module::removePhplist();
+                break;
+            case 5:
+                module::removeWanewsletter();
+                break;
+            case 6:
+                module::removePHPMyNewsletter();
                 break;
             default:
         }
@@ -235,16 +259,19 @@ class module
         print $git_view_retval;
     }
 
-    static public function addPhplist($version = 'v.3.4.2'){
+    static public function addPhplist($version = 'release-3.5.2'){
 
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/phpList/phplist3.git phplist');
         print $git_clone;
         $git_fetch = shell_exec('cd '.MODULES_PATH.'/phplist && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phplist && git checkout tags/'.$version.' -b actual-branch ');
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phplist && git checkout '.$version);
         print $git_checkout;
         $composer_update = shell_exec('cd '.MODULES_PATH.'/phplist && composer update');
         print $composer_update;
+        //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist-development/'.$version.'/phplist-'.$version.'.tgz/download');
+        //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && tar -xvf phplist-'.$version.'.tar.gz');
+        //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && mv phplist-'.$version.' phplist');
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
         print $git_ln_1;
         $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist -R');
@@ -267,7 +294,95 @@ class module
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
 
-        print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
+        /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
+        $host = trim(fgets(STDIN));
+        if($host !== '' && preg_match('#(.)+#',$host)){
+            $host = $host;
+        }else{
+            $host = '192.168.1.70';
+        }
+        print "Quel est le nom de la base de donnees (default:SAND_phplist) ? ";
+        $host_name = trim(fgets(STDIN));
+        if($host_name !== '' && preg_match('#(.)+#',$host_name)){
+            $host_name = $host_name;
+        }else{
+            $host_name = 'SAND_phplist';
+        }
+        print "Quel est le user de la base de donnees (default:sand) ? ";
+        $user = trim(fgets(STDIN));
+        if($user !== '' && preg_match('#(.)+#',$user)){
+            $user = $user;
+        }else{
+            $user = 'sand';
+        }
+        print "Quel est le pass de la base de donnees (default:sand) ? ";
+        $pass = trim(fgets(STDIN));
+        if($pass !== '' && preg_match('#(.)+#',$pass)){
+            $pass = $pass;
+        }else{
+            $pass = 'sand';
+        }*/
+
+        /*$config_skel = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
+        $config = preg_replace('%HOST_USERNAME%',$user,$config);
+        $config = preg_replace('%HOST_NAME%',$host_name,$config);
+        $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
+        $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
+        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
+
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
+            ."\nphplist : Application permettant de générer une newsletter phplist"
+            ."\n "
+            ."\n et de créer la base de données!\n";
+    }
+    static public function removePhplist(){
+
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/phplist', $git_clone_retval);
+        print $git_clone_retval;
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phplist', $git_ln_1_retval);
+        print $git_ln_1_retval;
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phplist.php', $git_controlleur_retval);
+        print $git_controlleur_retval;
+        $git_modele = system('rm -f '.MODELS_PATH.'/phplist.model', $git_modele_retval);
+        print $git_modele_retval;
+        $git_view = system('rm -f '.VIEW_PATH.'/view/phplist.blade.php', $git_view_retval);
+        print $git_view_retval;
+    }
+    static public function addWanewsletter($version = 'release-3.0.1'){
+
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/wascripts/wanewsletter.git wanewsletter');
+        print $git_clone;
+        $git_fetch = shell_exec('cd '.MODULES_PATH.'/wanewsletter && git fetch --all --tags');
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/wanewsletter && git checkout tags/'.$version);
+        print $git_checkout;
+        $composer_update = shell_exec('cd '.MODULES_PATH.'/wanewsletter && composer update');
+        print $composer_update;
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wanewsletter wanewsletter');
+        print $git_ln_1;
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wanewsletter -R');
+        print $git_chmod;
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/wanewsletter -R');
+        print $git_chown;
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wanewsletter.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.'/wanewsletter.php');
+        $controlleur = preg_replace('%MODULE%','wanewsletter',$controlleur);
+        file_put_contents(CONTROLLERS_PATH.'/wanewsletter.php', $controlleur);
+        print $git_controlleur;
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wanewsletter.model');
+        $controlleur = file_get_contents(MODELS_PATH.'/wanewsletter.model');
+        $controlleur = preg_replace('%MODULE%','wanewsletter',$controlleur);
+        file_put_contents(MODELS_PATH.'/wanewsletter.model', $controlleur);
+        print $git_modele;
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wanewsletter.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.'/view/wanewsletter.blade.php');
+        $controlleur = preg_replace('%MODULE%','wanewsletter',$controlleur);
+        file_put_contents(VIEW_PATH.'/view/wanewsletter.blade.php', $controlleur);
+        print $git_view;
+
+        /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
         $host = trim(fgets(STDIN));
         if($host !== '' && preg_match('#(.)+#',$host)){
             $host = $host;
@@ -303,24 +418,112 @@ class module
         $config = preg_replace('%HOST_NAME%',$host_name,$config);
         $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
         $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
-        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);
+        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
-            ."\nphplist : Application permettant de générer une newsletter phplist"
+            ."\nwanewsletter : Application permettant de générer une newsletter wanewsletter"
             ."\n "
             ."\n et de créer la base de données!\n";
     }
-    static public function removePhplist(){
+    static public function removeWanewsletter(){
 
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/phplist', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/wanewsletter', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phplist', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/wanewsletter', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phplist.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/wanewsletter.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/phplist.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.'/wanewsletter.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/phplist.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.'/view/wanewsletter.blade.php', $git_view_retval);
+        print $git_view_retval;
+    }
+    static public function addPHPMyNewsletter($version = 'v2.0.5'){
+
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/Arnaud69/phpmynewsletter-2.0.git phpmynewsletter');
+        print $git_clone;
+        $git_fetch = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && git fetch --all --tags');
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && git checkout tags/'.$version.' -b actual-dev');
+        print $git_checkout;
+        //$composer_update = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && composer update');
+        //print $composer_update;
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phpmynewsletter phpmynewsletter');
+        print $git_ln_1;
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phpmynewsletter -R');
+        print $git_chmod;
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phpmynewsletter -R');
+        print $git_chown;
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phpmynewsletter.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.'/phpmynewsletter.php');
+        $controlleur = preg_replace('%MODULE%','phpmynewsletter',$controlleur);
+        file_put_contents(CONTROLLERS_PATH.'/phpmynewsletter.php', $controlleur);
+        print $git_controlleur;
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phpmynewsletter.model');
+        $controlleur = file_get_contents(MODELS_PATH.'/phpmynewsletter.model');
+        $controlleur = preg_replace('%MODULE%','phpmynewsletter',$controlleur);
+        file_put_contents(MODELS_PATH.'/phpmynewsletter.model', $controlleur);
+        print $git_modele;
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phpmynewsletter.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php');
+        $controlleur = preg_replace('%MODULE%','phpmynewsletter',$controlleur);
+        file_put_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php', $controlleur);
+        print $git_view;
+
+        /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
+        $host = trim(fgets(STDIN));
+        if($host !== '' && preg_match('#(.)+#',$host)){
+            $host = $host;
+        }else{
+            $host = '192.168.1.70';
+        }
+        print "Quel est le nom de la base de donnees (default:SAND_phplist) ? ";
+        $host_name = trim(fgets(STDIN));
+        if($host_name !== '' && preg_match('#(.)+#',$host_name)){
+            $host_name = $host_name;
+        }else{
+            $host_name = 'SAND_phplist';
+        }
+        print "Quel est le user de la base de donnees (default:sand) ? ";
+        $user = trim(fgets(STDIN));
+        if($user !== '' && preg_match('#(.)+#',$user)){
+            $user = $user;
+        }else{
+            $user = 'sand';
+        }
+        print "Quel est le pass de la base de donnees (default:sand) ? ";
+        $pass = trim(fgets(STDIN));
+        if($pass !== '' && preg_match('#(.)+#',$pass)){
+            $pass = $pass;
+        }else{
+            $pass = 'sand';
+        }
+
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
+        $config = preg_replace('%HOST_USERNAME%',$user,$config);
+        $config = preg_replace('%HOST_NAME%',$host_name,$config);
+        $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
+        $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
+        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
+
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
+            ."\nphpmynewsletter : Application permettant de générer une newsletter phpmynewsletter"
+            ."\n "
+            ."\n et de créer la base de données!\n";
+    }
+    static public function removePHPMyNewsletter(){
+
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/phpmynewsletter', $git_clone_retval);
+        print $git_clone_retval;
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phpmynewsletter', $git_ln_1_retval);
+        print $git_ln_1_retval;
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phpmynewsletter.php', $git_controlleur_retval);
+        print $git_controlleur_retval;
+        $git_modele = system('rm -f '.MODELS_PATH.'/phpmynewsletter.model', $git_modele_retval);
+        print $git_modele_retval;
+        $git_view = system('rm -f '.VIEW_PATH.'/view/phpmynewsletter.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 }

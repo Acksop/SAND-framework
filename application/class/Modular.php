@@ -64,6 +64,21 @@ class Modular{
                     $this->subapp_dir = DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'lists';
                 }
                 break;
+            case "wanewsletter":
+                $this->subfile = "install.php";
+                if(isset($options[0])) {
+                    switch ($options[0]) {
+                        case 'admin':
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0] ;
+                            $this->subfile = "index.php";
+                            break;
+                        default:
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0] ;
+                    }
+                }
+                break;
+            case "phpmynewsletter":
+                break;
         }
     }
 
@@ -84,6 +99,12 @@ class Modular{
                 break;
             case "phplist":
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
+                break;
+            case "wanewsletter":
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
+                break;
+            case "phpmynewsletter":
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
         }
     }
