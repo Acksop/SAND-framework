@@ -109,21 +109,7 @@
 
                                     <li class="dropdown"><a
                                                 href="#">Documentation</a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Docs', []) }}">Summary</a></li>
-                                            <li class="dropdown-submenu">
-                                                <span class="dropdown-menu-title-only">Controllers</span>
-                                                <ul class="dropdown-menu menu-invert" style="">
-                                                    <li><a href="#">Easy</a></li>
-                                                    <li><a href="#">Base</a></li>
-                                                    <li><a href="#">REST</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Actions</a></li>
-                                            <li><a href="#">Conduits</a></li>
-                                            <li><a href="#">Modules</a></li>
-                                            <li><a href="#">Views</a></li>
-                                        </ul>
+                                        {{\MVC\Classe\ControlleurAction::inserer('menudocs.default',[])}}
                                     </li>
                                 </ul>
                             </nav>

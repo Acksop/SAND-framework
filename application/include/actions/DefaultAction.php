@@ -10,7 +10,6 @@ class DefaultAction extends Action
 {
     public function default($data)
     {
-
         /**your action algorythm**/
         if (isset($data[0])) {
             $var1 = $data[0];
