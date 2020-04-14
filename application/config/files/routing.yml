@@ -12,3 +12,10 @@ foo_placeholder_route:
   requirements:
     id: '[0-9]+'
 
+docs_route:
+  path:     /docs
+  defaults: { controller: 'DocConduit::index' }
+
+docs_name_route:
+  path:     /docs/file/{name}
+  defaults: { controller: 'DocConduit::readfile' }
