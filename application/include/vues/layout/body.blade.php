@@ -12,7 +12,7 @@
                         <ul class="top-menu">
                             <li><a href="#">About</a></li>
                             <li><a href="#">Features</a></li>
-                            <li><a href="#">Pricing</a></li>
+                            <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Beers', []) }}">Pricing</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                         </ul>
