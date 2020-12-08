@@ -1,7 +1,8 @@
 <?php
 
+namespace MVC\Command;
 
-class page
+class Page
 {
 
     static public function help(){

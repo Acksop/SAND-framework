@@ -1,7 +1,8 @@
 <?php
 
+namespace MVC\Command;
 
-class module
+class Module
 {
     static public function help(){
         print "explaination of the command\n\n";
@@ -16,54 +17,54 @@ class module
                 print "Quel est le nom du module symfony à ajouter (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
                 if($name !== '' && preg_match('#(.)+#',$name)){
-                    module::addSymfony($name);
+                    Module::addSymfony($name);
                 }else{
-                    module::addSymfony('symfony');
+                    Module::addSymfony('symfony');
                 }
                 break;
             case 2:
                 print "Quel est la version de Wordpress à ajouter (default : 5.4) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)#',$version)){
-                    module::addWordpress($version);
+                    Module::addWordpress($version);
                 }else{
-                    module::addWordpress('5.4');
+                    Module::addWordpress('5.4');
                 }
                 break;
             case 3:
                 print "Quel est la version de Prestashop à ajouter (default : 1.7.5.0) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)\.(.)#',$version)){
-                    module::addPrestashop($version);
+                    Module::addPrestashop($version);
                 }else{
-                    module::addPrestashop('1.7.5.0');
+                    Module::addPrestashop('1.7.5.0');
                 }
                 break;
             case 4:
                 print "Quel est la version de PhpList à ajouter (default : 3.5.2) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
-                    module::addPhplist($version);
+                    Module::addPhplist($version);
                 }else{
-                    module::addPhplist('3.5.2');
+                    Module::addPhplist('3.5.2');
                 }
                 break;
             case 5:
                 print "Quel est la version de Wanewletter à ajouter (default : release-3.0.1) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
-                    module::addWanewsletter($version);
+                    Module::addWanewsletter($version);
                 }else{
-                    module::addWanewsletter('release-3.0.1');
+                    Module::addWanewsletter('release-3.0.1');
                 }
                 break;
             case 6:
                 print "Quel est la version de PHPmyNewletter à ajouter (default : v2.0.5) ? ";
                 $version = trim(fgets(STDIN));
                 if($version !== '' && preg_match('#(.)\.(.)\.(.)#',$version)){
-                    module::addPHPMyNewsletter($version);
+                    Module::addPHPMyNewsletter($version);
                 }else{
-                    module::addPHPMyNewsletter('v2.0.5');
+                    Module::addPHPMyNewsletter('v2.0.5');
                 }
                 break;
             default:
@@ -79,25 +80,25 @@ class module
                 print "Quel est le nom du module symfony à supprimer (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
                 if($name !== '' && preg_match('#(.)+#',$name)){
-                    module::removeSymfony($name);
+                    Module::removeSymfony($name);
                 }else{
-                    module::removeSymfony('symfony');
+                    Module::removeSymfony('symfony');
                 }
                 break;
             case 2:
-                module::removeWordpress();
+                Module::removeWordpress();
                 break;
             case 3:
-                module::removePrestashop();
+                Module::removePrestashop();
                 break;
             case 4:
-                module::removePhplist();
+                Module::removePhplist();
                 break;
             case 5:
-                module::removeWanewsletter();
+                Module::removeWanewsletter();
                 break;
             case 6:
-                module::removePHPMyNewsletter();
+                Module::removePHPMyNewsletter();
                 break;
             default:
         }
@@ -128,8 +129,8 @@ class module
         print $git_view;
 
         //stabilize symfony application
-        include dirname(__FILE__).DIRECTORY_SEPARATOR.'symfony.class.php';
-        symfony::stabilize();
+        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Symfony.php';
+        Symfony::stabilize();
 
         $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/src '.MODULES_PATH.'/'.$name.'/ -Rf');
         $symfony_root = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/config '.MODULES_PATH.'/'.$name.'/ -Rf');

@@ -22,5 +22,24 @@ class Logger
             file_put_contents($file, $what);
         }
     }
+    /**
+     * Fonction courante permettant de logger les erreurs obtenues dans un fichier
+     *
+     * @param array $errors
+     * @return void
+     */
+    public static function logCommandErrors(array $errors)
+    {
+        // log connection errors to the web service
+        ob_start();
+        foreach ($errors as $key => $value) {
+            echo "\n\n$key : \n";
+            print_r($value);
+        }
+        $write_string = ob_get_clean();
+        file_put_contents(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "errors_command.log", $write_string);
+
+        return;
+    }
 
 }
