@@ -26,15 +26,16 @@ class Bdd
         return $req;
     }
 
-    public function creerTableau($res){
+    public function exploiterResultat($res){
 
-        $tab = array();
-        foreach($res as $key => $row){
-            if (is_string($row)) {
-                $row = Caracter::normalise_ChaineDeCaracteresDownload($row);
+        foreach($res as $data) {
+            foreach ($data as $key => $row) {
+                if (is_string($row)) {
+                    $row = Caracter::normalise_ChaineDeCaracteresDownload($row);
+                }
+                $data[$key] = $row;
             }
-            $tab[$key] = $row;
         }
-        return $tab;
+        return $res;
     }
 }
