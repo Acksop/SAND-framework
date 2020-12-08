@@ -1,7 +1,8 @@
 <?php
 
+namespace MVC\Command;
 
-class cache
+class Cache
 {
 
     static public function help(){

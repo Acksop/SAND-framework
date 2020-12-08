@@ -5,8 +5,9 @@
       ],
 
         "psr-4": {
-            "MVC\\Classe\\":"./application/class",
-            "MVC\\Objets\\":"./application/objets"
+            "MVC\\Classe\\" : "./application/class",
+            "MVC\\Domain\\" : "./domain",
+            "MVC\\Command\\": "./console/command"
         }
     },
     "require": {
