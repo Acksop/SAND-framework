@@ -86,7 +86,9 @@ trait MemcachedTrait
         if (!static::isSupported()) {
             throw new CacheException('Memcached >= 2.2.0 is required');
         }
-        set_error_handler(function ($type, $msg, $file, $line) { throw new \ErrorException($msg, 0, $type, $file, $line); });
+        set_error_handler(function ($type, $msg, $file, $line) {
+            throw new \ErrorException($msg, 0, $type, $file, $line);
+        });
         try {
             $options += static::$defaultClientOptions;
             $client = new \Memcached($options['persistent_id']);

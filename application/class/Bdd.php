@@ -8,7 +8,7 @@ class Bdd
 
     public function __construct($bdd = 'bdd1')
     {
-        switch($bdd) {
+        switch ($bdd) {
             case 'bdd1':
                 $this->bdd = new \PDO(DSN_BDD1, USER_BDD1, PASS_BDD1);
                 break;
@@ -44,11 +44,12 @@ class Bdd
      * @param array|null $params
      * @return bool|\PDOStatement
      */
-    public function faireBindRequete($sql,Array $params = null){
+    public function faireBindRequete($sql, array $params = null)
+    {
         $req = $this->bdd->prepare($sql);
-        if($params){
+        if ($params) {
             foreach ($params as $value) {
-                $req->bindParam($value[0],Caracter::normalise_ChaineDeCaracteres($value[1]),$value[2]);
+                $req->bindParam($value[0], Caracter::normalise_ChaineDeCaracteres($value[1]), $value[2]);
             }
         }
         $req->execute();
@@ -56,9 +57,10 @@ class Bdd
         return $req;
     }
 
-    public function exploiterResultat($req){
+    public function exploiterResultat($req)
+    {
         $res = $req->fetchAll();
-        foreach($res as $data) {
+        foreach ($res as $data) {
             foreach ($data as $key => $row) {
                 if (is_string($row)) {
                     $row = Caracter::normalise_ChaineDeCaracteres($row);

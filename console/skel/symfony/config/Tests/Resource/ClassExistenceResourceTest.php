@@ -56,7 +56,9 @@ EOF
 
     public function testExistsKo()
     {
-        spl_autoload_register($autoloader = function ($class) use (&$loadedClass) { $loadedClass = $class; });
+        spl_autoload_register($autoloader = function ($class) use (&$loadedClass) {
+            $loadedClass = $class;
+        });
 
         try {
             $res = new ClassExistenceResource('MissingFooClass');

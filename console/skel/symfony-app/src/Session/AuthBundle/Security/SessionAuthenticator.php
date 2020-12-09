@@ -33,7 +33,7 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
     {
         if (isset($_SESSION['id_utilisateur'])) {
             return true;
-        }else{
+        } else {
             return true;
         }
     }
@@ -50,9 +50,9 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         if (!isset($_SESSION['id_utilisateur'])) {
-            $user = new \App\Classes\AuthUser('','','','','',['ROLE_USER']);
-        }else {
-            $user = new \App\Classes\AuthUser($_SESSION['id_utilisateur'], $_SESSION['identifiant'], $_SESSION['status_compte'], $_SESSION['type_compte'],$credentials, ['ROLE_USER', 'ROLE_USER_CONNECTED']);
+            $user = new \App\Classes\AuthUser('', '', '', '', '', ['ROLE_USER']);
+        } else {
+            $user = new \App\Classes\AuthUser($_SESSION['id_utilisateur'], $_SESSION['identifiant'], $_SESSION['status_compte'], $_SESSION['type_compte'], $credentials, ['ROLE_USER', 'ROLE_USER_CONNECTED']);
         }
 
         // if a User is returned, checkCredentials() is called
@@ -65,9 +65,9 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
         // In case of an API token, no credential check is needed.
 
         // Return `true` to cause authentication success
-        if($user->getCredentials() === $credentials) {
+        if ($user->getCredentials() === $credentials) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -91,7 +91,6 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
 //        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
         $url = $this->router->generate('unauthorized');
         return new RedirectResponse($url);
-
     }
 
     /**
@@ -108,8 +107,6 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
 
         $url = $this->router->generate('unauthorized');
         return new RedirectResponse($url);
-
-
     }
 
     public function supportsRememberMe()
@@ -117,11 +114,11 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
         return false;
     }
 
-    public function onLogoutSuccess(Request $request) {
+    public function onLogoutSuccess(Request $request)
+    {
         //$homepage = $this->config["homepage"];
         //return \phpCAS::logoutWithRedirectService($this->urlGenerator->generate($homepage, array(), UrlGeneratorInterface::ABSOLUTE_URL));
         header('Location: /index.php');
         return ;
     }
-
 }

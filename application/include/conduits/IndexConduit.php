@@ -11,5 +11,4 @@ class IndexConduit extends Conduit
         echo "IndexControlleur";
         return $this->render('index', array("templating_a"=>'blade',"templating_b"=>'twig',"templating_c"=>'edge'));
     }
-
 }

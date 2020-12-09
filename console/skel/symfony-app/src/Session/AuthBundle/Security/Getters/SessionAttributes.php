@@ -15,62 +15,75 @@ use  App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
  * renvoyé par CAS à partir des méthodes d'accès définies dans l'interface AttributesInterface
  *
  */
-class SessionAttributes implements AttributesInterface {
-
-    public function getFirstName() {
+class SessionAttributes implements AttributesInterface
+{
+    public function getFirstName()
+    {
         return ;
     }
 
-    public function getCompletName() {
+    public function getCompletName()
+    {
         return ;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return ;
     }
 
-    public function getDiscipline() {
+    public function getDiscipline()
+    {
         return ;
     }
 
-    public function getFonctM() {
+    public function getFonctM()
+    {
         return ;
     }
 
-    public function getRne() {
+    public function getRne()
+    {
         return ;
     }
 
-    public function getFreDuRne() {
+    public function getFreDuRne()
+    {
         return ;
     }
 
-    public function getFreDuRneResp() {
+    public function getFreDuRneResp()
+    {
         return ;
     }
 
-    public function getMail() {
+    public function getMail()
+    {
         return ;
     }
 
-    public function getTitle() {
+    public function getTitle()
+    {
         return ;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return ;
     }
 
-    public function getFrEduResDel(){
+    public function getFrEduResDel()
+    {
         return ;
     }
 
-    public function getFrEduFonctAdm() {
+    public function getFrEduFonctAdm()
+    {
         return ;
     }
 
-    public function getGrade() {
+    public function getGrade()
+    {
         return ;
     }
-
 }

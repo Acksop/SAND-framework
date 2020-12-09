@@ -53,7 +53,9 @@ final class Php70
     {
         static $handler;
         if (!$handler) {
-            $handler = function () { return false; };
+            $handler = function () {
+                return false;
+            };
         }
         set_error_handler($handler);
         @trigger_error('');

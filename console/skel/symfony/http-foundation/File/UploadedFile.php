@@ -192,7 +192,9 @@ class UploadedFile extends File
 
             $target = $this->getTargetFile($directory, $name);
 
-            set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+            set_error_handler(function ($type, $msg) use (&$error) {
+                $error = $msg;
+            });
             $moved = move_uploaded_file($this->getPathname(), $target);
             restore_error_handler();
             if (!$moved) {

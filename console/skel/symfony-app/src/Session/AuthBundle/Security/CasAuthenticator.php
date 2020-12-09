@@ -28,12 +28,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutSuccessHandlerInterface, AuthenticatorInterface {
-
+class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutSuccessHandlerInterface, AuthenticatorInterface
+{
     private $authService;
     private $urlGenerator;
 
-    public function __construct(AuthInterface $authService, Array $config, UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $dispatcher) {
+    public function __construct(AuthInterface $authService, array $config, UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $dispatcher)
+    {
         $this->urlGenerator = $urlGenerator;
         //Récupérer le service déaclaré authService
         $this->authService = $authService;
@@ -51,31 +52,34 @@ class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
      */
-    public function getCredentials(Request $request) {
+    public function getCredentials(Request $request)
+    {
         return true;
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider) {
+    public function getUser($credentials, UserProviderInterface $userProvider)
+    {
         $username = \phpCAS::getUser();
         $user = $userProvider->loadUserByUsername($username);
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user) {
+    public function checkCredentials($credentials, UserInterface $user)
+    {
         return $this->authService->ctrlAccess($user);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey) {
-        
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    {
         $event = new OnAuthenticationSuccessEvent($request, $token, $providerKey);
         $this->dispatcher->dispatch(OnAuthenticationSuccessEvent::NAME, $event);
         
         $this->authService->onSuccess($token);
-// on success, let the request continue
+        // on success, let the request continue
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception) {
-        
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
         $event = new OnAuthenticationFailureEvent($request, $exception);
         $this->dispatcher->dispatch(OnAuthenticationFailureEvent::NAME, $event);
         
@@ -90,25 +94,28 @@ class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
 //        return new RedirectResponse($url);
 //    }
 
-    public function supportsRememberMe() {
+    public function supportsRememberMe()
+    {
         return false;
     }
 
-//implementation LogoutSuccessHandlerInterface
-    public function onLogoutSuccess(Request $request) {
+    //implementation LogoutSuccessHandlerInterface
+    public function onLogoutSuccess(Request $request)
+    {
         $homepage = $this->config["homepage"];
         return \phpCAS::logoutWithRedirectService($this->urlGenerator->generate($homepage, array(), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
-    protected function getLoginUrl() {
+    protected function getLoginUrl()
+    {
         return \phpCas::getServerLoginURL();
     }
 
-    public function supports(Request $request) {
+    public function supports(Request $request)
+    {
         if (isset($this->config['environment']) && $this->config['environment'] == "test") {
             return false;
         }
         return true;
     }
-
 }

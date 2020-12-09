@@ -55,14 +55,13 @@ class DefaultAction extends Action
 
     public function makeHttp11($data)
     {
-
         $data = array('myval' => 25);
         //Dumper::dump($data);
-        \MVC\Classe\Logger::addLog('action','http11 make request');
+        \MVC\Classe\Logger::addLog('action', 'http11 make request');
         $request = new HttpMethodRequete();
-        $request->setUrl(Url::absolute_link_rewrite(false,'accueil',['var10'=>'val10']))->get($data);
-        $request->setUrl(Url::absolute_link_rewrite(false,'accueil',['var10'=>'val10']))->post($data);
+        $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->get($data);
+        $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->post($data);
         $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10' => 'val10']))->put($data);
-        $request->setUrl(Url::absolute_link_rewrite(false,'accueil',['var10'=>'val10']))->delete($data);
+        $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->delete($data);
     }
 }

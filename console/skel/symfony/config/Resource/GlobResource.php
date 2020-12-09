@@ -101,7 +101,9 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
                     $files = iterator_to_array(new \RecursiveIteratorIterator(
                         new \RecursiveCallbackFilterIterator(
                             new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS),
-                            function (\SplFileInfo $file) { return '.' !== $file->getBasename()[0]; }
+                            function (\SplFileInfo $file) {
+                                return '.' !== $file->getBasename()[0];
+                            }
                         ),
                         \RecursiveIteratorIterator::LEAVES_ONLY
                     ));

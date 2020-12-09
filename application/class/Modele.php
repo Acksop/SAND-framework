@@ -2,15 +2,15 @@
 
 namespace MVC\Classe;
 
-class Modele{
-	
-	public $page;
-	
-	public function __construct($base_param){
-		
-		if(file_exists(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model')){
-			$fichier = file(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model');
-			foreach ($fichier as $ligne_num => $ligne) {
+class Modele
+{
+    public $page;
+    
+    public function __construct($base_param)
+    {
+        if (file_exists(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model')) {
+            $fichier = file(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model');
+            foreach ($fichier as $ligne_num => $ligne) {
                 //on recherche le pattern des parametres
                 if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9-_+'\{\,\ \}\(\)]*[ ]*)#", $ligne, $matches)) {
                     //on recherche le pattern des tableau dans la valeur du paramètre
@@ -28,14 +28,12 @@ class Modele{
                     }
                     $this->page[$matches[1]] = $matches[2];
                 }
-
             }
             $this->page['url_params'] = $base_param['params'];
-		}else{
-			$this->page['name'] = $base_param['name'];
-			$this->page['description'] = $base_param['description'];
-			$this->page['params'] = $base_param['params'];
-		}
-	}
-	
+        } else {
+            $this->page['name'] = $base_param['name'];
+            $this->page['description'] = $base_param['description'];
+            $this->page['params'] = $base_param['params'];
+        }
+    }
 }

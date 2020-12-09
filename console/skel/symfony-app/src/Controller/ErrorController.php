@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -11,8 +12,8 @@ class ErrorController extends AbstractController
      */
     public function indexAction()
     {
-    	print_r("<pre>");
-    	//print_r($this->get('session'));
+        print_r("<pre>");
+        //print_r($this->get('session'));
         print_r($_COOKIE);
         print_r($_SESSION);
         print_r("</pre>");

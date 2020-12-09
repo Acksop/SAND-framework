@@ -3,7 +3,6 @@
 
 namespace MVC\Classe;
 
-
 /**
  * Class Response
  *
@@ -165,8 +164,6 @@ class HttpMethodRequete
 
         /** Pour utiliser ce code il faut mettre la variable safe_mode a ON dans php.ini */
         //exec($curl_cmd);
-
-
     }
 
     /**
@@ -218,5 +215,4 @@ class HttpMethodRequete
     {
         return $this->replaceContext('DELETE')->addContent($params)->send();
     }
-
 }

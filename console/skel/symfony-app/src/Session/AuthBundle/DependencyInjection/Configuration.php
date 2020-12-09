@@ -11,12 +11,14 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/configuration.html}
  */
-class Configuration implements ConfigurationInterface {
+class Configuration implements ConfigurationInterface
+{
 
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder() {
+    public function getConfigTreeBuilder()
+    {
         $treeBuilder = new TreeBuilder('session_auth');
         $rootNode = $treeBuilder->getRootNode();
         $rootNode
@@ -36,15 +38,15 @@ class Configuration implements ConfigurationInterface {
                 ->end()
         ;
                
-         $rootNode 
-            ->validate()   
+        $rootNode
+            ->validate()
                 ->ifTrue(function ($v) {
-                    if(!is_null($v['user_entity'])){
+                    if (!is_null($v['user_entity'])) {
                         $class  = $v['user_entity'];
-                        if(!class_exists($class)){
+                        if (!class_exists($class)) {
                             return true;
                         }
-                        return !array_key_exists("Symfony\Component\Security\Core\User\UserInterface", class_implements($class)); 
+                        return !array_key_exists("Symfony\Component\Security\Core\User\UserInterface", class_implements($class));
                     }
                     return false;
                 })
@@ -57,8 +59,8 @@ class Configuration implements ConfigurationInterface {
         return $treeBuilder;
     }
     
-     private function _addCasConfig(ArrayNodeDefinition $node) {
-         
+    private function _addCasConfig(ArrayNodeDefinition $node)
+    {
         $node
             ->children()
                 ->arrayNode('cas')->info('A déclarer si authentification pas CAS.')
@@ -75,17 +77,18 @@ class Configuration implements ConfigurationInterface {
             ->end()
         ;
         
-        $node 
-            ->validate()   
+        $node
+            ->validate()
                 ->ifTrue(function ($v) {
                     $cas_config =   $v['cas'];
-                    return ($v['type_auth']=="Cas" && (is_null($cas_config['hostname']) || is_null($cas_config['port']) || is_null($cas_config['uri']))  );
+                    return ($v['type_auth']=="Cas" && (is_null($cas_config['hostname']) || is_null($cas_config['port']) || is_null($cas_config['uri'])));
                 })
                 ->thenInvalid("En utilisant le type d'authentification Cas vous devez renseigner la section 'cas' et ses clés 'hostname', 'port', 'uri'")
             ->end();
-     }
+    }
     
-     private function _addRsaConfig(ArrayNodeDefinition $node) {
+    private function _addRsaConfig(ArrayNodeDefinition $node)
+    {
         $node
             ->children()
                 ->arrayNode('rsa')->addDefaultsIfNotSet()->info('A déclarer si authentification pas RSA.')
@@ -98,13 +101,13 @@ class Configuration implements ConfigurationInterface {
             ->end()
         ;
         
-        $node 
-            ->validate()   
+        $node
+            ->validate()
                 ->ifTrue(function ($v) {
                     $rsa_config =   $v['rsa'];
                     return ($v['type_auth']==="Rsa" && is_null($rsa_config['logout_url']));
                 })
                 ->thenInvalid("En utilisant le type d'authentification Rsa vous devez renseigner la section 'rsa' et sa clé 'logout_url'")
             ->end();
-     }
+    }
 }
