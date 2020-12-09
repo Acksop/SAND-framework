@@ -43,12 +43,11 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
             if ('/a/333' === $pathinfo) {
                 return ['_route' => 'a_third'];
             }
-
         }
 
         // a_wildcard
         if (preg_match('#^/(?P<param>[^/]++)$#sD', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, ['_route' => 'a_wildcard']), array ());
+            return $this->mergeDefaults(array_replace($matches, ['_route' => 'a_wildcard']), array());
         }
 
         if (0 === strpos($pathinfo, '/a')) {
@@ -96,12 +95,11 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 return $ret;
             }
             not_a_sixth:
-
         }
 
         // nested_wildcard
         if (0 === strpos($pathinfo, '/nested') && preg_match('#^/nested/(?P<param>[^/]++)$#sD', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, ['_route' => 'nested_wildcard']), array ());
+            return $this->mergeDefaults(array_replace($matches, ['_route' => 'nested_wildcard']), array());
         }
 
         if (0 === strpos($pathinfo, '/nested/group')) {
@@ -149,10 +147,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 return $ret;
             }
             not_nested_c:
-
-        }
-
-        elseif (0 === strpos($pathinfo, '/slashed/group')) {
+        } elseif (0 === strpos($pathinfo, '/slashed/group')) {
             // slashed_a
             if ('/slashed/group' === $trimmedPathinfo) {
                 $ret = ['_route' => 'slashed_a'];
@@ -197,7 +192,6 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 return $ret;
             }
             not_slashed_c:
-
         }
 
         if ('/' === $pathinfo && !$allow) {

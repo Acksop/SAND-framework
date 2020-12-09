@@ -290,12 +290,16 @@ class ExpressionLanguageTest extends TestCase
         return [
             [
                 function (ExpressionLanguage $el) {
-                    $el->register('fn', function () {}, function () {});
+                    $el->register('fn', function () {
+                    }, function () {
+                    });
                 },
             ],
             [
                 function (ExpressionLanguage $el) {
-                    $el->addFunction(new ExpressionFunction('fn', function () {}, function () {}));
+                    $el->addFunction(new ExpressionFunction('fn', function () {
+                    }, function () {
+                    }));
                 },
             ],
             [

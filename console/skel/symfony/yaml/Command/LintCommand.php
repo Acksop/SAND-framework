@@ -57,7 +57,8 @@ class LintCommand extends Command
             ->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')
             ->addOption('parse-tags', null, InputOption::VALUE_NONE, 'Parse custom tags')
-            ->setHelp(<<<EOF
+            ->setHelp(
+                <<<EOF
 The <info>%command.name%</info> command lints a YAML file and outputs to STDOUT
 the first encountered syntax error.
 

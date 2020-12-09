@@ -17,13 +17,12 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Twig\Environment;
 
-
 class SessionAuthenticator extends AbstractGuardAuthenticator
 {
     public $router;
     public $twig;
 
-    public function __construct(UrlGeneratorInterface $router,Environment $twig)
+    public function __construct(UrlGeneratorInterface $router, Environment $twig)
     {
         $this->router = $router;
         $this->twig = $twig;
@@ -40,7 +39,7 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
         Dumper::dump($_SESSION);
         if (isset($_SESSION['id_utilisateur'])) {
             return true;
-        }else{
+        } else {
             return true;
         }
     }
@@ -59,8 +58,8 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
     {
         Dumper::dump("getUser");
         if (!isset($_SESSION['id'])) {
-            $user = new \App\Security\AuthUser('0','not-connected',$credentials,['ROLE_USER']);
-        }else {
+            $user = new \App\Security\AuthUser('0', 'not-connected', $credentials, ['ROLE_USER']);
+        } else {
             $user = new \App\Security\AuthUser($_SESSION['id'], $_SESSION['username'], $credentials, ['ROLE_USER', 'ROLE_USER_CONNECTED']);
         }
 
@@ -77,9 +76,9 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
 
         // Return `true` to cause authentication success
         Dumper::dump("checkCredentials");
-        if($user->getCredentials() === $credentials) {
+        if ($user->getCredentials() === $credentials) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -104,12 +103,11 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
 //        $url = $this->router->generate('unauthorized');
 //        return new RedirectResponse($url);
         $content = $this->twig->render(
-            'default/unauthorized.html.twig', array()
+            'default/unauthorized.html.twig',
+            array()
         );
         $response = new Response($content, Response::HTTP_FORBIDDEN);
         return $response;
-
-
     }
 
     /**
@@ -128,13 +126,11 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
 //        return new RedirectResponse($url);
 
         $content = $this->twig->render(
-            'default/unauthorized.html.twig', array()
+            'default/unauthorized.html.twig',
+            array()
         );
         $response = new Response($content, Response::HTTP_FORBIDDEN);
         return $response;
-
-
-
     }
 
     public function supportsRememberMe()
@@ -142,11 +138,11 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
         return false;
     }
 
-    public function onLogoutSuccess(Request $request) {
+    public function onLogoutSuccess(Request $request)
+    {
         //$homepage = $this->config["homepage"];
         //return \phpCAS::logoutWithRedirectService($this->urlGenerator->generate($homepage, array(), UrlGeneratorInterface::ABSOLUTE_URL));
         header('Location: /index.php');
         return ;
     }
-
 }

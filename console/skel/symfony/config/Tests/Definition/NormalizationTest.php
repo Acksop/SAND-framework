@@ -30,7 +30,9 @@ class NormalizationTest extends TestCase
                     ->node('encoders', 'array')
                         ->useAttributeAsKey('class')
                         ->prototype('array')
-                            ->beforeNormalization()->ifString()->then(function ($v) { return array('algorithm' => $v); })->end()
+                            ->beforeNormalization()->ifString()->then(function ($v) {
+                                return array('algorithm' => $v);
+                            })->end()
                             ->children()
                                 ->node('algorithm', 'scalar')->end()
                             ->end()
@@ -135,7 +137,9 @@ class NormalizationTest extends TestCase
             ),
         );
 
-        return array_map(function ($v) { return array($v); }, $configs);
+        return array_map(function ($v) {
+            return array($v);
+        }, $configs);
     }
 
     /**
@@ -166,7 +170,9 @@ class NormalizationTest extends TestCase
             ),
         );
 
-        return array_map(function ($v) { return array($v); }, $configs);
+        return array_map(function ($v) {
+            return array($v);
+        }, $configs);
     }
 
     /**

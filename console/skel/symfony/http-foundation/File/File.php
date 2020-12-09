@@ -93,7 +93,9 @@ class File extends \SplFileInfo
     {
         $target = $this->getTargetFile($directory, $name);
 
-        set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+        set_error_handler(function ($type, $msg) use (&$error) {
+            $error = $msg;
+        });
         $renamed = rename($this->getPathname(), $target);
         restore_error_handler();
         if (!$renamed) {

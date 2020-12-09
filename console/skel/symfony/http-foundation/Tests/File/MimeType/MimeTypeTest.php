@@ -27,7 +27,7 @@ class MimeTypeTest extends TestCase
         try {
             $this->assertEquals('image/gif', MimeTypeGuesser::getInstance()->guess('-test'));
             chdir($cwd);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             chdir($cwd);
             throw $e;
         }

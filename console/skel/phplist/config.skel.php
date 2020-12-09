@@ -663,7 +663,7 @@ define('UPLOADIMAGES_DIR', 'uploadimages');
 // EMBEDEXTERNALIMAGES
 // this flag will fetch images in your content that are remotely hosted and put them
 // inside the message that is sent.
-define('EMBEDEXTERNALIMAGES',false);
+define('EMBEDEXTERNALIMAGES', false);
 
 
 // Manual text part, will give you an input box for the text version of the message

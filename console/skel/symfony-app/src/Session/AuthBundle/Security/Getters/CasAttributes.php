@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
   * @package Besancon\AuthBundle\Security\Getters
   * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
   */
@@ -15,62 +15,75 @@ use  App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
   * renvoyé par CAS à partir des méthodes d'accès définies dans l'interface AttributesInterface
   *
   */
-class CasAttributes implements AttributesInterface {
-    
-    public function getFirstName() {
+class CasAttributes implements AttributesInterface
+{
+    public function getFirstName()
+    {
         return \phpCAS::getAttribute("prenom");
     }
     
-    public function getCompletName() {
+    public function getCompletName()
+    {
         return \phpCAS::getAttribute("nomcomplet");
     }
     
-    public function getName() {
+    public function getName()
+    {
         return \phpCAS::getAttribute("nom");
     }
 
-    public function getDiscipline() {
+    public function getDiscipline()
+    {
         return \phpCAS::getAttribute("discipline");
     }
 
-    public function getFonctM() {
+    public function getFonctM()
+    {
         return \phpCAS::getAttribute("fonctm");
     }
 
-    public function getRne() {
+    public function getRne()
+    {
         return \phpCAS::getAttribute("rne");
     }
 
-    public function getFreDuRne() {
+    public function getFreDuRne()
+    {
         return \phpCAS::getAttribute("FrEduRne");
     }
 
-    public function getFreDuRneResp() {
+    public function getFreDuRneResp()
+    {
         return \phpCAS::getAttribute("FrEduRneResp");
     }
 
-    public function getMail() {
+    public function getMail()
+    {
         return \phpCAS::getAttribute("mail");
     }
 
-    public function getTitle() {
+    public function getTitle()
+    {
         return \phpCAS::getAttribute("title");
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return \phpCAS::getUser();
     }
     
-    public function getFrEduResDel(){
+    public function getFrEduResDel()
+    {
         return \phpCAS::getAttribute("FrEduResDel");
     }
 
-    public function getFrEduFonctAdm() {
+    public function getFrEduFonctAdm()
+    {
         return \phpCAS::getAttribute("FrEduFonctAdm");
     }
 
-    public function getGrade() {
+    public function getGrade()
+    {
         return \phpCAS::getAttribute("grade");
     }
-
 }

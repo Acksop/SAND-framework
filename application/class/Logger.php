@@ -3,13 +3,11 @@
 
 namespace MVC\Classe;
 
-
 use Symfony\Component\Validator\Constraints\Date;
 
 class Logger
 {
-
-    static function addLog($type = 'default', $what = "")
+    public static function addLog($type = 'default', $what = "")
     {
         $file = LOG_PATH . DIRECTORY_SEPARATOR . 'app.' . $type . '.log';
         $browser = new Browser();
@@ -41,5 +39,4 @@ class Logger
 
         return;
     }
-
 }

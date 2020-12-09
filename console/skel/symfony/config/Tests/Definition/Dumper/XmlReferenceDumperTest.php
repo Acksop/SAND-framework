@@ -35,7 +35,10 @@ class XmlReferenceDumperTest extends TestCase
 
     private function getConfigurationAsString()
     {
-        return str_replace("\n", PHP_EOL, <<<'EOL'
+        return str_replace(
+            "\n",
+            PHP_EOL,
+            <<<'EOL'
 <!-- Namespace: http://example.org/schema/dic/acme_root -->
 <!-- scalar-required: Required -->
 <!-- enum-with-default: One of "this"; "that" -->

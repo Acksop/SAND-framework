@@ -273,7 +273,9 @@ class Command
             array_map(function ($bit) {
                 return $bit instanceof Command ? $bit->join() : ($bit ?: null);
             }, $this->bits),
-            function ($bit) { return null !== $bit; }
+            function ($bit) {
+                return null !== $bit;
+            }
         ));
     }
 

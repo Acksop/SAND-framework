@@ -52,7 +52,8 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
             return $ok;
         }
 
-        set_error_handler(static function () {});
+        set_error_handler(static function () {
+        });
         $chars = '+-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         try {
@@ -197,7 +198,8 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
                 continue;
             }
 
-            set_error_handler(static function () {});
+            set_error_handler(static function () {
+            });
 
             try {
                 if (rename($tagFolder, $renamed = substr_replace($tagFolder, bin2hex(random_bytes(4)), -9))) {
