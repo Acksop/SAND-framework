@@ -24,7 +24,7 @@ $phpcas_path = '../../source/';
 ///////////////////////////////////////
 
 // Full Hostname of your CAS Server
-$cas_host = 'cas.domain.fr';
+$cas_host = 'cas.univ-fcomte.fr';
 // Context of the CAS Server
 $cas_context = 'cas';
 // Port of your CAS server. Normally for a https server it's 443
