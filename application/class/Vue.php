@@ -20,6 +20,9 @@ class Vue{
 
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
             require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
+
+
+
 		    //TEMPLATING BLADE
             $paths = new \SplPriorityQueue;
 
