@@ -24,6 +24,7 @@
       "symfony/yaml": "~4.0",
       "symfony/expression-language": "~3.0",
       "symfony/config": "3.3.2",
-        "michelf/php-markdown": "^1.9"
+        "michelf/php-markdown": "^1.9",
+        "apereo/phpcas": "^1.3"
     }
 }
