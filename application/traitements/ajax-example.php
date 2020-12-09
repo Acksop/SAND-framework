@@ -1,15 +1,13 @@
 <?php
 
-require OBJETS_PATH.DIRECTORY_SEPARATOR."dns.class.php";
-
 header("Content-Type: text/plain");
 
 $bdd = new Bdd();
-$dns = Dns::getDNS($bdd,$url_params['ip']);
+$dns = \MVC\Domain\Dns::getDNS($bdd,$url_params['ip']);
 $alias = array();
-$reverseDns = Dns::getReverseDNS($bdd,$url_params['ip']);
+$reverseDns = \MVC\Domain\Dns::getReverseDNS($bdd,$url_params['ip']);
 foreach($reverseDns as $row){
-    $tab = Dns::getAliasFromDNS($bdd,$row['valeur2_dns']);
+    $tab = \MVC\Domain\Dns::getAliasFromDNS($bdd,$row['valeur2_dns']);
     $alias[] = $tab;
 }
 

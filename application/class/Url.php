@@ -14,12 +14,12 @@ class Url
     public function __construct($method, $appRequest)
     {
 
-        //on créé le registre des modules symfony
+        //on créé le registre des modules d'applications tierces
         $this->registre = new \MVC\Classe\ModularRegister();
 
         //définition des parametres de base
         $page = array();
-        $page['name'] = 'accueil';
+        $page['name'] = 'index';
         $page['description'] = "";
         $page['params'] = array();
         $page['control'] = false;
@@ -32,11 +32,10 @@ class Url
         //print_r($urlParts);
         if(isset($urlParts[0])) {
             //Récupération du nom de la page
-            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'accueil' : $page['name'] = $urlParts[0];
-            //array_shift($urlParts);
+            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'index' : $page['name'] = $urlParts[0];
             unset($urlParts[0]);
         }else{
-            $page['name'] = 'accueil';
+            $page['name'] = 'index';
         }
 
         //il se peut que l'on ait des variable avec ? dans l'url
@@ -47,8 +46,7 @@ class Url
 
         if($page['name'] == 'control'){
             $page['control'] = true;
-            ($urlParts[1] == 'index' || $urlParts[1] == '' ) ? $page['name']='accueil' : $page['name']=$urlParts[1];
-            //array_shift($urlParts);
+            ($urlParts[1] == 'index' || $urlParts[1] == '' ) ? $page['name']='index' : $page['name']=$urlParts[1];
             unset($urlParts[1]);
 
         }
@@ -63,7 +61,7 @@ class Url
                 $page['params'] = array();
                 $this->page = $page;
                 return;
-            }else {
+            } else {
                 foreach ($urlParts as $key => $value) {
                     $values[] = $value;
                     $keys[] = $key;

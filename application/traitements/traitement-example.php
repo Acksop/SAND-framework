@@ -1,11 +1,9 @@
 <?php
 
-require OBJETS_PATH.DIRECTORY_SEPARATOR."host.class.php";
-
 $path = PATH_URL;
-$bdd = new Bdd();
+$bdd = new \MVC\Classe\Bdd();
 
-Host::addHost($bdd,$_POST['ip'],$_POST['nom']);
+\MVC\Domain\Host::addHost($bdd,$_POST['ip'],$_POST['nom']);
 
 switch($_POST['from']){
     case "vlan-zone+" :
