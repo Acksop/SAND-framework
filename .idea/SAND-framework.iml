@@ -12,9 +12,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/support" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/illuminate/view" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ircmaxell/password-compat" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/johnpbloch/wordpress" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/johnpbloch/wordpress-core-installer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/michelf/php-markdown" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/neitanod/forceutf8" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
@@ -29,6 +29,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php54" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php55" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php70" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/routing" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/var-exporter" />

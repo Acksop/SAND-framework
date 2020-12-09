@@ -13,6 +13,7 @@ class HttpMethod
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
+        Logger::addLog('http.method',$this->method);
         $this->acceptResponse();
     }
 

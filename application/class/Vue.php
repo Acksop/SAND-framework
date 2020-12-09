@@ -10,16 +10,19 @@ class Vue{
 	public $ecran;
 	public $block_body;
 	
-	public function __construct($baseControlleur){
+	public function __construct($application){
 
         $templateData = array();
-		extract( $baseControlleur->modele->page );
+		extract( $application->modele->page );
 
 		ob_start();
 		if(file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
 
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
             require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
+
+
+
 		    //TEMPLATING BLADE
             $paths = new \SplPriorityQueue;
 
@@ -30,7 +33,7 @@ class Vue{
             $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
 
             //de base on ajoute les parametres du .model et ceux provenant de l'url
-            foreach ($baseControlleur->modele->page as $key => $value) {
+            foreach ($application->modele->page as $key => $value) {
                 $templateData[$key] = $value;
             }
             echo $renderer->render($name, $templateData);

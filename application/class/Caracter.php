@@ -9,9 +9,8 @@ use ForceUTF8\Encoding;
 class Caracter
 {
 
-    public static function normalise_ChaineDeCaracteresDownload($chaine)
+    public static function normalise_ChaineDeCaracteres($chaine)
     {
-        //return Caracter::remplacerAccents($chaine);
         return Encoding::fixUTF8(Caracter::fp_stripslashes($chaine));
     }
 

@@ -1,6 +1,6 @@
 home_route:
   path:     /
-  defaults: { controller: 'FooController::indexAction' }
+  defaults: { controller: '' }
 
 foo_route:
   path:     /foo
@@ -11,4 +11,3 @@ foo_placeholder_route:
   defaults: { controller: 'FooConduit::load' }
   requirements:
     id: '[0-9]+'
-

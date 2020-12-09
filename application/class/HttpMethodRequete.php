@@ -132,19 +132,30 @@ class HttpMethodRequete
 //            return true;
 //        }
 
-        $curl_cmd = "curl -i -X $this->method -H 'Content-Type: application/json' -d '$this->content' $this->url";
+
+
+        $curl_cmd = "curl -i -k -X $this->method -H 'Content-Type: application/json' -d '$this->content' $this->url";
 
         /** Pour utiliser ce code il faut utiliser la variable curl.cainfo dans php.ini */
         Logger::addLog('curl', $curl_cmd);
 
-        $curl = curl_init($this->url);
+        /*$curl = curl_init($this->url);
         //curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl,CURLOPT_SSL_ENABLE_NPN,false);
+        curl_setopt($curl,CURLOPT_SSL_ENABLE_ALPN,false);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($curl,CURLOPT_SSL_VERIFYSTATUS,false);
+        curl_setopt($curl,CURLOPT_PROXY_SSL_VERIFYPEER,false);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $this->method);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($this->data));
 
         $response = curl_exec($curl);
-        curl_close($curl);
+        curl_close($curl);*/
+
+        $response = exec($curl_cmd);
+
+        Logger::addLog('curl.response', $response);
 
         if (!$response) {
             return false;
