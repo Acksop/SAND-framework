@@ -14,6 +14,7 @@ class Browser
     {
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->user = $this->get_browser_name();
+        //Logger::addLog('http.browser',$this->user);
     }
 
     protected function get_browser_name()

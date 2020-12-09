@@ -5,8 +5,9 @@
       ],
 
         "psr-4": {
-            "MVC\\Classe\\":"./application/class",
-            "MVC\\Objets\\":"./application/objets"
+            "MVC\\Classe\\" : "./application/class",
+            "MVC\\Domain\\" : "./domain",
+            "MVC\\Command\\": "./console/command"
         }
     },
     "require": {
@@ -15,12 +16,13 @@
       "ext-curl": "*",
       "windwalker/renderer": "3.*",
       "illuminate/view": "4.*",
-      "hybridauth/hybridauth": "~3.0",
+      "hybridauth/hybridauth": "^3.2",
       "neitanod/forceutf8": "^2.0",
       "symfony/routing": "3.4.36",
       "symfony/http-foundation": "~2.8",
       "symfony/yaml": "~4.0",
       "symfony/expression-language": "~3.0",
-      "symfony/config": "3.3.2"
+      "symfony/config": "3.3.2",
+        "michelf/php-markdown": "^1.9"
     }
 }

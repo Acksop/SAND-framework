@@ -2,6 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/application/modules/phplist" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/application/modules/prestashop" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/application/modules/wordpress" vcs="Git" />
   </component>
 </project>

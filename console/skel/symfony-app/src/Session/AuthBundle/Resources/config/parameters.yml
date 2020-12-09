@@ -1,0 +1,40 @@
+parameters:
+    #auth_cas devra s'appeler auth_multi
+    #bes_auth.authentication_service: bes_auth.authentification
+    session_auth:
+        type_auth: Session
+        environment: "%kernel.environment%"
+        cas:
+            #defini l'entité correspondant aux utilisateurs pour la création automatique des comptes
+            server:
+                cas_hostname: "seshat23.ac-besancon.fr"
+                cas_port: 8443
+                cas_uri: ""
+            route:
+                after_connect: "homepage"
+        rsa :
+            logout_url: http://webphppreprod.in.ac-besancon.fr/login/ct_logout.jsp
+            login_url: ~
+            route:
+                after_connect: "homepage"
+        #Gérer les droits d'accès à l'application en fonction des attributs CAS
+        access:
+#            allow: 
+#                attributes : 
+#                    - ["[phpCAS][attributes][title]","[phpCAS][attributes][ABservice]"]
+#                    - "[phpCAS][attributes][FrEduRne]"
+#                values : ["DIR|^DSS","^.*\\$TEC\\$"]
+            #deny:
+                #attributes : "title"
+                #values : "ENS"
+        #@TODO : Association profile CAS et Role de l'appli
+#        profil: 
+#            cas:
+#                ROLE_ADMIN:
+#                  key: "[phpCAS][attributes][typensi]"
+#                  value: "A"
+#                ROLE_USER:
+#                  key: "[phpCAS][attributes][FrEduRne]"
+#                  value: "^0250069P"
+#                  control: "regex"
+        

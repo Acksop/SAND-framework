@@ -1,0 +1,12 @@
+{
+    "name": "ac-besancon/authbundle",
+    "description": "Bundle Symfony 3 permettant de mettre en palce une authentification CAS ou RSA à travers le système de Guard",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amine Belhadjali",
+            "email": "amine.belhadjali@ac-besancon.fr"
+        }
+    ]
+}

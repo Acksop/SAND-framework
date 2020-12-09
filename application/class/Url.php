@@ -7,18 +7,19 @@ namespace MVC\Classe;
 class Url
 {
     public $page;
+    public $pageFile;
     public $registre;
 
 
     public function __construct($method, $appRequest)
     {
 
-        //on créé le registre des modules symfony
+        //on créé le registre des modules d'applications tierces
         $this->registre = new \MVC\Classe\ModularRegister();
 
         //définition des parametres de base
         $page = array();
-        $page['name'] = 'accueil';
+        $page['name'] = 'index';
         $page['description'] = "";
         $page['params'] = array();
         $page['control'] = false;
@@ -31,17 +32,21 @@ class Url
         //print_r($urlParts);
         if(isset($urlParts[0])) {
             //Récupération du nom de la page
-            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'accueil' : $page['name'] = $urlParts[0];
-            //array_shift($urlParts);
+            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'index' : $page['name'] = $urlParts[0];
             unset($urlParts[0]);
         }else{
-            $page['name'] = 'accueil';
+            $page['name'] = 'index';
         }
+
+        //il se peut que l'on ait des variable avec ? dans l'url
+        $urlQuery = explode('?' , $page['name'] );
+        $page['name'] = $urlQuery[0];
+
+        $page['name'] = strtolower($page['name']);
 
         if($page['name'] == 'control'){
             $page['control'] = true;
-            ($urlParts[1] == 'index' || $urlParts[1] == '' ) ? $page['name']='accueil' : $page['name']=$urlParts[1];
-            //array_shift($urlParts);
+            ($urlParts[1] == 'index' || $urlParts[1] == '' ) ? $page['name']='index' : $page['name']=$urlParts[1];
             unset($urlParts[1]);
 
         }
@@ -56,7 +61,7 @@ class Url
                 $page['params'] = array();
                 $this->page = $page;
                 return;
-            }else {
+            } else {
                 foreach ($urlParts as $key => $value) {
                     $values[] = $value;
                     $keys[] = $key;
@@ -91,6 +96,8 @@ class Url
                 }
             }
         }
+        $page['name'] = lcfirst($page['name']);
+        $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
         //verification de l'existence de la page dans les controlleurs
         if($page['control']){
             $pageFile = TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
@@ -124,6 +131,7 @@ class Url
             }
         }
         $this->page = $page;
+        $this->pageFile = $pageFile;
 
     }
 
@@ -134,6 +142,15 @@ class Url
         } else {
             return self::link_rewrite_slashParam($page, $params);
         }
+    }
+
+    static public function module_link_rewrite($page, $params = array())
+    {
+        $stringParams = '';
+        foreach ($params as $values) {
+            $stringParams .= "/" . $values;
+        }
+        return '/' . $page . $stringParams;
     }
 
     static private function link_rewrite_slashParam($page, $params = array())
