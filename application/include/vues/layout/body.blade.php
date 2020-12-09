@@ -10,8 +10,6 @@
                 <div class="row">
                     <div class="col-md-6">
                         <ul class="top-menu">
-                            <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
-                            <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Create', []) }}">Create</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                         </ul>
@@ -43,6 +41,8 @@
                         <div class="container">
                             <nav>
                                 <ul>
+                                    <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
+                                    <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Create', []) }}">Create</a></li>
     {{--@if (\MVC\Classe\Session::isRegistered())
         <li>
             <a href="{{ \MVC\Classe\Url::module_link_rewrite( 'prestashop', ['admin-dev']) }}">E-commerce</a>
