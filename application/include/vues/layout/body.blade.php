@@ -12,7 +12,6 @@
                         <ul class="top-menu">
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Create', []) }}">Create</a></li>
-                            <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Beers', []) }}">Pricing</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
                             <li><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                         </ul>
@@ -28,9 +27,9 @@
                 <div class="container">
                     <!--Logo-->
                     <div id="logo">
-                        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'accueil', []) }}">
-                            <span class="logo-default">Heberges APP</span>
-                            <span class="logo-dark">Heberges APP</span>
+                        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'index', []) }}">
+                            <span class="logo-default">APP</span>
+                            <span class="logo-dark">APP</span>
                         </a>
                     </div>
                     <!--End: Logo-->
