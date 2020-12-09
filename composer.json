@@ -1,7 +1,8 @@
 {
     "autoload": {
       "files": [
-        "./application/config/define-constantes.php"
+        "./application/config/define-constantes.php",
+        "./application/parameters.php"
       ],
 
         "psr-4": {

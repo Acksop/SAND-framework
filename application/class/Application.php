@@ -2,8 +2,6 @@
 
 namespace MVC\Classe;
 
-require APPLICATION_PATH . DIRECTORY_SEPARATOR . "parameters.php";
-
 class Application
 {
     public $http;

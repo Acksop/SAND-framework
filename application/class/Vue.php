@@ -2,9 +2,6 @@
 
 namespace MVC\Classe;
 
-define( "LAYOUT_PATH" , APPLICATION_PATH . DIRECTORY_SEPARATOR . "layout");
-
-
 class Vue{
 	
 	public $ecran;
