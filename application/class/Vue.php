@@ -27,7 +27,18 @@ class Vue
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
 
-            $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
+            if(!isset($engine)){$engine = 'blade';}
+
+            switch ($engine){
+                case 'twig':
+                    $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
+                    $name .= '.html';
+                    break;
+                case 'blade':
+                default:
+                $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
+            }
+
 
             //de base on ajoute les parametres du .model et ceux provenant de l'url
             foreach ($application->modele->page as $key => $value) {
