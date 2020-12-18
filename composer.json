@@ -14,11 +14,7 @@
     },
 
     "require": {
-<<<<<<< HEAD
-      "php": "^7.4",
-=======
-      "php": "^8",
->>>>>>> master-dev
+      "php": "^7.1",
       "ext-json": "*",
       "ext-pdo": "*",
       "ext-curl": "*",
