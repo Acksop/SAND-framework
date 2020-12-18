@@ -1,1 +1,0 @@
-<h3>Meldungen aus RSS-Feeds werden in PHPlist importiert</h3>

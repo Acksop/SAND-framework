@@ -1,1 +1,0 @@
-Hier kan he verschillende emails aan je lijst toevoegen. Attributen moeten worden geidentificeerd op de eerste lijn in het bestand. Ze zullen worden aangemaakt als textlijn attributen if they don't exist.

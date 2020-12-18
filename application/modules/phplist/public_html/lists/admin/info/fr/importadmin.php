@@ -1,1 +1,0 @@
-Ici, vous pouvez ajouter plusieurs administrateurs de votre syst&egrave;me.

@@ -1,1 +1,0 @@
-<h3>Cette page affiche une liste d'&eacute;l&eacute;ments qui doivent &amp;ecirc;tre mis en place pour que <?php echo NAME?> fonctionne correctement </h3>

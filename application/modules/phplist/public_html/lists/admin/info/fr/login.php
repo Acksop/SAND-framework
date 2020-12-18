@@ -1,1 +1,0 @@
-<p>Pour avoir acc&egrave;s &amp;agrave; cette page, vous devez vous connecter.<br/>
