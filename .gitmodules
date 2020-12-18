@@ -1,0 +1,9 @@
+[submodule "Prestashop"]
+	path = application/modules/prestashop
+	url = https://github.com/PrestaShop/PrestaShop.git
+[submodule "Wordpress"]
+  path = application/modules/wordpress
+  url = https://github.com/WordPress/WordPress.git
+[submodule "PhpMyNewsletter"]
+  path = application/modules/phpmynewsletter
+  url = https://github.com/Arnaud69/phpmynewsletter-2.0
