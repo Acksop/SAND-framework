@@ -29,6 +29,14 @@ class Url
         $urlTrim = trim($url['path'], '/');
         $urlParts = explode('/', $urlTrim);
 
+        //suppression des sous repertoires du BASE_SERVER_DIRECTORY
+        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
+        foreach($basePath as $subDir) {
+            if ($urlParts[0] == $subDir) {
+                array_shift($urlParts);
+            }
+        }
+
         //print_r($urlParts);
         if (isset($urlParts[0])) {
             //Récupération du nom de la page
@@ -133,6 +141,11 @@ class Url
         $this->pageFile = $pageFile;
     }
 
+    public static function asset_rewrite($urlAsset)
+    {
+        return '/' . BASE_SERVER_DIRECTORY . $urlAsset;
+    }
+
     public static function link_rewrite($isControlPatern, $page, $params = array())
     {
         if ($isControlPatern) {
@@ -148,7 +161,7 @@ class Url
         foreach ($params as $values) {
             $stringParams .= "/" . $values;
         }
-        return '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
     private static function link_rewrite_slashParam($page, $params = array())
@@ -157,7 +170,7 @@ class Url
         foreach ($params as $key => $values) {
             $stringParams .= "/" . $key . "/" . $values;
         }
-        return '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
     private static function controlLink_rewrite($page, $params = array())
@@ -166,7 +179,7 @@ class Url
         foreach ($params as $key => $values) {
             $stringParams .= "/" . $key . "/" . $values;
         }
-        return '/' . 'control' . '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
     }
 
     public static function absolute_link_rewrite($isControlPatern, $page, $params = array())
@@ -183,6 +196,6 @@ class Url
             $scheme = 'http';
         }
 
-        return ($scheme . "://" . $url . $uri);
+        return ($scheme . "://" . BASE_SERVER_DIRECTORY . $url . $uri);
     }
 }

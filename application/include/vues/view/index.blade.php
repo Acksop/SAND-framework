@@ -7,7 +7,8 @@
 @endsection
 
 @section('content')
-    <h1>Accueil</h1>
+    <h1>Accueil de l'url</h1>
+    <h2> {{$_SERVER['SERVER_NAME']}}</h2>
     <br /><br /><br />
     <a href="{{ \MVC\Classe\Url::link_rewrite(false, 'authentification', []) }}">S'authentifier ?</a>
     <hr/>

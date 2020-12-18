@@ -12,10 +12,11 @@ class Modele
             $fichier = file(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model');
             foreach ($fichier as $ligne_num => $ligne) {
                 //on recherche le pattern des parametres
-                if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9-_+'\{\,\ \}\(\)]*[ ]*)#", $ligne, $matches)) {
+                if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)]*[ ]*)#", $ligne, $matches)) {
                     //on recherche le pattern des tableau dans la valeur du paramètre
+                    // dans le cas ou la déclaration se fait sur une seule ligne
                     if (preg_match("#{.*}#", $matches[2])) {
-                        if (preg_match_all("#(?<capture>[0-9a-zA-Z-_+]*)#", $matches[2], $arrayMatches)) {
+                        if (preg_match_all("#(?<capture>[0-9a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", $matches[2], $arrayMatches)) {
                             $array = array();
                             foreach ($arrayMatches['capture'] as $val) {
                                 if ($val != '') {
