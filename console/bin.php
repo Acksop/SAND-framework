@@ -2,7 +2,7 @@
 <?php
 global $argv;
 
-require dirname(__FILE__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
 
 \MVC\Classe\Dumper::setPHPvalues();
 

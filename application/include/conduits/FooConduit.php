@@ -17,6 +17,5 @@ class FooConduit extends Conduit
     {
         echo "load of foo";
         return $this->render('foo', array('page_title' => 'Foo', 'description' => 'FooConduit', 'id' => $this->id));
-
     }
 }

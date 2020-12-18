@@ -17,47 +17,55 @@ namespace App\Session\AuthBundle\Security\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class AuthUser implements UserInterface, EquatableInterface {
-
+class AuthUser implements UserInterface, EquatableInterface
+{
     private $username;
     private $salt;
     private $roles = [];
 
-    public function __construct($username, $salt, array $roles = []) {
+    public function __construct($username, $salt, array $roles = [])
+    {
         $this->username = $username;
         $this->salt = $salt;
         $this->roles = $roles;
     }
 
-    public function getRoles() {
+    public function getRoles()
+    {
         return $this->roles;
     }
 
-    public function setRoles($roles) {
+    public function setRoles($roles)
+    {
         return $this->roles = $roles;
     }
     
-    public function addRole($role) {
+    public function addRole($role)
+    {
         return $this->roles[] = $role;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return;
     }
 
-    public function getSalt() {
+    public function getSalt()
+    {
         return $this->salt;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function eraseCredentials() {
-        
+    public function eraseCredentials()
+    {
     }
 
-    public function isEqualTo(UserInterface $user) {
+    public function isEqualTo(UserInterface $user)
+    {
         if (!$user instanceof AuthUser) {
             return false;
         }
@@ -72,5 +80,4 @@ class AuthUser implements UserInterface, EquatableInterface {
 
         return true;
     }
-
 }

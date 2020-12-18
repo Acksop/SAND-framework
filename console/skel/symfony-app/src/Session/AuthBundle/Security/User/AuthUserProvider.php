@@ -13,9 +13,10 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-class AuthUserProvider implements UserProviderInterface {
-
-    public function __construct(AuthInterface $authService, Array $config) {
+class AuthUserProvider implements UserProviderInterface
+{
+    public function __construct(AuthInterface $authService, array $config)
+    {
         $this->config = $config;
 
         if (!is_null($this->config['user_entity'])) {
@@ -26,33 +27,36 @@ class AuthUserProvider implements UserProviderInterface {
         $this->authService = $authService;
     }
 
-    public function loadUserByUsername($username) {
+    public function loadUserByUsername($username)
+    {
         $entity_user = $this->entity_user;
 
         return $this->authService->getUser($username);
     }
 
-    private function _ctrlInstanceUser(UserInterface $user) {
+    private function _ctrlInstanceUser(UserInterface $user)
+    {
         $entity_user = $this->entity_user;
 
         if (!$user instanceof $entity_user) {
             throw new UnsupportedUserException(
-            sprintf('Instances of "%s" are not supported.', get_class($user))
+                sprintf('Instances of "%s" are not supported.', get_class($user))
             );
         }
 
         return $user;
     }
 
-    public function refreshUser(UserInterface $user) {
+    public function refreshUser(UserInterface $user)
+    {
         $user = $this->_ctrlInstanceUser($user);
 
         return $this->loadUserByUsername($user->getUsername());
     }
 
-    public function supportsClass($class) {
+    public function supportsClass($class)
+    {
         $entity_user = $this->entity_user;
         return $this->entity_class === $class;
     }
-
 }

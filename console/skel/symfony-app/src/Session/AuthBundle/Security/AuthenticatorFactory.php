@@ -13,9 +13,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Session\AuthBundle\Utils\Config;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AuthenticatorFactory {
-
-    public static function getAuthenticator(AuthInterface $authService, Array $config, UrlGeneratorInterface $urlGenerator,EventDispatcherInterface $dispatcher) {
+class AuthenticatorFactory
+{
+    public static function getAuthenticator(AuthInterface $authService, array $config, UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $dispatcher)
+    {
         $type_auth = Config::getDeclaredType($config);
 
         $authenticator_class = "App\Session\AuthBundle\Security\\" . $type_auth . "Authenticator";
@@ -23,5 +24,4 @@ class AuthenticatorFactory {
 
         return $authenticator;
     }
-
 }

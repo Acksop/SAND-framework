@@ -30,7 +30,8 @@ use Symfony\Component\Security\Core\User\UserChecker;
  *
  * @author belhadjali
  */
-class DefaultAuthentication extends AuthFinal implements AuthInterface {
+class DefaultAuthentication extends AuthFinal implements AuthInterface
+{
 
     /**
      * @var string Uniquely identifies the secured area
@@ -48,9 +49,11 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface {
             'secured_area'
         );
 
-        $userProvider = new UserProvider( new Authentication(),
+        $userProvider = new UserProvider(
+            new Authentication(),
             array('user_entity' => 'App\Session\AuthBundle\Security\Auth\User',
-                'type_auth' => 'Cas'));
+                'type_auth' => 'Cas')
+        );
         $userChecker = new UserChecker();
 
         $defaultEncoder = new MessageDigestPasswordEncoder('sha512', true, 5000);
@@ -65,7 +68,8 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface {
             $userProvider,
             $userChecker,
             'secured_area',
-            $encoderFactory);
+            $encoderFactory
+        );
 
 
         $authenticatedToken = $provider
@@ -76,11 +80,13 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface {
         //$tokenStorage->setToken($authenticatedToken);
     }
 
-    public function getRoles() {
+    public function getRoles()
+    {
         return [];
     }
 
-    public function onSuccess($token) {
+    public function onSuccess($token)
+    {
 
         //dump($this->ai);
         //die('success');
@@ -95,12 +101,14 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface {
         return;
     }
 
-    public function ctrlAccess(\Symfony\Component\Security\Core\User\UserInterface $user) {
+    public function ctrlAccess(\Symfony\Component\Security\Core\User\UserInterface $user)
+    {
         //die('ctrlAccess');
         return true;
     }
 
-    public function getUser($username) {
+    public function getUser($username)
+    {
         return parent::getUser($username);
     }
 }

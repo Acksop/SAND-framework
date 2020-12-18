@@ -61,7 +61,9 @@ trait RedisTrait
 
         if ($redisClient instanceof \Predis\ClientInterface && $redisClient->getOptions()->exceptions) {
             $options = clone $redisClient->getOptions();
-            \Closure::bind(function () { $this->options['exceptions'] = false; }, $options, $options)();
+            \Closure::bind(function () {
+                $this->options['exceptions'] = false;
+            }, $options, $options)();
             $redisClient = new $redisClient($redisClient->getConnection(), $options);
         }
 
@@ -177,7 +179,9 @@ trait RedisTrait
                     throw new InvalidArgumentException(sprintf('Redis connection failed (%s): %s', $e->getMessage(), $dsn));
                 }
 
-                set_error_handler(function ($type, $msg) use (&$error) { $error = $msg; });
+                set_error_handler(function ($type, $msg) use (&$error) {
+                    $error = $msg;
+                });
                 $isConnected = $redis->isConnected();
                 restore_error_handler();
                 if (!$isConnected) {

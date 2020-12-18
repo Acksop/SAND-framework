@@ -82,7 +82,9 @@ class ArrayCache implements Psr16CacheInterface, LoggerAwareInterface, Resettabl
             }
         }
 
-        return $this->generateItems($keys, microtime(true), function ($k, $v, $hit) use ($default) { return $hit ? $v : $default; });
+        return $this->generateItems($keys, microtime(true), function ($k, $v, $hit) use ($default) {
+            return $hit ? $v : $default;
+        });
     }
 
     /**

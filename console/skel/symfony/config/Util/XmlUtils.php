@@ -220,7 +220,8 @@ class XmlUtils
     {
         $errors = array();
         foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf('[%s %s] %s (in %s - line %d, column %d)',
+            $errors[] = sprintf(
+                '[%s %s] %s (in %s - line %d, column %d)',
                 LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
                 $error->code,
                 trim($error->message),

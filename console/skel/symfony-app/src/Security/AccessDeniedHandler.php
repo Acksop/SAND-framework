@@ -18,7 +18,8 @@ class AccessDeniedHandler implements AccessDeniedHandlerInterface
     public function handle(Request $request, AccessDeniedException $accessDeniedException)
     {
         $content = $this->twig->render(
-            'default/unauthorized.html.twig', array()
+            'default/unauthorized.html.twig',
+            array()
         );
         $response = new Response($content, Response::HTTP_FORBIDDEN);
         return $response;

@@ -100,7 +100,6 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Matcher\UrlMatcher
                 return $ret;
             }
             not_put_and_get_and_head:
-
         }
 
         if ('/' === $pathinfo && !$allow) {

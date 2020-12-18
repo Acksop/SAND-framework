@@ -264,7 +264,9 @@ class FinderTest extends Iterator\RealIteratorTestCase
     public function testSort($adapter)
     {
         $finder = $this->buildFinder($adapter);
-        $this->assertSame($finder, $finder->sort(function (\SplFileInfo $a, \SplFileInfo $b) { return strcmp($a->getRealpath(), $b->getRealpath()); }));
+        $this->assertSame($finder, $finder->sort(function (\SplFileInfo $a, \SplFileInfo $b) {
+            return strcmp($a->getRealpath(), $b->getRealpath());
+        }));
         $this->assertIterator($this->toAbsolute(array('foo', 'foo bar', 'foo/bar.tmp', 'test.php', 'test.py', 'toto')), $finder->in(self::$tmpDir)->getIterator());
     }
 
@@ -274,7 +276,9 @@ class FinderTest extends Iterator\RealIteratorTestCase
     public function testFilter($adapter)
     {
         $finder = $this->buildFinder($adapter);
-        $this->assertSame($finder, $finder->filter(function (\SplFileInfo $f) { return preg_match('/test/', $f) > 0; }));
+        $this->assertSame($finder, $finder->filter(function (\SplFileInfo $f) {
+            return preg_match('/test/', $f) > 0;
+        }));
         $this->assertIterator($this->toAbsolute(array('test.php', 'test.py')), $finder->in(self::$tmpDir)->getIterator());
     }
 
@@ -374,7 +378,9 @@ class FinderTest extends Iterator\RealIteratorTestCase
 
         $finder = $this->buildFinder($adapter);
         $a = iterator_to_array($finder->directories()->in(self::$tmpDir));
-        $a = array_values(array_map(function ($a) { return (string) $a; }, $a));
+        $a = array_values(array_map(function ($a) {
+            return (string) $a;
+        }, $a));
         sort($a);
         $this->assertEquals($expected, $a, 'implements the \IteratorAggregate interface');
     }
@@ -632,7 +638,9 @@ class FinderTest extends Iterator\RealIteratorTestCase
     public function getAdaptersTestData()
     {
         return array_map(
-            function ($adapter) { return array($adapter); },
+            function ($adapter) {
+                return array($adapter);
+            },
             $this->getValidAdapters()
         );
     }

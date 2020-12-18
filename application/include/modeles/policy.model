@@ -1,4 +1,5 @@
 name : policy
 page_title: Politique de Confidentialité de l'application
 description : abracadabla
+engine : blade
 params : params

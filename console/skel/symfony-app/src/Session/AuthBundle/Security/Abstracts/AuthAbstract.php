@@ -15,7 +15,8 @@ namespace App\Session\AuthBundle\Security\Abstracts;
 use App\Session\AuthBundle\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class AuthAbstract {
+abstract class AuthAbstract
+{
 
     /**
      * @var App\Besancon\AuthBundle\Security\Interfaces\AttributesInterface $ai   Instance de CasAttributes ou RsaAttributes
@@ -73,6 +74,4 @@ abstract class AuthAbstract {
      *
      */
     abstract public function getUser($username);
-
-
 }
