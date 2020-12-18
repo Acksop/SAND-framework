@@ -9,6 +9,9 @@ class Page
         print "explaination of the command\n\n";
     }
 
+    /**
+     * TODO: ajouter en fonction du type de template  (blade ou twig)
+     */
     public static function add()
     {
         print "adding page...\n\n";
@@ -32,6 +35,9 @@ class Page
         print $git_view;
     }
 
+    /**
+     * Supprimer en fonction du template  contenu dans le model
+     */
     public static function remove()
     {
         print "removing page...\n\n";

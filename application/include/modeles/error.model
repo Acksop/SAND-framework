@@ -1,4 +1,5 @@
 name : error
 page_title: Erreurs de l'application
 description : abracadabla
+engine : blade
 params : params
