@@ -1,6 +1,6 @@
 [submodule "Prestashop"]
-	path = application/modules/prestashop
-	url = https://github.com/PrestaShop/PrestaShop.git
+  path = application/modules/prestashop
+  url = https://github.com/PrestaShop/PrestaShop.git
 [submodule "Wordpress"]
   path = application/modules/wordpress
   url = https://github.com/WordPress/WordPress.git
