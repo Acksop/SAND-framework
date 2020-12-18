@@ -7,3 +7,5 @@ vendor
 .vscode
 .DS_store
 
+application/modules/*
+!application/modules/setup
