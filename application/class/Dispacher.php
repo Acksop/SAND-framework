@@ -9,10 +9,8 @@ use Symfony\Component\Routing\RequestContext as RequestContext;
 use Symfony\Component\Routing\Loader\YamlFileLoader as YamlFileLoader;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
-
 class Dispacher
 {
-
     public $route;
 
     public function __construct()
@@ -20,7 +18,7 @@ class Dispacher
 
         //Avoid callback from empty homepage
         if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '') {
-            $this->route = NULL;
+            $this->route = null;
         } else {
             //Test the route from config file
             try {
@@ -38,7 +36,7 @@ class Dispacher
 
                 $this->route = $parameters;
             } catch (ResourceNotFoundException $e) {
-                $this->route = NULL;
+                $this->route = null;
             }
         }
     }

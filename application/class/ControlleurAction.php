@@ -3,10 +3,8 @@
 
 namespace MVC\Classe;
 
-
 class ControlleurAction
 {
-
     public static function inserer($action, $data = array())
     {
         $action = explode('.', $action);
@@ -21,13 +19,8 @@ class ControlleurAction
             } else {
                 return $slot->default($data);
             }
-
         } else {
             /*HandleError*/
         }
-
-
     }
-
-
 }

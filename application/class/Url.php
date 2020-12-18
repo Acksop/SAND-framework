@@ -14,56 +14,61 @@ class Url
     public function __construct($method, $appRequest)
     {
 
-        //on créé le registre des modules symfony
+        //on créé le registre des modules d'applications tierces
         $this->registre = new \MVC\Classe\ModularRegister();
 
         //définition des parametres de base
         $page = array();
-        $page['name'] = 'accueil';
+        $page['name'] = 'index';
         $page['description'] = "";
         $page['params'] = array();
         $page['control'] = false;
 
 
         $url = parse_url($_SERVER['REQUEST_URI']);
-        $urlTrim = trim( $url['path'] , '/' );
-        $urlParts = explode('/' , $urlTrim );
+        $urlTrim = trim($url['path'], '/');
+        $urlParts = explode('/', $urlTrim);
+
+        //suppression des sous repertoires du BASE_SERVER_DIRECTORY
+        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
+        foreach($basePath as $subDir) {
+            if ($urlParts[0] == $subDir) {
+                array_shift($urlParts);
+            }
+        }
 
         //print_r($urlParts);
-        if(isset($urlParts[0])) {
+        if (isset($urlParts[0])) {
             //Récupération du nom de la page
-            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'accueil' : $page['name'] = $urlParts[0];
-            //array_shift($urlParts);
+            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'index' : $page['name'] = $urlParts[0];
             unset($urlParts[0]);
-        }else{
-            $page['name'] = 'accueil';
+        } else {
+            $page['name'] = 'index';
         }
 
         //il se peut que l'on ait des variable avec ? dans l'url
-        $urlQuery = explode('?' , $page['name'] );
+        $urlQuery = explode('?', $page['name']);
         $page['name'] = $urlQuery[0];
 
         $page['name'] = strtolower($page['name']);
 
-        if($page['name'] == 'control'){
+        if ($page['name'] == 'control') {
             $page['control'] = true;
-            ($urlParts[1] == 'index' || $urlParts[1] == '' ) ? $page['name']='accueil' : $page['name']=$urlParts[1];
-            //array_shift($urlParts);
+            ($urlParts[1] == 'index' || $urlParts[1] == '') ? $page['name']='index' : $page['name']=$urlParts[1];
             unset($urlParts[1]);
-
         }
 
         //vérification du nombre de parametres:
         $numParts = count($urlParts);
         //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony
-        if ( $numParts%2 != 0 ) {
+        if ($numParts%2 != 0) {
             //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi un erreur
-            if( !in_array($page['name'], $this->registre->getIndex()) ){
+            if (!in_array($page['name'], $this->registre->getIndex())) {
                 $page['name'] = 'error';
                 $page['params'] = array();
                 $this->page = $page;
                 return;
-            }else {
+            } else {
                 foreach ($urlParts as $key => $value) {
                     $values[] = $value;
                     $keys[] = $key;
@@ -72,9 +77,9 @@ class Url
             }
 
             //cas d'utilisation normal : il existe autant de clé que de valeurs
-        } else if ( $numParts != 0 ) {
+        } elseif ($numParts != 0) {
             // si c'est un module alors on charge un a un les parametres
-            if( in_array($page['name'], $this->registre->getIndex()) ){
+            if (in_array($page['name'], $this->registre->getIndex())) {
                 foreach ($urlParts as $key => $value) {
                     $values[] = $value;
                     $keys[] = $key;
@@ -101,9 +106,9 @@ class Url
         $page['name'] = lcfirst($page['name']);
         $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
         //verification de l'existence de la page dans les controlleurs
-        if($page['control']){
+        if ($page['control']) {
             $pageFile = TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
-        }else {
+        } else {
             //recherche du fichier controlleur correpondant HTTP1.1 ou HTTP1.0
             switch ($method) {
                 //cas des requètes HTTP1.1
@@ -134,10 +139,14 @@ class Url
         }
         $this->page = $page;
         $this->pageFile = $pageFile;
-
     }
 
-    static public function link_rewrite($isControlPatern, $page, $params = array())
+    public static function asset_rewrite($urlAsset)
+    {
+        return '/' . BASE_SERVER_DIRECTORY . $urlAsset;
+    }
+
+    public static function link_rewrite($isControlPatern, $page, $params = array())
     {
         if ($isControlPatern) {
             return self::controlLink_rewrite($page, $params);
@@ -146,35 +155,34 @@ class Url
         }
     }
 
-    static public function module_link_rewrite($page, $params = array())
+    public static function module_link_rewrite($page, $params = array())
     {
         $stringParams = '';
         foreach ($params as $values) {
             $stringParams .= "/" . $values;
         }
-        return '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
-    static private function link_rewrite_slashParam($page, $params = array())
+    private static function link_rewrite_slashParam($page, $params = array())
     {
         $stringParams = '';
         foreach ($params as $key => $values) {
             $stringParams .= "/" . $key . "/" . $values;
         }
-        return '/' . $page . $stringParams;
-
+        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
-    static private function controlLink_rewrite($page, $params = array())
+    private static function controlLink_rewrite($page, $params = array())
     {
         $stringParams = '';
         foreach ($params as $key => $values) {
             $stringParams .= "/" . $key . "/" . $values;
         }
-        return '/' . 'control' . '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
     }
 
-    static public function absolute_link_rewrite($isControlPatern, $page, $params = array())
+    public static function absolute_link_rewrite($isControlPatern, $page, $params = array())
     {
         $url = $_SERVER['HTTP_HOST'];
         if ($isControlPatern) {
@@ -188,8 +196,6 @@ class Url
             $scheme = 'http';
         }
 
-        return ($scheme . "://" . $url . $uri);
-
+        return ($scheme . "://" . BASE_SERVER_DIRECTORY . $url . $uri);
     }
-
 }

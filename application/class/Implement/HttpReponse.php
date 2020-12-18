@@ -7,7 +7,6 @@ use MVC\Classe\Implement\Contrat\HttpReponseInterface;
 
 class HttpReponse extends Action implements HttpReponseInterface
 {
-
     public $url;
     public $params;
     public $data;
@@ -35,12 +34,9 @@ class HttpReponse extends Action implements HttpReponseInterface
 
     public function put()
     {
-
     }
 
     public function delete()
     {
-
     }
-
 }

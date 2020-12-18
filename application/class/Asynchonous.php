@@ -3,10 +3,8 @@
 
 namespace MVC\Classe;
 
-
 class Asynchonous
 {
-
     private $_css;
     private $_javascript;
 
@@ -37,5 +35,4 @@ class Asynchonous
     {
         echo $this->_javascript;
     }
-
 }

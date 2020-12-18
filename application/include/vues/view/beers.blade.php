@@ -31,7 +31,7 @@
             <a href="https://www.paypal.me/" class="beer-button button-secondary">Donate via PayPal</a>
         </div>
 
-        <img src="assets/img/beer.svg" alt="" class="donate-beer">
+        <img src="{{ \MVC\Classe\Url::asset_rewrite('assets/img/beer.svg')}}" alt="" class="donate-beer">
     </div>
 
 @endsection

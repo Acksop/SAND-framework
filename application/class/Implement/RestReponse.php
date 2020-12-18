@@ -10,7 +10,6 @@ use MVC\Classe\Implement\Contrat\RestReponseInterface;
 
 class RestReponse implements RestReponseInterface
 {
-
     public $url;
     public $params;
     public $data;
@@ -38,21 +37,17 @@ class RestReponse implements RestReponseInterface
 
     public function get()
     {
-
     }
 
     public function post()
     {
-
     }
 
     public function put()
     {
-
     }
 
     public function delete()
     {
-
     }
 }

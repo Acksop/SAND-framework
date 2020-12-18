@@ -3,14 +3,10 @@
 
 namespace MVC\Classe\Implement;
 
-
-
 class Action
 {
     public function render($view, $data)
     {
-
-
         $paths = new \SplPriorityQueue;
 
         $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
@@ -20,6 +16,5 @@ class Action
         $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
 
         return $renderer->render($view, $data);
-
     }
 }
