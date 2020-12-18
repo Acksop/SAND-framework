@@ -25,3 +25,12 @@ params : paramètre(s) supplémentaire(s)
 pour les modules symfony, c'est un peu plus compliqué il faut instancier ces trois précédents fichiers en faisant appel la class Modular,
 ne pas oublier de référencer le module dans le dossier modules > setup > registre.model
 et faire correspondre le nom du dossier avec le registre, ici l'exemple est syf43.
+
+
+#Commandes pour  demarrer  sur la branche  dev
+
+```
+composer  update
+git submodule init
+git submodule update
+```
