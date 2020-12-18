@@ -19,8 +19,8 @@ class RecursiveDirectoryIteratorTest extends IteratorTestCase
      * @dataProvider getPaths
      *
      * @param string $path
-     * @param bool   $seekable
-     * @param array  $contains
+     * @param bool $seekable
+     * @param array $contains
      * @param string $message
      */
     public function testRewind($path, $seekable, $contains, $message = null)
@@ -40,8 +40,8 @@ class RecursiveDirectoryIteratorTest extends IteratorTestCase
      * @dataProvider getPaths
      *
      * @param string $path
-     * @param bool   $seekable
-     * @param array  $contains
+     * @param bool $seekable
+     * @param array $contains
      * @param string $message
      */
     public function testSeek($path, $seekable, $contains, $message = null)
@@ -72,9 +72,9 @@ class RecursiveDirectoryIteratorTest extends IteratorTestCase
 
         // ftp
         $contains = array(
-            'ftp://ftp.mozilla.org'.DIRECTORY_SEPARATOR.'README',
-            'ftp://ftp.mozilla.org'.DIRECTORY_SEPARATOR.'index.html',
-            'ftp://ftp.mozilla.org'.DIRECTORY_SEPARATOR.'pub',
+            'ftp://ftp.mozilla.org' . DIRECTORY_SEPARATOR . 'README',
+            'ftp://ftp.mozilla.org' . DIRECTORY_SEPARATOR . 'index.html',
+            'ftp://ftp.mozilla.org' . DIRECTORY_SEPARATOR . 'pub',
         );
         $data[] = array('ftp://ftp.mozilla.org/', false, $contains);
 

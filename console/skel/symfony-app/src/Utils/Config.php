@@ -3,21 +3,21 @@
 
 namespace App\Utils;
 
-    /*
-     * To change this license header, choose License Headers in Project Properties.
-     * To change this template file, choose Tools | Templates
-     * and open the template in the editor.
-     */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
-    /**
-     * Description of Controls
-     *
-     * @author belhadjali
-     */
-    class Config
+/**
+ * Description of Controls
+ *
+ * @author belhadjali
+ */
+class Config
+{
+    public static function getDeclaredType($config)
     {
-        public static function getDeclaredType($config)
-        {
 //            if (!isset($config['type_auth'])) {
 //                throw new \LogicException('Paramètre type_auth manquant');
 //            }
@@ -27,21 +27,21 @@ namespace App\Utils;
 //            self::typeIsSupported($type);
 //
 //            return self::formatType($type);
-            return true;
-        }
+        return true;
+    }
 
-        public static function formatType($type)
-        {
+    public static function formatType($type)
+    {
 //            return ucfirst(strtolower($type));
-            return;
-        }
+        return;
+    }
 
-        public static function typeIsSupported($type)
-        {
+    public static function typeIsSupported($type)
+    {
 //            $type_auth = self::formatType($type);
 //            if (!in_array($type_auth, ['Rsa', 'Cas'])) {
 //                throw new \LogicException('Seuls Cas et Rsa sont supportés pour le moment');
 //            }
-            return true;
-        }
+        return true;
     }
+}

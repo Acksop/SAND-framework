@@ -56,57 +56,6 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
         $this->data['total']['statistics'] = $this->calculateTotalStatistics();
     }
 
-    public function reset()
-    {
-        $this->data = [];
-        foreach ($this->instances as $instance) {
-            $instance->clearCalls();
-        }
-    }
-
-    public function lateCollect()
-    {
-        $this->data['instances']['calls'] = $this->cloneVar($this->data['instances']['calls']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'cache';
-    }
-
-    /**
-     * Method returns amount of logged Cache reads: "get" calls.
-     *
-     * @return array
-     */
-    public function getStatistics()
-    {
-        return $this->data['instances']['statistics'];
-    }
-
-    /**
-     * Method returns the statistic totals.
-     *
-     * @return array
-     */
-    public function getTotals()
-    {
-        return $this->data['total']['statistics'];
-    }
-
-    /**
-     * Method returns all logged Cache call objects.
-     *
-     * @return mixed
-     */
-    public function getCalls()
-    {
-        return $this->data['instances']['calls'];
-    }
-
     private function calculateStatistics(): array
     {
         $statistics = [];
@@ -190,5 +139,56 @@ class CacheDataCollector extends DataCollector implements LateDataCollectorInter
         }
 
         return $totals;
+    }
+
+    /**
+     * Method returns amount of logged Cache reads: "get" calls.
+     *
+     * @return array
+     */
+    public function getStatistics()
+    {
+        return $this->data['instances']['statistics'];
+    }
+
+    public function reset()
+    {
+        $this->data = [];
+        foreach ($this->instances as $instance) {
+            $instance->clearCalls();
+        }
+    }
+
+    public function lateCollect()
+    {
+        $this->data['instances']['calls'] = $this->cloneVar($this->data['instances']['calls']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'cache';
+    }
+
+    /**
+     * Method returns the statistic totals.
+     *
+     * @return array
+     */
+    public function getTotals()
+    {
+        return $this->data['total']['statistics'];
+    }
+
+    /**
+     * Method returns all logged Cache call objects.
+     *
+     * @return mixed
+     */
+    public function getCalls()
+    {
+        return $this->data['instances']['calls'];
     }
 }

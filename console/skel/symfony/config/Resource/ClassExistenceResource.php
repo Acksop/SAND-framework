@@ -21,90 +21,21 @@ namespace Symfony\Component\Config\Resource;
  */
 class ClassExistenceResource implements SelfCheckingResourceInterface, \Serializable
 {
+    private static $autoloadLevel = 0;
+    private static $existsCache = array();
     private $resource;
     private $exists;
 
-    private static $autoloadLevel = 0;
-    private static $existsCache = array();
-
     /**
-     * @param string    $resource The fully-qualified class name
-     * @param bool|null $exists   Boolean when the existency check has already been done
+     * @param string $resource The fully-qualified class name
+     * @param bool|null $exists Boolean when the existency check has already been done
      */
     public function __construct($resource, $exists = null)
     {
         $this->resource = $resource;
         if (null !== $exists) {
-            $this->exists = (bool) $exists;
+            $this->exists = (bool)$exists;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
-    {
-        return $this->resource;
-    }
-
-    /**
-     * @return string The file path to the resource
-     */
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isFresh($timestamp)
-    {
-        $loaded = class_exists($this->resource, false) || interface_exists($this->resource, false) || trait_exists($this->resource, false);
-
-        if (null !== $exists = &self::$existsCache[$this->resource]) {
-            $exists = $exists || $loaded;
-        } elseif (!$exists = $loaded) {
-            if (!self::$autoloadLevel++) {
-                spl_autoload_register(__CLASS__.'::throwOnRequiredClass');
-            }
-
-            try {
-                $exists = class_exists($this->resource) || interface_exists($this->resource, false) || trait_exists($this->resource, false);
-            } catch (\ReflectionException $e) {
-                $exists = false;
-            } finally {
-                if (!--self::$autoloadLevel) {
-                    spl_autoload_unregister(__CLASS__.'::throwOnRequiredClass');
-                }
-            }
-        }
-
-        if (null === $this->exists) {
-            $this->exists = $exists;
-        }
-
-        return $this->exists xor !$exists;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
-    {
-        if (null === $this->exists) {
-            $this->isFresh(0);
-        }
-
-        return serialize(array($this->resource, $this->exists));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($serialized)
-    {
-        list($this->resource, $this->exists) = unserialize($serialized);
     }
 
     /**
@@ -141,5 +72,73 @@ class ClassExistenceResource implements SelfCheckingResourceInterface, \Serializ
         }
 
         throw $e;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * @return string The file path to the resource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        if (null === $this->exists) {
+            $this->isFresh(0);
+        }
+
+        return serialize(array($this->resource, $this->exists));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isFresh($timestamp)
+    {
+        $loaded = class_exists($this->resource, false) || interface_exists($this->resource, false) || trait_exists($this->resource, false);
+
+        if (null !== $exists = &self::$existsCache[$this->resource]) {
+            $exists = $exists || $loaded;
+        } elseif (!$exists = $loaded) {
+            if (!self::$autoloadLevel++) {
+                spl_autoload_register(__CLASS__ . '::throwOnRequiredClass');
+            }
+
+            try {
+                $exists = class_exists($this->resource) || interface_exists($this->resource, false) || trait_exists($this->resource, false);
+            } catch (\ReflectionException $e) {
+                $exists = false;
+            } finally {
+                if (!--self::$autoloadLevel) {
+                    spl_autoload_unregister(__CLASS__ . '::throwOnRequiredClass');
+                }
+            }
+        }
+
+        if (null === $this->exists) {
+            $this->exists = $exists;
+        }
+
+        return $this->exists xor !$exists;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list($this->resource, $this->exists) = unserialize($serialized);
     }
 }

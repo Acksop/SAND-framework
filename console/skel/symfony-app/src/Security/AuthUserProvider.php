@@ -3,7 +3,6 @@
 
 namespace App\Security;
 
-use App\Security\AuthUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,29 +10,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class AuthUserProvider implements UserProviderInterface
 {
-
-    /**
-     * Symfony calls this method if you use features like switch_user
-     * or remember_me.
-     *
-     * If you're not using these features, you do not need to implement
-     * this method.
-     *
-     * @return UserInterface
-     *
-     * @throws UsernameNotFoundException if the user is not found
-     */
-    public function loadUserByUsername($username)
-    {
-        $entity_user = $this->entity_user;
-
-        return $this->authService->getUser($username);
-        // Load a User object from your data source or throw UsernameNotFoundException.
-         // The $username argument may not actually be a username:
-         // it is whatever value is being returned by the getUsername()
-         // method in your User class.
-//         throw new \Exception('TODO: fill in loadUserByUsername() inside '.__FILE__);
-    }
 
     /**
      * Refreshes the user after being reloaded from the session.
@@ -67,6 +43,29 @@ class AuthUserProvider implements UserProviderInterface
         }
 
         return $user;
+    }
+
+    /**
+     * Symfony calls this method if you use features like switch_user
+     * or remember_me.
+     *
+     * If you're not using these features, you do not need to implement
+     * this method.
+     *
+     * @return UserInterface
+     *
+     * @throws UsernameNotFoundException if the user is not found
+     */
+    public function loadUserByUsername($username)
+    {
+        $entity_user = $this->entity_user;
+
+        return $this->authService->getUser($username);
+        // Load a User object from your data source or throw UsernameNotFoundException.
+        // The $username argument may not actually be a username:
+        // it is whatever value is being returned by the getUsername()
+        // method in your User class.
+//         throw new \Exception('TODO: fill in loadUserByUsername() inside '.__FILE__);
     }
 
     /**

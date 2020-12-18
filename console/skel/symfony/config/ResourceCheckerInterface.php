@@ -39,8 +39,8 @@ interface ResourceCheckerInterface
     /**
      * Validates the resource.
      *
-     * @param ResourceInterface $resource  The resource to be validated
-     * @param int               $timestamp The timestamp at which the cache associated with this resource was created
+     * @param ResourceInterface $resource The resource to be validated
+     * @param int $timestamp The timestamp at which the cache associated with this resource was created
      *
      * @return bool True if the resource has not changed since the given timestamp, false otherwise
      */

@@ -43,59 +43,70 @@ trait ProfilsCalculator
     }
 
     //equipe de direction établissement
+
+    public function isDIR()
+    {
+        return $this->isGroupeDIR() && in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_DIR);
+    }
+
+    //directeur 2nd degré
+
     public function isGroupeDIR()
     {
         return $this->ai->getFrEduFonctAdm() == "DIR";
     }
 
-    //directeur 2nd degré
-    public function isDIR()
-    {
-        return $this->isGroupeDIR() &&  in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_DIR);
-    }
-
     //directeur adjoint 2nd degré
+
     public function isAdjointDIR()
     {
-        return $this->isGroupeDIR() &&  in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_ADJOINT_DIR);
+        return $this->isGroupeDIR() && in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_ADJOINT_DIR);
     }
 
     //directeur d'ecole
-    public function isDEC()
-    {
-        return $this->ai->getFrEduFonctAdm() == "DEC";
-    }
 
-    //alias directeur d'ecole
     public function isDIR1D()
     {
         return $this->isDEC();
     }
 
-    //adaptation scolaire et de la scolarisation des élèves handicapé
-    public function isASH()
+    //alias directeur d'ecole
+
+    public function isDEC()
     {
-        return in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_ASH);
+        return $this->ai->getFrEduFonctAdm() == "DEC";
     }
+
+    //adaptation scolaire et de la scolarisation des élèves handicapé
+
+    public function isIEN1D()
+    {
+        return $this->isIEN() && $this->ai->getFrEduFonctAdm() == "IEN1D";
+    }
+
     //est inspecteur
+
     public function isIEN()
     {
         return (!is_null($this->ai->getGrade())) ? in_array($this->ai->getGrade(), AttributesInterface::GRADES_IEN) : $this->ai->getTitle() == "INS";
     }
 
     //est inspecteur 1er degré
-    public function isIEN1D()
-    {
-        return $this->isIEN() && $this->ai->getFrEduFonctAdm() == "IEN1D";
-    }
 
-    //est inspecteur ASH
     public function isIENASH()
     {
         return $this->isASH() && $this->isIEN();
     }
 
+    //est inspecteur ASH
+
+    public function isASH()
+    {
+        return in_array($this->ai->getDiscipline(), AttributesInterface::CODES_DISCIPLINE_ASH);
+    }
+
     //est DASEN
+
     public function isDASEN()
     {
         return in_array($this->ai->getGrade(), AttributesInterface::GRADES_DASEN);
@@ -113,25 +124,10 @@ trait ProfilsCalculator
         return $this->ai->getFrEduFonctAdm() == "DIO";
     }
 
-    public function filterFrEduRneByType($type)
+    public function isAffectedToRectorat()
     {
-        if ($this->ai->getFrEduRne() == AttributesInterface::NO_VALUE) {
-            return [];
-        }
-        $FrEduRne = (!is_array($this->ai->getFrEduRne())) ? [$this->ai->getFrEduRne()] : $this->ai->getFrEduRne();
-
-        $uais = array_filter($FrEduRne, function ($value) use ($type) {
-            $arr_value = explode("$", $value);
-            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNE_OFFSET_CODETTY, $arr_value)) {
-                return false;
-            }
-            if (is_array($type)) {
-                return in_array($arr_value[AttributesInterface::FREDURNE_OFFSET_CODETTY], $type);
-            }
-            return $arr_value[AttributesInterface::FREDURNE_OFFSET_CODETTY] == $type;
-        });
-
-        return $uais;
+        $result = $this->filterFrEduRneByNature(AttributesInterface::CODE_NATURE_RECTORAT);
+        return (count($result)) ? true : false;
     }
 
     public function filterFrEduRneByNature($nature)
@@ -154,46 +150,16 @@ trait ProfilsCalculator
         return $uais;
     }
 
-    public function filterFrEduRneRespByNature($nature)
+    public function isAffectedToDSDEN()
     {
-        if ($this->ai->getFrEduRneResp() == AttributesInterface::NO_VALUE) {
-            return [];
-        }
-        $FrEduRneResp = (!is_array($this->ai->getFrEduRneResp())) ? [$this->ai->getFrEduRneResp()] : $this->ai->getFrEduRneResp();
-
-        $uais = array_filter($FrEduRneResp, function ($value) use ($nature) {
-            $arr_value = explode("$", $value);
-            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNERESP_OFFSET_CODETNA, $arr_value)) {
-                return false;
-            }
-            if (is_array($nature)) {
-                return in_array($arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETNA], $nature);
-            }
-            return $arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETNA] == $nature;
-        });
-
-        return $uais;
+        $result = $this->filterFrEduRneByNature(AttributesInterface::CODE_NATURE_DSDEN);
+        return (count($result)) ? true : false;
     }
 
-    public function filterFrEduRneRespByType($type)
+    public function isAffectedToLYC()
     {
-        if ($this->ai->getFrEduRneResp() == AttributesInterface::NO_VALUE) {
-            return [];
-        }
-        $FrEduRneResp = (!is_array($this->ai->getFrEduRneResp())) ? [$this->ai->getFrEduRneResp()] : $this->ai->getFrEduRneResp();
-
-        $uais = array_filter($FrEduRneResp, function ($value) use ($type) {
-            $arr_value = explode("$", $value);
-            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNERESP_OFFSET_CODETTY, $arr_value)) {
-                return false;
-            }
-            if (is_array($type)) {
-                return in_array($arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETTY], $type);
-            }
-            return $arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETTY] == $type;
-        });
-
-        return $uais;
+        $result = $this->filterFrEduRneByType(AttributesInterface::TYPE_LYCEE_GENERAL);
+        return (count($result)) ? true : false;
     }
 
     // public function hasLYC()
@@ -206,23 +172,25 @@ trait ProfilsCalculator
     //     return $this->findUaiRespByType(AttributesInterface::TYPE_LYCEE_PRO);
     // }
 
-
-    public function isAffectedToRectorat()
+    public function filterFrEduRneByType($type)
     {
-        $result = $this->filterFrEduRneByNature(AttributesInterface::CODE_NATURE_RECTORAT);
-        return (count($result)) ? true : false;
-    }
+        if ($this->ai->getFrEduRne() == AttributesInterface::NO_VALUE) {
+            return [];
+        }
+        $FrEduRne = (!is_array($this->ai->getFrEduRne())) ? [$this->ai->getFrEduRne()] : $this->ai->getFrEduRne();
 
-    public function isAffectedToDSDEN()
-    {
-        $result = $this->filterFrEduRneByNature(AttributesInterface::CODE_NATURE_DSDEN);
-        return (count($result)) ? true : false;
-    }
+        $uais = array_filter($FrEduRne, function ($value) use ($type) {
+            $arr_value = explode("$", $value);
+            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNE_OFFSET_CODETTY, $arr_value)) {
+                return false;
+            }
+            if (is_array($type)) {
+                return in_array($arr_value[AttributesInterface::FREDURNE_OFFSET_CODETTY], $type);
+            }
+            return $arr_value[AttributesInterface::FREDURNE_OFFSET_CODETTY] == $type;
+        });
 
-    public function isAffectedToLYC()
-    {
-        $result = $this->filterFrEduRneByType(AttributesInterface::TYPE_LYCEE_GENERAL);
-        return (count($result)) ? true : false;
+        return $uais;
     }
 
     public function isAffectedToLP()
@@ -247,6 +215,27 @@ trait ProfilsCalculator
     {
         $result = $this->filterFrEduRneRespByType(AttributesInterface::TYPE_LYCEE_GENERAL);
         return (count($result)) ? true : false;
+    }
+
+    public function filterFrEduRneRespByType($type)
+    {
+        if ($this->ai->getFrEduRneResp() == AttributesInterface::NO_VALUE) {
+            return [];
+        }
+        $FrEduRneResp = (!is_array($this->ai->getFrEduRneResp())) ? [$this->ai->getFrEduRneResp()] : $this->ai->getFrEduRneResp();
+
+        $uais = array_filter($FrEduRneResp, function ($value) use ($type) {
+            $arr_value = explode("$", $value);
+            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNERESP_OFFSET_CODETTY, $arr_value)) {
+                return false;
+            }
+            if (is_array($type)) {
+                return in_array($arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETTY], $type);
+            }
+            return $arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETTY] == $type;
+        });
+
+        return $uais;
     }
 
     public function isRespOfLP()
@@ -295,7 +284,6 @@ trait ProfilsCalculator
         return $this->filterFrEduRneByNature(AttributesInterface::CODE_NATURE_SEGPA);
     }
 
-
     /****************************************************************************************
      *  Filtres sur FrEduRneResp
      ***************************************************************************************/
@@ -303,6 +291,27 @@ trait ProfilsCalculator
     public function filterFrEduRneRespByLYCG()
     {
         return $this->filterFrEduRneRespByNature(AttributesInterface::CODE_NATURE_LYCEE_GENERAL);
+    }
+
+    public function filterFrEduRneRespByNature($nature)
+    {
+        if ($this->ai->getFrEduRneResp() == AttributesInterface::NO_VALUE) {
+            return [];
+        }
+        $FrEduRneResp = (!is_array($this->ai->getFrEduRneResp())) ? [$this->ai->getFrEduRneResp()] : $this->ai->getFrEduRneResp();
+
+        $uais = array_filter($FrEduRneResp, function ($value) use ($nature) {
+            $arr_value = explode("$", $value);
+            if (!is_array($arr_value) || !array_key_exists(AttributesInterface::FREDURNERESP_OFFSET_CODETNA, $arr_value)) {
+                return false;
+            }
+            if (is_array($nature)) {
+                return in_array($arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETNA], $nature);
+            }
+            return $arr_value[AttributesInterface::FREDURNERESP_OFFSET_CODETNA] == $nature;
+        });
+
+        return $uais;
     }
 
     public function filterFrEduRneRespByLYCGT()

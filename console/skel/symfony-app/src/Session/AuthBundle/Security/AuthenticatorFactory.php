@@ -9,9 +9,9 @@
 namespace App\Session\AuthBundle\Security;
 
 use App\Session\AuthBundle\Security\Interfaces\AuthInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Session\AuthBundle\Utils\Config;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AuthenticatorFactory
 {

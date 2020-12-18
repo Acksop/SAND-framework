@@ -3,11 +3,8 @@
 
 namespace App\Session\AuthBundle\Security;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -119,6 +116,6 @@ class SessionAuthenticator extends AbstractGuardAuthenticator
         //$homepage = $this->config["homepage"];
         //return \phpCAS::logoutWithRedirectService($this->urlGenerator->generate($homepage, array(), UrlGeneratorInterface::ABSOLUTE_URL));
         header('Location: /index.php');
-        return ;
+        return;
     }
 }

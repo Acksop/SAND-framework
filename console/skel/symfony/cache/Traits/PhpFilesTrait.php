@@ -29,20 +29,12 @@ trait PhpFilesTrait
         doDelete as private doCommonDelete;
     }
 
+    private static $startTime;
+    private static $valuesCache = [];
     private $includeHandler;
     private $appendOnly;
     private $values = [];
     private $files = [];
-
-    private static $startTime;
-    private static $valuesCache = [];
-
-    public static function isSupported()
-    {
-        self::$startTime = self::$startTime ?? $_SERVER['REQUEST_TIME'] ?? time();
-
-        return \function_exists('opcache_invalidate') && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN) && (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) || filter_var(ini_get('opcache.enable_cli'), FILTER_VALIDATE_BOOLEAN));
-    }
 
     /**
      * @return bool
@@ -73,6 +65,24 @@ trait PhpFilesTrait
         }
 
         return $pruned;
+    }
+
+    protected function doUnlink($file)
+    {
+        unset(self::$valuesCache[$file]);
+
+        if (self::isSupported()) {
+            @opcache_invalidate($file, true);
+        }
+
+        return @unlink($file);
+    }
+
+    public static function isSupported()
+    {
+        self::$startTime = self::$startTime ?? $_SERVER['REQUEST_TIME'] ?? time();
+
+        return \function_exists('opcache_invalidate') && filter_var(ini_get('opcache.enable'), FILTER_VALIDATE_BOOLEAN) && (!\in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) || filter_var(ini_get('opcache.enable_cli'), FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
@@ -273,17 +283,6 @@ trait PhpFilesTrait
         }
 
         return $this->doCommonDelete($ids);
-    }
-
-    protected function doUnlink($file)
-    {
-        unset(self::$valuesCache[$file]);
-
-        if (self::isSupported()) {
-            @opcache_invalidate($file, true);
-        }
-
-        return @unlink($file);
     }
 
     private function getFileKey(string $file): string

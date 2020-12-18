@@ -14,8 +14,8 @@
 
 namespace App\Session\AuthBundle\Security\User;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthUser implements UserInterface, EquatableInterface
 {
@@ -39,7 +39,7 @@ class AuthUser implements UserInterface, EquatableInterface
     {
         return $this->roles = $roles;
     }
-    
+
     public function addRole($role)
     {
         return $this->roles[] = $role;

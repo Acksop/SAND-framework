@@ -34,7 +34,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     private $resourceCheckers;
 
     /**
-     * @param string                              $file             The absolute cache path
+     * @param string $file The absolute cache path
      * @param iterable|ResourceCheckerInterface[] $resourceCheckers The ResourceCheckers to use for the freshness check
      */
     public function __construct($file, $resourceCheckers = array())
@@ -123,9 +123,19 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     }
 
     /**
+     * Gets the meta file path.
+     *
+     * @return string The meta file path
+     */
+    private function getMetaFile()
+    {
+        return $this->file . '.meta';
+    }
+
+    /**
      * Writes cache.
      *
-     * @param string              $content  The content to write in the cache
+     * @param string $content The content to write in the cache
      * @param ResourceInterface[] $metadata An array of metadata
      *
      * @throws \RuntimeException When cache file can't be written
@@ -150,15 +160,5 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
                 // discard chmod failure (some filesystem may not support it)
             }
         }
-    }
-
-    /**
-     * Gets the meta file path.
-     *
-     * @return string The meta file path
-     */
-    private function getMetaFile()
-    {
-        return $this->file.'.meta';
     }
 }

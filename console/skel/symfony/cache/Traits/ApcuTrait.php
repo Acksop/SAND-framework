@@ -21,37 +21,12 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 trait ApcuTrait
 {
-    public static function isSupported()
-    {
-        return \function_exists('apcu_fetch') && filter_var(ini_get('apc.enabled'), FILTER_VALIDATE_BOOLEAN);
-    }
-
-    private function init(string $namespace, int $defaultLifetime, ?string $version)
-    {
-        if (!static::isSupported()) {
-            throw new CacheException('APCu is not enabled');
-        }
-        if ('cli' === \PHP_SAPI) {
-            ini_set('apc.use_request_time', 0);
-        }
-        parent::__construct($namespace, $defaultLifetime);
-
-        if (null !== $version) {
-            CacheItem::validateKey($version);
-
-            if (!apcu_exists($version.'@'.$namespace)) {
-                $this->doClear($namespace);
-                apcu_add($version.'@'.$namespace, null);
-            }
-        }
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function doFetch(array $ids)
     {
-        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__.'::handleUnserializeCallback');
+        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__ . '::handleUnserializeCallback');
         try {
             $values = [];
             foreach (apcu_fetch($ids, $ok) ?: [] as $k => $v) {
@@ -74,16 +49,6 @@ trait ApcuTrait
     protected function doHave($id)
     {
         return apcu_exists($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doClear($namespace)
-    {
-        return isset($namespace[0]) && class_exists('APCuIterator', false) && ('cli' !== \PHP_SAPI || filter_var(ini_get('apc.enable_cli'), FILTER_VALIDATE_BOOLEAN))
-            ? apcu_delete(new \APCuIterator(sprintf('/^%s/', preg_quote($namespace, '/')), APC_ITER_KEY))
-            : apcu_clear_cache();
     }
 
     /**
@@ -117,5 +82,40 @@ trait ApcuTrait
 
             throw $e;
         }
+    }
+
+    private function init(string $namespace, int $defaultLifetime, ?string $version)
+    {
+        if (!static::isSupported()) {
+            throw new CacheException('APCu is not enabled');
+        }
+        if ('cli' === \PHP_SAPI) {
+            ini_set('apc.use_request_time', 0);
+        }
+        parent::__construct($namespace, $defaultLifetime);
+
+        if (null !== $version) {
+            CacheItem::validateKey($version);
+
+            if (!apcu_exists($version . '@' . $namespace)) {
+                $this->doClear($namespace);
+                apcu_add($version . '@' . $namespace, null);
+            }
+        }
+    }
+
+    public static function isSupported()
+    {
+        return \function_exists('apcu_fetch') && filter_var(ini_get('apc.enabled'), FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doClear($namespace)
+    {
+        return isset($namespace[0]) && class_exists('APCuIterator', false) && ('cli' !== \PHP_SAPI || filter_var(ini_get('apc.enable_cli'), FILTER_VALIDATE_BOOLEAN))
+            ? apcu_delete(new \APCuIterator(sprintf('/^%s/', preg_quote($namespace, '/')), APC_ITER_KEY))
+            : apcu_clear_cache();
     }
 }

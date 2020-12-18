@@ -11,10 +11,10 @@
 
 namespace Symfony\Component\Config\Definition\Dumper;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\ArrayNode;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\EnumNode;
+use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
 
 /**
@@ -43,14 +43,14 @@ class XmlReferenceDumper
 
     /**
      * @param NodeInterface $node
-     * @param int           $depth
-     * @param bool          $root      If the node is the root node
-     * @param string        $namespace The namespace of the node
+     * @param int $depth
+     * @param bool $root If the node is the root node
+     * @param string $namespace The namespace of the node
      */
     private function writeNode(NodeInterface $node, $depth = 0, $root = false, $namespace = null)
     {
         $rootName = ($root ? 'config' : $node->getName());
-        $rootNamespace = ($namespace ?: ($root ? 'http://example.org/schema/dic/'.$node->getName() : null));
+        $rootNamespace = ($namespace ?: ($root ? 'http://example.org/schema/dic/' . $node->getName() : null));
 
         // xml remapping
         if ($node->getParent()) {
@@ -79,7 +79,7 @@ class XmlReferenceDumper
             }
 
             if ($rootNamespace) {
-                $rootComments[] = 'Namespace: '.$rootNamespace;
+                $rootComments[] = 'Namespace: ' . $rootNamespace;
             }
 
             // render prototyped nodes
@@ -88,12 +88,12 @@ class XmlReferenceDumper
 
                 $info = 'prototype';
                 if (null !== $prototype->getInfo()) {
-                    $info .= ': '.$prototype->getInfo();
+                    $info .= ': ' . $prototype->getInfo();
                 }
                 array_unshift($rootComments, $info);
 
                 if ($key = $node->getKeyAttribute()) {
-                    $rootAttributes[$key] = str_replace('-', ' ', $rootName).' '.$key;
+                    $rootAttributes[$key] = str_replace('-', ' ', $rootName) . ' ' . $key;
                 }
 
                 if ($prototype instanceof PrototypedArrayNode) {
@@ -146,7 +146,7 @@ class XmlReferenceDumper
                     }
 
                     if ($example = $child->getExample()) {
-                        $comments[] = 'Example: '.$example;
+                        $comments[] = 'Example: ' . $example;
                     }
 
                     if ($child->isRequired()) {
@@ -154,7 +154,7 @@ class XmlReferenceDumper
                     }
 
                     if ($child instanceof EnumNode) {
-                        $comments[] = 'One of '.implode('; ', array_map('json_encode', $child->getValues()));
+                        $comments[] = 'One of ' . implode('; ', array_map('json_encode', $child->getValues()));
                     }
 
                     if (count($comments)) {
@@ -180,7 +180,7 @@ class XmlReferenceDumper
         // root node comment
         if (count($rootComments)) {
             foreach ($rootComments as $comment) {
-                $this->writeLine('<!-- '.$comment.' -->', $depth);
+                $this->writeLine('<!-- ' . $comment . ' -->', $depth);
             }
         }
 
@@ -190,14 +190,14 @@ class XmlReferenceDumper
                 $commentDepth = $depth + 4 + strlen($attrName) + 2;
                 $commentLines = explode("\n", $comment);
                 $multiline = (count($commentLines) > 1);
-                $comment = implode(PHP_EOL.str_repeat(' ', $commentDepth), $commentLines);
+                $comment = implode(PHP_EOL . str_repeat(' ', $commentDepth), $commentLines);
 
                 if ($multiline) {
                     $this->writeLine('<!--', $depth);
-                    $this->writeLine($attrName.': '.$comment, $depth + 4);
+                    $this->writeLine($attrName . ': ' . $comment, $depth + 4);
                     $this->writeLine('-->', $depth);
                 } else {
-                    $this->writeLine('<!-- '.$attrName.': '.$comment.' -->', $depth);
+                    $this->writeLine('<!-- ' . $attrName . ': ' . $comment . ' -->', $depth);
                 }
             }
         }
@@ -205,7 +205,7 @@ class XmlReferenceDumper
         // render start tag + attributes
         $rootIsVariablePrototype = isset($prototypeValue);
         $rootIsEmptyTag = (0 === count($rootChildren) && !$rootIsVariablePrototype);
-        $rootOpenTag = '<'.$rootName;
+        $rootOpenTag = '<' . $rootName;
         if (1 >= ($attributesCount = count($rootAttributes))) {
             if (1 === $attributesCount) {
                 $rootOpenTag .= sprintf(' %s="%s"', current(array_keys($rootAttributes)), $this->writeValue(current($rootAttributes)));
@@ -214,7 +214,7 @@ class XmlReferenceDumper
             $rootOpenTag .= $rootIsEmptyTag ? ' />' : '>';
 
             if ($rootIsVariablePrototype) {
-                $rootOpenTag .= $prototypeValue.'</'.$rootName.'>';
+                $rootOpenTag .= $prototypeValue . '</' . $rootName . '>';
             }
 
             $this->writeLine($rootOpenTag, $depth);
@@ -232,7 +232,7 @@ class XmlReferenceDumper
                     $this->writeLine($rootIsEmptyTag ? '/>' : '>', $depth);
 
                     if ($rootIsVariablePrototype) {
-                        $rootOpenTag .= $prototypeValue.'</'.$rootName.'>';
+                        $rootOpenTag .= $prototypeValue . '</' . $rootName . '>';
                     }
                 }
             }
@@ -248,7 +248,7 @@ class XmlReferenceDumper
         if (!$rootIsEmptyTag && !$rootIsVariablePrototype) {
             $this->writeLine('');
 
-            $rootEndTag = '</'.$rootName.'>';
+            $rootEndTag = '</' . $rootName . '>';
             $this->writeLine($rootEndTag, $depth);
         }
     }
@@ -257,14 +257,14 @@ class XmlReferenceDumper
      * Outputs a single config reference line.
      *
      * @param string $text
-     * @param int    $indent
+     * @param int $indent
      */
     private function writeLine($text, $indent = 0)
     {
         $indent = strlen($text) + $indent;
-        $format = '%'.$indent.'s';
+        $format = '%' . $indent . 's';
 
-        $this->reference .= sprintf($format, $text).PHP_EOL;
+        $this->reference .= sprintf($format, $text) . PHP_EOL;
     }
 
     /**

@@ -54,6 +54,25 @@ class MimeTypeGuesser implements MimeTypeGuesserInterface
     protected $guessers = array();
 
     /**
+     * Registers all natively provided mime type guessers.
+     */
+    private function __construct()
+    {
+        $this->register(new FileBinaryMimeTypeGuesser());
+        $this->register(new FileinfoMimeTypeGuesser());
+    }
+
+    /**
+     * Registers a new mime type guesser.
+     *
+     * When guessing, this guesser is preferred over previously registered ones.
+     */
+    public function register(MimeTypeGuesserInterface $guesser)
+    {
+        array_unshift($this->guessers, $guesser);
+    }
+
+    /**
      * Returns the singleton instance.
      *
      * @return self
@@ -73,25 +92,6 @@ class MimeTypeGuesser implements MimeTypeGuesserInterface
     public static function reset()
     {
         self::$instance = null;
-    }
-
-    /**
-     * Registers all natively provided mime type guessers.
-     */
-    private function __construct()
-    {
-        $this->register(new FileBinaryMimeTypeGuesser());
-        $this->register(new FileinfoMimeTypeGuesser());
-    }
-
-    /**
-     * Registers a new mime type guesser.
-     *
-     * When guessing, this guesser is preferred over previously registered ones.
-     */
-    public function register(MimeTypeGuesserInterface $guesser)
-    {
-        array_unshift($this->guessers, $guesser);
     }
 
     /**

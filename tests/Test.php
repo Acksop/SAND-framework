@@ -10,12 +10,12 @@ class Test extends PHPUnit_Framework_TestCase
     public function Test()
     {
     }
-        
+
     //fonction de testing proprement dite
     public function testOne()
     {
         $essai = ajouterZero(1);
-            
+
         $this->assertEquals('01', $essai);
         $this->assertNotEquals(10, $essai);
     }

@@ -30,15 +30,6 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
     /**
      * {@inheritdoc}
      */
-    public function setDefaultValue($value)
-    {
-        $this->defaultValueSet = true;
-        $this->defaultValue = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue()
     {
         return $this->defaultValueSet;
@@ -55,13 +46,22 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setDefaultValue($value)
+    {
+        $this->defaultValueSet = true;
+        $this->defaultValue = $value;
+    }
+
+    /**
      * Sets if this node is allowed to have an empty value.
      *
      * @param bool $boolean True if this entity will accept empty values
      */
     public function setAllowEmptyValue($boolean)
     {
-        $this->allowEmptyValue = (bool) $boolean;
+        $this->allowEmptyValue = (bool)$boolean;
     }
 
     /**
@@ -102,22 +102,6 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function normalizeValue($value)
-    {
-        return $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function mergeValues($leftSide, $rightSide)
-    {
-        return $rightSide;
-    }
-
-    /**
      * Evaluates if the given value is to be treated as empty.
      *
      * By default, PHP's empty() function is used to test for emptiness. This
@@ -131,5 +115,21 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
     protected function isValueEmpty($value)
     {
         return empty($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function normalizeValue($value)
+    {
+        return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function mergeValues($leftSide, $rightSide)
+    {
+        return $rightSide;
     }
 }

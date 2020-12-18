@@ -3,9 +3,9 @@
 namespace App\Session\AuthBundle\Events;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class OnAuthenticationFailureEvent extends Event
 {
@@ -27,12 +27,12 @@ class OnAuthenticationFailureEvent extends Event
     {
         return $this->exception;
     }
- 
+
     public function getResponse()
     {
         return $this->response;
     }
-    
+
     public function setResponse($response)
     {
         $this->response = $response;

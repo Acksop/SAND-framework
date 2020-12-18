@@ -54,7 +54,7 @@ trait AbstractAdapterTrait
 
             return $f($key, $value, $isHit);
         } catch (\Exception $e) {
-            CacheItem::log($this->logger, 'Failed to fetch key "{key}": '.$e->getMessage(), ['key' => $key, 'exception' => $e]);
+            CacheItem::log($this->logger, 'Failed to fetch key "{key}": ' . $e->getMessage(), ['key' => $key, 'exception' => $e]);
         }
 
         return $f($key, null, false);
@@ -76,12 +76,34 @@ trait AbstractAdapterTrait
         try {
             $items = $this->doFetch($ids);
         } catch (\Exception $e) {
-            CacheItem::log($this->logger, 'Failed to fetch items: '.$e->getMessage(), ['keys' => $keys, 'exception' => $e]);
+            CacheItem::log($this->logger, 'Failed to fetch items: ' . $e->getMessage(), ['keys' => $keys, 'exception' => $e]);
             $items = [];
         }
         $ids = array_combine($ids, $keys);
 
         return $this->generateItems($items, $ids);
+    }
+
+    private function generateItems(iterable $items, array &$keys): iterable
+    {
+        $f = $this->createCacheItem;
+
+        try {
+            foreach ($items as $id => $value) {
+                if (!isset($keys[$id])) {
+                    $id = key($keys);
+                }
+                $key = $keys[$id];
+                unset($keys[$id]);
+                yield $key => $f($key, $value, true);
+            }
+        } catch (\Exception $e) {
+            CacheItem::log($this->logger, 'Failed to fetch items: ' . $e->getMessage(), ['keys' => array_values($keys), 'exception' => $e]);
+        }
+
+        foreach ($keys as $key) {
+            yield $key => $f($key, null, false);
+        }
     }
 
     /**
@@ -116,40 +138,18 @@ trait AbstractAdapterTrait
 
     public function __sleep()
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
 
     public function __wakeup()
     {
-        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 
     public function __destruct()
     {
         if ($this->deferred) {
             $this->commit();
-        }
-    }
-
-    private function generateItems(iterable $items, array &$keys): iterable
-    {
-        $f = $this->createCacheItem;
-
-        try {
-            foreach ($items as $id => $value) {
-                if (!isset($keys[$id])) {
-                    $id = key($keys);
-                }
-                $key = $keys[$id];
-                unset($keys[$id]);
-                yield $key => $f($key, $value, true);
-            }
-        } catch (\Exception $e) {
-            CacheItem::log($this->logger, 'Failed to fetch items: '.$e->getMessage(), ['keys' => array_values($keys), 'exception' => $e]);
-        }
-
-        foreach ($keys as $key) {
-            yield $key => $f($key, null, false);
         }
     }
 }

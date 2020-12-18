@@ -11,10 +11,10 @@
 
 namespace Symfony\Component\Config\Loader;
 
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Config\Exception\FileLoaderLoadException;
 use Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
+use Symfony\Component\Config\Exception\FileLoaderLoadException;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Resource\FileExistenceResource;
 use Symfony\Component\Config\Resource\GlobResource;
 
@@ -58,21 +58,11 @@ abstract class FileLoader extends Loader
     }
 
     /**
-     * Returns the file locator used by this loader.
-     *
-     * @return FileLocatorInterface
-     */
-    public function getLocator()
-    {
-        return $this->locator;
-    }
-
-    /**
      * Imports a resource.
      *
-     * @param mixed       $resource       A Resource
-     * @param string|null $type           The resource type or null if unknown
-     * @param bool        $ignoreErrors   Whether to ignore import errors or not
+     * @param mixed $resource A Resource
+     * @param string|null $type The resource type or null if unknown
+     * @param bool $ignoreErrors Whether to ignore import errors or not
      * @param string|null $sourceResource The original resource importing the new resource
      *
      * @return mixed
@@ -111,7 +101,7 @@ abstract class FileLoader extends Loader
             $pattern = '';
         } elseif (0 === $i || false === strpos(substr($pattern, 0, $i), '/')) {
             $prefix = '.';
-            $pattern = '/'.$pattern;
+            $pattern = '/' . $pattern;
         } else {
             $prefix = dirname(substr($pattern, 0, 1 + $i));
             $pattern = substr($pattern, strlen($prefix));
@@ -179,5 +169,15 @@ abstract class FileLoader extends Loader
                 throw new FileLoaderLoadException($resource, $sourceResource, null, $e, $type);
             }
         }
+    }
+
+    /**
+     * Returns the file locator used by this loader.
+     *
+     * @return FileLocatorInterface
+     */
+    public function getLocator()
+    {
+        return $this->locator;
     }
 }

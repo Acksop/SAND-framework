@@ -21,9 +21,9 @@ use Symfony\Component\Config\Definition\Exception\UnsetKeyException;
  */
 class ExprBuilder
 {
-    protected $node;
     public $ifPart;
     public $thenPart;
+    protected $node;
 
     /**
      * Constructor.
@@ -33,6 +33,28 @@ class ExprBuilder
     public function __construct(NodeDefinition $node)
     {
         $this->node = $node;
+    }
+
+    /**
+     * Builds the expressions.
+     *
+     * @param ExprBuilder[] $expressions An array of ExprBuilder instances to build
+     *
+     * @return array
+     */
+    public static function buildExpressions(array $expressions)
+    {
+        foreach ($expressions as $k => $expr) {
+            if ($expr instanceof self) {
+                $if = $expr->ifPart;
+                $then = $expr->thenPart;
+                $expressions[$k] = function ($v) use ($if, $then) {
+                    return $if($v) ? $then($v) : $v;
+                };
+            }
+        }
+
+        return $expressions;
     }
 
     /**
@@ -263,27 +285,5 @@ class ExprBuilder
         }
 
         return $this->node;
-    }
-
-    /**
-     * Builds the expressions.
-     *
-     * @param ExprBuilder[] $expressions An array of ExprBuilder instances to build
-     *
-     * @return array
-     */
-    public static function buildExpressions(array $expressions)
-    {
-        foreach ($expressions as $k => $expr) {
-            if ($expr instanceof self) {
-                $if = $expr->ifPart;
-                $then = $expr->thenPart;
-                $expressions[$k] = function ($v) use ($if, $then) {
-                    return $if($v) ? $then($v) : $v;
-                };
-            }
-        }
-
-        return $expressions;
     }
 }

@@ -23,6 +23,10 @@ trait AbstractTrait
 {
     use LoggerAwareTrait;
 
+    /**
+     * @var int|null The maximum length to enforce for identifiers or null when no limit applies
+     */
+    protected $maxIdLength;
     private $namespace;
     private $namespaceVersion = '';
     private $versioningIsEnabled = false;
@@ -30,55 +34,43 @@ trait AbstractTrait
     private $ids = [];
 
     /**
-     * @var int|null The maximum length to enforce for identifiers or null when no limit applies
+     * @internal
      */
-    protected $maxIdLength;
+    public static function handleUnserializeCallback($class)
+    {
+        throw new \DomainException('Class not found: ' . $class);
+    }
 
     /**
-     * Fetches several cache items.
+     * Like the native unserialize() function but throws an exception if anything goes wrong.
      *
-     * @param array $ids The cache identifiers to fetch
+     * @param string $value
      *
-     * @return array|\Traversable The corresponding values found in the cache
+     * @return mixed
+     *
+     * @throws \Exception
+     *
+     * @deprecated since Symfony 4.2, use DefaultMarshaller instead.
      */
-    abstract protected function doFetch(array $ids);
+    protected static function unserialize($value)
+    {
+        @trigger_error(sprintf('The "%s::unserialize()" method is deprecated since Symfony 4.2, use DefaultMarshaller instead.', __CLASS__), E_USER_DEPRECATED);
 
-    /**
-     * Confirms if the cache contains specified cache item.
-     *
-     * @param string $id The identifier for which to check existence
-     *
-     * @return bool True if item exists in the cache, false otherwise
-     */
-    abstract protected function doHave($id);
-
-    /**
-     * Deletes all items in the pool.
-     *
-     * @param string $namespace The prefix used for all identifiers managed by this pool
-     *
-     * @return bool True if the pool was successfully cleared, false otherwise
-     */
-    abstract protected function doClear($namespace);
-
-    /**
-     * Removes multiple items from the pool.
-     *
-     * @param array $ids An array of identifiers that should be removed from the pool
-     *
-     * @return bool True if the items were successfully removed, false otherwise
-     */
-    abstract protected function doDelete(array $ids);
-
-    /**
-     * Persists several cache items immediately.
-     *
-     * @param array $values   The values to cache, indexed by their cache identifier
-     * @param int   $lifetime The lifetime of the cached values, 0 for persisting until manual cleaning
-     *
-     * @return array|bool The identifiers that failed to be cached or a boolean stating if caching succeeded or not
-     */
-    abstract protected function doSave(array $values, $lifetime);
+        if ('b:0;' === $value) {
+            return false;
+        }
+        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__ . '::handleUnserializeCallback');
+        try {
+            if (false !== $value = unserialize($value)) {
+                return $value;
+            }
+            throw new \DomainException('Failed to unserialize cached value');
+        } catch (\Error $e) {
+            throw new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+        } finally {
+            ini_set('unserialize_callback_func', $unserializeCallbackHandler);
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -96,11 +88,74 @@ trait AbstractTrait
         try {
             return $this->doHave($id);
         } catch (\Exception $e) {
-            CacheItem::log($this->logger, 'Failed to check if key "{key}" is cached: '.$e->getMessage(), ['key' => $key, 'exception' => $e]);
+            CacheItem::log($this->logger, 'Failed to check if key "{key}" is cached: ' . $e->getMessage(), ['key' => $key, 'exception' => $e]);
 
             return false;
         }
     }
+
+    private function getId($key): string
+    {
+        if ($this->versioningIsEnabled && '' === $this->namespaceVersion) {
+            $this->ids = [];
+            $this->namespaceVersion = '1' . static::NS_SEPARATOR;
+            try {
+                foreach ($this->doFetch([static::NS_SEPARATOR . $this->namespace]) as $v) {
+                    $this->namespaceVersion = $v;
+                }
+                if ('1' . static::NS_SEPARATOR === $this->namespaceVersion) {
+                    $this->namespaceVersion = substr_replace(base64_encode(pack('V', time())), static::NS_SEPARATOR, 5);
+                    $this->doSave([static::NS_SEPARATOR . $this->namespace => $this->namespaceVersion], 0);
+                }
+            } catch (\Exception $e) {
+            }
+        }
+
+        if (\is_string($key) && isset($this->ids[$key])) {
+            return $this->namespace . $this->namespaceVersion . $this->ids[$key];
+        }
+        CacheItem::validateKey($key);
+        $this->ids[$key] = $key;
+
+        if (null === $this->maxIdLength) {
+            return $this->namespace . $this->namespaceVersion . $key;
+        }
+        if (\strlen($id = $this->namespace . $this->namespaceVersion . $key) > $this->maxIdLength) {
+            // Use MD5 to favor speed over security, which is not an issue here
+            $this->ids[$key] = $id = substr_replace(base64_encode(hash('md5', $key, true)), static::NS_SEPARATOR, -(\strlen($this->namespaceVersion) + 2));
+            $id = $this->namespace . $this->namespaceVersion . $id;
+        }
+
+        return $id;
+    }
+
+    /**
+     * Fetches several cache items.
+     *
+     * @param array $ids The cache identifiers to fetch
+     *
+     * @return array|\Traversable The corresponding values found in the cache
+     */
+    abstract protected function doFetch(array $ids);
+
+    /**
+     * Persists several cache items immediately.
+     *
+     * @param array $values The values to cache, indexed by their cache identifier
+     * @param int $lifetime The lifetime of the cached values, 0 for persisting until manual cleaning
+     *
+     * @return array|bool The identifiers that failed to be cached or a boolean stating if caching succeeded or not
+     */
+    abstract protected function doSave(array $values, $lifetime);
+
+    /**
+     * Confirms if the cache contains specified cache item.
+     *
+     * @param string $id The identifier for which to check existence
+     *
+     * @return bool True if item exists in the cache, false otherwise
+     */
+    abstract protected function doHave($id);
 
     /**
      * {@inheritdoc}
@@ -114,14 +169,14 @@ trait AbstractTrait
         $this->deferred = [];
         if ($cleared = $this->versioningIsEnabled) {
             if ('' === $namespaceVersionToClear = $this->namespaceVersion) {
-                foreach ($this->doFetch([static::NS_SEPARATOR.$this->namespace]) as $v) {
+                foreach ($this->doFetch([static::NS_SEPARATOR . $this->namespace]) as $v) {
                     $namespaceVersionToClear = $v;
                 }
             }
-            $namespaceToClear = $this->namespace.$namespaceVersionToClear;
+            $namespaceToClear = $this->namespace . $namespaceVersionToClear;
             $namespaceVersion = substr_replace(base64_encode(pack('V', mt_rand())), static::NS_SEPARATOR, 5);
             try {
-                $cleared = $this->doSave([static::NS_SEPARATOR.$this->namespace => $namespaceVersion], 0);
+                $cleared = $this->doSave([static::NS_SEPARATOR . $this->namespace => $namespaceVersion], 0);
             } catch (\Exception $e) {
                 $cleared = false;
             }
@@ -130,18 +185,27 @@ trait AbstractTrait
                 $this->ids = [];
             }
         } else {
-            $prefix = 0 < \func_num_args() ? (string) func_get_arg(0) : '';
-            $namespaceToClear = $this->namespace.$prefix;
+            $prefix = 0 < \func_num_args() ? (string)func_get_arg(0) : '';
+            $namespaceToClear = $this->namespace . $prefix;
         }
 
         try {
             return $this->doClear($namespaceToClear) || $cleared;
         } catch (\Exception $e) {
-            CacheItem::log($this->logger, 'Failed to clear the cache: '.$e->getMessage(), ['exception' => $e]);
+            CacheItem::log($this->logger, 'Failed to clear the cache: ' . $e->getMessage(), ['exception' => $e]);
 
             return false;
         }
     }
+
+    /**
+     * Deletes all items in the pool.
+     *
+     * @param string $namespace The prefix used for all identifiers managed by this pool
+     *
+     * @return bool True if the pool was successfully cleared, false otherwise
+     */
+    abstract protected function doClear($namespace);
 
     /**
      * {@inheritdoc}
@@ -185,13 +249,22 @@ trait AbstractTrait
                 }
             } catch (\Exception $e) {
             }
-            $message = 'Failed to delete key "{key}"'.($e instanceof \Exception ? ': '.$e->getMessage() : '.');
+            $message = 'Failed to delete key "{key}"' . ($e instanceof \Exception ? ': ' . $e->getMessage() : '.');
             CacheItem::log($this->logger, $message, ['key' => $key, 'exception' => $e]);
             $ok = false;
         }
 
         return $ok;
     }
+
+    /**
+     * Removes multiple items from the pool.
+     *
+     * @param array $ids An array of identifiers that should be removed from the pool
+     *
+     * @return bool True if the items were successfully removed, false otherwise
+     */
+    abstract protected function doDelete(array $ids);
 
     /**
      * Enables/disables versioning of items.
@@ -208,7 +281,7 @@ trait AbstractTrait
     public function enableVersioning($enable = true)
     {
         $wasEnabled = $this->versioningIsEnabled;
-        $this->versioningIsEnabled = (bool) $enable;
+        $this->versioningIsEnabled = (bool)$enable;
         $this->namespaceVersion = '';
         $this->ids = [];
 
@@ -225,79 +298,5 @@ trait AbstractTrait
         }
         $this->namespaceVersion = '';
         $this->ids = [];
-    }
-
-    /**
-     * Like the native unserialize() function but throws an exception if anything goes wrong.
-     *
-     * @param string $value
-     *
-     * @return mixed
-     *
-     * @throws \Exception
-     *
-     * @deprecated since Symfony 4.2, use DefaultMarshaller instead.
-     */
-    protected static function unserialize($value)
-    {
-        @trigger_error(sprintf('The "%s::unserialize()" method is deprecated since Symfony 4.2, use DefaultMarshaller instead.', __CLASS__), E_USER_DEPRECATED);
-
-        if ('b:0;' === $value) {
-            return false;
-        }
-        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__.'::handleUnserializeCallback');
-        try {
-            if (false !== $value = unserialize($value)) {
-                return $value;
-            }
-            throw new \DomainException('Failed to unserialize cached value');
-        } catch (\Error $e) {
-            throw new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
-        } finally {
-            ini_set('unserialize_callback_func', $unserializeCallbackHandler);
-        }
-    }
-
-    private function getId($key): string
-    {
-        if ($this->versioningIsEnabled && '' === $this->namespaceVersion) {
-            $this->ids = [];
-            $this->namespaceVersion = '1'.static::NS_SEPARATOR;
-            try {
-                foreach ($this->doFetch([static::NS_SEPARATOR.$this->namespace]) as $v) {
-                    $this->namespaceVersion = $v;
-                }
-                if ('1'.static::NS_SEPARATOR === $this->namespaceVersion) {
-                    $this->namespaceVersion = substr_replace(base64_encode(pack('V', time())), static::NS_SEPARATOR, 5);
-                    $this->doSave([static::NS_SEPARATOR.$this->namespace => $this->namespaceVersion], 0);
-                }
-            } catch (\Exception $e) {
-            }
-        }
-
-        if (\is_string($key) && isset($this->ids[$key])) {
-            return $this->namespace.$this->namespaceVersion.$this->ids[$key];
-        }
-        CacheItem::validateKey($key);
-        $this->ids[$key] = $key;
-
-        if (null === $this->maxIdLength) {
-            return $this->namespace.$this->namespaceVersion.$key;
-        }
-        if (\strlen($id = $this->namespace.$this->namespaceVersion.$key) > $this->maxIdLength) {
-            // Use MD5 to favor speed over security, which is not an issue here
-            $this->ids[$key] = $id = substr_replace(base64_encode(hash('md5', $key, true)), static::NS_SEPARATOR, -(\strlen($this->namespaceVersion) + 2));
-            $id = $this->namespace.$this->namespaceVersion.$id;
-        }
-
-        return $id;
-    }
-
-    /**
-     * @internal
-     */
-    public static function handleUnserializeCallback($class)
-    {
-        throw new \DomainException('Class not found: '.$class);
     }
 }

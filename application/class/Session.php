@@ -10,6 +10,7 @@ class Session
         session_start();
         return;
     }
+
     public static function destroy()
     {
         session_destroy();
@@ -21,11 +22,13 @@ class Session
         $_SESSION['userProfile'] = $userProfile;
         return;
     }
+
     public static function setId($id)
     {
         $_SESSION['id'] = $id;
         return;
     }
+
     public static function setUserName($username)
     {
         $_SESSION['username'] = $username;
@@ -43,9 +46,10 @@ class Session
         $_SESSION['storage'] = $hybriauthStorage;
         return;
     }
+
     public static function getStorage()
     {
-        return $_SESSION['storage'] ;
+        return $_SESSION['storage'];
     }
 
     public static function setHybridAuth($hybriauth)
@@ -53,9 +57,10 @@ class Session
         $_SESSION['auth'] = $hybriauth;
         return;
     }
+
     public static function getHybridAuth()
     {
-        return $_SESSION['auth'] ;
+        return $_SESSION['auth'];
     }
 
     public static function isRegistered()
@@ -70,7 +75,7 @@ class Session
     public static function redirectIfNotRegistered()
     {
         if (isset($_SESSION['userProfile'])) {
-            return ;
+            return;
         } else {
             header("location : " . Url::link_rewrite(false, 'error', []));
             die('Ooops, something was wrong...');

@@ -48,9 +48,9 @@ final class Instantiator
      *     // creates an ArrayObject populated with $inputArray
      *     Instantiator::instantiate(ArrayObject::class, ["\0" => [$inputArray]]);
      *
-     * @param string $class             The class of the instance to create
-     * @param array  $properties        The properties to set on the instance
-     * @param array  $privateProperties The private properties to set on the instance,
+     * @param string $class The class of the instance to create
+     * @param array $properties The properties to set on the instance
+     * @param array $privateProperties The private properties to set on the instance,
      *                                  keyed by their declaring class
      *
      * @return object The created instance
@@ -68,9 +68,9 @@ final class Instantiator
         } elseif (null === Registry::$prototypes[$class]) {
             throw new NotInstantiableTypeException($class);
         } elseif ($reflector->implementsInterface('Serializable') && (\PHP_VERSION_ID < 70400 || !method_exists($class, '__unserialize'))) {
-            $wrappedInstance = [unserialize('C:'.\strlen($class).':"'.$class.'":0:{}')];
+            $wrappedInstance = [unserialize('C:' . \strlen($class) . ':"' . $class . '":0:{}')];
         } else {
-            $wrappedInstance = [unserialize('O:'.\strlen($class).':"'.$class.'":0:{}')];
+            $wrappedInstance = [unserialize('O:' . \strlen($class) . ':"' . $class . '":0:{}')];
         }
 
         if ($properties) {

@@ -37,8 +37,8 @@ class ChainCache implements Psr16CacheInterface, PruneableInterface, ResettableI
     private $cacheCount;
 
     /**
-     * @param Psr16CacheInterface[] $caches          The ordered list of caches used to fetch cached items
-     * @param int                   $defaultLifetime The lifetime of items propagated from lower caches to upper ones
+     * @param Psr16CacheInterface[] $caches The ordered list of caches used to fetch cached items
+     * @param int $defaultLifetime The lifetime of items propagated from lower caches to upper ones
      */
     public function __construct(array $caches, int $defaultLifetime = 0)
     {

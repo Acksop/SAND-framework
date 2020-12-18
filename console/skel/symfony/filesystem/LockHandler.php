@@ -38,7 +38,7 @@ class LockHandler
     private $handle;
 
     /**
-     * @param string      $name     The lock name
+     * @param string $name The lock name
      * @param string|null $lockPath The directory to store the lock. Default values will use temporary directory
      *
      * @throws IOException If the lock directory could not be created or is not writable

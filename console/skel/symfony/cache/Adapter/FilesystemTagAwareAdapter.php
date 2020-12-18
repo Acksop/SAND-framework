@@ -57,30 +57,30 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
         $chars = '+-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         try {
-            foreach ($this->scanHashDir($this->directory.self::TAG_FOLDER.\DIRECTORY_SEPARATOR) as $dir) {
+            foreach ($this->scanHashDir($this->directory . self::TAG_FOLDER . \DIRECTORY_SEPARATOR) as $dir) {
                 if (rename($dir, $renamed = substr_replace($dir, bin2hex(random_bytes(4)), -8))) {
-                    $dir = $renamed.\DIRECTORY_SEPARATOR;
+                    $dir = $renamed . \DIRECTORY_SEPARATOR;
                 } else {
                     $dir .= \DIRECTORY_SEPARATOR;
                     $renamed = null;
                 }
 
                 for ($i = 0; $i < 38; ++$i) {
-                    if (!file_exists($dir.$chars[$i])) {
+                    if (!file_exists($dir . $chars[$i])) {
                         continue;
                     }
                     for ($j = 0; $j < 38; ++$j) {
-                        if (!file_exists($d = $dir.$chars[$i].\DIRECTORY_SEPARATOR.$chars[$j])) {
+                        if (!file_exists($d = $dir . $chars[$i] . \DIRECTORY_SEPARATOR . $chars[$j])) {
                             continue;
                         }
                         foreach (scandir($d, SCANDIR_SORT_NONE) ?: [] as $link) {
-                            if ('.' !== $link && '..' !== $link && (null !== $renamed || !realpath($d.\DIRECTORY_SEPARATOR.$link))) {
-                                unlink($d.\DIRECTORY_SEPARATOR.$link);
+                            if ('.' !== $link && '..' !== $link && (null !== $renamed || !realpath($d . \DIRECTORY_SEPARATOR . $link))) {
+                                unlink($d . \DIRECTORY_SEPARATOR . $link);
                             }
                         }
                         null === $renamed ?: rmdir($d);
                     }
-                    null === $renamed ?: rmdir($dir.$chars[$i]);
+                    null === $renamed ?: rmdir($dir . $chars[$i]);
                 }
                 null === $renamed ?: rmdir($renamed);
             }
@@ -128,6 +128,11 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
         }
 
         return $failed;
+    }
+
+    private function getTagFolder(string $tagId): string
+    {
+        return $this->getFile($tagId, false, $this->directory . self::TAG_FOLDER . \DIRECTORY_SEPARATOR) . \DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -203,7 +208,7 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
 
             try {
                 if (rename($tagFolder, $renamed = substr_replace($tagFolder, bin2hex(random_bytes(4)), -9))) {
-                    $tagFolder = $renamed.\DIRECTORY_SEPARATOR;
+                    $tagFolder = $renamed . \DIRECTORY_SEPARATOR;
                 } else {
                     $renamed = null;
                 }
@@ -221,9 +226,9 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
 
                 for ($i = 0; $i < 38; ++$i) {
                     for ($j = 0; $j < 38; ++$j) {
-                        rmdir($tagFolder.$chars[$i].\DIRECTORY_SEPARATOR.$chars[$j]);
+                        rmdir($tagFolder . $chars[$i] . \DIRECTORY_SEPARATOR . $chars[$j]);
                     }
-                    rmdir($tagFolder.$chars[$i]);
+                    rmdir($tagFolder . $chars[$i]);
                 }
                 rmdir($renamed);
             } finally {
@@ -232,10 +237,5 @@ class FilesystemTagAwareAdapter extends AbstractTagAwareAdapter implements Prune
         }
 
         return true;
-    }
-
-    private function getTagFolder(string $tagId): string
-    {
-        return $this->getFile($tagId, false, $this->directory.self::TAG_FOLDER.\DIRECTORY_SEPARATOR).\DIRECTORY_SEPARATOR;
     }
 }

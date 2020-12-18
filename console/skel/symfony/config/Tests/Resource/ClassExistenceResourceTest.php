@@ -20,7 +20,7 @@ class ClassExistenceResourceTest extends TestCase
     public function testToString()
     {
         $res = new ClassExistenceResource('BarClass');
-        $this->assertSame('BarClass', (string) $res);
+        $this->assertSame('BarClass', (string)$res);
     }
 
     public function testGetResource()

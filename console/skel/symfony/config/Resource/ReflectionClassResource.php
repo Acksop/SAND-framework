@@ -49,50 +49,6 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
         return true;
     }
 
-    public function __toString()
-    {
-        return 'reflection.'.$this->className;
-    }
-
-    public function serialize()
-    {
-        if (null === $this->hash) {
-            $this->hash = $this->computeHash();
-            $this->loadFiles($this->classReflector);
-        }
-
-        return serialize(array($this->files, $this->className, $this->hash));
-    }
-
-    public function unserialize($serialized)
-    {
-        list($this->files, $this->className, $this->hash) = unserialize($serialized);
-    }
-
-    private function loadFiles(\ReflectionClass $class)
-    {
-        foreach ($class->getInterfaces() as $v) {
-            $this->loadFiles($v);
-        }
-        do {
-            $file = $class->getFileName();
-            if (false !== $file && file_exists($file)) {
-                foreach ($this->excludedVendors as $vendor) {
-                    if (0 === strpos($file, $vendor) && false !== strpbrk(substr($file, strlen($vendor), 1), '/'.DIRECTORY_SEPARATOR)) {
-                        $file = false;
-                        break;
-                    }
-                }
-                if ($file) {
-                    $this->files[$file] = null;
-                }
-            }
-            foreach ($class->getTraits() as $v) {
-                $this->loadFiles($v);
-            }
-        } while ($class = $class->getParentClass());
-    }
-
     private function computeHash()
     {
         if (null === $this->classReflector) {
@@ -114,7 +70,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
 
     private function generateSignature(\ReflectionClass $class)
     {
-        yield $class->getDocComment().$class->getModifiers();
+        yield $class->getDocComment() . $class->getModifiers();
 
         if ($class->isTrait()) {
             yield print_r(class_uses($class->name), true);
@@ -128,7 +84,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
             $defaults = $class->getDefaultProperties();
 
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
-                yield $p->getDocComment().$p;
+                yield $p->getDocComment() . $p;
                 yield print_r($defaults[$p->name], true);
             }
         }
@@ -149,6 +105,50 @@ class ReflectionClassResource implements SelfCheckingResourceInterface, \Seriali
                 yield print_r($defaults, true);
             }
         }
+    }
+
+    private function loadFiles(\ReflectionClass $class)
+    {
+        foreach ($class->getInterfaces() as $v) {
+            $this->loadFiles($v);
+        }
+        do {
+            $file = $class->getFileName();
+            if (false !== $file && file_exists($file)) {
+                foreach ($this->excludedVendors as $vendor) {
+                    if (0 === strpos($file, $vendor) && false !== strpbrk(substr($file, strlen($vendor), 1), '/' . DIRECTORY_SEPARATOR)) {
+                        $file = false;
+                        break;
+                    }
+                }
+                if ($file) {
+                    $this->files[$file] = null;
+                }
+            }
+            foreach ($class->getTraits() as $v) {
+                $this->loadFiles($v);
+            }
+        } while ($class = $class->getParentClass());
+    }
+
+    public function __toString()
+    {
+        return 'reflection.' . $this->className;
+    }
+
+    public function serialize()
+    {
+        if (null === $this->hash) {
+            $this->hash = $this->computeHash();
+            $this->loadFiles($this->classReflector);
+        }
+
+        return serialize(array($this->files, $this->className, $this->hash));
+    }
+
+    public function unserialize($serialized)
+    {
+        list($this->files, $this->className, $this->hash) = unserialize($serialized);
     }
 }
 

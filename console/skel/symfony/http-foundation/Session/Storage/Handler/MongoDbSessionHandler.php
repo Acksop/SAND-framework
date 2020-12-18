@@ -56,8 +56,8 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      * If you use such an index, you can drop `gc_probability` to 0 since
      * no garbage-collection is required.
      *
-     * @param \Mongo|\MongoClient|\MongoDB\Client $mongo   A MongoDB\Client, MongoClient or Mongo instance
-     * @param array                               $options An associative array of field options
+     * @param \Mongo|\MongoClient|\MongoDB\Client $mongo A MongoDB\Client, MongoClient or Mongo instance
+     * @param array $options An associative array of field options
      *
      * @throws \InvalidArgumentException When MongoClient or Mongo instance not provided
      * @throws \InvalidArgumentException When "database" or "collection" not provided
@@ -113,6 +113,20 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
+     * Return a "MongoCollection" instance.
+     *
+     * @return \MongoCollection
+     */
+    private function getCollection()
+    {
+        if (null === $this->collection) {
+            $this->collection = $this->mongo->selectCollection($this->options['database'], $this->options['collection']);
+        }
+
+        return $this->collection;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function gc($maxlifetime)
@@ -127,11 +141,33 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
+     * Create a date object using the class appropriate for the current mongo connection.
+     *
+     * Return an instance of a MongoDate or \MongoDB\BSON\UTCDateTime
+     *
+     * @param int $seconds An integer representing UTC seconds since Jan 1 1970.  Defaults to now.
+     *
+     * @return \MongoDate|\MongoDB\BSON\UTCDateTime
+     */
+    private function createDateTime($seconds = null)
+    {
+        if (null === $seconds) {
+            $seconds = time();
+        }
+
+        if ($this->mongo instanceof \MongoDB\Client) {
+            return new \MongoDB\BSON\UTCDateTime($seconds * 1000);
+        }
+
+        return new \MongoDate($seconds);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function write($sessionId, $data)
     {
-        $expiry = $this->createDateTime(time() + (int) ini_get('session.gc_maxlifetime'));
+        $expiry = $this->createDateTime(time() + (int)ini_get('session.gc_maxlifetime'));
 
         $fields = array(
             $this->options['time_field'] => $this->createDateTime(),
@@ -180,20 +216,6 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * Return a "MongoCollection" instance.
-     *
-     * @return \MongoCollection
-     */
-    private function getCollection()
-    {
-        if (null === $this->collection) {
-            $this->collection = $this->mongo->selectCollection($this->options['database'], $this->options['collection']);
-        }
-
-        return $this->collection;
-    }
-
-    /**
      * Return a Mongo instance.
      *
      * @return \Mongo|\MongoClient|\MongoDB\Client
@@ -201,27 +223,5 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     protected function getMongo()
     {
         return $this->mongo;
-    }
-
-    /**
-     * Create a date object using the class appropriate for the current mongo connection.
-     *
-     * Return an instance of a MongoDate or \MongoDB\BSON\UTCDateTime
-     *
-     * @param int $seconds An integer representing UTC seconds since Jan 1 1970.  Defaults to now.
-     *
-     * @return \MongoDate|\MongoDB\BSON\UTCDateTime
-     */
-    private function createDateTime($seconds = null)
-    {
-        if (null === $seconds) {
-            $seconds = time();
-        }
-
-        if ($this->mongo instanceof \MongoDB\Client) {
-            return new \MongoDB\BSON\UTCDateTime($seconds * 1000);
-        }
-
-        return new \MongoDate($seconds);
     }
 }

@@ -14,19 +14,19 @@
 
 namespace App\Session\AuthBundle\Security;
 
-use App\Session\AuthBundle\Security\Interfaces\AuthInterface;
 use App\Session\AuthBundle\Events\OnAuthenticationFailureEvent;
 use App\Session\AuthBundle\Events\OnAuthenticationSuccessEvent;
+use App\Session\AuthBundle\Security\Interfaces\AuthInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 
 class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutSuccessHandlerInterface, AuthenticatorInterface
 {
@@ -73,7 +73,7 @@ class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
     {
         $event = new OnAuthenticationSuccessEvent($request, $token, $providerKey);
         $this->dispatcher->dispatch(OnAuthenticationSuccessEvent::NAME, $event);
-        
+
         $this->authService->onSuccess($token);
         // on success, let the request continue
     }
@@ -82,7 +82,7 @@ class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
     {
         $event = new OnAuthenticationFailureEvent($request, $exception);
         $this->dispatcher->dispatch(OnAuthenticationFailureEvent::NAME, $event);
-        
+
         return $this->authService->onAuthenticationFailure($exception);
     }
 
@@ -106,16 +106,16 @@ class CasAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
         return \phpCAS::logoutWithRedirectService($this->urlGenerator->generate($homepage, array(), UrlGeneratorInterface::ABSOLUTE_URL));
     }
 
-    protected function getLoginUrl()
-    {
-        return \phpCas::getServerLoginURL();
-    }
-
     public function supports(Request $request)
     {
         if (isset($this->config['environment']) && $this->config['environment'] == "test") {
             return false;
         }
         return true;
+    }
+
+    protected function getLoginUrl()
+    {
+        return \phpCas::getServerLoginURL();
     }
 }

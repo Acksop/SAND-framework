@@ -21,8 +21,8 @@ interface LoaderInterface
     /**
      * Loads a resource.
      *
-     * @param mixed       $resource The resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param mixed $resource The resource
+     * @param string|null $type The resource type or null if unknown
      *
      * @throws \Exception If something went wrong
      */
@@ -31,8 +31,8 @@ interface LoaderInterface
     /**
      * Returns whether this class supports the given resource.
      *
-     * @param mixed       $resource A resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param mixed $resource A resource
+     * @param string|null $type The resource type or null if unknown
      *
      * @return bool True if this class supports the given resource, false otherwise
      */

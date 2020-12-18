@@ -23,15 +23,14 @@ use Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface;
  */
 class ExpressionLanguage
 {
+    protected $functions = [];
     private $cache;
     private $lexer;
     private $parser;
     private $compiler;
 
-    protected $functions = [];
-
     /**
-     * @param CacheItemPoolInterface                $cache
+     * @param CacheItemPoolInterface $cache
      * @param ExpressionFunctionProviderInterface[] $providers
      */
     public function __construct($cache = null, array $providers = [])
@@ -52,71 +51,21 @@ class ExpressionLanguage
         }
     }
 
-    /**
-     * Compiles an expression source code.
-     *
-     * @param Expression|string $expression The expression to compile
-     * @param array             $names      An array of valid names
-     *
-     * @return string The compiled PHP source code
-     */
-    public function compile($expression, $names = [])
+    protected function registerFunctions()
     {
-        return $this->getCompiler()->compile($this->parse($expression, $names)->getNodes())->getSource();
+        $this->addFunction(ExpressionFunction::fromPhp('constant'));
     }
 
-    /**
-     * Evaluate an expression.
-     *
-     * @param Expression|string $expression The expression to compile
-     * @param array             $values     An array of values
-     *
-     * @return mixed The result of the evaluation of the expression
-     */
-    public function evaluate($expression, $values = [])
+    public function addFunction(ExpressionFunction $function)
     {
-        return $this->parse($expression, array_keys($values))->getNodes()->evaluate($this->functions, $values);
-    }
-
-    /**
-     * Parses an expression.
-     *
-     * @param Expression|string $expression The expression to parse
-     * @param array             $names      An array of valid names
-     *
-     * @return ParsedExpression A ParsedExpression instance
-     */
-    public function parse($expression, $names)
-    {
-        if ($expression instanceof ParsedExpression) {
-            return $expression;
-        }
-
-        asort($names);
-        $cacheKeyItems = [];
-
-        foreach ($names as $nameKey => $name) {
-            $cacheKeyItems[] = \is_int($nameKey) ? $name : $nameKey.':'.$name;
-        }
-
-        $cacheItem = $this->cache->getItem(rawurlencode($expression.'//'.implode('|', $cacheKeyItems)));
-
-        if (null === $parsedExpression = $cacheItem->get()) {
-            $nodes = $this->getParser()->parse($this->getLexer()->tokenize((string) $expression), $names);
-            $parsedExpression = new ParsedExpression((string) $expression, $nodes);
-
-            $cacheItem->set($parsedExpression);
-            $this->cache->save($cacheItem);
-        }
-
-        return $parsedExpression;
+        $this->register($function->getName(), $function->getCompiler(), $function->getEvaluator());
     }
 
     /**
      * Registers a function.
      *
-     * @param string   $name      The function name
-     * @param callable $compiler  A callable able to compile the function
+     * @param string $name The function name
+     * @param callable $compiler A callable able to compile the function
      * @param callable $evaluator A callable able to evaluate the function
      *
      * @throws \LogicException when registering a function after calling evaluate(), compile() or parse()
@@ -132,11 +81,6 @@ class ExpressionLanguage
         $this->functions[$name] = ['compiler' => $compiler, 'evaluator' => $evaluator];
     }
 
-    public function addFunction(ExpressionFunction $function)
-    {
-        $this->register($function->getName(), $function->getCompiler(), $function->getEvaluator());
-    }
-
     public function registerProvider(ExpressionFunctionProviderInterface $provider)
     {
         foreach ($provider->getFunctions() as $function) {
@@ -144,18 +88,60 @@ class ExpressionLanguage
         }
     }
 
-    protected function registerFunctions()
+    /**
+     * Compiles an expression source code.
+     *
+     * @param Expression|string $expression The expression to compile
+     * @param array $names An array of valid names
+     *
+     * @return string The compiled PHP source code
+     */
+    public function compile($expression, $names = [])
     {
-        $this->addFunction(ExpressionFunction::fromPhp('constant'));
+        return $this->getCompiler()->compile($this->parse($expression, $names)->getNodes())->getSource();
     }
 
-    private function getLexer()
+    private function getCompiler()
     {
-        if (null === $this->lexer) {
-            $this->lexer = new Lexer();
+        if (null === $this->compiler) {
+            $this->compiler = new Compiler($this->functions);
         }
 
-        return $this->lexer;
+        return $this->compiler->reset();
+    }
+
+    /**
+     * Parses an expression.
+     *
+     * @param Expression|string $expression The expression to parse
+     * @param array $names An array of valid names
+     *
+     * @return ParsedExpression A ParsedExpression instance
+     */
+    public function parse($expression, $names)
+    {
+        if ($expression instanceof ParsedExpression) {
+            return $expression;
+        }
+
+        asort($names);
+        $cacheKeyItems = [];
+
+        foreach ($names as $nameKey => $name) {
+            $cacheKeyItems[] = \is_int($nameKey) ? $name : $nameKey . ':' . $name;
+        }
+
+        $cacheItem = $this->cache->getItem(rawurlencode($expression . '//' . implode('|', $cacheKeyItems)));
+
+        if (null === $parsedExpression = $cacheItem->get()) {
+            $nodes = $this->getParser()->parse($this->getLexer()->tokenize((string)$expression), $names);
+            $parsedExpression = new ParsedExpression((string)$expression, $nodes);
+
+            $cacheItem->set($parsedExpression);
+            $this->cache->save($cacheItem);
+        }
+
+        return $parsedExpression;
     }
 
     private function getParser()
@@ -167,12 +153,25 @@ class ExpressionLanguage
         return $this->parser;
     }
 
-    private function getCompiler()
+    private function getLexer()
     {
-        if (null === $this->compiler) {
-            $this->compiler = new Compiler($this->functions);
+        if (null === $this->lexer) {
+            $this->lexer = new Lexer();
         }
 
-        return $this->compiler->reset();
+        return $this->lexer;
+    }
+
+    /**
+     * Evaluate an expression.
+     *
+     * @param Expression|string $expression The expression to compile
+     * @param array $values An array of values
+     *
+     * @return mixed The result of the evaluation of the expression
+     */
+    public function evaluate($expression, $values = [])
+    {
+        return $this->parse($expression, array_keys($values))->getNodes()->evaluate($this->functions, $values);
     }
 }

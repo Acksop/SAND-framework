@@ -31,6 +31,15 @@ class GetAttrNodeTest extends AbstractNodeTest
         ];
     }
 
+    protected function getArrayNode()
+    {
+        $array = new ArrayNode();
+        $array->addElement(new ConstantNode('a'), new ConstantNode('b'));
+        $array->addElement(new ConstantNode('b'));
+
+        return $array;
+    }
+
     public function getCompileData()
     {
         return [
@@ -55,15 +64,6 @@ class GetAttrNodeTest extends AbstractNodeTest
             ['foo.foo({"b": "a", 0: "b"})', new GetAttrNode(new NameNode('foo'), new NameNode('foo'), $this->getArrayNode(), GetAttrNode::METHOD_CALL), ['foo' => new Obj()]],
             ['foo[index]', new GetAttrNode(new NameNode('foo'), new NameNode('index'), $this->getArrayNode(), GetAttrNode::ARRAY_CALL)],
         ];
-    }
-
-    protected function getArrayNode()
-    {
-        $array = new ArrayNode();
-        $array->addElement(new ConstantNode('a'), new ConstantNode('b'));
-        $array->addElement(new ConstantNode('b'));
-
-        return $array;
     }
 }
 

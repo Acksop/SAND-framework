@@ -6,7 +6,7 @@ include_once '../public/scriptPHP/cookies.php';
 class FichierTest extends PHPUnit_Framework_TestCase
 {
     protected $essai;
-    
+
     public function testFichier()
     {
         $essai = ajouterZero(1);

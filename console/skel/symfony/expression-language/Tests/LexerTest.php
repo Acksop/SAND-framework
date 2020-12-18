@@ -23,11 +23,6 @@ class LexerTest extends TestCase
      */
     private $lexer;
 
-    protected function setUp()
-    {
-        $this->lexer = new Lexer();
-    }
-
     /**
      * @dataProvider getTokenizeData
      */
@@ -125,5 +120,10 @@ class LexerTest extends TestCase
                 'foo.not in [bar]',
             ],
         ];
+    }
+
+    protected function setUp()
+    {
+        $this->lexer = new Lexer();
     }
 }

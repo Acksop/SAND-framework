@@ -38,7 +38,7 @@ trait FilesystemTrait
                 continue;
             }
 
-            if (($expiresAt = (int) fgets($h)) && $time >= $expiresAt) {
+            if (($expiresAt = (int)fgets($h)) && $time >= $expiresAt) {
                 fclose($h);
                 $pruned = @unlink($file) && !file_exists($file) && $pruned;
             } else {
@@ -47,6 +47,16 @@ trait FilesystemTrait
         }
 
         return $pruned;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doHave($id)
+    {
+        $file = $this->getFile($id);
+
+        return file_exists($file) && (@filemtime($file) > time() || $this->doFetch([$id]));
     }
 
     /**
@@ -62,7 +72,7 @@ trait FilesystemTrait
             if (!file_exists($file) || !$h = @fopen($file, 'rb')) {
                 continue;
             }
-            if (($expiresAt = (int) fgets($h)) && $now >= $expiresAt) {
+            if (($expiresAt = (int)fgets($h)) && $now >= $expiresAt) {
                 fclose($h);
                 @unlink($file);
             } else {
@@ -81,23 +91,13 @@ trait FilesystemTrait
     /**
      * {@inheritdoc}
      */
-    protected function doHave($id)
-    {
-        $file = $this->getFile($id);
-
-        return file_exists($file) && (@filemtime($file) > time() || $this->doFetch([$id]));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function doSave(array $values, $lifetime)
     {
         $expiresAt = $lifetime ? (time() + $lifetime) : 0;
         $values = $this->marshaller->marshall($values, $failed);
 
         foreach ($values as $id => $value) {
-            if (!$this->write($this->getFile($id, true), $expiresAt."\n".rawurlencode($id)."\n".$value, $expiresAt)) {
+            if (!$this->write($this->getFile($id, true), $expiresAt . "\n" . rawurlencode($id) . "\n" . $value, $expiresAt)) {
                 $failed[] = $id;
             }
         }

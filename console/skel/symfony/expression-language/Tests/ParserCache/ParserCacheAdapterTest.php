@@ -33,8 +33,7 @@ class ParserCacheAdapterTest extends TestCase
             ->expects($this->once())
             ->method('fetch')
             ->with($key)
-            ->willReturn($value)
-        ;
+            ->willReturn($value);
 
         $cacheItem = $parserCacheAdapter->getItem($key);
 
@@ -53,20 +52,17 @@ class ParserCacheAdapterTest extends TestCase
         $poolMock
             ->expects($this->once())
             ->method('save')
-            ->with($key, $value)
-        ;
+            ->with($key, $value);
 
         $cacheItemMock
             ->expects($this->once())
             ->method('getKey')
-            ->willReturn($key)
-        ;
+            ->willReturn($key);
 
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->willReturn($value)
-        ;
+            ->willReturn($value);
 
         $parserCacheAdapter->save($cacheItemMock);
     }

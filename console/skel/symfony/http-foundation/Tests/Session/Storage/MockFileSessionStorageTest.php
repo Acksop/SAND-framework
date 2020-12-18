@@ -24,30 +24,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 class MockFileSessionStorageTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $sessionDir;
-
-    /**
      * @var MockFileSessionStorage
      */
     protected $storage;
-
-    protected function setUp()
-    {
-        $this->sessionDir = sys_get_temp_dir().'/sf2test';
-        $this->storage = $this->getStorage();
-    }
-
-    protected function tearDown()
-    {
-        $this->sessionDir = null;
-        $this->storage = null;
-        array_map('unlink', glob($this->sessionDir.'/*.session'));
-        if (is_dir($this->sessionDir)) {
-            rmdir($this->sessionDir);
-        }
-    }
+    /**
+     * @var string
+     */
+    private $sessionDir;
 
     public function testStart()
     {
@@ -116,6 +99,12 @@ class MockFileSessionStorageTest extends TestCase
         $storage1->save();
     }
 
+    protected function setUp()
+    {
+        $this->sessionDir = sys_get_temp_dir() . '/sf2test';
+        $this->storage = $this->getStorage();
+    }
+
     private function getStorage()
     {
         $storage = new MockFileSessionStorage($this->sessionDir);
@@ -123,5 +112,15 @@ class MockFileSessionStorageTest extends TestCase
         $storage->registerBag(new AttributeBag());
 
         return $storage;
+    }
+
+    protected function tearDown()
+    {
+        $this->sessionDir = null;
+        $this->storage = null;
+        array_map('unlink', glob($this->sessionDir . '/*.session'));
+        if (is_dir($this->sessionDir)) {
+            rmdir($this->sessionDir);
+        }
     }
 }

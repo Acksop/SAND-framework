@@ -1,7 +1,5 @@
 <?php
 
-use MVC\Classe\Dumper;
-
 \MVC\Classe\Session::start();
 \MVC\Classe\Session::redirectIfNotRegistered();
 
@@ -10,8 +8,8 @@ require CONFIG_PATH . DIRECTORY_SEPARATOR . "hybrid-authentification-config-exam
 $hybridauth = new Hybridauth\Hybridauth($config);
 $hybridauth->authenticate(\MVC\Classe\Session::getStorage()->get('provider'));
 $adapters = $hybridauth->getConnectedAdapters();
-foreach ($adapters as $adapter){
- $userProfile[] = $adapter->getUserProfile();
+foreach ($adapters as $adapter) {
+    $userProfile[] = $adapter->getUserProfile();
     \MVC\Classe\Session::setId($adapter->getUserProfile()->identifier);
     \MVC\Classe\Session::setUserName($adapter->getUserProfile()->displayName);
 }

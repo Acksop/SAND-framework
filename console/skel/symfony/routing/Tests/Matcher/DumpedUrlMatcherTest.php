@@ -35,9 +35,9 @@ class DumpedUrlMatcherTest extends UrlMatcherTest
     {
         static $i = 0;
 
-        $class = 'DumpedUrlMatcher'.++$i;
+        $class = 'DumpedUrlMatcher' . ++$i;
         $dumper = new PhpMatcherDumper($routes);
-        eval('?>'.$dumper->dump(['class' => $class]));
+        eval('?>' . $dumper->dump(['class' => $class]));
 
         return new $class($context ?: new RequestContext());
     }

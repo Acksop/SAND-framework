@@ -1,7 +1,5 @@
 <?php
 
-use MVC\Classe\Dumper;
-
 require CONFIG_PATH . DIRECTORY_SEPARATOR . "hybrid-authentification-config-example.php";
 
 try {

@@ -108,9 +108,9 @@ class RouteCollectionTest extends TestCase
     public function testAddCollectionWithResources()
     {
         $collection = new RouteCollection();
-        $collection->addResource($foo = new FileResource(__DIR__.'/Fixtures/foo.xml'));
+        $collection->addResource($foo = new FileResource(__DIR__ . '/Fixtures/foo.xml'));
         $collection1 = new RouteCollection();
-        $collection1->addResource($foo1 = new FileResource(__DIR__.'/Fixtures/foo1.xml'));
+        $collection1->addResource($foo1 = new FileResource(__DIR__ . '/Fixtures/foo1.xml'));
         $collection->addCollection($collection1);
         $this->assertEquals([$foo, $foo1], $collection->getResources(), '->addCollection() merges resources');
     }
@@ -123,11 +123,11 @@ class RouteCollectionTest extends TestCase
         $collection1->add(
             'bar',
             new Route(
-            '/{placeholder}',
-            ['_controller' => 'fixed', 'placeholder' => 'default'],
-            ['placeholder' => '.+'],
-            ['option' => 'value']
-        )
+                '/{placeholder}',
+                ['_controller' => 'fixed', 'placeholder' => 'default'],
+                ['placeholder' => '.+'],
+                ['option' => 'value']
+            )
         );
         $collection->addCollection($collection1);
 
@@ -192,9 +192,9 @@ class RouteCollectionTest extends TestCase
     public function testResource()
     {
         $collection = new RouteCollection();
-        $collection->addResource($foo = new FileResource(__DIR__.'/Fixtures/foo.xml'));
-        $collection->addResource($bar = new FileResource(__DIR__.'/Fixtures/bar.xml'));
-        $collection->addResource(new FileResource(__DIR__.'/Fixtures/foo.xml'));
+        $collection->addResource($foo = new FileResource(__DIR__ . '/Fixtures/foo.xml'));
+        $collection->addResource($bar = new FileResource(__DIR__ . '/Fixtures/bar.xml'));
+        $collection->addResource(new FileResource(__DIR__ . '/Fixtures/foo.xml'));
 
         $this->assertEquals(
             [$foo, $bar],

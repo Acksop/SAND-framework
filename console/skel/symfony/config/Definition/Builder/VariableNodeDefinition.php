@@ -21,16 +21,6 @@ use Symfony\Component\Config\Definition\VariableNode;
 class VariableNodeDefinition extends NodeDefinition
 {
     /**
-     * Instantiate a Node.
-     *
-     * @return VariableNode The node
-     */
-    protected function instantiateNode()
-    {
-        return new VariableNode($this->name, $this->parent);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function createNode()
@@ -60,5 +50,15 @@ class VariableNodeDefinition extends NodeDefinition
         }
 
         return $node;
+    }
+
+    /**
+     * Instantiate a Node.
+     *
+     * @return VariableNode The node
+     */
+    protected function instantiateNode()
+    {
+        return new VariableNode($this->name, $this->parent);
     }
 }

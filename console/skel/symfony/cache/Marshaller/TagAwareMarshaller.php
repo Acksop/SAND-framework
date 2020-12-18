@@ -47,7 +47,7 @@ class TagAwareMarshaller implements MarshallerInterface
                         $v['tags'] = '';
                     }
 
-                    $serialized[$id] = "\x9D".($value['meta'] ?? "\0\0\0\0\0\0\0\0").pack('N', \strlen($v['tags'])).$v['tags'].$v['value'];
+                    $serialized[$id] = "\x9D" . ($value['meta'] ?? "\0\0\0\0\0\0\0\0") . pack('N', \strlen($v['tags'])) . $v['tags'] . $v['value'];
                     $serialized[$id][9] = "\x5F";
                 }
             } else {

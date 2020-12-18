@@ -43,8 +43,8 @@ trait ContractsTrait
     {
         $previousWrapper = $this->callbackWrapper;
         $this->callbackWrapper = $callbackWrapper ?? function (callable $callback, ItemInterface $item, bool &$save, CacheInterface $pool, \Closure $setMetadata, ?LoggerInterface $logger) {
-            return $callback($item, $save);
-        };
+                return $callback($item, $save);
+            };
 
         return $previousWrapper;
     }
@@ -58,17 +58,17 @@ trait ContractsTrait
         static $setMetadata;
 
         $setMetadata = $setMetadata ?? \Closure::bind(
-            static function (CacheItem $item, float $startTime, ?array &$metadata) {
-                if ($item->expiry > $endTime = microtime(true)) {
-                    $item->newMetadata[CacheItem::METADATA_EXPIRY] = $metadata[CacheItem::METADATA_EXPIRY] = $item->expiry;
-                    $item->newMetadata[CacheItem::METADATA_CTIME] = $metadata[CacheItem::METADATA_CTIME] = (int) ceil(1000 * ($endTime - $startTime));
-                } else {
-                    unset($metadata[CacheItem::METADATA_EXPIRY], $metadata[CacheItem::METADATA_CTIME]);
-                }
-            },
-            null,
-            CacheItem::class
-        );
+                static function (CacheItem $item, float $startTime, ?array &$metadata) {
+                    if ($item->expiry > $endTime = microtime(true)) {
+                        $item->newMetadata[CacheItem::METADATA_EXPIRY] = $metadata[CacheItem::METADATA_EXPIRY] = $item->expiry;
+                        $item->newMetadata[CacheItem::METADATA_CTIME] = $metadata[CacheItem::METADATA_CTIME] = (int)ceil(1000 * ($endTime - $startTime));
+                    } else {
+                        unset($metadata[CacheItem::METADATA_EXPIRY], $metadata[CacheItem::METADATA_CTIME]);
+                    }
+                },
+                null,
+                CacheItem::class
+            );
 
         return $this->contractsGet($pool, $key, function (CacheItem $item, bool &$save) use ($pool, $callback, $setMetadata, &$metadata, $key) {
             // don't wrap nor save recursive calls

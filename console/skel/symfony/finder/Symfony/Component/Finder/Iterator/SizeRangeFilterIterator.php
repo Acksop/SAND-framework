@@ -25,7 +25,7 @@ class SizeRangeFilterIterator extends FilterIterator
     /**
      * Constructor.
      *
-     * @param \Iterator          $iterator    The Iterator to filter
+     * @param \Iterator $iterator The Iterator to filter
      * @param NumberComparator[] $comparators An array of NumberComparator instances
      */
     public function __construct(\Iterator $iterator, array $comparators)

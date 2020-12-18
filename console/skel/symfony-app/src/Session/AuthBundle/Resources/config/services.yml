@@ -1,11 +1,11 @@
 services:
 
-    session_auth.authenticator_factory:
-        class: App\Session\AuthBundle\Security\AuthenticatorFactory
-        public: false
-        
-    #bes_auth.authentification:
-    #    class: App\Besancon\AuthBundle\Security\Auth\Authentication
-    #    parent: App\Besancon\AuthBundle\Security\Abstracts\AuthFinal
-    #    public: false
-    #    autoconfigure: false
+  session_auth.authenticator_factory:
+    class: App\Session\AuthBundle\Security\AuthenticatorFactory
+    public: false
+
+  #bes_auth.authentification:
+  #    class: App\Besancon\AuthBundle\Security\Auth\Authentication
+  #    parent: App\Besancon\AuthBundle\Security\Abstracts\AuthFinal
+  #    public: false
+  #    autoconfigure: false

@@ -32,7 +32,7 @@ final class VarExporter
     /**
      * Exports a serializable PHP value to PHP code.
      *
-     * @param mixed $value          The value to export
+     * @param mixed $value The value to export
      * @param bool  &$isStaticValue Set to true after execution if the provided value is static, false otherwise
      *
      * @return string The value exported as PHP code

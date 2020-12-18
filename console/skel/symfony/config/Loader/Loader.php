@@ -41,8 +41,8 @@ abstract class Loader implements LoaderInterface
     /**
      * Imports a resource.
      *
-     * @param mixed       $resource A resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param mixed $resource A resource
+     * @param string|null $type The resource type or null if unknown
      *
      * @return mixed
      */
@@ -54,8 +54,8 @@ abstract class Loader implements LoaderInterface
     /**
      * Finds a loader able to load an imported resource.
      *
-     * @param mixed       $resource A resource
-     * @param string|null $type     The resource type or null if unknown
+     * @param mixed $resource A resource
+     * @param string|null $type The resource type or null if unknown
      *
      * @return $this|LoaderInterface
      *

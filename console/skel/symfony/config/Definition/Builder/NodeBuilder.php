@@ -27,14 +27,109 @@ class NodeBuilder implements NodeParentInterface
     public function __construct()
     {
         $this->nodeMapping = array(
-            'variable' => __NAMESPACE__.'\\VariableNodeDefinition',
-            'scalar' => __NAMESPACE__.'\\ScalarNodeDefinition',
-            'boolean' => __NAMESPACE__.'\\BooleanNodeDefinition',
-            'integer' => __NAMESPACE__.'\\IntegerNodeDefinition',
-            'float' => __NAMESPACE__.'\\FloatNodeDefinition',
-            'array' => __NAMESPACE__.'\\ArrayNodeDefinition',
-            'enum' => __NAMESPACE__.'\\EnumNodeDefinition',
+            'variable' => __NAMESPACE__ . '\\VariableNodeDefinition',
+            'scalar' => __NAMESPACE__ . '\\ScalarNodeDefinition',
+            'boolean' => __NAMESPACE__ . '\\BooleanNodeDefinition',
+            'integer' => __NAMESPACE__ . '\\IntegerNodeDefinition',
+            'float' => __NAMESPACE__ . '\\FloatNodeDefinition',
+            'array' => __NAMESPACE__ . '\\ArrayNodeDefinition',
+            'enum' => __NAMESPACE__ . '\\EnumNodeDefinition',
         );
+    }
+
+    /**
+     * Creates a child array node.
+     *
+     * @param string $name The name of the node
+     *
+     * @return ArrayNodeDefinition The child node
+     */
+    public function arrayNode($name)
+    {
+        return $this->node($name, 'array');
+    }
+
+    /**
+     * Creates a child node.
+     *
+     * @param string $name The name of the node
+     * @param string $type The type of the node
+     *
+     * @return NodeDefinition The child node
+     *
+     * @throws \RuntimeException When the node type is not registered
+     * @throws \RuntimeException When the node class is not found
+     */
+    public function node($name, $type)
+    {
+        $class = $this->getNodeClass($type);
+
+        $node = new $class($name);
+
+        $this->append($node);
+
+        return $node;
+    }
+
+    /**
+     * Returns the class name of the node definition.
+     *
+     * @param string $type The node type
+     *
+     * @return string The node definition class name
+     *
+     * @throws \RuntimeException When the node type is not registered
+     * @throws \RuntimeException When the node class is not found
+     */
+    protected function getNodeClass($type)
+    {
+        $type = strtolower($type);
+
+        if (!isset($this->nodeMapping[$type])) {
+            throw new \RuntimeException(sprintf('The node type "%s" is not registered.', $type));
+        }
+
+        $class = $this->nodeMapping[$type];
+
+        if (!class_exists($class)) {
+            throw new \RuntimeException(sprintf('The node class "%s" does not exist.', $class));
+        }
+
+        return $class;
+    }
+
+    /**
+     * Appends a node definition.
+     *
+     * Usage:
+     *
+     *     $node = new ArrayNodeDefinition('name')
+     *         ->children()
+     *             ->scalarNode('foo')->end()
+     *             ->scalarNode('baz')->end()
+     *             ->append($this->getBarNodeDefinition())
+     *         ->end()
+     *     ;
+     *
+     * @param NodeDefinition $node
+     *
+     * @return $this
+     */
+    public function append(NodeDefinition $node)
+    {
+        if ($node instanceof ParentNodeDefinitionInterface) {
+            $builder = clone $this;
+            $builder->setParent(null);
+            $node->setBuilder($builder);
+        }
+
+        if (null !== $this->parent) {
+            $this->parent->append($node);
+            // Make this builder the node parent to allow for a fluid interface
+            $node->setParent($this);
+        }
+
+        return $this;
     }
 
     /**
@@ -49,18 +144,6 @@ class NodeBuilder implements NodeParentInterface
         $this->parent = $parent;
 
         return $this;
-    }
-
-    /**
-     * Creates a child array node.
-     *
-     * @param string $name The name of the node
-     *
-     * @return ArrayNodeDefinition The child node
-     */
-    public function arrayNode($name)
-    {
-        return $this->node($name, 'array');
     }
 
     /**
@@ -146,65 +229,9 @@ class NodeBuilder implements NodeParentInterface
     }
 
     /**
-     * Creates a child node.
-     *
-     * @param string $name The name of the node
-     * @param string $type The type of the node
-     *
-     * @return NodeDefinition The child node
-     *
-     * @throws \RuntimeException When the node type is not registered
-     * @throws \RuntimeException When the node class is not found
-     */
-    public function node($name, $type)
-    {
-        $class = $this->getNodeClass($type);
-
-        $node = new $class($name);
-
-        $this->append($node);
-
-        return $node;
-    }
-
-    /**
-     * Appends a node definition.
-     *
-     * Usage:
-     *
-     *     $node = new ArrayNodeDefinition('name')
-     *         ->children()
-     *             ->scalarNode('foo')->end()
-     *             ->scalarNode('baz')->end()
-     *             ->append($this->getBarNodeDefinition())
-     *         ->end()
-     *     ;
-     *
-     * @param NodeDefinition $node
-     *
-     * @return $this
-     */
-    public function append(NodeDefinition $node)
-    {
-        if ($node instanceof ParentNodeDefinitionInterface) {
-            $builder = clone $this;
-            $builder->setParent(null);
-            $node->setBuilder($builder);
-        }
-
-        if (null !== $this->parent) {
-            $this->parent->append($node);
-            // Make this builder the node parent to allow for a fluid interface
-            $node->setParent($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Adds or overrides a node Type.
      *
-     * @param string $type  The name of the type
+     * @param string $type The name of the type
      * @param string $class The fully qualified name the node definition class
      *
      * @return $this
@@ -214,32 +241,5 @@ class NodeBuilder implements NodeParentInterface
         $this->nodeMapping[strtolower($type)] = $class;
 
         return $this;
-    }
-
-    /**
-     * Returns the class name of the node definition.
-     *
-     * @param string $type The node type
-     *
-     * @return string The node definition class name
-     *
-     * @throws \RuntimeException When the node type is not registered
-     * @throws \RuntimeException When the node class is not found
-     */
-    protected function getNodeClass($type)
-    {
-        $type = strtolower($type);
-
-        if (!isset($this->nodeMapping[$type])) {
-            throw new \RuntimeException(sprintf('The node type "%s" is not registered.', $type));
-        }
-
-        $class = $this->nodeMapping[$type];
-
-        if (!class_exists($class)) {
-            throw new \RuntimeException(sprintf('The node class "%s" does not exist.', $class));
-        }
-
-        return $class;
     }
 }

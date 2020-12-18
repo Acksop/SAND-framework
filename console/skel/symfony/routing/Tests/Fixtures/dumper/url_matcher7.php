@@ -37,7 +37,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_simple_trailing_slash_no_methods;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'simple_trailing_slash_no_methods'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'simple_trailing_slash_no_methods'));
                 }
 
                 return $ret;
@@ -52,7 +52,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_simple_trailing_slash_GET_method;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'simple_trailing_slash_GET_method'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'simple_trailing_slash_GET_method'));
                 }
 
                 if (!in_array($canonicalMethod, ['GET'])) {
@@ -96,7 +96,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_regex_trailing_slash_no_methods;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'regex_trailing_slash_no_methods'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'regex_trailing_slash_no_methods'));
                 }
 
                 return $ret;
@@ -111,7 +111,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_regex_trailing_slash_GET_method;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'regex_trailing_slash_GET_method'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'regex_trailing_slash_GET_method'));
                 }
 
                 if (!in_array($canonicalMethod, ['GET'])) {

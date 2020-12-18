@@ -30,18 +30,11 @@ trait CacheTrait
         return $this->doGet($this, $key, $callback, $beta, $metadata);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(string $key): bool
-    {
-        return $this->deleteItem($key);
-    }
-
     private function doGet(CacheItemPoolInterface $pool, string $key, callable $callback, ?float $beta, array &$metadata = null, LoggerInterface $logger = null)
     {
         if (0 > $beta = $beta ?? 1.0) {
-            throw new class(sprintf('Argument "$beta" provided to "%s::get()" must be a positive number, %f given.', \get_class($this), $beta)) extends \InvalidArgumentException implements InvalidArgumentException {
+            throw new class(sprintf('Argument "$beta" provided to "%s::get()" must be a positive number, %f given.', \get_class($this), $beta)) extends \InvalidArgumentException implements InvalidArgumentException
+            {
             };
         }
 
@@ -72,5 +65,13 @@ trait CacheTrait
         }
 
         return $item->get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(string $key): bool
+    {
+        return $this->deleteItem($key);
     }
 }

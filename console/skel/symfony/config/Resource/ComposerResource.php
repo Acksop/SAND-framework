@@ -18,17 +18,40 @@ namespace Symfony\Component\Config\Resource;
  */
 class ComposerResource implements SelfCheckingResourceInterface, \Serializable
 {
-    private $versions;
-    private $vendors;
-
     private static $runtimeVersion;
     private static $runtimeVendors;
+    private $versions;
+    private $vendors;
 
     public function __construct()
     {
         self::refresh();
         $this->versions = self::$runtimeVersion;
         $this->vendors = self::$runtimeVendors;
+    }
+
+    private static function refresh()
+    {
+        if (null !== self::$runtimeVersion) {
+            return;
+        }
+
+        self::$runtimeVersion = array();
+        self::$runtimeVendors = array();
+
+        foreach (get_loaded_extensions() as $ext) {
+            self::$runtimeVersion[$ext] = phpversion($ext);
+        }
+
+        foreach (get_declared_classes() as $class) {
+            if ('C' === $class[0] && 0 === strpos($class, 'ComposerAutoloaderInit')) {
+                $r = new \ReflectionClass($class);
+                $v = dirname(dirname($r->getFileName()));
+                if (file_exists($v . '/composer/installed.json')) {
+                    self::$runtimeVendors[$v] = @filemtime($v . '/composer/installed.json');
+                }
+            }
+        }
     }
 
     public function getVendors()
@@ -66,29 +89,5 @@ class ComposerResource implements SelfCheckingResourceInterface, \Serializable
     public function unserialize($serialized)
     {
         list($this->versions, $this->vendors) = unserialize($serialized);
-    }
-
-    private static function refresh()
-    {
-        if (null !== self::$runtimeVersion) {
-            return;
-        }
-
-        self::$runtimeVersion = array();
-        self::$runtimeVendors = array();
-
-        foreach (get_loaded_extensions() as $ext) {
-            self::$runtimeVersion[$ext] = phpversion($ext);
-        }
-
-        foreach (get_declared_classes() as $class) {
-            if ('C' === $class[0] && 0 === strpos($class, 'ComposerAutoloaderInit')) {
-                $r = new \ReflectionClass($class);
-                $v = dirname(dirname($r->getFileName()));
-                if (file_exists($v.'/composer/installed.json')) {
-                    self::$runtimeVendors[$v] = @filemtime($v.'/composer/installed.json');
-                }
-            }
-        }
     }
 }

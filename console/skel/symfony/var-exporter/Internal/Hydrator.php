@@ -97,11 +97,13 @@ class Hydrator
                 };
 
             case 'ErrorException':
-                return self::$hydrators[$class] = (self::$hydrators['stdClass'] ?? self::getHydrator('stdClass'))->bindTo(null, new class() extends \ErrorException {
+                return self::$hydrators[$class] = (self::$hydrators['stdClass'] ?? self::getHydrator('stdClass'))->bindTo(null, new class() extends \ErrorException
+                {
                 });
 
             case 'TypeError':
-                return self::$hydrators[$class] = (self::$hydrators['stdClass'] ?? self::getHydrator('stdClass'))->bindTo(null, new class() extends \Error {
+                return self::$hydrators[$class] = (self::$hydrators['stdClass'] ?? self::getHydrator('stdClass'))->bindTo(null, new class() extends \Error
+                {
                 });
 
             case 'SplObjectStorage':

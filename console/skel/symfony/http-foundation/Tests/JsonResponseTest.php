@@ -16,15 +16,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class JsonResponseTest extends TestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-
-        if (!\defined('HHVM_VERSION')) {
-            $this->iniSet('serialize_precision', 14);
-        }
-    }
-
     public function testConstructorEmptyCreatesJsonObject()
     {
         $response = new JsonResponse();
@@ -233,6 +224,15 @@ class JsonResponseTest extends TestCase
         $response->setCallback('ಠ_ಠ["foo"].bar[0]');
 
         $this->assertEquals('/**/ಠ_ಠ["foo"].bar[0]({"foo":"bar"});', $response->getContent());
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        if (!\defined('HHVM_VERSION')) {
+            $this->iniSet('serialize_precision', 14);
+        }
     }
 }
 

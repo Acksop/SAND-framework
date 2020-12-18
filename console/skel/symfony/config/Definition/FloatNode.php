@@ -27,7 +27,7 @@ class FloatNode extends NumericNode
     {
         // Integers are also accepted, we just cast them
         if (is_int($value)) {
-            $value = (float) $value;
+            $value = (float)$value;
         }
 
         if (!is_float($value)) {

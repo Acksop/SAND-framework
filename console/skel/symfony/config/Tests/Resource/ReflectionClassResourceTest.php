@@ -14,13 +14,17 @@ namespace Symfony\Component\Config\Tests\Resource;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\ReflectionClassResource;
 
+interface DummyInterface
+{
+}
+
 class ReflectionClassResourceTest extends TestCase
 {
     public function testToString()
     {
         $res = new ReflectionClassResource(new \ReflectionClass('ErrorException'));
 
-        $this->assertSame('reflection.ErrorException', (string) $res);
+        $this->assertSame('reflection.ErrorException', (string)$res);
     }
 
     public function testSerializeUnserialize()
@@ -31,7 +35,7 @@ class ReflectionClassResourceTest extends TestCase
         $this->assertTrue($res->isFresh(0));
         $this->assertTrue($ser->isFresh(0));
 
-        $this->assertSame((string) $res, (string) $ser);
+        $this->assertSame((string)$res, (string)$ser);
     }
 
     public function testIsFresh()
@@ -47,7 +51,7 @@ class ReflectionClassResourceTest extends TestCase
     public function testIsFreshForDeletedResources()
     {
         $now = time();
-        $tmp = sys_get_temp_dir().'/tmp.php';
+        $tmp = sys_get_temp_dir() . '/tmp.php';
         file_put_contents($tmp, '<?php class ReflectionClassResourceTestClass {}');
         require $tmp;
 
@@ -86,7 +90,7 @@ EOPHP;
         static $expectedSignature, $generateSignature;
 
         if (null === $expectedSignature) {
-            eval(sprintf($code, $class = 'Foo'.str_replace('.', '_', uniqid('', true))));
+            eval(sprintf($code, $class = 'Foo' . str_replace('.', '_', uniqid('', true))));
             $r = new \ReflectionClass(ReflectionClassResource::class);
             $generateSignature = $r->getMethod('generateSignature');
             $generateSignature->setAccessible(true);
@@ -96,7 +100,7 @@ EOPHP;
 
         $code = explode("\n", $code);
         $code[$changedLine] = $changedCode;
-        eval(sprintf(implode("\n", $code), $class = 'Foo'.str_replace('.', '_', uniqid('', true))));
+        eval(sprintf(implode("\n", $code), $class = 'Foo' . str_replace('.', '_', uniqid('', true))));
         $signature = implode("\n", iterator_to_array($generateSignature(new \ReflectionClass($class))));
 
         if ($changeExpected) {
@@ -113,7 +117,7 @@ EOPHP;
         yield array(1, 1, 'abstract class %s');
         yield array(1, 1, 'final class %s');
         yield array(1, 1, 'class %s extends Exception');
-        yield array(1, 1, 'class %s implements '.DummyInterface::class);
+        yield array(1, 1, 'class %s implements ' . DummyInterface::class);
         yield array(1, 3, 'const FOO = 456;');
         yield array(1, 3, 'const BAR = 123;');
         yield array(1, 4, '/** pub docblock */');
@@ -136,8 +140,4 @@ EOPHP;
         yield array(0, 14, '/** priv docblock */');
         yield array(0, 15, '');
     }
-}
-
-interface DummyInterface
-{
 }

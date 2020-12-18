@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Session\AuthBundle\Utils;
 
 /*
@@ -19,17 +20,12 @@ class Config
         if (!isset($config['type_auth'])) {
             throw new \LogicException('Paramètre type_auth manquant');
         }
-        
+
         $type = $config['type_auth'];
-        
+
         self::typeIsSupported($type);
 
         return self::formatType($type);
-    }
-
-    public static function formatType($type)
-    {
-        return ucfirst(strtolower($type));
     }
 
     public static function typeIsSupported($type)
@@ -39,5 +35,10 @@ class Config
             throw new \LogicException('Seuls Cas et Rsa sont supportés pour le moment');
         }
         return true;
+    }
+
+    public static function formatType($type)
+    {
+        return ucfirst(strtolower($type));
     }
 }

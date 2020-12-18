@@ -59,7 +59,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_a_fourth;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'a_fourth'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'a_fourth'));
                 }
 
                 return $ret;
@@ -74,7 +74,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_a_fifth;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'a_fifth'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'a_fifth'));
                 }
 
                 return $ret;
@@ -89,7 +89,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_a_sixth;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'a_sixth'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'a_sixth'));
                 }
 
                 return $ret;
@@ -111,7 +111,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_nested_a;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'nested_a'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'nested_a'));
                 }
 
                 return $ret;
@@ -126,7 +126,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_nested_b;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'nested_b'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'nested_b'));
                 }
 
                 return $ret;
@@ -141,7 +141,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_nested_c;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'nested_c'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'nested_c'));
                 }
 
                 return $ret;
@@ -156,7 +156,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_slashed_a;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'slashed_a'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'slashed_a'));
                 }
 
                 return $ret;
@@ -171,7 +171,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_slashed_b;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'slashed_b'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'slashed_b'));
                 }
 
                 return $ret;
@@ -186,7 +186,7 @@ class ProjectUrlMatcher extends Symfony\Component\Routing\Tests\Fixtures\Redirec
                 } elseif ('GET' !== $canonicalMethod) {
                     goto not_slashed_c;
                 } else {
-                    return array_replace($ret, $this->redirect($rawPathinfo.'/', 'slashed_c'));
+                    return array_replace($ret, $this->redirect($rawPathinfo . '/', 'slashed_c'));
                 }
 
                 return $ret;

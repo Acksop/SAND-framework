@@ -31,7 +31,7 @@ class XmlUtils
     /**
      * Loads an XML file.
      *
-     * @param string               $file             An XML file path
+     * @param string $file An XML file path
      * @param string|callable|null $schemaOrCallable An XSD schema file path, a callable, or null to disable validation
      *
      * @return \DOMDocument
@@ -79,8 +79,8 @@ class XmlUtils
                 } catch (\Exception $e) {
                     $valid = false;
                 }
-            } elseif (!is_array($schemaOrCallable) && is_file((string) $schemaOrCallable)) {
-                $schemaSource = file_get_contents((string) $schemaOrCallable);
+            } elseif (!is_array($schemaOrCallable) && is_file((string)$schemaOrCallable)) {
+                $schemaSource = file_get_contents((string)$schemaOrCallable);
                 $valid = @$dom->schemaValidateSource($schemaSource);
             } else {
                 libxml_use_internal_errors($internalErrors);
@@ -103,6 +103,27 @@ class XmlUtils
         return $dom;
     }
 
+    protected static function getXmlErrors($internalErrors)
+    {
+        $errors = array();
+        foreach (libxml_get_errors() as $error) {
+            $errors[] = sprintf(
+                '[%s %s] %s (in %s - line %d, column %d)',
+                LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
+                $error->code,
+                trim($error->message),
+                $error->file ?: 'n/a',
+                $error->line,
+                $error->column
+            );
+        }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
+
+        return $errors;
+    }
+
     /**
      * Converts a \DomElement object to a PHP array.
      *
@@ -118,18 +139,18 @@ class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DomElement $element     A \DomElement instance
-     * @param bool        $checkPrefix Check prefix in an element or an attribute name
+     * @param \DomElement $element A \DomElement instance
+     * @param bool $checkPrefix Check prefix in an element or an attribute name
      *
      * @return array A PHP array
      */
     public static function convertDomElementToArray(\DOMElement $element, $checkPrefix = true)
     {
-        $prefix = (string) $element->prefix;
+        $prefix = (string)$element->prefix;
         $empty = true;
         $config = array();
         foreach ($element->attributes as $name => $node) {
-            if ($checkPrefix && !in_array((string) $node->prefix, array('', $prefix), true)) {
+            if ($checkPrefix && !in_array((string)$node->prefix, array('', $prefix), true)) {
                 continue;
             }
             $config[$name] = static::phpize($node->value);
@@ -143,7 +164,7 @@ class XmlUtils
                     $nodeValue = trim($node->nodeValue);
                     $empty = false;
                 }
-            } elseif ($checkPrefix && $prefix != (string) $node->prefix) {
+            } elseif ($checkPrefix && $prefix != (string)$node->prefix) {
                 continue;
             } elseif (!$node instanceof \DOMComment) {
                 $value = static::convertDomElementToArray($node, $checkPrefix);
@@ -183,7 +204,7 @@ class XmlUtils
      */
     public static function phpize($value)
     {
-        $value = (string) $value;
+        $value = (string)$value;
         $lowercaseValue = strtolower($value);
 
         switch (true) {
@@ -191,49 +212,28 @@ class XmlUtils
                 return;
             case ctype_digit($value):
                 $raw = $value;
-                $cast = (int) $value;
+                $cast = (int)$value;
 
-                return '0' == $value[0] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
+                return '0' == $value[0] ? octdec($value) : (((string)$raw === (string)$cast) ? $cast : $raw);
             case isset($value[1]) && '-' === $value[0] && ctype_digit(substr($value, 1)):
                 $raw = $value;
-                $cast = (int) $value;
+                $cast = (int)$value;
 
-                return '0' == $value[1] ? octdec($value) : (((string) $raw === (string) $cast) ? $cast : $raw);
+                return '0' == $value[1] ? octdec($value) : (((string)$raw === (string)$cast) ? $cast : $raw);
             case 'true' === $lowercaseValue:
                 return true;
             case 'false' === $lowercaseValue:
                 return false;
-            case isset($value[1]) && '0b' == $value[0].$value[1]:
+            case isset($value[1]) && '0b' == $value[0] . $value[1]:
                 return bindec($value);
             case is_numeric($value):
-                return '0x' === $value[0].$value[1] ? hexdec($value) : (float) $value;
+                return '0x' === $value[0] . $value[1] ? hexdec($value) : (float)$value;
             case preg_match('/^0x[0-9a-f]++$/i', $value):
                 return hexdec($value);
             case preg_match('/^(-|\+)?[0-9]+(\.[0-9]+)?$/', $value):
-                return (float) $value;
+                return (float)$value;
             default:
                 return $value;
         }
-    }
-
-    protected static function getXmlErrors($internalErrors)
-    {
-        $errors = array();
-        foreach (libxml_get_errors() as $error) {
-            $errors[] = sprintf(
-                '[%s %s] %s (in %s - line %d, column %d)',
-                LIBXML_ERR_WARNING == $error->level ? 'WARNING' : 'ERROR',
-                $error->code,
-                trim($error->message),
-                $error->file ?: 'n/a',
-                $error->line,
-                $error->column
-            );
-        }
-
-        libxml_clear_errors();
-        libxml_use_internal_errors($internalErrors);
-
-        return $errors;
     }
 }

@@ -27,6 +27,11 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
         $matcher->match('/foo');
     }
 
+    protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)
+    {
+        return $this->getMockForAbstractClass('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher', [$routes, $context ?: new RequestContext()]);
+    }
+
     public function testRedirectWhenNoSlashForNonSafeMethod()
     {
         $this->expectException('Symfony\Component\Routing\Exception\ResourceNotFoundException');
@@ -49,8 +54,7 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
             ->expects($this->once())
             ->method('redirect')
             ->with('/foo', 'foo', 'ftp')
-            ->willReturn(['_route' => 'foo'])
-        ;
+            ->willReturn(['_route' => 'foo']);
         $matcher->match('/foo');
     }
 
@@ -76,8 +80,7 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
             ->expects($this->once())
             ->method('redirect')
             ->with('/foo/baz', 'foo', 'https')
-            ->willReturn(['redirect' => 'value'])
-        ;
+            ->willReturn(['redirect' => 'value']);
         $this->assertEquals(['_route' => 'foo', 'bar' => 'baz', 'redirect' => 'value'], $matcher->match('/foo/baz'));
     }
 
@@ -91,8 +94,7 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
             ->expects($this->once())
             ->method('redirect')
             ->with('/foo/baz/', 'foo', null)
-            ->willReturn(['redirect' => 'value'])
-        ;
+            ->willReturn(['redirect' => 'value']);
         $this->assertEquals(['_route' => 'foo', 'bar' => 'baz', 'redirect' => 'value'], $matcher->match('/foo/baz'));
     }
 
@@ -141,10 +143,5 @@ class RedirectableUrlMatcherTest extends UrlMatcherTest
 
         $matcher->expects($this->once())->method('redirect')->with('/api/customers/123/contactpersons/')->willReturn([]);
         $this->assertEquals($expected, $matcher->match('/api/customers/123/contactpersons'));
-    }
-
-    protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)
-    {
-        return $this->getMockForAbstractClass('Symfony\Component\Routing\Matcher\RedirectableUrlMatcher', [$routes, $context ?: new RequestContext()]);
     }
 }

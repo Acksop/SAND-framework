@@ -66,7 +66,7 @@ class Glob implements ValueInterface
      */
     public function prepend($expr)
     {
-        $this->pattern = $expr.$this->pattern;
+        $this->pattern = $expr . $this->pattern;
 
         return $this;
     }
@@ -152,6 +152,6 @@ class Glob implements ValueInterface
             $escaping = false;
         }
 
-        return new Regex('^'.$regex.'$');
+        return new Regex('^' . $regex . '$');
     }
 }

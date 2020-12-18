@@ -15,7 +15,8 @@
                 SAND FrameWork is an CC Universal-licensed open source project and completely free to use.
             </p>
             <p>
-                However, the amount of effort needed to maintain and develop new features for the project is not sustainable
+                However, the amount of effort needed to maintain and develop new features for the project is not
+                sustainable
                 without proper financial backing.
                 You can support its ongoing development by being a backer or a sponsor on
                 <a href="https://www.patreon.com/"> Patreon campaign</a>

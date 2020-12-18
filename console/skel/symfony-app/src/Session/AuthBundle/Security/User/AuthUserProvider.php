@@ -9,9 +9,9 @@
 namespace App\Session\AuthBundle\Security\User;
 
 use App\Besancon\AuthBundle\Security\Interfaces\AuthInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class AuthUserProvider implements UserProviderInterface
 {
@@ -20,18 +20,18 @@ class AuthUserProvider implements UserProviderInterface
         $this->config = $config;
 
         if (!is_null($this->config['user_entity'])) {
-            $this->entity_user = "\\".$this->config['user_entity'];
+            $this->entity_user = "\\" . $this->config['user_entity'];
         } else {
             $this->entity_user = "App\Session\AuthBundle\Security\User\AuthUser";
         }
         $this->authService = $authService;
     }
 
-    public function loadUserByUsername($username)
+    public function refreshUser(UserInterface $user)
     {
-        $entity_user = $this->entity_user;
+        $user = $this->_ctrlInstanceUser($user);
 
-        return $this->authService->getUser($username);
+        return $this->loadUserByUsername($user->getUsername());
     }
 
     private function _ctrlInstanceUser(UserInterface $user)
@@ -47,11 +47,11 @@ class AuthUserProvider implements UserProviderInterface
         return $user;
     }
 
-    public function refreshUser(UserInterface $user)
+    public function loadUserByUsername($username)
     {
-        $user = $this->_ctrlInstanceUser($user);
+        $entity_user = $this->entity_user;
 
-        return $this->loadUserByUsername($user->getUsername());
+        return $this->authService->getUser($username);
     }
 
     public function supportsClass($class)

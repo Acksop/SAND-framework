@@ -11,36 +11,43 @@
 dl, ol, ul {
     margin: 0;
 }
+
 /** Sub Menu top bar, invisible on mobile **/
-.top-menu{
+.top-menu {
     display: flex;
     justify-content: end;
 }
+
 .top-menu > li {
     font-size: 0.7rem;
     list-style: none;
     padding: 0.5rem;
 }
-.top-menu > li:hover{
+
+.top-menu > li:hover {
     background-color: slategrey;
 }
+
 /** Menu de navigation **/
 nav > ul {
-    display:flex;
+    display: flex;
     justify-content: start;
 }
+
 nav > ul > li {
     list-style: none;
     padding: 1rem;
 }
-nav > ul > li:hover{
+
+nav > ul > li:hover {
     background-color: slategrey;
 }
 
 /** Liens de la page actuelle **/
-.actual{
+.actual {
     background-color: white;
 }
-header{
+
+header {
     margin-bottom: 2rem;
 }

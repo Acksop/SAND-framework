@@ -27,13 +27,13 @@ class Cookie
     protected $httpOnly;
 
     /**
-     * @param string                                  $name     The name of the cookie
-     * @param string                                  $value    The value of the cookie
-     * @param int|string|\DateTime|\DateTimeInterface $expire   The time the cookie expires
-     * @param string                                  $path     The path on the server in which the cookie will be available on
-     * @param string                                  $domain   The domain that the cookie is available to
-     * @param bool                                    $secure   Whether the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param bool                                    $httpOnly Whether the cookie will be made accessible only through the HTTP protocol
+     * @param string $name The name of the cookie
+     * @param string $value The value of the cookie
+     * @param int|string|\DateTime|\DateTimeInterface $expire The time the cookie expires
+     * @param string $path The path on the server in which the cookie will be available on
+     * @param string $domain The domain that the cookie is available to
+     * @param bool $secure Whether the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool $httpOnly Whether the cookie will be made accessible only through the HTTP protocol
      *
      * @throws \InvalidArgumentException
      */
@@ -62,10 +62,10 @@ class Cookie
         $this->name = $name;
         $this->value = $value;
         $this->domain = $domain;
-        $this->expire = 0 < $expire ? (int) $expire : 0;
+        $this->expire = 0 < $expire ? (int)$expire : 0;
         $this->path = empty($path) ? '/' : $path;
-        $this->secure = (bool) $secure;
-        $this->httpOnly = (bool) $httpOnly;
+        $this->secure = (bool)$secure;
+        $this->httpOnly = (bool)$httpOnly;
     }
 
     /**
@@ -75,24 +75,24 @@ class Cookie
      */
     public function __toString()
     {
-        $str = urlencode($this->getName()).'=';
+        $str = urlencode($this->getName()) . '=';
 
-        if ('' === (string) $this->getValue()) {
-            $str .= 'deleted; expires='.gmdate('D, d-M-Y H:i:s T', time() - 31536001);
+        if ('' === (string)$this->getValue()) {
+            $str .= 'deleted; expires=' . gmdate('D, d-M-Y H:i:s T', time() - 31536001);
         } else {
             $str .= rawurlencode($this->getValue());
 
             if (0 !== $this->getExpiresTime()) {
-                $str .= '; expires='.gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
+                $str .= '; expires=' . gmdate('D, d-M-Y H:i:s T', $this->getExpiresTime());
             }
         }
 
         if ($this->path) {
-            $str .= '; path='.$this->path;
+            $str .= '; path=' . $this->path;
         }
 
         if ($this->getDomain()) {
-            $str .= '; domain='.$this->getDomain();
+            $str .= '; domain=' . $this->getDomain();
         }
 
         if (true === $this->isSecure()) {
@@ -127,16 +127,6 @@ class Cookie
     }
 
     /**
-     * Gets the domain that the cookie is available to.
-     *
-     * @return string
-     */
-    public function getDomain()
-    {
-        return $this->domain;
-    }
-
-    /**
      * Gets the time the cookie expires.
      *
      * @return int
@@ -147,13 +137,13 @@ class Cookie
     }
 
     /**
-     * Gets the path on the server in which the cookie will be available on.
+     * Gets the domain that the cookie is available to.
      *
      * @return string
      */
-    public function getPath()
+    public function getDomain()
     {
-        return $this->path;
+        return $this->domain;
     }
 
     /**
@@ -174,6 +164,16 @@ class Cookie
     public function isHttpOnly()
     {
         return $this->httpOnly;
+    }
+
+    /**
+     * Gets the path on the server in which the cookie will be available on.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**

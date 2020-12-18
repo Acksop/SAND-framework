@@ -1,7 +1,5 @@
 <?php
 
-use MVC\Classe\Dumper;
-
 require CONFIG_PATH . DIRECTORY_SEPARATOR . "hybrid-authentification-config-example.php";
 
 try {
@@ -21,7 +19,7 @@ try {
             $adapter = $hybridauth->getAdapter($url_params['logout']);
             $adapter->disconnect();
             \MVC\Classe\Session::destroy();
-            header("location: ".MVC\Classe\Url::link_rewrite(false,'accueil'));
+            header("location: " . MVC\Classe\Url::link_rewrite(false, 'accueil'));
         } else {
             $error = $url_params['logout'];
         }

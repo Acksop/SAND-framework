@@ -28,11 +28,25 @@ class ArrayNodeTest extends AbstractNodeTest
         $this->assertNotEquals($this->createArrayNode(), $unserializedNode);
     }
 
+    protected function createArrayNode()
+    {
+        return new ArrayNode();
+    }
+
     public function getEvaluateData()
     {
         return [
             [['b' => 'a', 'b'], $this->getArrayNode()],
         ];
+    }
+
+    protected function getArrayNode()
+    {
+        $array = $this->createArrayNode();
+        $array->addElement(new ConstantNode('a'), new ConstantNode('b'));
+        $array->addElement(new ConstantNode('b'));
+
+        return $array;
     }
 
     public function getCompileData()
@@ -55,19 +69,5 @@ class ArrayNodeTest extends AbstractNodeTest
         $array->addElement(new ConstantNode('c'));
         $array->addElement(new ConstantNode('d'));
         yield ['["c", "d"]', $array];
-    }
-
-    protected function getArrayNode()
-    {
-        $array = $this->createArrayNode();
-        $array->addElement(new ConstantNode('a'), new ConstantNode('b'));
-        $array->addElement(new ConstantNode('b'));
-
-        return $array;
-    }
-
-    protected function createArrayNode()
-    {
-        return new ArrayNode();
     }
 }

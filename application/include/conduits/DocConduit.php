@@ -11,7 +11,7 @@ class DocConduit extends Conduit
 
         $files = array();
 
-        if ($handle = opendir(DATA_PATH.'/docs')) {
+        if ($handle = opendir(DATA_PATH . '/docs')) {
 
             while (false !== ($entry = readdir($handle))) {
 
@@ -26,16 +26,18 @@ class DocConduit extends Conduit
 
         asort($files);
 
-        return $this->render('docs', array('page_title' => 'Foo', 'description' => 'DocConduit','files' => $files));
+        return $this->render('docs', array('page_title' => 'Foo', 'description' => 'DocConduit', 'files' => $files));
     }
-    // Route('/docs/file/{name}')
-    public function readfile(){
 
-        $markdown = file_get_contents(DATA_PATH.'/docs/'.$this->name);
+    // Route('/docs/file/{name}')
+    public function readfile()
+    {
+
+        $markdown = file_get_contents(DATA_PATH . '/docs/' . $this->name);
 
         $my_html = MarkdownExtra::defaultTransform($markdown);
 
-        return $this->render('docs', array('page_title' => 'Foo', 'description' => 'DocConduit','data' => $my_html));
+        return $this->render('docs', array('page_title' => 'Foo', 'description' => 'DocConduit', 'data' => $my_html));
 
     }
 }

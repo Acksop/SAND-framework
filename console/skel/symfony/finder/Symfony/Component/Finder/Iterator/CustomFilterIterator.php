@@ -27,7 +27,7 @@ class CustomFilterIterator extends FilterIterator
      * Constructor.
      *
      * @param \Iterator $iterator The Iterator to filter
-     * @param array     $filters  An array of PHP callbacks
+     * @param array $filters An array of PHP callbacks
      *
      * @throws \InvalidArgumentException
      */

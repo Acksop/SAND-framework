@@ -24,7 +24,7 @@ class Node
     public $attributes = [];
 
     /**
-     * @param array $nodes      An array of nodes
+     * @param array $nodes An array of nodes
      * @param array $attributes An array of attributes
      */
     public function __construct(array $nodes = [], array $attributes = [])
@@ -40,12 +40,12 @@ class Node
             $attributes[] = sprintf('%s: %s', $name, str_replace("\n", '', var_export($value, true)));
         }
 
-        $repr = [str_replace('Symfony\Component\ExpressionLanguage\Node\\', '', static::class).'('.implode(', ', $attributes)];
+        $repr = [str_replace('Symfony\Component\ExpressionLanguage\Node\\', '', static::class) . '(' . implode(', ', $attributes)];
 
         if (\count($this->nodes)) {
             foreach ($this->nodes as $node) {
-                foreach (explode("\n", (string) $node) as $line) {
-                    $repr[] = '    '.$line;
+                foreach (explode("\n", (string)$node) as $line) {
+                    $repr[] = '    ' . $line;
                 }
             }
 
@@ -74,11 +74,6 @@ class Node
         return $results;
     }
 
-    public function toArray()
-    {
-        throw new \BadMethodCallException(sprintf('Dumping a "%s" instance is not supported yet.', static::class));
-    }
-
     public function dump()
     {
         $dump = '';
@@ -88,6 +83,11 @@ class Node
         }
 
         return $dump;
+    }
+
+    public function toArray()
+    {
+        throw new \BadMethodCallException(sprintf('Dumping a "%s" instance is not supported yet.', static::class));
     }
 
     protected function dumpString($value)

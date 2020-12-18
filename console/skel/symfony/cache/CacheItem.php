@@ -35,6 +35,48 @@ final class CacheItem implements ItemInterface
     protected $isTaggable = false;
 
     /**
+     * Validates a cache key according to PSR-6.
+     *
+     * @param string $key The key to validate
+     *
+     * @throws InvalidArgumentException When $key is not valid
+     */
+    public static function validateKey($key): string
+    {
+        if (!\is_string($key)) {
+            throw new InvalidArgumentException(sprintf('Cache key must be string, "%s" given', \is_object($key) ? \get_class($key) : \gettype($key)));
+        }
+        if ('' === $key) {
+            throw new InvalidArgumentException('Cache key length must be greater than zero');
+        }
+        if (false !== strpbrk($key, self::RESERVED_CHARACTERS)) {
+            throw new InvalidArgumentException(sprintf('Cache key "%s" contains reserved characters %s', $key, self::RESERVED_CHARACTERS));
+        }
+
+        return $key;
+    }
+
+    /**
+     * Internal logging helper.
+     *
+     * @internal
+     */
+    public static function log(?LoggerInterface $logger, string $message, array $context = [])
+    {
+        if ($logger) {
+            $logger->warning($message, $context);
+        } else {
+            $replace = [];
+            foreach ($context as $k => $v) {
+                if (is_scalar($v)) {
+                    $replace['{' . $k . '}'] = $v;
+                }
+            }
+            @trigger_error(strtr($message, $replace), E_USER_WARNING);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getKey(): string
@@ -80,7 +122,7 @@ final class CacheItem implements ItemInterface
         if (null === $expiration) {
             $this->expiry = $this->defaultLifetime > 0 ? microtime(true) + $this->defaultLifetime : null;
         } elseif ($expiration instanceof \DateTimeInterface) {
-            $this->expiry = (float) $expiration->format('U.u');
+            $this->expiry = (float)$expiration->format('U.u');
         } else {
             throw new InvalidArgumentException(sprintf('Expiration date must implement DateTimeInterface or be null, "%s" given', \is_object($expiration) ? \get_class($expiration) : \gettype($expiration)));
         }
@@ -156,47 +198,5 @@ final class CacheItem implements ItemInterface
         @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.2, use the "getMetadata()" method instead.', __METHOD__), E_USER_DEPRECATED);
 
         return $this->metadata[self::METADATA_TAGS] ?? [];
-    }
-
-    /**
-     * Validates a cache key according to PSR-6.
-     *
-     * @param string $key The key to validate
-     *
-     * @throws InvalidArgumentException When $key is not valid
-     */
-    public static function validateKey($key): string
-    {
-        if (!\is_string($key)) {
-            throw new InvalidArgumentException(sprintf('Cache key must be string, "%s" given', \is_object($key) ? \get_class($key) : \gettype($key)));
-        }
-        if ('' === $key) {
-            throw new InvalidArgumentException('Cache key length must be greater than zero');
-        }
-        if (false !== strpbrk($key, self::RESERVED_CHARACTERS)) {
-            throw new InvalidArgumentException(sprintf('Cache key "%s" contains reserved characters %s', $key, self::RESERVED_CHARACTERS));
-        }
-
-        return $key;
-    }
-
-    /**
-     * Internal logging helper.
-     *
-     * @internal
-     */
-    public static function log(?LoggerInterface $logger, string $message, array $context = [])
-    {
-        if ($logger) {
-            $logger->warning($message, $context);
-        } else {
-            $replace = [];
-            foreach ($context as $k => $v) {
-                if (is_scalar($v)) {
-                    $replace['{'.$k.'}'] = $v;
-                }
-            }
-            @trigger_error(strtr($message, $replace), E_USER_WARNING);
-        }
     }
 }

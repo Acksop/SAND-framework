@@ -65,9 +65,9 @@ class RedisTagAwareAdapter extends AbstractTagAwareAdapter
     private $redisEvictionPolicy;
 
     /**
-     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface $redisClient     The redis client
-     * @param string                                                   $namespace       The default namespace
-     * @param int                                                      $defaultLifetime The default lifetime
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface $redisClient The redis client
+     * @param string $namespace The default namespace
+     * @param int $defaultLifetime The default lifetime
      */
     public function __construct($redisClient, string $namespace = '', int $defaultLifetime = 0, MarshallerInterface $marshaller = null)
     {
@@ -142,6 +142,22 @@ class RedisTagAwareAdapter extends AbstractTagAwareAdapter
         }
 
         return $failed;
+    }
+
+    private function getRedisEvictionPolicy(): string
+    {
+        if (null !== $this->redisEvictionPolicy) {
+            return $this->redisEvictionPolicy;
+        }
+
+        foreach ($this->getHosts() as $host) {
+            $info = $host->info('Memory');
+            $info = isset($info['Memory']) ? $info['Memory'] : $info;
+
+            return $this->redisEvictionPolicy = $info['maxmemory_policy'];
+        }
+
+        return $this->redisEvictionPolicy = '';
     }
 
     /**
@@ -260,33 +276,17 @@ EOLUA;
 
         $results = $this->pipeline(static function () use ($ids, $uniqueToken) {
             foreach ($ids as $id) {
-                yield 'rename' => [$id, '{'.$id.'}'.$uniqueToken];
+                yield 'rename' => [$id, '{' . $id . '}' . $uniqueToken];
             }
         }, $redis);
 
         foreach ($results as $id => $result) {
             if (true === $result || ($result instanceof Status && Status::get('OK') === $result)) {
                 // Only take into account if ok (key existed), will be false on phpredis if it did not exist
-                $newIds[] = '{'.$id.'}'.$uniqueToken;
+                $newIds[] = '{' . $id . '}' . $uniqueToken;
             }
         }
 
         return $newIds;
-    }
-
-    private function getRedisEvictionPolicy(): string
-    {
-        if (null !== $this->redisEvictionPolicy) {
-            return $this->redisEvictionPolicy;
-        }
-
-        foreach ($this->getHosts() as $host) {
-            $info = $host->info('Memory');
-            $info = isset($info['Memory']) ? $info['Memory'] : $info;
-
-            return $this->redisEvictionPolicy = $info['maxmemory_policy'];
-        }
-
-        return $this->redisEvictionPolicy = '';
     }
 }

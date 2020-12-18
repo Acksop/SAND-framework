@@ -71,12 +71,12 @@ class AuthFinal extends AuthAbstract
      *
      * Est utilisé dans le userprovider par défaut Besancon\AuthBundle\Security\User\AuthUserProvider
      *
-     * @see \Symfony\Component\Security\Core\User\UserInterface
-     * @see \Besancon\AuthBundle\Security\User\AuthUserProvider
-     *
      * @param string $username
      *               Identifiant de l'utilisateur
      * @return \Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @see \Symfony\Component\Security\Core\User\UserInterface
+     * @see \Besancon\AuthBundle\Security\User\AuthUserProvider
      *
      */
     public function getUser($username)

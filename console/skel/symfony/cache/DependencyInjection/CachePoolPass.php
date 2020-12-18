@@ -49,11 +49,11 @@ class CachePoolPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if ($container->hasParameter('cache.prefix.seed')) {
-            $seed = '.'.$container->getParameterBag()->resolveValue($container->getParameter('cache.prefix.seed'));
+            $seed = '.' . $container->getParameterBag()->resolveValue($container->getParameter('cache.prefix.seed'));
         } else {
-            $seed = '_'.$container->getParameter('kernel.project_dir');
+            $seed = '_' . $container->getParameter('kernel.project_dir');
         }
-        $seed .= '.'.$container->getParameter('kernel.container_class');
+        $seed .= '.' . $container->getParameter('kernel.container_class');
 
         $allPools = [];
         $clearers = [];
@@ -81,7 +81,7 @@ class CachePoolPass implements CompilerPassInterface
             if (!isset($tags[0]['namespace'])) {
                 $namespaceSeed = $seed;
                 if (null !== $class) {
-                    $namespaceSeed .= '.'.$class;
+                    $namespaceSeed .= '.' . $class;
                 }
 
                 $tags[0]['namespace'] = $this->getNamespace($namespaceSeed, $name);
@@ -89,7 +89,7 @@ class CachePoolPass implements CompilerPassInterface
             if (isset($tags[0]['clearer'])) {
                 $clearer = $tags[0]['clearer'];
                 while ($container->hasAlias($clearer)) {
-                    $clearer = (string) $container->getAlias($clearer);
+                    $clearer = (string)$container->getAlias($clearer);
                 }
             } else {
                 $clearer = null;
@@ -173,7 +173,7 @@ class CachePoolPass implements CompilerPassInterface
 
         $notAliasedCacheClearerId = $this->cacheClearerId;
         while ($container->hasAlias($this->cacheClearerId)) {
-            $this->cacheClearerId = (string) $container->getAlias($this->cacheClearerId);
+            $this->cacheClearerId = (string)$container->getAlias($this->cacheClearerId);
         }
         if ($container->hasDefinition($this->cacheClearerId)) {
             $clearers[$notAliasedCacheClearerId] = $allPools;
@@ -200,7 +200,7 @@ class CachePoolPass implements CompilerPassInterface
 
     private function getNamespace(string $seed, string $id)
     {
-        return substr(str_replace('/', '-', base64_encode(hash('sha256', $id.$seed, true))), 0, 10);
+        return substr(str_replace('/', '-', base64_encode(hash('sha256', $id . $seed, true))), 0, 10);
     }
 
     /**
@@ -213,7 +213,7 @@ class CachePoolPass implements CompilerPassInterface
         if ($usedEnvs || preg_match('#^[a-z]++:#', $name)) {
             $dsn = $name;
 
-            if (!$container->hasDefinition($name = '.cache_connection.'.ContainerBuilder::hash($dsn))) {
+            if (!$container->hasDefinition($name = '.cache_connection.' . ContainerBuilder::hash($dsn))) {
                 $definition = new Definition(AbstractAdapter::class);
                 $definition->setPublic(false);
                 $definition->setFactory([AbstractAdapter::class, 'createConnection']);

@@ -39,8 +39,7 @@ class GetAttrNode extends Node
                 $compiler
                     ->compile($this->nodes['node'])
                     ->raw('->')
-                    ->raw($this->nodes['attribute']->attributes['value'])
-                ;
+                    ->raw($this->nodes['attribute']->attributes['value']);
                 break;
 
             case self::METHOD_CALL:
@@ -50,16 +49,14 @@ class GetAttrNode extends Node
                     ->raw($this->nodes['attribute']->attributes['value'])
                     ->raw('(')
                     ->compile($this->nodes['arguments'])
-                    ->raw(')')
-                ;
+                    ->raw(')');
                 break;
 
             case self::ARRAY_CALL:
                 $compiler
                     ->compile($this->nodes['node'])
                     ->raw('[')
-                    ->compile($this->nodes['attribute'])->raw(']')
-                ;
+                    ->compile($this->nodes['attribute'])->raw(']');
                 break;
         }
     }

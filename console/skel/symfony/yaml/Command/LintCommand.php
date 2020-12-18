@@ -76,14 +76,13 @@ Or of a whole directory:
   <info>php %command.full_name% dirname --format=json</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $filenames = (array) $input->getArgument('filename');
+        $filenames = (array)$input->getArgument('filename');
         $this->format = $input->getOption('format');
         $this->displayCorrectFiles = $output->isVerbose();
         $flags = $input->getOption('parse-tags') ? Yaml::PARSE_CUSTOM_TAGS : 0;
@@ -117,27 +116,6 @@ EOF
         return $this->display($io, $filesInfo);
     }
 
-    private function validate(string $content, int $flags, string $file = null)
-    {
-        $prevErrorHandler = set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-            if (E_USER_DEPRECATED === $level) {
-                throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
-            }
-
-            return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
-        });
-
-        try {
-            $this->getParser()->parse($content, Yaml::PARSE_CONSTANT | $flags);
-        } catch (ParseException $e) {
-            return ['file' => $file, 'line' => $e->getParsedLine(), 'valid' => false, 'message' => $e->getMessage()];
-        } finally {
-            restore_error_handler();
-        }
-
-        return ['file' => $file, 'valid' => true];
-    }
-
     private function display(SymfonyStyle $io, array $files): int
     {
         switch ($this->format) {
@@ -158,10 +136,10 @@ EOF
 
         foreach ($filesInfo as $info) {
             if ($info['valid'] && $this->displayCorrectFiles) {
-                $io->comment('<info>OK</info>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
+                $io->comment('<info>OK</info>' . ($info['file'] ? sprintf(' in %s', $info['file']) : ''));
             } elseif (!$info['valid']) {
                 ++$erroredFiles;
-                $io->text('<error> ERROR </error>'.($info['file'] ? sprintf(' in %s', $info['file']) : ''));
+                $io->text('<error> ERROR </error>' . ($info['file'] ? sprintf(' in %s', $info['file']) : ''));
                 $io->text(sprintf('<error> >> %s</error>', $info['message']));
 
                 if (false !== strpos($info['message'], 'PARSE_CUSTOM_TAGS')) {
@@ -184,7 +162,7 @@ EOF
         $errors = 0;
 
         array_walk($filesInfo, function (&$v) use (&$errors) {
-            $v['file'] = (string) $v['file'];
+            $v['file'] = (string)$v['file'];
             if (!$v['valid']) {
                 ++$errors;
             }
@@ -197,6 +175,49 @@ EOF
         $io->writeln(json_encode($filesInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
         return min($errors, 1);
+    }
+
+    private function validate(string $content, int $flags, string $file = null)
+    {
+        $prevErrorHandler = set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler) {
+            if (E_USER_DEPRECATED === $level) {
+                throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
+            }
+
+            return $prevErrorHandler ? $prevErrorHandler($level, $message, $file, $line) : false;
+        });
+
+        try {
+            $this->getParser()->parse($content, Yaml::PARSE_CONSTANT | $flags);
+        } catch (ParseException $e) {
+            return ['file' => $file, 'line' => $e->getParsedLine(), 'valid' => false, 'message' => $e->getMessage()];
+        } finally {
+            restore_error_handler();
+        }
+
+        return ['file' => $file, 'valid' => true];
+    }
+
+    private function getParser(): Parser
+    {
+        if (!$this->parser) {
+            $this->parser = new Parser();
+        }
+
+        return $this->parser;
+    }
+
+    private function isReadable(string $fileOrDirectory): bool
+    {
+        $default = function ($fileOrDirectory) {
+            return is_readable($fileOrDirectory);
+        };
+
+        if (null !== $this->isReadableProvider) {
+            return ($this->isReadableProvider)($fileOrDirectory, $default);
+        }
+
+        return $default($fileOrDirectory);
     }
 
     private function getFiles(string $fileOrDirectory): iterable
@@ -216,15 +237,6 @@ EOF
         }
     }
 
-    private function getParser(): Parser
-    {
-        if (!$this->parser) {
-            $this->parser = new Parser();
-        }
-
-        return $this->parser;
-    }
-
     private function getDirectoryIterator(string $directory): iterable
     {
         $default = function ($directory) {
@@ -239,18 +251,5 @@ EOF
         }
 
         return $default($directory);
-    }
-
-    private function isReadable(string $fileOrDirectory): bool
-    {
-        $default = function ($fileOrDirectory) {
-            return is_readable($fileOrDirectory);
-        };
-
-        if (null !== $this->isReadableProvider) {
-            return ($this->isReadableProvider)($fileOrDirectory, $default);
-        }
-
-        return $default($fileOrDirectory);
     }
 }

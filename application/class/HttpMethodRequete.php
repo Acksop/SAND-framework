@@ -111,6 +111,12 @@ class HttpMethodRequete
             return $this;
         }
     */
+
+    public function get($params = array())
+    {
+        return $this->replaceContext('GET')->addContent($params)->send();
+    }
+
     public function send()
     {
 
@@ -130,7 +136,6 @@ class HttpMethodRequete
 //        } else {
 //            return true;
 //        }
-
 
 
         $curl_cmd = "curl -i -k -X $this->method -H 'Content-Type: application/json' -d '$this->content' $this->url";
@@ -194,11 +199,6 @@ class HttpMethodRequete
             )
         );
         return $this;
-    }
-
-    public function get($params = array())
-    {
-        return $this->replaceContext('GET')->addContent($params)->send();
     }
 
     public function post($params = array())

@@ -37,6 +37,43 @@ class FileBinaryMimeTypeGuesser implements MimeTypeGuesserInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function guess($path)
+    {
+        if (!is_file($path)) {
+            throw new FileNotFoundException($path);
+        }
+
+        if (!is_readable($path)) {
+            throw new AccessDeniedException($path);
+        }
+
+        if (!self::isSupported()) {
+            return;
+        }
+
+        ob_start();
+
+        // need to use --mime instead of -i. see #6641
+        passthru(sprintf($this->cmd, escapeshellarg((0 === strpos($path, '-') ? './' : '') . $path)), $return);
+        if ($return > 0) {
+            ob_end_clean();
+
+            return;
+        }
+
+        $type = trim(ob_get_clean());
+
+        if (!preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
+            // it's not a type, but an error message
+            return;
+        }
+
+        return $match[1];
+    }
+
+    /**
      * Returns whether this guesser is supported on the current OS.
      *
      * @return bool
@@ -58,42 +95,5 @@ class FileBinaryMimeTypeGuesser implements MimeTypeGuesserInterface
         $binPath = trim(ob_get_clean());
 
         return $supported = 0 === $exitStatus && '' !== $binPath;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function guess($path)
-    {
-        if (!is_file($path)) {
-            throw new FileNotFoundException($path);
-        }
-
-        if (!is_readable($path)) {
-            throw new AccessDeniedException($path);
-        }
-
-        if (!self::isSupported()) {
-            return;
-        }
-
-        ob_start();
-
-        // need to use --mime instead of -i. see #6641
-        passthru(sprintf($this->cmd, escapeshellarg((0 === strpos($path, '-') ? './' : '').$path)), $return);
-        if ($return > 0) {
-            ob_end_clean();
-
-            return;
-        }
-
-        $type = trim(ob_get_clean());
-
-        if (!preg_match('#^([a-z0-9\-]+/[a-z0-9\-\.]+)#i', $type, $match)) {
-            // it's not a type, but an error message
-            return;
-        }
-
-        return $match[1];
     }
 }

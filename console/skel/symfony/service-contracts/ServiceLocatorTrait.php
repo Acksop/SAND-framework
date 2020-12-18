@@ -69,28 +69,6 @@ trait ServiceLocatorTrait
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getProvidedServices(): array
-    {
-        if (null === $this->providedTypes) {
-            $this->providedTypes = [];
-
-            foreach ($this->factories as $name => $factory) {
-                if (!\is_callable($factory)) {
-                    $this->providedTypes[$name] = '?';
-                } else {
-                    $type = (new \ReflectionFunction($factory))->getReturnType();
-
-                    $this->providedTypes[$name] = $type ? ($type->allowsNull() ? '?' : '').$type->getName() : '?';
-                }
-            }
-        }
-
-        return $this->providedTypes;
-    }
-
     private function createNotFoundException(string $id): NotFoundExceptionInterface
     {
         if (!$alternatives = array_keys($this->factories)) {
@@ -110,13 +88,37 @@ trait ServiceLocatorTrait
             $message = sprintf('Service "%s" not found: the current service locator %s', $id, $message);
         }
 
-        return new class($message) extends \InvalidArgumentException implements NotFoundExceptionInterface {
+        return new class($message) extends \InvalidArgumentException implements NotFoundExceptionInterface
+        {
         };
     }
 
     private function createCircularReferenceException(string $id, array $path): ContainerExceptionInterface
     {
-        return new class(sprintf('Circular reference detected for service "%s", path: "%s".', $id, implode(' -> ', $path))) extends \RuntimeException implements ContainerExceptionInterface {
+        return new class(sprintf('Circular reference detected for service "%s", path: "%s".', $id, implode(' -> ', $path))) extends \RuntimeException implements ContainerExceptionInterface
+        {
         };
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProvidedServices(): array
+    {
+        if (null === $this->providedTypes) {
+            $this->providedTypes = [];
+
+            foreach ($this->factories as $name => $factory) {
+                if (!\is_callable($factory)) {
+                    $this->providedTypes[$name] = '?';
+                } else {
+                    $type = (new \ReflectionFunction($factory))->getReturnType();
+
+                    $this->providedTypes[$name] = $type ? ($type->allowsNull() ? '?' : '') . $type->getName() : '?';
+                }
+            }
+        }
+
+        return $this->providedTypes;
     }
 }

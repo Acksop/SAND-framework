@@ -5,11 +5,11 @@ namespace MVC\Classe;
 class Modele
 {
     public $page;
-    
+
     public function __construct($base_param)
     {
-        if (file_exists(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model')) {
-            $fichier = file(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model');
+        if (file_exists(MODELS_PATH . DIRECTORY_SEPARATOR . $base_param['name'] . '.model')) {
+            $fichier = file(MODELS_PATH . DIRECTORY_SEPARATOR . $base_param['name'] . '.model');
             foreach ($fichier as $ligne_num => $ligne) {
                 //on recherche le pattern des parametres
                 if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)]*[ ]*)#", $ligne, $matches)) {

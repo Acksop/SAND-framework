@@ -24,6 +24,18 @@ class FunctionNodeTest extends AbstractNodeTest
         ];
     }
 
+    protected function getCallables()
+    {
+        return [
+            'compiler' => function ($arg) {
+                return sprintf('foo(%s)', $arg);
+            },
+            'evaluator' => function ($variables, $arg) {
+                return $arg;
+            },
+        ];
+    }
+
     public function getCompileData()
     {
         return [
@@ -35,18 +47,6 @@ class FunctionNodeTest extends AbstractNodeTest
     {
         return [
             ['foo("bar")', new FunctionNode('foo', new Node([new ConstantNode('bar')])), ['foo' => $this->getCallables()]],
-        ];
-    }
-
-    protected function getCallables()
-    {
-        return [
-            'compiler' => function ($arg) {
-                return sprintf('foo(%s)', $arg);
-            },
-            'evaluator' => function ($variables, $arg) {
-                return $arg;
-            },
         ];
     }
 }

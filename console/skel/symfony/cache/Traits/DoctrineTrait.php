@@ -34,7 +34,7 @@ trait DoctrineTrait
      */
     protected function doFetch(array $ids)
     {
-        $unserializeCallbackHandler = ini_set('unserialize_callback_func', parent::class.'::handleUnserializeCallback');
+        $unserializeCallbackHandler = ini_set('unserialize_callback_func', parent::class . '::handleUnserializeCallback');
         try {
             return $this->provider->fetchMultiple($ids);
         } catch (\Error $e) {

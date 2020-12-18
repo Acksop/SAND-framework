@@ -20,46 +20,12 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\MongoDbSessionHandl
  */
 class MongoDbSessionHandlerTest extends TestCase
 {
+    public $options;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $mongo;
     private $storage;
-    public $options;
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        if (\extension_loaded('mongodb')) {
-            if (!class_exists('MongoDB\Client')) {
-                $this->markTestSkipped('The mongodb/mongodb package is required.');
-            }
-        } elseif (!\extension_loaded('mongo')) {
-            $this->markTestSkipped('The Mongo or MongoDB extension is required.');
-        }
-
-        if (phpversion('mongodb')) {
-            $mongoClass = 'MongoDB\Client';
-        } else {
-            $mongoClass = version_compare(phpversion('mongo'), '1.3.0', '<') ? 'Mongo' : 'MongoClient';
-        }
-
-        $this->mongo = $this->getMockBuilder($mongoClass)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->options = array(
-            'id_field' => '_id',
-            'data_field' => 'data',
-            'time_field' => 'time',
-            'expiry_field' => 'expires_at',
-            'database' => 'sf2-test',
-            'collection' => 'session-test',
-        );
-
-        $this->storage = new MongoDbSessionHandler($this->mongo, $this->options);
-    }
 
     /**
      * @expectedException \InvalidArgumentException
@@ -113,7 +79,7 @@ class MongoDbSessionHandlerTest extends TestCase
 
                 if (phpversion('mongodb')) {
                     $that->assertInstanceOf('MongoDB\BSON\UTCDateTime', $criteria[$that->options['expiry_field']]['$gte']);
-                    $that->assertGreaterThanOrEqual(round((string) $criteria[$that->options['expiry_field']]['$gte'] / 1000), $testTimeout);
+                    $that->assertGreaterThanOrEqual(round((string)$criteria[$that->options['expiry_field']]['$gte'] / 1000), $testTimeout);
                 } else {
                     $that->assertInstanceOf('MongoDate', $criteria[$that->options['expiry_field']]['$gte']);
                     $that->assertGreaterThanOrEqual($criteria[$that->options['expiry_field']]['$gte']->sec, $testTimeout);
@@ -135,6 +101,20 @@ class MongoDbSessionHandlerTest extends TestCase
             }));
 
         $this->assertEquals('bar', $this->storage->read('foo'));
+    }
+
+    private function createMongoCollectionMock()
+    {
+        $collectionClass = 'MongoCollection';
+        if (phpversion('mongodb')) {
+            $collectionClass = 'MongoDB\Collection';
+        }
+
+        $collection = $this->getMockBuilder($collectionClass)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $collection;
     }
 
     public function testWrite()
@@ -165,14 +145,14 @@ class MongoDbSessionHandlerTest extends TestCase
                 $data = $updateData['$set'];
             }));
 
-        $expectedExpiry = time() + (int) ini_get('session.gc_maxlifetime');
+        $expectedExpiry = time() + (int)ini_get('session.gc_maxlifetime');
         $this->assertTrue($this->storage->write('foo', 'bar'));
 
         if (phpversion('mongodb')) {
             $that->assertEquals('bar', $data[$that->options['data_field']]->getData());
             $that->assertInstanceOf('MongoDB\BSON\UTCDateTime', $data[$that->options['time_field']]);
             $that->assertInstanceOf('MongoDB\BSON\UTCDateTime', $data[$that->options['expiry_field']]);
-            $that->assertGreaterThanOrEqual($expectedExpiry, round((string) $data[$that->options['expiry_field']] / 1000));
+            $that->assertGreaterThanOrEqual($expectedExpiry, round((string)$data[$that->options['expiry_field']] / 1000));
         } else {
             $that->assertEquals('bar', $data[$that->options['data_field']]->bin);
             $that->assertInstanceOf('MongoDate', $data[$that->options['time_field']]);
@@ -298,7 +278,7 @@ class MongoDbSessionHandlerTest extends TestCase
             ->will($this->returnCallback(function ($criteria) use ($that) {
                 if (phpversion('mongodb')) {
                     $that->assertInstanceOf('MongoDB\BSON\UTCDateTime', $criteria[$that->options['expiry_field']]['$lt']);
-                    $that->assertGreaterThanOrEqual(time() - 1, round((string) $criteria[$that->options['expiry_field']]['$lt'] / 1000));
+                    $that->assertGreaterThanOrEqual(time() - 1, round((string)$criteria[$that->options['expiry_field']]['$lt'] / 1000));
                 } else {
                     $that->assertInstanceOf('MongoDate', $criteria[$that->options['expiry_field']]['$lt']);
                     $that->assertGreaterThanOrEqual(time() - 1, $criteria[$that->options['expiry_field']]['$lt']->sec);
@@ -322,17 +302,37 @@ class MongoDbSessionHandlerTest extends TestCase
         $this->assertInstanceOf($mongoClass, $method->invoke($this->storage));
     }
 
-    private function createMongoCollectionMock()
+    protected function setUp()
     {
-        $collectionClass = 'MongoCollection';
-        if (phpversion('mongodb')) {
-            $collectionClass = 'MongoDB\Collection';
+        parent::setUp();
+
+        if (\extension_loaded('mongodb')) {
+            if (!class_exists('MongoDB\Client')) {
+                $this->markTestSkipped('The mongodb/mongodb package is required.');
+            }
+        } elseif (!\extension_loaded('mongo')) {
+            $this->markTestSkipped('The Mongo or MongoDB extension is required.');
         }
 
-        $collection = $this->getMockBuilder($collectionClass)
+        if (phpversion('mongodb')) {
+            $mongoClass = 'MongoDB\Client';
+        } else {
+            $mongoClass = version_compare(phpversion('mongo'), '1.3.0', '<') ? 'Mongo' : 'MongoClient';
+        }
+
+        $this->mongo = $this->getMockBuilder($mongoClass)
             ->disableOriginalConstructor()
             ->getMock();
 
-        return $collection;
+        $this->options = array(
+            'id_field' => '_id',
+            'data_field' => 'data',
+            'time_field' => 'time',
+            'expiry_field' => 'expires_at',
+            'database' => 'sf2-test',
+            'collection' => 'session-test',
+        );
+
+        $this->storage = new MongoDbSessionHandler($this->mongo, $this->options);
     }
 }

@@ -23,13 +23,13 @@ class ExcludeDirectoryFilterIterator extends FilterIterator
     /**
      * Constructor.
      *
-     * @param \Iterator $iterator    The Iterator to filter
-     * @param array     $directories An array of directories to exclude
+     * @param \Iterator $iterator The Iterator to filter
+     * @param array $directories An array of directories to exclude
      */
     public function __construct(\Iterator $iterator, array $directories)
     {
         foreach ($directories as $directory) {
-            $this->patterns[] = '#(^|/)'.preg_quote($directory, '#').'(/|$)#';
+            $this->patterns[] = '#(^|/)' . preg_quote($directory, '#') . '(/|$)#';
         }
 
         parent::__construct($iterator);

@@ -39,14 +39,10 @@ class Browser
             return 'Firefox';
         } elseif (strpos($t, 'msie') || strpos($t, 'trident/7')) {
             return 'Internet Explorer';
-        }
-
-        // Application Users
+        } // Application Users
         elseif (strpos($t, 'curl')) {
             return '[App] Curl';
-        }
-
-        // Search Engines
+        } // Search Engines
         elseif (strpos($t, 'google')) {
             return '[Bot] Googlebot';
         } elseif (strpos($t, 'bing')) {
@@ -65,9 +61,7 @@ class Browser
             return '[Bot] Exabot';
         } elseif (strpos($t, 'msn')) {
             return '[Bot] MSN';
-        }
-
-        // Common Tools and Bots
+        } // Common Tools and Bots
         elseif (strpos($t, 'mj12bot')) {
             return '[Bot] Majestic';
         } elseif (strpos($t, 'ahrefs')) {
@@ -78,16 +72,12 @@ class Browser
             return '[Bot] Moz or OpenSiteExplorer';
         } elseif (strpos($t, 'frog') || strpos($t, 'screaming')) {
             return '[Bot] Screaming Frog';
-        }
-
-        // Miscellaneous
+        } // Miscellaneous
         elseif (strpos($t, 'facebook')) {
             return '[Bot] Facebook';
         } elseif (strpos($t, 'pinterest')) {
             return '[Bot] Pinterest';
-        }
-
-        // Check for strings commonly used in bot user agents
+        } // Check for strings commonly used in bot user agents
         elseif (strpos($t, 'crawler') || strpos($t, 'api') ||
             strpos($t, 'spider') || strpos($t, 'http') ||
             strpos($t, 'bot') || strpos($t, 'archive') ||

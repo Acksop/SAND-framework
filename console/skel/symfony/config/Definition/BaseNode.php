@@ -35,7 +35,7 @@ abstract class BaseNode implements NodeInterface
     /**
      * Constructor.
      *
-     * @param string        $name   The name of the node
+     * @param string $name The name of the node
      * @param NodeInterface $parent The parent of this node
      *
      * @throws \InvalidArgumentException if the name contains a period.
@@ -48,16 +48,6 @@ abstract class BaseNode implements NodeInterface
 
         $this->name = $name;
         $this->parent = $parent;
-    }
-
-    public function setAttribute($key, $value)
-    {
-        $this->attributes[$key] = $value;
-    }
-
-    public function getAttribute($key, $default = null)
-    {
-        return isset($this->attributes[$key]) ? $this->attributes[$key] : $default;
     }
 
     public function hasAttribute($key)
@@ -90,6 +80,11 @@ abstract class BaseNode implements NodeInterface
         $this->setAttribute('info', $info);
     }
 
+    public function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
+    }
+
     /**
      * Returns info message.
      *
@@ -98,6 +93,11 @@ abstract class BaseNode implements NodeInterface
     public function getInfo()
     {
         return $this->getAttribute('info');
+    }
+
+    public function getAttribute($key, $default = null)
+    {
+        return isset($this->attributes[$key]) ? $this->attributes[$key] : $default;
     }
 
     /**
@@ -132,23 +132,13 @@ abstract class BaseNode implements NodeInterface
     }
 
     /**
-     * Set this node as required.
-     *
-     * @param bool $boolean Required node
-     */
-    public function setRequired($boolean)
-    {
-        $this->required = (bool) $boolean;
-    }
-
-    /**
      * Sets if this node can be overridden.
      *
      * @param bool $allow
      */
     public function setAllowOverwrite($allow)
     {
-        $this->allowOverwrite = (bool) $allow;
+        $this->allowOverwrite = (bool)$allow;
     }
 
     /**
@@ -182,6 +172,16 @@ abstract class BaseNode implements NodeInterface
     }
 
     /**
+     * Set this node as required.
+     *
+     * @param bool $boolean Required node
+     */
+    public function setRequired($boolean)
+    {
+        $this->required = (bool)$boolean;
+    }
+
+    /**
      * Returns the name of this node.
      *
      * @return string The Node's name
@@ -189,22 +189,6 @@ abstract class BaseNode implements NodeInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Retrieves the path of this node.
-     *
-     * @return string The Node's path
-     */
-    public function getPath()
-    {
-        $path = $this->name;
-
-        if (null !== $this->parent) {
-            $path = $this->parent->getPath().'.'.$path;
-        }
-
-        return $path;
     }
 
     /**
@@ -222,8 +206,8 @@ abstract class BaseNode implements NodeInterface
         if (!$this->allowOverwrite) {
             throw new ForbiddenOverwriteException(sprintf(
                 'Configuration path "%s" cannot be overwritten. You have to '
-               .'define all options for this path, and any of its sub-paths in '
-               .'one configuration section.',
+                . 'define all options for this path, and any of its sub-paths in '
+                . 'one configuration section.',
                 $this->getPath()
             ));
         }
@@ -233,6 +217,41 @@ abstract class BaseNode implements NodeInterface
 
         return $this->mergeValues($leftSide, $rightSide);
     }
+
+    /**
+     * Retrieves the path of this node.
+     *
+     * @return string The Node's path
+     */
+    public function getPath()
+    {
+        $path = $this->name;
+
+        if (null !== $this->parent) {
+            $path = $this->parent->getPath() . '.' . $path;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Validates the type of a Node.
+     *
+     * @param mixed $value The value to validate
+     *
+     * @throws InvalidTypeException when the value is invalid
+     */
+    abstract protected function validateType($value);
+
+    /**
+     * Merges two values together.
+     *
+     * @param mixed $leftSide
+     * @param mixed $rightSide
+     *
+     * @return mixed The merged value
+     */
+    abstract protected function mergeValues($leftSide, $rightSide);
 
     /**
      * Normalizes a value, applying all normalization closures.
@@ -277,6 +296,15 @@ abstract class BaseNode implements NodeInterface
     }
 
     /**
+     * Normalizes the value.
+     *
+     * @param mixed $value The value to normalize
+     *
+     * @return mixed The normalized value
+     */
+    abstract protected function normalizeValue($value);
+
+    /**
      * Returns parent node for this node.
      *
      * @return NodeInterface|null
@@ -316,34 +344,6 @@ abstract class BaseNode implements NodeInterface
 
         return $value;
     }
-
-    /**
-     * Validates the type of a Node.
-     *
-     * @param mixed $value The value to validate
-     *
-     * @throws InvalidTypeException when the value is invalid
-     */
-    abstract protected function validateType($value);
-
-    /**
-     * Normalizes the value.
-     *
-     * @param mixed $value The value to normalize
-     *
-     * @return mixed The normalized value
-     */
-    abstract protected function normalizeValue($value);
-
-    /**
-     * Merges two values together.
-     *
-     * @param mixed $leftSide
-     * @param mixed $rightSide
-     *
-     * @return mixed The merged value
-     */
-    abstract protected function mergeValues($leftSide, $rightSide);
 
     /**
      * Finalizes a value.

@@ -26,7 +26,7 @@ class HttpMethod
                 //$this->data['GET'] = ...
                 //POST DATA except enctype="multipart/form-data"
                 $this->data = json_decode(file_get_contents("php://input"), true);
-                // no break
+            // no break
             case 'DELETE':
                 //$this->data['GET'] = ...
                 //POST DATA except enctype="multipart/form-data"

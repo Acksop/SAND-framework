@@ -16,29 +16,24 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class FilesystemTestCase extends TestCase
 {
-    private $umask;
-
-    protected $longPathNamesWindows = [];
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem = null;
-
-    /**
-     * @var string
-     */
-    protected $workspace = null;
-
     /**
      * @var bool|null Flag for hard links on Windows
      */
     private static $linkOnWindows = null;
-
     /**
      * @var bool|null Flag for symbolic links on Windows
      */
     private static $symlinkOnWindows = null;
+    protected $longPathNamesWindows = [];
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem = null;
+    /**
+     * @var string
+     */
+    protected $workspace = null;
+    private $umask;
 
     public static function setUpBeforeClass()
     {
@@ -73,7 +68,7 @@ class FilesystemTestCase extends TestCase
     {
         $this->umask = umask(0);
         $this->filesystem = new Filesystem();
-        $this->workspace = sys_get_temp_dir().'/'.microtime(true).'.'.mt_rand();
+        $this->workspace = sys_get_temp_dir() . '/' . microtime(true) . '.' . mt_rand();
         mkdir($this->workspace, 0777, true);
         $this->workspace = realpath($this->workspace);
     }
@@ -82,7 +77,7 @@ class FilesystemTestCase extends TestCase
     {
         if (!empty($this->longPathNamesWindows)) {
             foreach ($this->longPathNamesWindows as $path) {
-                exec('DEL '.$path);
+                exec('DEL ' . $path);
             }
             $this->longPathNamesWindows = [];
         }
@@ -92,12 +87,12 @@ class FilesystemTestCase extends TestCase
     }
 
     /**
-     * @param int    $expectedFilePerms Expected file permissions as three digits (i.e. 755)
+     * @param int $expectedFilePerms Expected file permissions as three digits (i.e. 755)
      * @param string $filePath
      */
     protected function assertFilePermissions($expectedFilePerms, $filePath)
     {
-        $actualFilePerms = (int) substr(sprintf('%o', fileperms($filePath)), -3);
+        $actualFilePerms = (int)substr(sprintf('%o', fileperms($filePath)), -3);
         $this->assertEquals(
             $expectedFilePerms,
             $actualFilePerms,
@@ -112,6 +107,13 @@ class FilesystemTestCase extends TestCase
         $infos = stat($filepath);
 
         return ($datas = posix_getpwuid($infos['uid'])) ? $datas['name'] : null;
+    }
+
+    protected function markAsSkippedIfPosixIsMissing()
+    {
+        if (!\function_exists('posix_isatty')) {
+            $this->markTestSkipped('Function posix_isatty is required.');
+        }
     }
 
     protected function getFileGroup($filepath)
@@ -153,13 +155,6 @@ class FilesystemTestCase extends TestCase
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $this->markTestSkipped('chmod is not supported on Windows');
-        }
-    }
-
-    protected function markAsSkippedIfPosixIsMissing()
-    {
-        if (!\function_exists('posix_isatty')) {
-            $this->markTestSkipped('Function posix_isatty is required.');
         }
     }
 }

@@ -25,7 +25,7 @@ class TokenStream
     private $expression;
 
     /**
-     * @param array  $tokens     An array of tokens
+     * @param array $tokens An array of tokens
      * @param string $expression
      */
     public function __construct(array $tokens, $expression = '')
@@ -46,6 +46,22 @@ class TokenStream
     }
 
     /**
+     * Tests a token.
+     *
+     * @param array|int $type The type to test
+     * @param string|null $value The token value
+     * @param string|null $message The syntax error message
+     */
+    public function expect($type, $value = null, $message = null)
+    {
+        $token = $this->current;
+        if (!$token->test($type, $value)) {
+            throw new SyntaxError(sprintf('%sUnexpected token "%s" of value "%s" ("%s" expected%s)', $message ? $message . '. ' : '', $token->type, $token->value, $type, $value ? sprintf(' with value "%s"', $value) : ''), $token->cursor, $this->expression);
+        }
+        $this->next();
+    }
+
+    /**
      * Sets the pointer to the next token and returns the old one.
      */
     public function next()
@@ -60,22 +76,6 @@ class TokenStream
     }
 
     /**
-     * Tests a token.
-     *
-     * @param array|int   $type    The type to test
-     * @param string|null $value   The token value
-     * @param string|null $message The syntax error message
-     */
-    public function expect($type, $value = null, $message = null)
-    {
-        $token = $this->current;
-        if (!$token->test($type, $value)) {
-            throw new SyntaxError(sprintf('%sUnexpected token "%s" of value "%s" ("%s" expected%s)', $message ? $message.'. ' : '', $token->type, $token->value, $type, $value ? sprintf(' with value "%s"', $value) : ''), $token->cursor, $this->expression);
-        }
-        $this->next();
-    }
-
-    /**
      * Checks if end of stream was reached.
      *
      * @return bool
@@ -86,9 +86,9 @@ class TokenStream
     }
 
     /**
+     * @return string
      * @internal
      *
-     * @return string
      */
     public function getExpression()
     {

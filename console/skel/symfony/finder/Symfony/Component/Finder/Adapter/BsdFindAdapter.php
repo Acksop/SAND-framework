@@ -11,10 +11,10 @@
 
 namespace Symfony\Component\Finder\Adapter;
 
-use Symfony\Component\Finder\Shell\Shell;
-use Symfony\Component\Finder\Shell\Command;
-use Symfony\Component\Finder\Iterator\SortableIterator;
 use Symfony\Component\Finder\Expression\Expression;
+use Symfony\Component\Finder\Iterator\SortableIterator;
+use Symfony\Component\Finder\Shell\Command;
+use Symfony\Component\Finder\Shell\Shell;
 
 /**
  * Shell engine implementation using BSD find command.
@@ -67,7 +67,7 @@ class BsdFindAdapter extends AbstractFindAdapter
 
         $command
             ->add('-print0 | xargs -0 stat -f')
-            ->arg($format.'%t%N')
+            ->arg($format . '%t%N')
             ->add('| sort | cut -f 2');
     }
 
@@ -96,8 +96,7 @@ class BsdFindAdapter extends AbstractFindAdapter
                 ->add($expr->isCaseSensitive() ? null : '-i')
                 ->add($not ? '-L' : '-l')
                 ->add('-Ee')->arg($expr->renderPattern())
-                ->add('{}')
-            ;
+                ->add('{}');
         }
     }
 }

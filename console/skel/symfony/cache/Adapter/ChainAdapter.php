@@ -38,8 +38,8 @@ class ChainAdapter implements AdapterInterface, CacheInterface, PruneableInterfa
     private $syncItem;
 
     /**
-     * @param CacheItemPoolInterface[] $adapters        The ordered list of adapters used to fetch cached items
-     * @param int                      $defaultLifetime The default lifetime of items propagated from lower adapters to upper ones
+     * @param CacheItemPoolInterface[] $adapters The ordered list of adapters used to fetch cached items
+     * @param int $defaultLifetime The default lifetime of items propagated from lower adapters to upper ones
      */
     public function __construct(array $adapters, int $defaultLifetime = 0)
     {
@@ -202,7 +202,7 @@ class ChainAdapter implements AdapterInterface, CacheInterface, PruneableInterfa
      */
     public function clear(/*string $prefix = ''*/)
     {
-        $prefix = 0 < \func_num_args() ? (string) func_get_arg(0) : '';
+        $prefix = 0 < \func_num_args() ? (string)func_get_arg(0) : '';
         $cleared = true;
         $i = $this->adapterCount;
 

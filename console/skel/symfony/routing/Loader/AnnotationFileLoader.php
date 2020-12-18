@@ -43,7 +43,7 @@ class AnnotationFileLoader extends FileLoader
     /**
      * Loads from annotations from a file.
      *
-     * @param string      $file A PHP file path
+     * @param string $file A PHP file path
      * @param string|null $type The resource type
      *
      * @return RouteCollection|null A RouteCollection instance
@@ -73,14 +73,6 @@ class AnnotationFileLoader extends FileLoader
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        return \is_string($resource) && 'php' === pathinfo($resource, PATHINFO_EXTENSION) && (!$type || 'annotation' === $type);
-    }
-
-    /**
      * Returns the full class name for the first class in the file.
      *
      * @param string $file A PHP file path
@@ -105,7 +97,7 @@ class AnnotationFileLoader extends FileLoader
             }
 
             if (true === $class && T_STRING === $token[0]) {
-                return $namespace.'\\'.$token[1];
+                return $namespace . '\\' . $token[1];
             }
 
             if (true === $namespace && T_STRING === $token[0]) {
@@ -143,5 +135,13 @@ class AnnotationFileLoader extends FileLoader
         }
 
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($resource, $type = null)
+    {
+        return \is_string($resource) && 'php' === pathinfo($resource, PATHINFO_EXTENSION) && (!$type || 'annotation' === $type);
     }
 }

@@ -36,7 +36,7 @@ class Registry
 
     public static function unserialize($objects, $serializables)
     {
-        $unserializeCallback = ini_set('unserialize_callback_func', __CLASS__.'::getClassReflector');
+        $unserializeCallback = ini_set('unserialize_callback_func', __CLASS__ . '::getClassReflector');
 
         try {
             foreach ($serializables as $k => $v) {
@@ -54,13 +54,6 @@ class Registry
         self::getClassReflector($class, true, true);
 
         return self::$prototypes[$class];
-    }
-
-    public static function f($class)
-    {
-        $reflector = self::$reflectors[$class] ?? self::getClassReflector($class, true, false);
-
-        return self::$factories[$class] = \Closure::fromCallable([$reflector, 'newInstanceWithoutConstructor']);
     }
 
     public static function getClassReflector($class, $instantiableWithoutConstructor = false, $cloneable = null)
@@ -89,7 +82,7 @@ class Registry
                 $proto = $reflector->implementsInterface('Serializable') && !method_exists($class, '__unserialize') ? 'C:' : 'O:';
                 if ('C:' === $proto && !$reflector->getMethod('unserialize')->isInternal()) {
                     $proto = null;
-                } elseif (false === $proto = @unserialize($proto.\strlen($class).':"'.$class.'":0:{}')) {
+                } elseif (false === $proto = @unserialize($proto . \strlen($class) . ':"' . $class . '":0:{}')) {
                     throw new NotInstantiableTypeException($class);
                 }
             }
@@ -132,5 +125,12 @@ class Registry
         }
 
         return self::$reflectors[$class] = $reflector;
+    }
+
+    public static function f($class)
+    {
+        $reflector = self::$reflectors[$class] ?? self::getClassReflector($class, true, false);
+
+        return self::$factories[$class] = \Closure::fromCallable([$reflector, 'newInstanceWithoutConstructor']);
     }
 }

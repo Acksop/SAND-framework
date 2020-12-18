@@ -20,27 +20,27 @@ abstract class GetterAbstract
     {
         return $this->getFrEduFonctAdm() == "ACP";
     }
-    
+
     public function isDIR()
     {
         return $this->getFrEduFonctAdm() == "DIR";
     }
-    
-    public function isDEC()
-    {
-        return $this->getFrEduFonctAdm() == "DEC";
-    }
-    
+
     public function isDIR1D()
     {
         return $this->isDEC();
+    }
+
+    public function isDEC()
+    {
+        return $this->getFrEduFonctAdm() == "DEC";
     }
 
     public function isIEN1D()
     {
         return $this->getFrEduFonctAdm() == "IEN1D";
     }
-    
+
     public function isDIO()
     {
         return $this->getFrEduFonctAdm() == "IEN1D";

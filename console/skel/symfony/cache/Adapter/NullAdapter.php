@@ -65,6 +65,15 @@ class NullAdapter implements AdapterInterface, CacheInterface
         return $this->generateItems($keys);
     }
 
+    private function generateItems(array $keys)
+    {
+        $f = $this->createCacheItem;
+
+        foreach ($keys as $key) {
+            yield $key => $f($key);
+        }
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -83,16 +92,6 @@ class NullAdapter implements AdapterInterface, CacheInterface
      * @return bool
      */
     public function clear(/*string $prefix = ''*/)
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function deleteItem($key)
     {
         return true;
     }
@@ -145,12 +144,13 @@ class NullAdapter implements AdapterInterface, CacheInterface
         return $this->deleteItem($key);
     }
 
-    private function generateItems(array $keys)
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function deleteItem($key)
     {
-        $f = $this->createCacheItem;
-
-        foreach ($keys as $key) {
-            yield $key => $f($key);
-        }
+        return true;
     }
 }

@@ -42,32 +42,6 @@ class Shell
     }
 
     /**
-     * Tests if a command is available.
-     *
-     * @param string $command
-     *
-     * @return bool
-     */
-    public function testCommand($command)
-    {
-        if (!function_exists('exec')) {
-            return false;
-        }
-
-        // todo: find a better way (command could not be available)
-        $testCommand = 'which ';
-        if (self::TYPE_WINDOWS === $this->type) {
-            $testCommand = 'where ';
-        }
-
-        $command = escapeshellcmd($command);
-
-        exec($testCommand.$command, $output, $code);
-
-        return 0 === $code && count($output) > 0;
-    }
-
-    /**
      * Guesses OS type.
      *
      * @return int
@@ -93,5 +67,31 @@ class Shell
         }
 
         return self::TYPE_UNIX;
+    }
+
+    /**
+     * Tests if a command is available.
+     *
+     * @param string $command
+     *
+     * @return bool
+     */
+    public function testCommand($command)
+    {
+        if (!function_exists('exec')) {
+            return false;
+        }
+
+        // todo: find a better way (command could not be available)
+        $testCommand = 'which ';
+        if (self::TYPE_WINDOWS === $this->type) {
+            $testCommand = 'where ';
+        }
+
+        $command = escapeshellcmd($command);
+
+        exec($testCommand . $command, $output, $code);
+
+        return 0 === $code && count($output) > 0;
     }
 }

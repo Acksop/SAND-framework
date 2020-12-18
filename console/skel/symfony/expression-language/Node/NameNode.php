@@ -30,7 +30,7 @@ class NameNode extends Node
 
     public function compile(Compiler $compiler)
     {
-        $compiler->raw('$'.$this->attributes['name']);
+        $compiler->raw('$' . $this->attributes['name']);
     }
 
     public function evaluate($functions, $values)

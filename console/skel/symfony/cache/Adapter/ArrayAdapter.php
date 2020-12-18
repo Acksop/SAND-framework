@@ -82,6 +82,39 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
 
     /**
      * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function save(CacheItemInterface $item)
+    {
+        if (!$item instanceof CacheItem) {
+            return false;
+        }
+        $item = (array)$item;
+        $key = $item["\0*\0key"];
+        $value = $item["\0*\0value"];
+        $expiry = $item["\0*\0expiry"];
+
+        if (null !== $expiry && $expiry <= microtime(true)) {
+            $this->deleteItem($key);
+
+            return true;
+        }
+        if ($this->storeSerialized && null === $value = $this->freeze($value, $key)) {
+            return false;
+        }
+        if (null === $expiry && 0 < $item["\0*\0defaultLifetime"]) {
+            $expiry = microtime(true) + $item["\0*\0defaultLifetime"];
+        }
+
+        $this->values[$key] = $value;
+        $this->expiries[$key] = null !== $expiry ? $expiry : PHP_INT_MAX;
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getItems(array $keys = [])
     {
@@ -104,39 +137,6 @@ class ArrayAdapter implements AdapterInterface, CacheInterface, LoggerAwareInter
         foreach ($keys as $key) {
             $this->deleteItem($key);
         }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function save(CacheItemInterface $item)
-    {
-        if (!$item instanceof CacheItem) {
-            return false;
-        }
-        $item = (array) $item;
-        $key = $item["\0*\0key"];
-        $value = $item["\0*\0value"];
-        $expiry = $item["\0*\0expiry"];
-
-        if (null !== $expiry && $expiry <= microtime(true)) {
-            $this->deleteItem($key);
-
-            return true;
-        }
-        if ($this->storeSerialized && null === $value = $this->freeze($value, $key)) {
-            return false;
-        }
-        if (null === $expiry && 0 < $item["\0*\0defaultLifetime"]) {
-            $expiry = microtime(true) + $item["\0*\0defaultLifetime"];
-        }
-
-        $this->values[$key] = $value;
-        $this->expiries[$key] = null !== $expiry ? $expiry : PHP_INT_MAX;
 
         return true;
     }

@@ -36,7 +36,7 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
     private $createCacheItem;
 
     /**
-     * @param string           $file         The PHP file were values are cached
+     * @param string $file The PHP file were values are cached
      * @param AdapterInterface $fallbackPool A pool to fallback on when an item is not hit
      */
     public function __construct(string $file, AdapterInterface $fallbackPool)
@@ -60,7 +60,7 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
     /**
      * This adapter takes advantage of how PHP stores arrays in its latest versions.
      *
-     * @param string                 $file         The PHP file were values are cached
+     * @param string $file The PHP file were values are cached
      * @param CacheItemPoolInterface $fallbackPool A pool to fallback on when an item is not hit
      *
      * @return CacheItemPoolInterface
@@ -72,6 +72,44 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
         }
 
         return new static($file, $fallbackPool);
+    }
+
+    /**
+     * @throws \ReflectionException When $class is not found and is required
+     *
+     * @internal to be removed in Symfony 5.0
+     */
+    public static function throwOnRequiredClass($class)
+    {
+        $e = new \ReflectionException("Class $class does not exist");
+        $trace = debug_backtrace();
+        $autoloadFrame = [
+            'function' => 'spl_autoload_call',
+            'args' => [$class],
+        ];
+        $i = 1 + array_search($autoloadFrame, $trace, true);
+
+        if (isset($trace[$i]['function']) && !isset($trace[$i]['class'])) {
+            switch ($trace[$i]['function']) {
+                case 'get_class_methods':
+                case 'get_class_vars':
+                case 'get_parent_class':
+                case 'is_a':
+                case 'is_subclass_of':
+                case 'class_exists':
+                case 'class_implements':
+                case 'class_parents':
+                case 'trait_exists':
+                case 'defined':
+                case 'interface_exists':
+                case 'method_exists':
+                case 'property_exists':
+                case 'is_callable':
+                    return;
+            }
+        }
+
+        throw $e;
     }
 
     /**
@@ -156,6 +194,36 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
         }
 
         return $this->generateItems($keys);
+    }
+
+    private function generateItems(array $keys): \Generator
+    {
+        $f = $this->createCacheItem;
+        $fallbackKeys = [];
+
+        foreach ($keys as $key) {
+            if (isset($this->keys[$key])) {
+                $value = $this->values[$this->keys[$key]];
+
+                if ('N;' === $value) {
+                    yield $key => $f($key, null, true);
+                } elseif ($value instanceof \Closure) {
+                    try {
+                        yield $key => $f($key, $value(), true);
+                    } catch (\Throwable $e) {
+                        yield $key => $f($key, null, false);
+                    }
+                } else {
+                    yield $key => $f($key, $value, true);
+                }
+            } else {
+                $fallbackKeys[] = $key;
+            }
+        }
+
+        if ($fallbackKeys) {
+            yield from $this->pool->getItems($fallbackKeys);
+        }
     }
 
     /**
@@ -260,73 +328,5 @@ class PhpArrayAdapter implements AdapterInterface, CacheInterface, PruneableInte
     public function commit()
     {
         return $this->pool->commit();
-    }
-
-    private function generateItems(array $keys): \Generator
-    {
-        $f = $this->createCacheItem;
-        $fallbackKeys = [];
-
-        foreach ($keys as $key) {
-            if (isset($this->keys[$key])) {
-                $value = $this->values[$this->keys[$key]];
-
-                if ('N;' === $value) {
-                    yield $key => $f($key, null, true);
-                } elseif ($value instanceof \Closure) {
-                    try {
-                        yield $key => $f($key, $value(), true);
-                    } catch (\Throwable $e) {
-                        yield $key => $f($key, null, false);
-                    }
-                } else {
-                    yield $key => $f($key, $value, true);
-                }
-            } else {
-                $fallbackKeys[] = $key;
-            }
-        }
-
-        if ($fallbackKeys) {
-            yield from $this->pool->getItems($fallbackKeys);
-        }
-    }
-
-    /**
-     * @throws \ReflectionException When $class is not found and is required
-     *
-     * @internal to be removed in Symfony 5.0
-     */
-    public static function throwOnRequiredClass($class)
-    {
-        $e = new \ReflectionException("Class $class does not exist");
-        $trace = debug_backtrace();
-        $autoloadFrame = [
-            'function' => 'spl_autoload_call',
-            'args' => [$class],
-        ];
-        $i = 1 + array_search($autoloadFrame, $trace, true);
-
-        if (isset($trace[$i]['function']) && !isset($trace[$i]['class'])) {
-            switch ($trace[$i]['function']) {
-                case 'get_class_methods':
-                case 'get_class_vars':
-                case 'get_parent_class':
-                case 'is_a':
-                case 'is_subclass_of':
-                case 'class_exists':
-                case 'class_implements':
-                case 'class_parents':
-                case 'trait_exists':
-                case 'defined':
-                case 'interface_exists':
-                case 'method_exists':
-                case 'property_exists':
-                case 'is_callable':
-                    return;
-            }
-        }
-
-        throw $e;
     }
 }

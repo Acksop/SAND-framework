@@ -16,9 +16,9 @@
         <ul>
             @foreach ($adapters as $name => $adapter)
                 <li>
-                     from <i>{{ $name }}</i>
-                    {{ \MVC\Classe\Dumper::dump($adapter->getUserProfile()) }}
-                    <!--<span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
+                    from <i>{{ $name }}</i>
+                {{ \MVC\Classe\Dumper::dump($adapter->getUserProfile()) }}
+                <!--<span>(<a href="{{ \MVC\Classe\Url::link_rewrite( true, 'authentification-callback-example', ['logout'=>$name ]) }}"
                               ">Log Out</a>)</span>-->
                     <span>(<a href="{{ \MVC\Classe\Url::link_rewrite( false, 'logout', ['logout'=>$name ]) }}">Log Out</a>)</span>
                 </li>

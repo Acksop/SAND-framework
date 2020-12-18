@@ -41,110 +41,6 @@ trait PdoTrait
     private $connectionOptions = [];
     private $namespace;
 
-    private function init($connOrDsn, string $namespace, int $defaultLifetime, array $options, ?MarshallerInterface $marshaller)
-    {
-        if (isset($namespace[0]) && preg_match('#[^-+.A-Za-z0-9]#', $namespace, $match)) {
-            throw new InvalidArgumentException(sprintf('Namespace contains "%s" but only characters in [-+.A-Za-z0-9] are allowed.', $match[0]));
-        }
-
-        if ($connOrDsn instanceof \PDO) {
-            if (\PDO::ERRMODE_EXCEPTION !== $connOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
-                throw new InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
-            }
-
-            $this->conn = $connOrDsn;
-        } elseif ($connOrDsn instanceof Connection) {
-            $this->conn = $connOrDsn;
-        } elseif (\is_string($connOrDsn)) {
-            $this->dsn = $connOrDsn;
-        } else {
-            throw new InvalidArgumentException(sprintf('"%s" requires PDO or Doctrine\DBAL\Connection instance or DSN string as first argument, "%s" given.', __CLASS__, \is_object($connOrDsn) ? \get_class($connOrDsn) : \gettype($connOrDsn)));
-        }
-
-        $this->table = isset($options['db_table']) ? $options['db_table'] : $this->table;
-        $this->idCol = isset($options['db_id_col']) ? $options['db_id_col'] : $this->idCol;
-        $this->dataCol = isset($options['db_data_col']) ? $options['db_data_col'] : $this->dataCol;
-        $this->lifetimeCol = isset($options['db_lifetime_col']) ? $options['db_lifetime_col'] : $this->lifetimeCol;
-        $this->timeCol = isset($options['db_time_col']) ? $options['db_time_col'] : $this->timeCol;
-        $this->username = isset($options['db_username']) ? $options['db_username'] : $this->username;
-        $this->password = isset($options['db_password']) ? $options['db_password'] : $this->password;
-        $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
-        $this->namespace = $namespace;
-        $this->marshaller = $marshaller ?? new DefaultMarshaller();
-
-        parent::__construct($namespace, $defaultLifetime);
-    }
-
-    /**
-     * Creates the table to store cache items which can be called once for setup.
-     *
-     * Cache ID are saved in a column of maximum length 255. Cache data is
-     * saved in a BLOB.
-     *
-     * @throws \PDOException    When the table already exists
-     * @throws DBALException    When the table already exists
-     * @throws \DomainException When an unsupported PDO driver is used
-     */
-    public function createTable()
-    {
-        // connect if we are not yet
-        $conn = $this->getConnection();
-
-        if ($conn instanceof Connection) {
-            $types = [
-                'mysql' => 'binary',
-                'sqlite' => 'text',
-                'pgsql' => 'string',
-                'oci' => 'string',
-                'sqlsrv' => 'string',
-            ];
-            if (!isset($types[$this->driver])) {
-                throw new \DomainException(sprintf('Creating the cache table is currently not implemented for PDO driver "%s".', $this->driver));
-            }
-
-            $schema = new Schema();
-            $table = $schema->createTable($this->table);
-            $table->addColumn($this->idCol, $types[$this->driver], ['length' => 255]);
-            $table->addColumn($this->dataCol, 'blob', ['length' => 16777215]);
-            $table->addColumn($this->lifetimeCol, 'integer', ['unsigned' => true, 'notnull' => false]);
-            $table->addColumn($this->timeCol, 'integer', ['unsigned' => true]);
-            $table->setPrimaryKey([$this->idCol]);
-
-            foreach ($schema->toSql($conn->getDatabasePlatform()) as $sql) {
-                $conn->exec($sql);
-            }
-
-            return;
-        }
-
-        switch ($this->driver) {
-            case 'mysql':
-                // We use varbinary for the ID column because it prevents unwanted conversions:
-                // - character set conversions between server and client
-                // - trailing space removal
-                // - case-insensitivity
-                // - language processing like é == e
-                $sql = "CREATE TABLE $this->table ($this->idCol VARBINARY(255) NOT NULL PRIMARY KEY, $this->dataCol MEDIUMBLOB NOT NULL, $this->lifetimeCol INTEGER UNSIGNED, $this->timeCol INTEGER UNSIGNED NOT NULL) COLLATE utf8_bin, ENGINE = InnoDB";
-                break;
-            case 'sqlite':
-                $sql = "CREATE TABLE $this->table ($this->idCol TEXT NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
-                break;
-            case 'pgsql':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(255) NOT NULL PRIMARY KEY, $this->dataCol BYTEA NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
-                break;
-            case 'oci':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR2(255) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
-                break;
-            case 'sqlsrv':
-                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(255) NOT NULL PRIMARY KEY, $this->dataCol VARBINARY(MAX) NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
-                break;
-            default:
-                throw new \DomainException(sprintf('Creating the cache table is currently not implemented for PDO driver "%s".', $this->driver));
-        }
-
-        $conn->exec($sql);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -175,6 +71,53 @@ trait PdoTrait
         } catch (\PDOException $e) {
             return true;
         }
+    }
+
+    /**
+     * @return \PDO|Connection
+     */
+    private function getConnection()
+    {
+        if (null === $this->conn) {
+            if (strpos($this->dsn, '://')) {
+                if (!class_exists(DriverManager::class)) {
+                    throw new InvalidArgumentException(sprintf('Failed to parse the DSN "%s". Try running "composer require doctrine/dbal".', $this->dsn));
+                }
+                $this->conn = DriverManager::getConnection(['url' => $this->dsn]);
+            } else {
+                $this->conn = new \PDO($this->dsn, $this->username, $this->password, $this->connectionOptions);
+                $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            }
+        }
+        if (null === $this->driver) {
+            if ($this->conn instanceof \PDO) {
+                $this->driver = $this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
+            } else {
+                switch ($this->driver = $this->conn->getDriver()->getName()) {
+                    case 'mysqli':
+                        throw new \LogicException(sprintf('The adapter "%s" does not support the mysqli driver, use pdo_mysql instead.', static::class));
+                    case 'pdo_mysql':
+                    case 'drizzle_pdo_mysql':
+                        $this->driver = 'mysql';
+                        break;
+                    case 'pdo_sqlite':
+                        $this->driver = 'sqlite';
+                        break;
+                    case 'pdo_pgsql':
+                        $this->driver = 'pgsql';
+                        break;
+                    case 'oci8':
+                    case 'pdo_oracle':
+                        $this->driver = 'oci';
+                        break;
+                    case 'pdo_sqlsrv':
+                        $this->driver = 'sqlsrv';
+                        break;
+                }
+            }
+        }
+
+        return $this->conn;
     }
 
     /**
@@ -226,7 +169,7 @@ trait PdoTrait
         $stmt->bindValue(':time', time(), \PDO::PARAM_INT);
         $stmt->execute();
 
-        return (bool) $stmt->fetchColumn();
+        return (bool)$stmt->fetchColumn();
     }
 
     /**
@@ -287,26 +230,26 @@ trait PdoTrait
 
         switch (true) {
             case 'mysql' === $driver:
-                $sql = $insertSql." ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
+                $sql = $insertSql . " ON DUPLICATE KEY UPDATE $this->dataCol = VALUES($this->dataCol), $this->lifetimeCol = VALUES($this->lifetimeCol), $this->timeCol = VALUES($this->timeCol)";
                 break;
             case 'oci' === $driver:
                 // DUAL is Oracle specific dummy table
-                $sql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                $sql = "MERGE INTO $this->table USING DUAL ON ($this->idCol = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?";
                 break;
             case 'sqlsrv' === $driver && version_compare($this->getServerVersion(), '10', '>='):
                 // MERGE is only available since SQL Server 2008 and must be terminated by semicolon
                 // It also requires HOLDLOCK according to http://weblogs.sqlteam.com/dang/archive/2009/01/31/UPSERT-Race-Condition-With-MERGE.aspx
-                $sql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) ".
-                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) ".
+                $sql = "MERGE INTO $this->table WITH (HOLDLOCK) USING (SELECT 1 AS dummy) AS src ON ($this->idCol = ?) " .
+                    "WHEN NOT MATCHED THEN INSERT ($this->idCol, $this->dataCol, $this->lifetimeCol, $this->timeCol) VALUES (?, ?, ?, ?) " .
                     "WHEN MATCHED THEN UPDATE SET $this->dataCol = ?, $this->lifetimeCol = ?, $this->timeCol = ?;";
                 break;
             case 'sqlite' === $driver:
-                $sql = 'INSERT OR REPLACE'.substr($insertSql, 6);
+                $sql = 'INSERT OR REPLACE' . substr($insertSql, 6);
                 break;
             case 'pgsql' === $driver && version_compare($this->getServerVersion(), '9.5', '>='):
-                $sql = $insertSql." ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
+                $sql = $insertSql . " ON CONFLICT ($this->idCol) DO UPDATE SET ($this->dataCol, $this->lifetimeCol, $this->timeCol) = (EXCLUDED.$this->dataCol, EXCLUDED.$this->lifetimeCol, EXCLUDED.$this->timeCol)";
                 break;
             default:
                 $driver = null;
@@ -381,53 +324,6 @@ trait PdoTrait
         return $failed;
     }
 
-    /**
-     * @return \PDO|Connection
-     */
-    private function getConnection()
-    {
-        if (null === $this->conn) {
-            if (strpos($this->dsn, '://')) {
-                if (!class_exists(DriverManager::class)) {
-                    throw new InvalidArgumentException(sprintf('Failed to parse the DSN "%s". Try running "composer require doctrine/dbal".', $this->dsn));
-                }
-                $this->conn = DriverManager::getConnection(['url' => $this->dsn]);
-            } else {
-                $this->conn = new \PDO($this->dsn, $this->username, $this->password, $this->connectionOptions);
-                $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            }
-        }
-        if (null === $this->driver) {
-            if ($this->conn instanceof \PDO) {
-                $this->driver = $this->conn->getAttribute(\PDO::ATTR_DRIVER_NAME);
-            } else {
-                switch ($this->driver = $this->conn->getDriver()->getName()) {
-                    case 'mysqli':
-                        throw new \LogicException(sprintf('The adapter "%s" does not support the mysqli driver, use pdo_mysql instead.', static::class));
-                    case 'pdo_mysql':
-                    case 'drizzle_pdo_mysql':
-                        $this->driver = 'mysql';
-                        break;
-                    case 'pdo_sqlite':
-                        $this->driver = 'sqlite';
-                        break;
-                    case 'pdo_pgsql':
-                        $this->driver = 'pgsql';
-                        break;
-                    case 'oci8':
-                    case 'pdo_oracle':
-                        $this->driver = 'oci';
-                        break;
-                    case 'pdo_sqlsrv':
-                        $this->driver = 'sqlsrv';
-                        break;
-                }
-            }
-        }
-
-        return $this->conn;
-    }
-
     private function getServerVersion(): string
     {
         if (null === $this->serverVersion) {
@@ -442,5 +338,109 @@ trait PdoTrait
         }
 
         return $this->serverVersion;
+    }
+
+    /**
+     * Creates the table to store cache items which can be called once for setup.
+     *
+     * Cache ID are saved in a column of maximum length 255. Cache data is
+     * saved in a BLOB.
+     *
+     * @throws \PDOException    When the table already exists
+     * @throws DBALException    When the table already exists
+     * @throws \DomainException When an unsupported PDO driver is used
+     */
+    public function createTable()
+    {
+        // connect if we are not yet
+        $conn = $this->getConnection();
+
+        if ($conn instanceof Connection) {
+            $types = [
+                'mysql' => 'binary',
+                'sqlite' => 'text',
+                'pgsql' => 'string',
+                'oci' => 'string',
+                'sqlsrv' => 'string',
+            ];
+            if (!isset($types[$this->driver])) {
+                throw new \DomainException(sprintf('Creating the cache table is currently not implemented for PDO driver "%s".', $this->driver));
+            }
+
+            $schema = new Schema();
+            $table = $schema->createTable($this->table);
+            $table->addColumn($this->idCol, $types[$this->driver], ['length' => 255]);
+            $table->addColumn($this->dataCol, 'blob', ['length' => 16777215]);
+            $table->addColumn($this->lifetimeCol, 'integer', ['unsigned' => true, 'notnull' => false]);
+            $table->addColumn($this->timeCol, 'integer', ['unsigned' => true]);
+            $table->setPrimaryKey([$this->idCol]);
+
+            foreach ($schema->toSql($conn->getDatabasePlatform()) as $sql) {
+                $conn->exec($sql);
+            }
+
+            return;
+        }
+
+        switch ($this->driver) {
+            case 'mysql':
+                // We use varbinary for the ID column because it prevents unwanted conversions:
+                // - character set conversions between server and client
+                // - trailing space removal
+                // - case-insensitivity
+                // - language processing like é == e
+                $sql = "CREATE TABLE $this->table ($this->idCol VARBINARY(255) NOT NULL PRIMARY KEY, $this->dataCol MEDIUMBLOB NOT NULL, $this->lifetimeCol INTEGER UNSIGNED, $this->timeCol INTEGER UNSIGNED NOT NULL) COLLATE utf8_bin, ENGINE = InnoDB";
+                break;
+            case 'sqlite':
+                $sql = "CREATE TABLE $this->table ($this->idCol TEXT NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
+                break;
+            case 'pgsql':
+                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(255) NOT NULL PRIMARY KEY, $this->dataCol BYTEA NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
+                break;
+            case 'oci':
+                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR2(255) NOT NULL PRIMARY KEY, $this->dataCol BLOB NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
+                break;
+            case 'sqlsrv':
+                $sql = "CREATE TABLE $this->table ($this->idCol VARCHAR(255) NOT NULL PRIMARY KEY, $this->dataCol VARBINARY(MAX) NOT NULL, $this->lifetimeCol INTEGER, $this->timeCol INTEGER NOT NULL)";
+                break;
+            default:
+                throw new \DomainException(sprintf('Creating the cache table is currently not implemented for PDO driver "%s".', $this->driver));
+        }
+
+        $conn->exec($sql);
+    }
+
+    private function init($connOrDsn, string $namespace, int $defaultLifetime, array $options, ?MarshallerInterface $marshaller)
+    {
+        if (isset($namespace[0]) && preg_match('#[^-+.A-Za-z0-9]#', $namespace, $match)) {
+            throw new InvalidArgumentException(sprintf('Namespace contains "%s" but only characters in [-+.A-Za-z0-9] are allowed.', $match[0]));
+        }
+
+        if ($connOrDsn instanceof \PDO) {
+            if (\PDO::ERRMODE_EXCEPTION !== $connOrDsn->getAttribute(\PDO::ATTR_ERRMODE)) {
+                throw new InvalidArgumentException(sprintf('"%s" requires PDO error mode attribute be set to throw Exceptions (i.e. $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION))', __CLASS__));
+            }
+
+            $this->conn = $connOrDsn;
+        } elseif ($connOrDsn instanceof Connection) {
+            $this->conn = $connOrDsn;
+        } elseif (\is_string($connOrDsn)) {
+            $this->dsn = $connOrDsn;
+        } else {
+            throw new InvalidArgumentException(sprintf('"%s" requires PDO or Doctrine\DBAL\Connection instance or DSN string as first argument, "%s" given.', __CLASS__, \is_object($connOrDsn) ? \get_class($connOrDsn) : \gettype($connOrDsn)));
+        }
+
+        $this->table = isset($options['db_table']) ? $options['db_table'] : $this->table;
+        $this->idCol = isset($options['db_id_col']) ? $options['db_id_col'] : $this->idCol;
+        $this->dataCol = isset($options['db_data_col']) ? $options['db_data_col'] : $this->dataCol;
+        $this->lifetimeCol = isset($options['db_lifetime_col']) ? $options['db_lifetime_col'] : $this->lifetimeCol;
+        $this->timeCol = isset($options['db_time_col']) ? $options['db_time_col'] : $this->timeCol;
+        $this->username = isset($options['db_username']) ? $options['db_username'] : $this->username;
+        $this->password = isset($options['db_password']) ? $options['db_password'] : $this->password;
+        $this->connectionOptions = isset($options['db_connection_options']) ? $options['db_connection_options'] : $this->connectionOptions;
+        $this->namespace = $namespace;
+        $this->marshaller = $marshaller ?? new DefaultMarshaller();
+
+        parent::__construct($namespace, $defaultLifetime);
     }
 }

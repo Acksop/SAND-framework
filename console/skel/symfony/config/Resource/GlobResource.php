@@ -31,9 +31,9 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
     /**
      * Constructor.
      *
-     * @param string $prefix    A directory prefix
-     * @param string $pattern   A glob pattern
-     * @param bool   $recursive Whether directories should be scanned recursively or not
+     * @param string $prefix A directory prefix
+     * @param string $pattern A glob pattern
+     * @param bool $recursive Whether directories should be scanned recursively or not
      *
      * @throws \InvalidArgumentException
      */
@@ -58,7 +58,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
      */
     public function __toString()
     {
-        return 'glob.'.$this->prefix.$this->pattern.(int) $this->recursive;
+        return 'glob.' . $this->prefix . $this->pattern . (int)$this->recursive;
     }
 
     /**
@@ -75,18 +75,15 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
         return $this->hash === $hash;
     }
 
-    public function serialize()
+    private function computeHash()
     {
-        if (null === $this->hash) {
-            $this->hash = $this->computeHash();
+        $hash = hash_init('md5');
+
+        foreach ($this->getIterator() as $path => $info) {
+            hash_update($hash, $path . "\n");
         }
 
-        return serialize(array($this->prefix, $this->pattern, $this->recursive, $this->hash));
-    }
-
-    public function unserialize($serialized)
-    {
-        list($this->prefix, $this->pattern, $this->recursive, $this->hash) = unserialize($serialized);
+        return hash_final($hash);
     }
 
     public function getIterator()
@@ -96,7 +93,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
         }
 
         if (false === strpos($this->pattern, '/**/') && (defined('GLOB_BRACE') || false === strpos($this->pattern, '{'))) {
-            foreach (glob($this->prefix.$this->pattern, defined('GLOB_BRACE') ? GLOB_BRACE : 0) as $path) {
+            foreach (glob($this->prefix . $this->pattern, defined('GLOB_BRACE') ? GLOB_BRACE : 0) as $path) {
                 if ($this->recursive && is_dir($path)) {
                     $files = iterator_to_array(new \RecursiveIteratorIterator(
                         new \RecursiveCallbackFilterIterator(
@@ -108,7 +105,7 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
                         \RecursiveIteratorIterator::LEAVES_ONLY
                     ));
                     uasort($files, function (\SplFileInfo $a, \SplFileInfo $b) {
-                        return (string) $a > (string) $b ? 1 : -1;
+                        return (string)$a > (string)$b ? 1 : -1;
                     });
 
                     foreach ($files as $path => $info) {
@@ -142,14 +139,17 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface,
         }
     }
 
-    private function computeHash()
+    public function serialize()
     {
-        $hash = hash_init('md5');
-
-        foreach ($this->getIterator() as $path => $info) {
-            hash_update($hash, $path."\n");
+        if (null === $this->hash) {
+            $this->hash = $this->computeHash();
         }
 
-        return hash_final($hash);
+        return serialize(array($this->prefix, $this->pattern, $this->recursive, $this->hash));
+    }
+
+    public function unserialize($serialized)
+    {
+        list($this->prefix, $this->pattern, $this->recursive, $this->hash) = unserialize($serialized);
     }
 }

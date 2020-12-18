@@ -20,9 +20,9 @@ class MockStream
     /**
      * Opens file or URL.
      *
-     * @param string $path        Specifies the URL that was passed to the original function
-     * @param string $mode        The mode used to open the file, as detailed for fopen()
-     * @param int    $options     Holds additional flags set by the streams API
+     * @param string $path Specifies the URL that was passed to the original function
+     * @param string $mode The mode used to open the file, as detailed for fopen()
+     * @param int $options Holds additional flags set by the streams API
      * @param string $opened_path If the path is opened successfully, and STREAM_USE_PATH is set in options,
      *                            opened_path should be set to the full path of the file/resource that was actually opened
      *
@@ -34,8 +34,8 @@ class MockStream
     }
 
     /**
-     * @param string $path  The file path or URL to stat
-     * @param array  $flags Holds additional flags set by the streams API
+     * @param string $path The file path or URL to stat
+     * @param array $flags Holds additional flags set by the streams API
      *
      * @return array File stats
      */

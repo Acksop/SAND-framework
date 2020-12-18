@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
@@ -22,7 +21,7 @@ class DefaultController extends AbstractController
             'text' => 'homepage',
         ]);
     }
-    
+
     /**
      * @Route("/symfony/page1", name="page1")
      */
@@ -33,6 +32,7 @@ class DefaultController extends AbstractController
             'text' => 'page1',
         ]);
     }
+
     /**
      * @Route("/symfony/page2", name="page2")
      */

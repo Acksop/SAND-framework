@@ -30,8 +30,8 @@ class Url
         $urlParts = explode('/', $urlTrim);
 
         //suppression des sous repertoires du BASE_SERVER_DIRECTORY
-        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
-        foreach($basePath as $subDir) {
+        $basePath = explode('/', BASE_SERVER_DIRECTORY);
+        foreach ($basePath as $subDir) {
             if ($urlParts[0] == $subDir) {
                 array_shift($urlParts);
             }
@@ -54,14 +54,14 @@ class Url
 
         if ($page['name'] == 'control') {
             $page['control'] = true;
-            ($urlParts[1] == 'index' || $urlParts[1] == '') ? $page['name']='index' : $page['name']=$urlParts[1];
+            ($urlParts[1] == 'index' || $urlParts[1] == '') ? $page['name'] = 'index' : $page['name'] = $urlParts[1];
             unset($urlParts[1]);
         }
 
         //vérification du nombre de parametres:
         $numParts = count($urlParts);
         //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony
-        if ($numParts%2 != 0) {
+        if ($numParts % 2 != 0) {
             //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi un erreur
             if (!in_array($page['name'], $this->registre->getIndex())) {
                 $page['name'] = 'error';
@@ -85,7 +85,7 @@ class Url
                     $keys[] = $key;
                 }
                 $page['params'] = $values;
-            // sinon c'est une page normal du framework
+                // sinon c'est une page normal du framework
             } else {
                 $values = array();
                 $keys = array();
@@ -155,13 +155,13 @@ class Url
         }
     }
 
-    public static function module_link_rewrite($page, $params = array())
+    private static function controlLink_rewrite($page, $params = array())
     {
         $stringParams = '';
-        foreach ($params as $values) {
-            $stringParams .= "/" . $values;
+        foreach ($params as $key => $values) {
+            $stringParams .= "/" . $key . "/" . $values;
         }
-        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
     }
 
     private static function link_rewrite_slashParam($page, $params = array())
@@ -173,13 +173,13 @@ class Url
         return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
-    private static function controlLink_rewrite($page, $params = array())
+    public static function module_link_rewrite($page, $params = array())
     {
         $stringParams = '';
-        foreach ($params as $key => $values) {
-            $stringParams .= "/" . $key . "/" . $values;
+        foreach ($params as $values) {
+            $stringParams .= "/" . $values;
         }
-        return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
+        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
     public static function absolute_link_rewrite($isControlPatern, $page, $params = array())

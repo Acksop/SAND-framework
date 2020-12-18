@@ -50,7 +50,7 @@ class CollectionConfigurator
      */
     final public function add($name, $path)
     {
-        $this->collection->add($this->name.$name, $route = clone $this->route);
+        $this->collection->add($this->name . $name, $route = clone $this->route);
 
         return new RouteConfigurator($this->collection, $route->setPath($path), $this->name, $this);
     }
@@ -62,7 +62,7 @@ class CollectionConfigurator
      */
     final public function collection($name = '')
     {
-        return new self($this->collection, $this->name.$name, $this);
+        return new self($this->collection, $this->name . $name, $this);
     }
 
     /**

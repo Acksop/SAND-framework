@@ -12,8 +12,8 @@
 namespace Symfony\Component\Config\Tests\Definition;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Config\Definition\PrototypedArrayNode;
 use Symfony\Component\Config\Definition\ArrayNode;
+use Symfony\Component\Config\Definition\PrototypedArrayNode;
 use Symfony\Component\Config\Definition\ScalarNode;
 use Symfony\Component\Config\Definition\VariableNode;
 
@@ -158,15 +158,6 @@ class PrototypedArrayNodeTest extends TestCase
         $this->assertEquals(array(array('foo' => 'bar'), array('foo' => 'bar')), $node->getDefaultValue());
     }
 
-    public function testDefaultChildrenWinsOverDefaultValue()
-    {
-        $node = $this->getPrototypeNodeWithDefaultChildren();
-        $node->setAddChildrenIfNoneSet();
-        $node->setDefaultValue(array('bar' => 'foo'));
-        $this->assertTrue($node->hasDefaultValue());
-        $this->assertEquals(array(array('foo' => 'bar')), $node->getDefaultValue());
-    }
-
     protected function getPrototypeNodeWithDefaultChildren()
     {
         $node = new PrototypedArrayNode('root');
@@ -178,6 +169,15 @@ class PrototypedArrayNodeTest extends TestCase
         $node->setPrototype($prototype);
 
         return $node;
+    }
+
+    public function testDefaultChildrenWinsOverDefaultValue()
+    {
+        $node = $this->getPrototypeNodeWithDefaultChildren();
+        $node->setAddChildrenIfNoneSet();
+        $node->setDefaultValue(array('bar' => 'foo'));
+        $this->assertTrue($node->hasDefaultValue());
+        $this->assertEquals(array(array('foo' => 'bar')), $node->getDefaultValue());
     }
 
     /**
@@ -292,51 +292,51 @@ class PrototypedArrayNodeTest extends TestCase
         $variableValue = new VariableNode('value');
 
         return array(
-           array(
-               $scalarValue,
-               array(
-                   array('id' => 'option1', 'value' => 'value1'),
-               ),
-               array('option1' => 'value1'),
-           ),
+            array(
+                $scalarValue,
+                array(
+                    array('id' => 'option1', 'value' => 'value1'),
+                ),
+                array('option1' => 'value1'),
+            ),
 
-           array(
-               $scalarValue,
-               array(
-                   array('id' => 'option1', 'value' => 'value1'),
-                   array('id' => 'option2', 'value' => 'value2', 'foo' => 'foo2'),
-               ),
-               array(
-                   'option1' => 'value1',
-                   'option2' => array('value' => 'value2', 'foo' => 'foo2'),
-               ),
-           ),
+            array(
+                $scalarValue,
+                array(
+                    array('id' => 'option1', 'value' => 'value1'),
+                    array('id' => 'option2', 'value' => 'value2', 'foo' => 'foo2'),
+                ),
+                array(
+                    'option1' => 'value1',
+                    'option2' => array('value' => 'value2', 'foo' => 'foo2'),
+                ),
+            ),
 
-           array(
-               $arrayValue,
-               array(
-                   array(
-                       'id' => 'option1',
-                       'value' => array('foo' => 'foo1', 'bar' => 'bar1'),
-                   ),
-               ),
-               array(
-                   'option1' => array('foo' => 'foo1', 'bar' => 'bar1'),
-               ),
-           ),
+            array(
+                $arrayValue,
+                array(
+                    array(
+                        'id' => 'option1',
+                        'value' => array('foo' => 'foo1', 'bar' => 'bar1'),
+                    ),
+                ),
+                array(
+                    'option1' => array('foo' => 'foo1', 'bar' => 'bar1'),
+                ),
+            ),
 
-           array($variableValue,
-               array(
-                   array(
-                       'id' => 'option1', 'value' => array('foo' => 'foo1', 'bar' => 'bar1'),
-                   ),
-                   array('id' => 'option2', 'value' => 'value2'),
-               ),
-               array(
-                   'option1' => array('foo' => 'foo1', 'bar' => 'bar1'),
-                   'option2' => 'value2',
-               ),
-           ),
+            array($variableValue,
+                array(
+                    array(
+                        'id' => 'option1', 'value' => array('foo' => 'foo1', 'bar' => 'bar1'),
+                    ),
+                    array('id' => 'option2', 'value' => 'value2'),
+                ),
+                array(
+                    'option1' => array('foo' => 'foo1', 'bar' => 'bar1'),
+                    'option2' => 'value2',
+                ),
+            ),
         );
     }
 }

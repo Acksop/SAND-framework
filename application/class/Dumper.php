@@ -14,6 +14,7 @@ class Dumper
         }
         echo "</pre>";
     }
+
     /**
      * Fonction Statique permettant d'initialiser les valeurs de php lors du script courant
      *

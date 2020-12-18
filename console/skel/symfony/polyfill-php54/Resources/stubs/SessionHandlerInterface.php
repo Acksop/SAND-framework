@@ -36,7 +36,7 @@ interface SessionHandlerInterface
      *
      * @see http://php.net/sessionhandlerinterface.open
      *
-     * @param string $savePath    Save path
+     * @param string $savePath Save path
      * @param string $sessionName Session name, see http://php.net/function.session-name.php
      *
      * @return bool true on success, false on failure
@@ -72,7 +72,7 @@ interface SessionHandlerInterface
      * @see http://php.net/sessionhandlerinterface.write
      *
      * @param string $sessionId Session ID , see http://php.net/function.session-id
-     * @param string $data      Serialized session data to save
+     * @param string $data Serialized session data to save
      *
      * @return bool true on success, false on failure
      */

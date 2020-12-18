@@ -32,8 +32,8 @@ class StreamedResponse extends Response
 
     /**
      * @param callable|null $callback A valid PHP callback or null to set it later
-     * @param int           $status   The response status code
-     * @param array         $headers  An array of response headers
+     * @param int $status The response status code
+     * @param array $headers An array of response headers
      */
     public function __construct($callback = null, $status = 200, $headers = array())
     {
@@ -44,20 +44,6 @@ class StreamedResponse extends Response
         }
         $this->streamed = false;
         $this->headersSent = false;
-    }
-
-    /**
-     * Factory method for chainability.
-     *
-     * @param callable|null $callback A valid PHP callback or null to set it later
-     * @param int           $status   The response status code
-     * @param array         $headers  An array of response headers
-     *
-     * @return static
-     */
-    public static function create($callback = null, $status = 200, $headers = array())
-    {
-        return new static($callback, $status, $headers);
     }
 
     /**
@@ -73,6 +59,20 @@ class StreamedResponse extends Response
             throw new \LogicException('The Response callback must be a valid PHP callable.');
         }
         $this->callback = $callback;
+    }
+
+    /**
+     * Factory method for chainability.
+     *
+     * @param callable|null $callback A valid PHP callback or null to set it later
+     * @param int $status The response status code
+     * @param array $headers An array of response headers
+     *
+     * @return static
+     */
+    public static function create($callback = null, $status = 200, $headers = array())
+    {
+        return new static($callback, $status, $headers);
     }
 
     /**

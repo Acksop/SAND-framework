@@ -24,8 +24,8 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
     /**
      * Constructor.
      *
-     * @param string      $resource The file path to the resource
-     * @param string|null $pattern  A pattern to restrict monitored files
+     * @param string $resource The file path to the resource
+     * @param string|null $pattern A pattern to restrict monitored files
      *
      * @throws \InvalidArgumentException
      */

@@ -69,30 +69,6 @@ trait ArrayTrait
     /**
      * {@inheritdoc}
      *
-     * @param string $prefix
-     *
-     * @return bool
-     */
-    public function clear(/*string $prefix = ''*/)
-    {
-        $prefix = 0 < \func_num_args() ? (string) func_get_arg(0) : '';
-
-        if ('' !== $prefix) {
-            foreach ($this->values as $key => $value) {
-                if (0 === strpos($key, $prefix)) {
-                    unset($this->values[$key], $this->expiries[$key]);
-                }
-            }
-        } else {
-            $this->values = $this->expiries = [];
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return bool
      */
     public function deleteItem($key)
@@ -113,6 +89,30 @@ trait ArrayTrait
         $this->clear();
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $prefix
+     *
+     * @return bool
+     */
+    public function clear(/*string $prefix = ''*/)
+    {
+        $prefix = 0 < \func_num_args() ? (string)func_get_arg(0) : '';
+
+        if ('' !== $prefix) {
+            foreach ($this->values as $key => $value) {
+                if (0 === strpos($key, $prefix)) {
+                    unset($this->values[$key], $this->expiries[$key]);
+                }
+            }
+        } else {
+            $this->values = $this->expiries = [];
+        }
+
+        return true;
+    }
+
     private function generateItems(array $keys, float $now, callable $f): iterable
     {
         foreach ($keys as $i => $key) {
@@ -129,6 +129,27 @@ trait ArrayTrait
         foreach ($keys as $key) {
             yield $key => $f($key, null, false);
         }
+    }
+
+    private function unfreeze(string $key, bool &$isHit)
+    {
+        if ('N;' === $value = $this->values[$key]) {
+            return null;
+        }
+        if (\is_string($value) && isset($value[2]) && ':' === $value[1]) {
+            try {
+                $value = unserialize($value);
+            } catch (\Exception $e) {
+                CacheItem::log($this->logger, 'Failed to unserialize key "{key}": ' . $e->getMessage(), ['key' => $key, 'exception' => $e]);
+                $value = false;
+            }
+            if (false === $value) {
+                $this->values[$key] = $value = null;
+                $isHit = false;
+            }
+        }
+
+        return $value;
     }
 
     private function freeze($value, $key)
@@ -154,27 +175,6 @@ trait ArrayTrait
             // Keep value serialized if it contains any objects or any internal references
             if ('C' === $serialized[0] || 'O' === $serialized[0] || preg_match('/;[OCRr]:[1-9]/', $serialized)) {
                 return $serialized;
-            }
-        }
-
-        return $value;
-    }
-
-    private function unfreeze(string $key, bool &$isHit)
-    {
-        if ('N;' === $value = $this->values[$key]) {
-            return null;
-        }
-        if (\is_string($value) && isset($value[2]) && ':' === $value[1]) {
-            try {
-                $value = unserialize($value);
-            } catch (\Exception $e) {
-                CacheItem::log($this->logger, 'Failed to unserialize key "{key}": '.$e->getMessage(), ['key' => $key, 'exception' => $e]);
-                $value = false;
-            }
-            if (false === $value) {
-                $this->values[$key] = $value = null;
-                $isHit = false;
             }
         }
 

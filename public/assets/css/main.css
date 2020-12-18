@@ -1,30 +1,35 @@
 .section-title {
-    text-align:center;
-    font-family:Panton,sans-serif;
-    font-size:100px;
-    color:#ff974a;
-    padding-top:100px;
-    padding-bottom:30px
+    text-align: center;
+    font-family: Panton, sans-serif;
+    font-size: 100px;
+    color: #ff974a;
+    padding-top: 100px;
+    padding-bottom: 30px
 }
+
 .donate-container {
     position: relative;
     max-width: 800px;
     margin: 0 auto;
 }
+
 .donate-container .donate-beer {
     position: absolute;
     left: -190px;
     bottom: -30px;
     width: 250px;
 }
+
 .donate-container .button:focus, .donate-container .button:hover {
     text-decoration: none;
     background: #fff;
     color: #ff974a;
 }
+
 .button-secondary {
     background: #f48d40;
 }
+
 .beer-button {
     display: inline-block;
     position: relative;
@@ -40,10 +45,11 @@
     text-decoration: none;
     border-radius: 50px;
     text-align: center;
-    -webkit-transition: color 150ms,background-color 150ms;
-    -o-transition: color 150ms,background-color 150ms;
-    transition: color 150ms,background-color 150ms;
+    -webkit-transition: color 150ms, background-color 150ms;
+    -o-transition: color 150ms, background-color 150ms;
+    transition: color 150ms, background-color 150ms;
 }
+
 .donate-container .donate-description {
     width: 100%;
     padding: 30px 50px 50px;
@@ -51,13 +57,14 @@
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
+
 .donate-container .donate-footer {
     text-align: center;
     padding: 30px 50px 50px;
-    background: #ff974a -webkit-gradient(linear,right top,left bottom,from(#ff974a),to(#ffb864));
-    background: #ff974a -webkit-linear-gradient(top right,#ff974a,#ffb864);
-    background: #ff974a -o-linear-gradient(top right,#ff974a,#ffb864);
-    background: #ff974a linear-gradient(to bottom left,#ff974a,#ffb864);
+    background: #ff974a -webkit-gradient(linear, right top, left bottom, from(#ff974a), to(#ffb864));
+    background: #ff974a -webkit-linear-gradient(top right, #ff974a, #ffb864);
+    background: #ff974a -o-linear-gradient(top right, #ff974a, #ffb864);
+    background: #ff974a linear-gradient(to bottom left, #ff974a, #ffb864);
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
     width: 100%;

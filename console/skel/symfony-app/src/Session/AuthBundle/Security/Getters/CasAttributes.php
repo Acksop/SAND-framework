@@ -1,32 +1,32 @@
 <?php
 /**
-  * @package Besancon\AuthBundle\Security\Getters
-  * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
-  */
+ * @package Besancon\AuthBundle\Security\Getters
+ * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
+ */
 
-namespace  App\Session\AuthBundle\Security\Getters;
+namespace App\Session\AuthBundle\Security\Getters;
 
-use  App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
+use App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
 
 /**
-  * Class CasAttributes
-  *
-  * Cette classe permet d'accèder aux informations (attributs) de l'utilisateur
-  * renvoyé par CAS à partir des méthodes d'accès définies dans l'interface AttributesInterface
-  *
-  */
+ * Class CasAttributes
+ *
+ * Cette classe permet d'accèder aux informations (attributs) de l'utilisateur
+ * renvoyé par CAS à partir des méthodes d'accès définies dans l'interface AttributesInterface
+ *
+ */
 class CasAttributes implements AttributesInterface
 {
     public function getFirstName()
     {
         return \phpCAS::getAttribute("prenom");
     }
-    
+
     public function getCompletName()
     {
         return \phpCAS::getAttribute("nomcomplet");
     }
-    
+
     public function getName()
     {
         return \phpCAS::getAttribute("nom");
@@ -71,7 +71,7 @@ class CasAttributes implements AttributesInterface
     {
         return \phpCAS::getUser();
     }
-    
+
     public function getFrEduResDel()
     {
         return \phpCAS::getAttribute("FrEduResDel");

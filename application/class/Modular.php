@@ -57,7 +57,7 @@ class Modular
                 if (isset($options[0])) {
                     switch ($options[0]) {
                         case 'admin':
-                            $this->subapp_dir = DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'lists'. DIRECTORY_SEPARATOR . $options[0] ;
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'lists' . DIRECTORY_SEPARATOR . $options[0];
                             break;
                         default:
                     }
@@ -70,11 +70,11 @@ class Modular
                 if (isset($options[0])) {
                     switch ($options[0]) {
                         case 'admin':
-                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0] ;
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0];
                             $this->subfile = "index.php";
                             break;
                         default:
-                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0] ;
+                            $this->subapp_dir = DIRECTORY_SEPARATOR . $options[0];
                     }
                 }
                 break;
@@ -83,17 +83,12 @@ class Modular
         }
     }
 
-    public function getAppName()
-    {
-        return $this->app;
-    }
-
     public function load($type = "symfony")
     {
         switch ($type) {
             case "symfony":
-            require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
-            break;
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
+                break;
             case "wordpress":
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
@@ -110,5 +105,10 @@ class Modular
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
         }
+    }
+
+    public function getAppName()
+    {
+        return $this->app;
     }
 }

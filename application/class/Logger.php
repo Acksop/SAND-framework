@@ -3,8 +3,6 @@
 
 namespace MVC\Classe;
 
-use Symfony\Component\Validator\Constraints\Date;
-
 class Logger
 {
     public static function addLog($type = 'default', $what = "")
@@ -20,6 +18,7 @@ class Logger
             file_put_contents($file, $what);
         }
     }
+
     /**
      * Fonction courante permettant de logger les erreurs obtenues dans un fichier
      *

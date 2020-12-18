@@ -11,10 +11,10 @@
 
 namespace Symfony\Component\Finder\Adapter;
 
-use Symfony\Component\Finder\Shell\Shell;
-use Symfony\Component\Finder\Shell\Command;
-use Symfony\Component\Finder\Iterator\SortableIterator;
 use Symfony\Component\Finder\Expression\Expression;
+use Symfony\Component\Finder\Iterator\SortableIterator;
+use Symfony\Component\Finder\Shell\Command;
+use Symfony\Component\Finder\Shell\Shell;
 
 /**
  * Shell engine implementation using GNU find command.
@@ -60,11 +60,10 @@ class GnuFindAdapter extends AbstractFindAdapter
         $command
             ->get('find')
             ->add('-printf')
-            ->arg($format.' %h/%f\\n')
+            ->arg($format . ' %h/%f\\n')
             ->add('| sort | cut')
             ->arg('-d ')
-            ->arg('-f2-')
-        ;
+            ->arg('-f2-');
     }
 
     /**
@@ -97,8 +96,7 @@ class GnuFindAdapter extends AbstractFindAdapter
                 ->add($expr->isCaseSensitive() ? null : '-i')
                 ->add($not ? '-L' : '-l')
                 ->add('-Ee')->arg($expr->renderPattern())
-                ->add('{}')
-            ;
+                ->add('{}');
         }
     }
 }

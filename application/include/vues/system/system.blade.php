@@ -2,9 +2,9 @@
 
 <head>
     <title>{{$page_title}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="author" content=""/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" lang="fr" content="{{$description}}"/>
 

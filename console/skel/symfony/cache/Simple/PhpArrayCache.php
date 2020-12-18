@@ -29,7 +29,7 @@ class PhpArrayCache implements Psr16CacheInterface, PruneableInterface, Resettab
     use PhpArrayTrait;
 
     /**
-     * @param string              $file         The PHP file were values are cached
+     * @param string $file The PHP file were values are cached
      * @param Psr16CacheInterface $fallbackPool A pool to fallback on when an item is not hit
      */
     public function __construct(string $file, Psr16CacheInterface $fallbackPool)
@@ -41,7 +41,7 @@ class PhpArrayCache implements Psr16CacheInterface, PruneableInterface, Resettab
     /**
      * This adapter takes advantage of how PHP stores arrays in its latest versions.
      *
-     * @param string         $file         The PHP file were values are cached
+     * @param string $file The PHP file were values are cached
      * @param CacheInterface $fallbackPool A pool to fallback on when an item is not hit
      *
      * @return Psr16CacheInterface
@@ -103,6 +103,35 @@ class PhpArrayCache implements Psr16CacheInterface, PruneableInterface, Resettab
         }
 
         return $this->generateItems($keys, $default);
+    }
+
+    private function generateItems(array $keys, $default): iterable
+    {
+        $fallbackKeys = [];
+
+        foreach ($keys as $key) {
+            if (isset($this->keys[$key])) {
+                $value = $this->values[$this->keys[$key]];
+
+                if ('N;' === $value) {
+                    yield $key => null;
+                } elseif ($value instanceof \Closure) {
+                    try {
+                        yield $key => $value();
+                    } catch (\Throwable $e) {
+                        yield $key => $default;
+                    }
+                } else {
+                    yield $key => $value;
+                }
+            } else {
+                $fallbackKeys[] = $key;
+            }
+        }
+
+        if ($fallbackKeys) {
+            yield from $this->pool->getMultiple($fallbackKeys, $default);
+        }
     }
 
     /**
@@ -223,34 +252,5 @@ class PhpArrayCache implements Psr16CacheInterface, PruneableInterface, Resettab
         }
 
         return $saved;
-    }
-
-    private function generateItems(array $keys, $default): iterable
-    {
-        $fallbackKeys = [];
-
-        foreach ($keys as $key) {
-            if (isset($this->keys[$key])) {
-                $value = $this->values[$this->keys[$key]];
-
-                if ('N;' === $value) {
-                    yield $key => null;
-                } elseif ($value instanceof \Closure) {
-                    try {
-                        yield $key => $value();
-                    } catch (\Throwable $e) {
-                        yield $key => $default;
-                    }
-                } else {
-                    yield $key => $value;
-                }
-            } else {
-                $fallbackKeys[] = $key;
-            }
-        }
-
-        if ($fallbackKeys) {
-            yield from $this->pool->getMultiple($fallbackKeys, $default);
-        }
     }
 }

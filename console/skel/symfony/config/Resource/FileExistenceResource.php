@@ -32,7 +32,7 @@ class FileExistenceResource implements SelfCheckingResourceInterface, \Serializa
      */
     public function __construct($resource)
     {
-        $this->resource = (string) $resource;
+        $this->resource = (string)$resource;
         $this->exists = file_exists($resource);
     }
 

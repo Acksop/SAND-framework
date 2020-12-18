@@ -72,9 +72,9 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function peekAll()
+    public function has($type)
     {
-        return $this->flashes;
+        return array_key_exists($type, $this->flashes) && $this->flashes[$type];
     }
 
     /**
@@ -96,20 +96,9 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function all()
-    {
-        $return = $this->peekAll();
-        $this->flashes = array();
-
-        return $return;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function set($type, $messages)
     {
-        $this->flashes[$type] = (array) $messages;
+        $this->flashes[$type] = (array)$messages;
     }
 
     /**
@@ -118,14 +107,6 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     public function setAll(array $messages)
     {
         $this->flashes = $messages;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($type)
-    {
-        return array_key_exists($type, $this->flashes) && $this->flashes[$type];
     }
 
     /**
@@ -153,15 +134,34 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function all()
+    {
+        $return = $this->peekAll();
+        $this->flashes = array();
+
+        return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function peekAll()
+    {
+        return $this->flashes;
+    }
+
+    /**
      * Returns an iterator for flashes.
      *
+     * @return \ArrayIterator An \ArrayIterator instance
      * @deprecated since version 2.4, to be removed in 3.0.
      *
-     * @return \ArrayIterator An \ArrayIterator instance
      */
     public function getIterator()
     {
-        @trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.4 and will be removed in 3.0.', E_USER_DEPRECATED);
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since Symfony 2.4 and will be removed in 3.0.', E_USER_DEPRECATED);
 
         return new \ArrayIterator($this->all());
     }

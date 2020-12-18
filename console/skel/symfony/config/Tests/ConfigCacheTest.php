@@ -19,22 +19,6 @@ class ConfigCacheTest extends TestCase
 {
     private $cacheFile = null;
 
-    protected function setUp()
-    {
-        $this->cacheFile = tempnam(sys_get_temp_dir(), 'config_');
-    }
-
-    protected function tearDown()
-    {
-        $files = array($this->cacheFile, $this->cacheFile.'.meta');
-
-        foreach ($files as $file) {
-            if (file_exists($file)) {
-                unlink($file);
-            }
-        }
-    }
-
     /**
      * @dataProvider debugModes
      */
@@ -95,5 +79,21 @@ class ConfigCacheTest extends TestCase
             array(true),
             array(false),
         );
+    }
+
+    protected function setUp()
+    {
+        $this->cacheFile = tempnam(sys_get_temp_dir(), 'config_');
+    }
+
+    protected function tearDown()
+    {
+        $files = array($this->cacheFile, $this->cacheFile . '.meta');
+
+        foreach ($files as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
     }
 }

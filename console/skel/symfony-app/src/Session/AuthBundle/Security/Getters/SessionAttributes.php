@@ -4,9 +4,9 @@
  * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
  */
 
-namespace  App\Session\AuthBundle\Security\Getters;
+namespace App\Session\AuthBundle\Security\Getters;
 
-use  App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
+use App\Session\AuthBundle\Security\Interfaces\AttributesInterface;
 
 /**
  * Class CasAttributes
@@ -19,71 +19,71 @@ class SessionAttributes implements AttributesInterface
 {
     public function getFirstName()
     {
-        return ;
+        return;
     }
 
     public function getCompletName()
     {
-        return ;
+        return;
     }
 
     public function getName()
     {
-        return ;
+        return;
     }
 
     public function getDiscipline()
     {
-        return ;
+        return;
     }
 
     public function getFonctM()
     {
-        return ;
+        return;
     }
 
     public function getRne()
     {
-        return ;
+        return;
     }
 
     public function getFreDuRne()
     {
-        return ;
+        return;
     }
 
     public function getFreDuRneResp()
     {
-        return ;
+        return;
     }
 
     public function getMail()
     {
-        return ;
+        return;
     }
 
     public function getTitle()
     {
-        return ;
+        return;
     }
 
     public function getUsername()
     {
-        return ;
+        return;
     }
 
     public function getFrEduResDel()
     {
-        return ;
+        return;
     }
 
     public function getFrEduFonctAdm()
     {
-        return ;
+        return;
     }
 
     public function getGrade()
     {
-        return ;
+        return;
     }
 }

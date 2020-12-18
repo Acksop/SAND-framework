@@ -92,23 +92,6 @@ class ArrayCache implements Psr16CacheInterface, LoggerAwareInterface, Resettabl
      *
      * @return bool
      */
-    public function deleteMultiple($keys)
-    {
-        if (!\is_array($keys) && !$keys instanceof \Traversable) {
-            throw new InvalidArgumentException(sprintf('Cache keys must be array or Traversable, "%s" given', \is_object($keys) ? \get_class($keys) : \gettype($keys)));
-        }
-        foreach ($keys as $key) {
-            $this->delete($key);
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
     public function set($key, $value, $ttl = null)
     {
         if (!\is_string($key)) {
@@ -158,12 +141,29 @@ class ArrayCache implements Psr16CacheInterface, LoggerAwareInterface, Resettabl
             return $this->defaultLifetime;
         }
         if ($ttl instanceof \DateInterval) {
-            $ttl = (int) \DateTime::createFromFormat('U', 0)->add($ttl)->format('U');
+            $ttl = (int)\DateTime::createFromFormat('U', 0)->add($ttl)->format('U');
         }
         if (\is_int($ttl)) {
             return 0 < $ttl ? $ttl : false;
         }
 
         throw new InvalidArgumentException(sprintf('Expiration date must be an integer, a DateInterval or null, "%s" given', \is_object($ttl) ? \get_class($ttl) : \gettype($ttl)));
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function deleteMultiple($keys)
+    {
+        if (!\is_array($keys) && !$keys instanceof \Traversable) {
+            throw new InvalidArgumentException(sprintf('Cache keys must be array or Traversable, "%s" given', \is_object($keys) ? \get_class($keys) : \gettype($keys)));
+        }
+        foreach ($keys as $key) {
+            $this->delete($key);
+        }
+
+        return true;
     }
 }

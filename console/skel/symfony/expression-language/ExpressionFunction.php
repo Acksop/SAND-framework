@@ -35,8 +35,8 @@ class ExpressionFunction
     private $evaluator;
 
     /**
-     * @param string   $name      The function name
-     * @param callable $compiler  A callable able to compile the function
+     * @param string $name The function name
+     * @param callable $compiler A callable able to compile the function
      * @param callable $evaluator A callable able to evaluate the function
      */
     public function __construct($name, callable $compiler, callable $evaluator)
@@ -46,25 +46,10 @@ class ExpressionFunction
         $this->evaluator = $evaluator;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getCompiler()
-    {
-        return $this->compiler;
-    }
-
-    public function getEvaluator()
-    {
-        return $this->evaluator;
-    }
-
     /**
      * Creates an ExpressionFunction from a PHP function name.
      *
-     * @param string      $phpFunctionName        The PHP function name
+     * @param string $phpFunctionName The PHP function name
      * @param string|null $expressionFunctionName The expression function name (default: same than the PHP function name)
      *
      * @return self
@@ -96,5 +81,20 @@ class ExpressionFunction
         };
 
         return new self($expressionFunctionName ?: end($parts), $compiler, $evaluator);
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getCompiler()
+    {
+        return $this->compiler;
+    }
+
+    public function getEvaluator()
+    {
+        return $this->evaluator;
     }
 }

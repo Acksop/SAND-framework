@@ -1,14 +1,14 @@
 <phpunit colors="true">
-  <testsuites>
-    <testsuite name="Objet_Fichier">
-      <file>./fichiertest.class.php</file>
-      <file>./Test.php</file>
-    </testsuite>
-  </testsuites>
-  
-  <logging>
-    <log type="junit" target="../build/logs/phpunit.xml" />
-    <log type="testdox-html" target="../build/logs/phpunit.html" />
-  </logging>
-  
+    <testsuites>
+        <testsuite name="Objet_Fichier">
+            <file>./fichiertest.class.php</file>
+            <file>./Test.php</file>
+        </testsuite>
+    </testsuites>
+
+    <logging>
+        <log type="junit" target="../build/logs/phpunit.xml"/>
+        <log type="testdox-html" target="../build/logs/phpunit.html"/>
+    </logging>
+
 </phpunit>

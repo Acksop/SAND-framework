@@ -57,7 +57,7 @@ class StaticPrefixCollection
      * Adds a route to a group.
      *
      * @param string $prefix
-     * @param mixed  $route
+     * @param mixed $route
      */
     public function addRoute($prefix, $route)
     {
@@ -100,11 +100,39 @@ class StaticPrefixCollection
     }
 
     /**
+     * Guards against adding incompatible prefixes in a group.
+     *
+     * @param string $prefix
+     *
+     * @throws \LogicException when a prefix does not belong in a group
+     */
+    private function guardAgainstAddingNotAcceptedRoutes($prefix)
+    {
+        if (!$this->accepts($prefix)) {
+            $message = sprintf('Could not add route with prefix %s to collection with prefix %s', $prefix, $this->prefix);
+
+            throw new \LogicException($message);
+        }
+    }
+
+    /**
+     * Checks whether a prefix can be contained within the group.
+     *
+     * @param string $prefix
+     *
+     * @return bool Whether a prefix could belong in a given group
+     */
+    private function accepts($prefix)
+    {
+        return '' === $this->prefix || 0 === strpos($prefix, $this->prefix);
+    }
+
+    /**
      * Tries to combine a route with another route or group.
      *
      * @param StaticPrefixCollection|array $item
-     * @param string                       $prefix
-     * @param mixed                        $route
+     * @param string $prefix
+     * @param mixed $route
      *
      * @return StaticPrefixCollection|null
      */
@@ -128,18 +156,6 @@ class StaticPrefixCollection
         $child->addRoute($prefix, $route);
 
         return $child;
-    }
-
-    /**
-     * Checks whether a prefix can be contained within the group.
-     *
-     * @param string $prefix
-     *
-     * @return bool Whether a prefix could belong in a given group
-     */
-    private function accepts($prefix)
-    {
-        return '' === $this->prefix || 0 === strpos($prefix, $this->prefix);
     }
 
     /**
@@ -218,21 +234,5 @@ class StaticPrefixCollection
         }
 
         return true;
-    }
-
-    /**
-     * Guards against adding incompatible prefixes in a group.
-     *
-     * @param string $prefix
-     *
-     * @throws \LogicException when a prefix does not belong in a group
-     */
-    private function guardAgainstAddingNotAcceptedRoutes($prefix)
-    {
-        if (!$this->accepts($prefix)) {
-            $message = sprintf('Could not add route with prefix %s to collection with prefix %s', $prefix, $this->prefix);
-
-            throw new \LogicException($message);
-        }
     }
 }

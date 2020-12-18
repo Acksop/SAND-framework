@@ -8,21 +8,15 @@
 
 namespace App\Session\AuthBundle\Security;
 
+use App\Session\AuthBundle\Security\Abstracts\AuthFinal;
 use App\Session\AuthBundle\Security\Auth\Authentication;
 use App\Session\AuthBundle\Security\Auth\User;
 use App\Session\AuthBundle\Security\Auth\UserProvider;
 use App\Session\AuthBundle\Security\Interfaces\AuthInterface;
-use App\Session\AuthBundle\Security\Abstracts\AuthFinal;
-use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
-use Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
-use Symfony\Component\Security\Core\Authentication\Provider\UserAuthenticationProvider;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 use Symfony\Component\Security\Core\User\UserChecker;
 
 /**
@@ -59,7 +53,7 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface
         $defaultEncoder = new MessageDigestPasswordEncoder('sha512', true, 5000);
 
         $encoders = [
-            User::class       => $defaultEncoder,
+            User::class => $defaultEncoder,
         ];
 
         $encoderFactory = new EncoderFactory($encoders);
@@ -97,7 +91,7 @@ class DefaultAuthentication extends AuthFinal implements AuthInterface
         $token->setAttribute("complet_name", $this->ai->getCompletName());
         $token->setAttribute("mail", $this->ai->getMail());
         $token->setAttribute("FreDuRne", $this->ai->getFreDuRne());
-        
+
         return;
     }
 

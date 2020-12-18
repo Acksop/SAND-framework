@@ -30,16 +30,14 @@ class ExpressionLanguageTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getItem')
             ->with('1%20%2B%201%2F%2F')
-            ->willReturn($cacheItemMock)
-        ;
+            ->willReturn($cacheItemMock);
 
         $cacheItemMock
             ->expects($this->exactly(2))
             ->method('get')
             ->willReturnCallback(function () use (&$savedParsedExpression) {
                 return $savedParsedExpression;
-            })
-        ;
+            });
 
         $cacheItemMock
             ->expects($this->exactly(1))
@@ -47,14 +45,12 @@ class ExpressionLanguageTest extends TestCase
             ->with($this->isInstanceOf(ParsedExpression::class))
             ->willReturnCallback(function ($parsedExpression) use (&$savedParsedExpression) {
                 $savedParsedExpression = $parsedExpression;
-            })
-        ;
+            });
 
         $cacheMock
             ->expects($this->exactly(1))
             ->method('save')
-            ->with($cacheItemMock)
-        ;
+            ->with($cacheItemMock);
 
         $parsedExpression = $expressionLanguage->parse('1 + 1', []);
         $this->assertSame($savedParsedExpression, $parsedExpression);
@@ -77,8 +73,7 @@ class ExpressionLanguageTest extends TestCase
             ->expects($this->exactly(1))
             ->method('fetch')
             ->with('1%20%2B%201%2F%2F')
-            ->willReturn($savedParsedExpression)
-        ;
+            ->willReturn($savedParsedExpression);
 
         $cacheMock
             ->expects($this->exactly(1))
@@ -86,8 +81,7 @@ class ExpressionLanguageTest extends TestCase
             ->with('1%20%2B%201%2F%2F', $this->isInstanceOf(ParsedExpression::class))
             ->willReturnCallback(function ($key, $expression) use (&$savedParsedExpression) {
                 $savedParsedExpression = $expression;
-            })
-        ;
+            });
 
         $parsedExpression = $expressionLanguage->parse('1 + 1', []);
         $this->assertSame($savedParsedExpression, $parsedExpression);
@@ -202,16 +196,14 @@ class ExpressionLanguageTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getItem')
             ->with('a%20%2B%20b%2F%2Fa%7CB%3Ab')
-            ->willReturn($cacheItemMock)
-        ;
+            ->willReturn($cacheItemMock);
 
         $cacheItemMock
             ->expects($this->exactly(2))
             ->method('get')
             ->willReturnCallback(function () use (&$savedParsedExpression) {
                 return $savedParsedExpression;
-            })
-        ;
+            });
 
         $cacheItemMock
             ->expects($this->exactly(1))
@@ -219,14 +211,12 @@ class ExpressionLanguageTest extends TestCase
             ->with($this->isInstanceOf(ParsedExpression::class))
             ->willReturnCallback(function ($parsedExpression) use (&$savedParsedExpression) {
                 $savedParsedExpression = $parsedExpression;
-            })
-        ;
+            });
 
         $cacheMock
             ->expects($this->exactly(1))
             ->method('save')
-            ->with($cacheItemMock)
-        ;
+            ->with($cacheItemMock);
 
         $expression = 'a + b';
         $expressionLanguage->compile($expression, ['a', 'B' => 'b']);
@@ -240,7 +230,7 @@ class ExpressionLanguageTest extends TestCase
         $compiled = $expressionLanguage->compile($expression, ['foo', 'bar']);
         $this->assertSame('in_array($foo->not, [0 => $bar])', $compiled);
 
-        $result = $expressionLanguage->evaluate($expression, ['foo' => (object) ['not' => 'test'], 'bar' => 'test']);
+        $result = $expressionLanguage->evaluate($expression, ['foo' => (object)['not' => 'test'], 'bar' => 'test']);
         $this->assertTrue($result);
     }
 

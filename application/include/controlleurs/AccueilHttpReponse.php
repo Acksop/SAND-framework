@@ -15,6 +15,7 @@ class AccueilHttpReponse extends RestReponse
         $text = ob_get_clean();
         Logger::addLog('http11.put', '____Hello Put____' . PHP_EOL . $text);
     }
+
     public function delete()
     {
         ob_start();

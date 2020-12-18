@@ -21,7 +21,7 @@ use Psr\Cache\CacheItemInterface;
 interface CallbackInterface
 {
     /**
-     * @param CacheItemInterface|ItemInterface $item  The item to compute the value for
+     * @param CacheItemInterface|ItemInterface $item The item to compute the value for
      * @param bool                             &$save Should be set to false when the value should not be saved in the pool
      *
      * @return mixed The computed value for the passed item

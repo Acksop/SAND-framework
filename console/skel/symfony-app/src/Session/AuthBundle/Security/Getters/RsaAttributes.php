@@ -1,24 +1,24 @@
 <?php
 
 /**
-  * Class RsaAttributes
-  *
-  * @package Besancon\AuthBundle\Security\Getters
-  * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
-  *
-  */
+ * Class RsaAttributes
+ *
+ * @package Besancon\AuthBundle\Security\Getters
+ * @author  Amine BEL HADJ ALI <amine.belhadjali@ac-besancon.fr>
+ *
+ */
 
-namespace  App\Besancon\AuthBundle\Security\Getters;
+namespace App\Besancon\AuthBundle\Security\Getters;
 
-use  App\Besancon\AuthBundle\Security\Interfaces\AttributesInterface;
+use App\Besancon\AuthBundle\Security\Interfaces\AttributesInterface;
 
 /**
-  * Class RsaAttributes
-  *
-  * Cette classe permet d'accèder aux informations (entête HTTP) de l'utilisateur
-  * renvoyé par RSA CT à partir des méthodes d'accès définies dans l'interface AttributesInterface
-  *
-  */
+ * Class RsaAttributes
+ *
+ * Cette classe permet d'accèder aux informations (entête HTTP) de l'utilisateur
+ * renvoyé par RSA CT à partir des méthodes d'accès définies dans l'interface AttributesInterface
+ *
+ */
 class RsaAttributes implements AttributesInterface
 {
     public function getCompletName()
@@ -70,7 +70,7 @@ class RsaAttributes implements AttributesInterface
     {
         return (isset($_SERVER['HTTP_FREDURESDEL'])) ? $_SERVER['HTTP_FREDURESDEL'] : null;
     }
-    
+
     public function getFrEduFonctAdm()
     {
         return (isset($_SERVER['HTTP_FREDUFONCTADM'])) ? $_SERVER['HTTP_FREDUFONCTADM'] : null;
@@ -85,7 +85,7 @@ class RsaAttributes implements AttributesInterface
     {
         return (isset($_SERVER['HTTP_CTLN'])) ? $_SERVER['HTTP_CTLN'] : null;
     }
-    
+
     public function getGrade()
     {
         return (isset($_SERVER['HTTP_GRADE'])) ? $_SERVER['HTTP_GRADE'] : null;

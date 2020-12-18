@@ -12,14 +12,11 @@
 
 namespace App\Session\AuthBundle\Security\Abstracts;
 
-use App\Session\AuthBundle\Utils\Config;
-use Symfony\Component\HttpFoundation\Response;
-
 abstract class AuthAbstract
 {
 
     /**
-     * @var App\Besancon\AuthBundle\Security\Interfaces\AttributesInterface $ai   Instance de CasAttributes ou RsaAttributes
+     * @var App\Besancon\AuthBundle\Security\Interfaces\AttributesInterface $ai Instance de CasAttributes ou RsaAttributes
      */
     protected $ai;
 
@@ -65,12 +62,12 @@ abstract class AuthAbstract
      *
      * Est utilisé dans le userprovider par défaut Besancon\AuthBundle\Security\User\AuthUserProvider
      *
-     * @see \Symfony\Component\Security\Core\User\UserInterface
-     * @see \Besancon\AuthBundle\Security\User\AuthUserProvider
-     *
      * @param string $username
      *               Identifiant de l'utilisateur
      * @return \Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @see \Symfony\Component\Security\Core\User\UserInterface
+     * @see \Besancon\AuthBundle\Security\User\AuthUserProvider
      *
      */
     abstract public function getUser($username);

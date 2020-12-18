@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Events;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class OnAuthenticationSuccessEvent extends Event
 {

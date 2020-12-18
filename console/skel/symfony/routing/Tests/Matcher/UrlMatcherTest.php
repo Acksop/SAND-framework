@@ -30,6 +30,11 @@ class UrlMatcherTest extends TestCase
         $this->assertIsArray($matcher->match('/foo'));
     }
 
+    protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)
+    {
+        return new UrlMatcher($routes, $context ?: new RequestContext());
+    }
+
     public function testMethodNotAllowed()
     {
         $coll = new RouteCollection();
@@ -191,11 +196,11 @@ class UrlMatcherTest extends TestCase
     {
         $collection = new RouteCollection();
         $chars = '!"$%éà &\'()*+,./:;<=>@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[]^_`abcdefghijklmnopqrstuvwxyz{|}~-';
-        $collection->add('foo', new Route('/{foo}/bar', [], ['foo' => '['.preg_quote($chars).']+'], ['utf8' => true]));
+        $collection->add('foo', new Route('/{foo}/bar', [], ['foo' => '[' . preg_quote($chars) . ']+'], ['utf8' => true]));
 
         $matcher = $this->getUrlMatcher($collection);
-        $this->assertEquals(['_route' => 'foo', 'foo' => $chars], $matcher->match('/'.rawurlencode($chars).'/bar'));
-        $this->assertEquals(['_route' => 'foo', 'foo' => $chars], $matcher->match('/'.strtr($chars, ['%' => '%25']).'/bar'));
+        $this->assertEquals(['_route' => 'foo', 'foo' => $chars], $matcher->match('/' . rawurlencode($chars) . '/bar'));
+        $this->assertEquals(['_route' => 'foo', 'foo' => $chars], $matcher->match('/' . strtr($chars, ['%' => '%25']) . '/bar'));
     }
 
     public function testMatchWithDotMetacharacterInRequirements()
@@ -204,7 +209,7 @@ class UrlMatcherTest extends TestCase
         $collection->add('foo', new Route('/{foo}/bar', [], ['foo' => '.+']));
 
         $matcher = $this->getUrlMatcher($collection);
-        $this->assertEquals(['_route' => 'foo', 'foo' => "\n"], $matcher->match('/'.urlencode("\n").'/bar'), 'linefeed character is matched');
+        $this->assertEquals(['_route' => 'foo', 'foo' => "\n"], $matcher->match('/' . urlencode("\n") . '/bar'), 'linefeed character is matched');
     }
 
     public function testMatchOverriddenRoute()
@@ -607,10 +612,5 @@ class UrlMatcherTest extends TestCase
 
         $this->assertEquals(['_route' => 'a', 'a' => 'foo'], $matcher->match('/foo'));
         $this->assertEquals(['_route' => 'a', 'a' => 'foo/'], $matcher->match('/foo/'));
-    }
-
-    protected function getUrlMatcher(RouteCollection $routes, RequestContext $context = null)
-    {
-        return new UrlMatcher($routes, $context ?: new RequestContext());
     }
 }

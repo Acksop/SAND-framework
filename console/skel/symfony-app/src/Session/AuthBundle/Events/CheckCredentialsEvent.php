@@ -9,7 +9,7 @@ class CheckCredentialsEvent extends Event
 {
     const NAME = "besancon_auth.event.check_credentials";
     private $access = true;
-    
+
     public function __construct($credentials, UserInterface $user_interface)
     {
         $this->credentials = $credentials;
@@ -30,6 +30,7 @@ class CheckCredentialsEvent extends Event
     {
         return $this->access;
     }
+
     public function setAccess($access)
     {
         $this->access = $access;

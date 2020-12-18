@@ -44,7 +44,7 @@ class Psr16Cache implements CacheInterface, PruneableInterface, ResettableInterf
         $createCacheItem = \Closure::bind(
             static function ($key, $value, $allowInt = false) use (&$cacheItemPrototype) {
                 $item = clone $cacheItemPrototype;
-                $item->key = $allowInt && \is_int($key) ? (string) $key : CacheItem::validateKey($key);
+                $item->key = $allowInt && \is_int($key) ? (string)$key : CacheItem::validateKey($key);
                 $item->value = $value;
                 $item->isHit = false;
 
@@ -55,7 +55,7 @@ class Psr16Cache implements CacheInterface, PruneableInterface, ResettableInterf
         );
         $this->createCacheItem = function ($key, $value, $allowInt = false) use ($createCacheItem) {
             if (null === $this->cacheItemPrototype) {
-                $this->get($allowInt && \is_int($key) ? (string) $key : $key);
+                $this->get($allowInt && \is_int($key) ? (string)$key : $key);
             }
             $this->createCacheItem = $createCacheItem;
 
@@ -177,7 +177,7 @@ class Psr16Cache implements CacheInterface, PruneableInterface, ResettableInterf
             unset($metadata[CacheItem::METADATA_TAGS]);
 
             if ($metadata) {
-                $values[$key] = ["\x9D".pack('VN', (int) (0.1 + $metadata[CacheItem::METADATA_EXPIRY] - self::METADATA_EXPIRY_OFFSET), $metadata[CacheItem::METADATA_CTIME])."\x5F" => $values[$key]];
+                $values[$key] = ["\x9D" . pack('VN', (int)(0.1 + $metadata[CacheItem::METADATA_EXPIRY] - self::METADATA_EXPIRY_OFFSET), $metadata[CacheItem::METADATA_CTIME]) . "\x5F" => $values[$key]];
             }
         }
 
@@ -206,13 +206,13 @@ class Psr16Cache implements CacheInterface, PruneableInterface, ResettableInterf
             } elseif ($valuesIsArray) {
                 $items = [];
                 foreach ($values as $key => $value) {
-                    $items[] = (string) $key;
+                    $items[] = (string)$key;
                 }
                 $items = $this->pool->getItems($items);
             } else {
                 foreach ($values as $key => $value) {
                     if (\is_int($key)) {
-                        $key = (string) $key;
+                        $key = (string)$key;
                     }
                     $items[$key] = $this->pool->getItem($key)->set($value);
                 }

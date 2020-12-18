@@ -33,6 +33,14 @@ class DefaultMarshaller implements MarshallerInterface
     }
 
     /**
+     * @internal
+     */
+    public static function handleUnserializeCallback($class)
+    {
+        throw new \DomainException('Class not found: ' . $class);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function marshall(array $values, ?array &$failed): array
@@ -69,7 +77,7 @@ class DefaultMarshaller implements MarshallerInterface
         if ($value === ($igbinaryNull ?? $igbinaryNull = \extension_loaded('igbinary') && (\PHP_VERSION_ID < 70400 || version_compare('3.1.0', phpversion('igbinary'), '<=')) ? igbinary_serialize(null) : false)) {
             return null;
         }
-        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__.'::handleUnserializeCallback');
+        $unserializeCallbackHandler = ini_set('unserialize_callback_func', __CLASS__ . '::handleUnserializeCallback');
         try {
             if (':' === ($value[1] ?? ':')) {
                 if (false !== $value = unserialize($value)) {
@@ -87,13 +95,5 @@ class DefaultMarshaller implements MarshallerInterface
         } finally {
             ini_set('unserialize_callback_func', $unserializeCallbackHandler);
         }
-    }
-
-    /**
-     * @internal
-     */
-    public static function handleUnserializeCallback($class)
-    {
-        throw new \DomainException('Class not found: '.$class);
     }
 }

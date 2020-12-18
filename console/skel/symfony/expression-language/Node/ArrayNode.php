@@ -46,6 +46,35 @@ class ArrayNode extends Node
         $compiler->raw(']');
     }
 
+    protected function compileArguments(Compiler $compiler, $withKeys = true)
+    {
+        $first = true;
+        foreach ($this->getKeyValuePairs() as $pair) {
+            if (!$first) {
+                $compiler->raw(', ');
+            }
+            $first = false;
+
+            if ($withKeys) {
+                $compiler
+                    ->compile($pair['key'])
+                    ->raw(' => ');
+            }
+
+            $compiler->compile($pair['value']);
+        }
+    }
+
+    protected function getKeyValuePairs()
+    {
+        $pairs = [];
+        foreach (array_chunk($this->nodes, 2) as $pair) {
+            $pairs[] = ['key' => $pair[0], 'value' => $pair[1]];
+        }
+
+        return $pairs;
+    }
+
     public function evaluate($functions, $values)
     {
         $result = [];
@@ -84,35 +113,5 @@ class ArrayNode extends Node
         }
 
         return $array;
-    }
-
-    protected function getKeyValuePairs()
-    {
-        $pairs = [];
-        foreach (array_chunk($this->nodes, 2) as $pair) {
-            $pairs[] = ['key' => $pair[0], 'value' => $pair[1]];
-        }
-
-        return $pairs;
-    }
-
-    protected function compileArguments(Compiler $compiler, $withKeys = true)
-    {
-        $first = true;
-        foreach ($this->getKeyValuePairs() as $pair) {
-            if (!$first) {
-                $compiler->raw(', ');
-            }
-            $first = false;
-
-            if ($withKeys) {
-                $compiler
-                    ->compile($pair['key'])
-                    ->raw(' => ')
-                ;
-            }
-
-            $compiler->compile($pair['value']);
-        }
     }
 }

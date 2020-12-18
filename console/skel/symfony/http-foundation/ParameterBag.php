@@ -72,13 +72,60 @@ class ParameterBag implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Sets a parameter by name.
+     *
+     * @param string $key The key
+     * @param mixed $value The value
+     */
+    public function set($key, $value)
+    {
+        $this->parameters[$key] = $value;
+    }
+
+    /**
+     * Returns true if the parameter is defined.
+     *
+     * @param string $key The key
+     *
+     * @return bool true if the parameter exists, false otherwise
+     */
+    public function has($key)
+    {
+        return array_key_exists($key, $this->parameters);
+    }
+
+    /**
+     * Removes a parameter.
+     *
+     * @param string $key The key
+     */
+    public function remove($key)
+    {
+        unset($this->parameters[$key]);
+    }
+
+    /**
+     * Returns the alphabetic characters of the parameter value.
+     *
+     * @param string $key The parameter key
+     * @param string $default The default value if the parameter key does not exist
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
+     *
+     * @return string The filtered value
+     */
+    public function getAlpha($key, $default = '', $deep = false)
+    {
+        return preg_replace('/[^[:alpha:]]/', '', $this->get($key, $default, $deep));
+    }
+
+    /**
      * Returns a parameter by name.
      *
      * Note: Finding deep items is deprecated since version 2.8, to be removed in 3.0.
      *
-     * @param string $key     The key
-     * @param mixed  $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
      *
      * @return mixed
      *
@@ -87,7 +134,7 @@ class ParameterBag implements \IteratorAggregate, \Countable
     public function get($key, $default = null, $deep = false)
     {
         if ($deep) {
-            @trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since Symfony 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
+            @trigger_error('Using paths to find deeper items in ' . __METHOD__ . ' is deprecated since Symfony 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
         }
 
         if (!$deep || false === $pos = strpos($key, '[')) {
@@ -138,58 +185,11 @@ class ParameterBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Sets a parameter by name.
-     *
-     * @param string $key   The key
-     * @param mixed  $value The value
-     */
-    public function set($key, $value)
-    {
-        $this->parameters[$key] = $value;
-    }
-
-    /**
-     * Returns true if the parameter is defined.
-     *
-     * @param string $key The key
-     *
-     * @return bool true if the parameter exists, false otherwise
-     */
-    public function has($key)
-    {
-        return array_key_exists($key, $this->parameters);
-    }
-
-    /**
-     * Removes a parameter.
-     *
-     * @param string $key The key
-     */
-    public function remove($key)
-    {
-        unset($this->parameters[$key]);
-    }
-
-    /**
-     * Returns the alphabetic characters of the parameter value.
-     *
-     * @param string $key     The parameter key
-     * @param string $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
-     *
-     * @return string The filtered value
-     */
-    public function getAlpha($key, $default = '', $deep = false)
-    {
-        return preg_replace('/[^[:alpha:]]/', '', $this->get($key, $default, $deep));
-    }
-
-    /**
      * Returns the alphabetic characters and digits of the parameter value.
      *
-     * @param string $key     The parameter key
+     * @param string $key The parameter key
      * @param string $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string The filtered value
      */
@@ -201,9 +201,9 @@ class ParameterBag implements \IteratorAggregate, \Countable
     /**
      * Returns the digits of the parameter value.
      *
-     * @param string $key     The parameter key
+     * @param string $key The parameter key
      * @param string $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string The filtered value
      */
@@ -214,45 +214,17 @@ class ParameterBag implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Returns the parameter value converted to integer.
-     *
-     * @param string $key     The parameter key
-     * @param int    $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
-     *
-     * @return int The filtered value
-     */
-    public function getInt($key, $default = 0, $deep = false)
-    {
-        return (int) $this->get($key, $default, $deep);
-    }
-
-    /**
-     * Returns the parameter value converted to boolean.
-     *
-     * @param string $key     The parameter key
-     * @param bool   $default The default value if the parameter key does not exist
-     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
-     *
-     * @return bool The filtered value
-     */
-    public function getBoolean($key, $default = false, $deep = false)
-    {
-        return $this->filter($key, $default, FILTER_VALIDATE_BOOLEAN, array(), $deep);
-    }
-
-    /**
      * Filter key.
      *
-     * @param string $key     Key
-     * @param mixed  $default Default = null
-     * @param int    $filter  FILTER_* constant
-     * @param mixed  $options Filter options
-     * @param bool   $deep    Default = false
-     *
-     * @see http://php.net/manual/en/function.filter-var.php
+     * @param string $key Key
+     * @param mixed $default Default = null
+     * @param int $filter FILTER_* constant
+     * @param mixed $options Filter options
+     * @param bool $deep Default = false
      *
      * @return mixed
+     * @see http://php.net/manual/en/function.filter-var.php
+     *
      */
     public function filter($key, $default = null, $filter = FILTER_DEFAULT, $options = array(), $deep = false)
     {
@@ -264,7 +236,7 @@ class ParameterBag implements \IteratorAggregate, \Countable
             }
         }
         if (\is_bool($filter) || !isset($filters[$filter]) || \is_array($deep)) {
-            @trigger_error('Passing the $deep boolean as 3rd argument to the '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0. Remove it altogether as the $deep argument will be removed in 3.0.', E_USER_DEPRECATED);
+            @trigger_error('Passing the $deep boolean as 3rd argument to the ' . __METHOD__ . ' method is deprecated since Symfony 2.8 and will be removed in 3.0. Remove it altogether as the $deep argument will be removed in 3.0.', E_USER_DEPRECATED);
             $tmp = $deep;
             $deep = $filter;
             $filter = $options;
@@ -284,6 +256,34 @@ class ParameterBag implements \IteratorAggregate, \Countable
         }
 
         return filter_var($value, $filter, $options);
+    }
+
+    /**
+     * Returns the parameter value converted to integer.
+     *
+     * @param string $key The parameter key
+     * @param int $default The default value if the parameter key does not exist
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
+     *
+     * @return int The filtered value
+     */
+    public function getInt($key, $default = 0, $deep = false)
+    {
+        return (int)$this->get($key, $default, $deep);
+    }
+
+    /**
+     * Returns the parameter value converted to boolean.
+     *
+     * @param string $key The parameter key
+     * @param bool $default The default value if the parameter key does not exist
+     * @param bool $deep If true, a path like foo[bar] will find deeper items
+     *
+     * @return bool The filtered value
+     */
+    public function getBoolean($key, $default = false, $deep = false)
+    {
+        return $this->filter($key, $default, FILTER_VALIDATE_BOOLEAN, array(), $deep);
     }
 
     /**

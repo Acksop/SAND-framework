@@ -67,6 +67,15 @@ class TraceableAdapter implements AdapterInterface, CacheInterface, PruneableInt
         return $value;
     }
 
+    protected function start($name)
+    {
+        $this->calls[] = $event = new TraceableAdapterEvent();
+        $event->name = $name;
+        $event->start = microtime(true);
+
+        return $event;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -182,7 +191,7 @@ class TraceableAdapter implements AdapterInterface, CacheInterface, PruneableInt
      */
     public function clear(/*string $prefix = ''*/)
     {
-        $prefix = 0 < \func_num_args() ? (string) func_get_arg(0) : '';
+        $prefix = 0 < \func_num_args() ? (string)func_get_arg(0) : '';
         $event = $this->start(__FUNCTION__);
         try {
             if ($this->pool instanceof AdapterInterface) {
@@ -279,15 +288,6 @@ class TraceableAdapter implements AdapterInterface, CacheInterface, PruneableInt
     public function clearCalls()
     {
         $this->calls = [];
-    }
-
-    protected function start($name)
-    {
-        $this->calls[] = $event = new TraceableAdapterEvent();
-        $event->name = $name;
-        $event->start = microtime(true);
-
-        return $event;
     }
 }
 

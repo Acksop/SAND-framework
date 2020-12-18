@@ -31,7 +31,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadWithRoute()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('validpattern.xml');
         $route = $routeCollection->get('blog_show');
 
@@ -48,7 +48,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadWithNamespacePrefix()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('namespaceprefix.xml');
 
         $this->assertCount(1, $routeCollection->all(), 'One route is loaded');
@@ -66,7 +66,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadWithImport()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('validresource.xml');
         $routes = $routeCollection->all();
 
@@ -85,7 +85,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testUtf8Route()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/localized']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/localized']));
         $routeCollection = $loader->load('utf8.xml');
         $routes = $routeCollection->all();
 
@@ -109,7 +109,7 @@ class XmlFileLoaderTest extends TestCase
     public function testLoadThrowsExceptionWithInvalidFile($filePath)
     {
         $this->expectException('InvalidArgumentException');
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $loader->load($filePath);
     }
 
@@ -119,7 +119,7 @@ class XmlFileLoaderTest extends TestCase
     public function testLoadThrowsExceptionWithInvalidFileEvenWithoutSchemaValidation($filePath)
     {
         $this->expectException('InvalidArgumentException');
-        $loader = new CustomXmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new CustomXmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $loader->load($filePath);
     }
 
@@ -132,13 +132,13 @@ class XmlFileLoaderTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Document types are not allowed.');
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $loader->load('withdoctype.xml');
     }
 
     public function testNullValues()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('null_values.xml');
         $route = $routeCollection->get('blog_show');
 
@@ -152,7 +152,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testScalarDataTypeDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('scalar_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -175,7 +175,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testListDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('list_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -190,7 +190,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testListInListDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('list_in_list_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -205,7 +205,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testListInMapDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('list_in_map_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -220,7 +220,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testMapDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('map_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -240,7 +240,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testMapInListDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('map_in_list_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -260,7 +260,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testMapInMapDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('map_in_map_defaults.xml');
         $route = $routeCollection->get('blog');
 
@@ -280,7 +280,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testNullValuesInList()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('list_null_values.xml');
         $route = $routeCollection->get('blog');
 
@@ -289,7 +289,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testNullValuesInMap()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures']));
         $routeCollection = $loader->load('map_null_values.xml');
         $route = $routeCollection->get('blog');
 
@@ -308,7 +308,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadRouteWithControllerAttribute()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $routeCollection = $loader->load('routing.xml');
 
         $route = $routeCollection->get('app_homepage');
@@ -318,7 +318,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadRouteWithoutControllerAttribute()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $routeCollection = $loader->load('routing.xml');
 
         $route = $routeCollection->get('app_logout');
@@ -328,7 +328,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testLoadRouteWithControllerSetInDefaults()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $routeCollection = $loader->load('routing.xml');
 
         $route = $routeCollection->get('app_blog');
@@ -340,7 +340,7 @@ class XmlFileLoaderTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessageRegExp('/The routing file "[^"]*" must not specify both the "controller" attribute and the defaults key "_controller" for "app_blog"/');
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $loader->load('override_defaults.xml');
     }
 
@@ -349,7 +349,7 @@ class XmlFileLoaderTest extends TestCase
      */
     public function testImportRouteWithController($file)
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $routeCollection = $loader->load($file);
 
         $route = $routeCollection->get('app_homepage');
@@ -372,13 +372,13 @@ class XmlFileLoaderTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessageRegExp('/The routing file "[^"]*" must not specify both the "controller" attribute and the defaults key "_controller" for the "import" tag/');
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/controller']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/controller']));
         $loader->load('import_override_defaults.xml');
     }
 
     public function testImportRouteWithGlobMatchingSingleFile()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/glob']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/glob']));
         $routeCollection = $loader->load('import_single.xml');
 
         $route = $routeCollection->get('bar_route');
@@ -387,7 +387,7 @@ class XmlFileLoaderTest extends TestCase
 
     public function testImportRouteWithGlobMatchingMultipleFiles()
     {
-        $loader = new XmlFileLoader(new FileLocator([__DIR__.'/../Fixtures/glob']));
+        $loader = new XmlFileLoader(new FileLocator([__DIR__ . '/../Fixtures/glob']));
         $routeCollection = $loader->load('import_multiple.xml');
 
         $route = $routeCollection->get('bar_route');

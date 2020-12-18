@@ -41,8 +41,7 @@ class UnaryNode extends Node
             ->raw('(')
             ->raw(self::$operators[$this->attributes['operator']])
             ->compile($this->nodes['node'])
-            ->raw(')')
-        ;
+            ->raw(')');
     }
 
     public function evaluate($functions, $values)
@@ -61,6 +60,6 @@ class UnaryNode extends Node
 
     public function toArray()
     {
-        return ['(', $this->attributes['operator'].' ', $this->nodes['node'], ')'];
+        return ['(', $this->attributes['operator'] . ' ', $this->nodes['node'], ')'];
     }
 }

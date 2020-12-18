@@ -6,18 +6,17 @@ class Vue
 {
     public $ecran;
     public $block_body;
-    
+
     public function __construct($application)
     {
         $templateData = array();
         extract($application->modele->page);
 
         ob_start();
-        if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
+        if (file_exists(VIEW_PATH . DIRECTORY_SEPARATOR . "view" . DIRECTORY_SEPARATOR . $name . ".blade.php")) {
 
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
             require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
-
 
 
             //TEMPLATING BLADE
@@ -27,16 +26,18 @@ class Vue
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
 
-            if(!isset($engine)){$engine = 'blade';}
+            if (!isset($engine)) {
+                $engine = 'blade';
+            }
 
-            switch ($engine){
+            switch ($engine) {
                 case 'twig':
                     $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
                     $name .= '.html';
                     break;
                 case 'blade':
                 default:
-                $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
+                    $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
             }
 
 

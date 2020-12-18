@@ -26,11 +26,10 @@ trait PhpArrayTrait
 {
     use ProxyTrait;
 
+    private static $valuesCache = [];
     private $file;
     private $keys;
     private $values;
-
-    private static $valuesCache = [];
 
     /**
      * Store an array of cached values.
@@ -72,7 +71,7 @@ return [[
 EOF;
 
         foreach ($values as $key => $value) {
-            CacheItem::validateKey(\is_int($key) ? (string) $key : $key);
+            CacheItem::validateKey(\is_int($key) ? (string)$key : $key);
             $isStaticValue = true;
 
             if (null === $value) {
@@ -106,7 +105,7 @@ EOF;
                 $dumpedValues .= "{$id} => {$value},\n";
             }
 
-            $dump .= var_export($key, true)." => {$id},\n";
+            $dump .= var_export($key, true) . " => {$id},\n";
         }
 
         $dump .= "\n], [\n\n{$dumpedValues}\n]];\n";
@@ -121,28 +120,6 @@ EOF;
         unset(self::$valuesCache[$this->file]);
 
         $this->initialize();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $prefix
-     *
-     * @return bool
-     */
-    public function clear(/*string $prefix = ''*/)
-    {
-        $prefix = 0 < \func_num_args() ? (string) func_get_arg(0) : '';
-        $this->keys = $this->values = [];
-
-        $cleared = @unlink($this->file) || !file_exists($this->file);
-        unset(self::$valuesCache[$this->file]);
-
-        if ($this->pool instanceof AdapterInterface) {
-            return $this->pool->clear($prefix) && $cleared;
-        }
-
-        return $this->pool->clear() && $cleared;
     }
 
     /**
@@ -165,5 +142,27 @@ EOF;
         } else {
             list($this->keys, $this->values) = $values;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $prefix
+     *
+     * @return bool
+     */
+    public function clear(/*string $prefix = ''*/)
+    {
+        $prefix = 0 < \func_num_args() ? (string)func_get_arg(0) : '';
+        $this->keys = $this->values = [];
+
+        $cleared = @unlink($this->file) || !file_exists($this->file);
+        unset(self::$valuesCache[$this->file]);
+
+        if ($this->pool instanceof AdapterInterface) {
+            return $this->pool->clear($prefix) && $cleared;
+        }
+
+        return $this->pool->clear() && $cleared;
     }
 }

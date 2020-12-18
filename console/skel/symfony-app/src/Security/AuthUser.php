@@ -38,6 +38,11 @@ class AuthUser implements UserInterface
         return $this->roles = $roles;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getUsername()
     {
         return $this->username;
@@ -46,11 +51,6 @@ class AuthUser implements UserInterface
     public function getUser()
     {
         return $this;
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     public function getCredentials()

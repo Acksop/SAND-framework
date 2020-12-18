@@ -20,23 +20,6 @@ class FileResourceTest extends TestCase
     protected $file;
     protected $time;
 
-    protected function setUp()
-    {
-        $this->file = sys_get_temp_dir().'/tmp.xml';
-        $this->time = time();
-        touch($this->file, $this->time);
-        $this->resource = new FileResource($this->file);
-    }
-
-    protected function tearDown()
-    {
-        if (!file_exists($this->file)) {
-            return;
-        }
-
-        unlink($this->file);
-    }
-
     public function testGetResource()
     {
         $this->assertSame(realpath($this->file), $this->resource->getResource(), '->getResource() returns the path to the resource');
@@ -44,13 +27,13 @@ class FileResourceTest extends TestCase
 
     public function testGetResourceWithScheme()
     {
-        $resource = new FileResource('file://'.$this->file);
-        $this->assertSame('file://'.$this->file, $resource->getResource(), '->getResource() returns the path to the schemed resource');
+        $resource = new FileResource('file://' . $this->file);
+        $this->assertSame('file://' . $this->file, $resource->getResource(), '->getResource() returns the path to the schemed resource');
     }
 
     public function testToString()
     {
-        $this->assertSame(realpath($this->file), (string) $this->resource);
+        $this->assertSame(realpath($this->file), (string)$this->resource);
     }
 
     /**
@@ -59,7 +42,7 @@ class FileResourceTest extends TestCase
      */
     public function testResourceDoesNotExist()
     {
-        $resource = new FileResource('/____foo/foobar'.mt_rand(1, 999999));
+        $resource = new FileResource('/____foo/foobar' . mt_rand(1, 999999));
     }
 
     public function testIsFresh()
@@ -81,5 +64,22 @@ class FileResourceTest extends TestCase
         $unserialized = unserialize(serialize($this->resource));
 
         $this->assertSame(realpath($this->file), $this->resource->getResource());
+    }
+
+    protected function setUp()
+    {
+        $this->file = sys_get_temp_dir() . '/tmp.xml';
+        $this->time = time();
+        touch($this->file, $this->time);
+        $this->resource = new FileResource($this->file);
+    }
+
+    protected function tearDown()
+    {
+        if (!file_exists($this->file)) {
+            return;
+        }
+
+        unlink($this->file);
     }
 }

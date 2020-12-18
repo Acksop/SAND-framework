@@ -74,34 +74,6 @@ class Compiler
     }
 
     /**
-     * Adds a raw string to the compiled code.
-     *
-     * @param string $string The string
-     *
-     * @return $this
-     */
-    public function raw($string)
-    {
-        $this->source .= $string;
-
-        return $this;
-    }
-
-    /**
-     * Adds a quoted string to the compiled code.
-     *
-     * @param string $value The string
-     *
-     * @return $this
-     */
-    public function string($value)
-    {
-        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
-
-        return $this;
-    }
-
-    /**
      * Returns a PHP representation of a given value.
      *
      * @param mixed $value The value to convert
@@ -140,6 +112,34 @@ class Compiler
         } else {
             $this->string($value);
         }
+
+        return $this;
+    }
+
+    /**
+     * Adds a raw string to the compiled code.
+     *
+     * @param string $string The string
+     *
+     * @return $this
+     */
+    public function raw($string)
+    {
+        $this->source .= $string;
+
+        return $this;
+    }
+
+    /**
+     * Adds a quoted string to the compiled code.
+     *
+     * @param string $value The string
+     *
+     * @return $this
+     */
+    public function string($value)
+    {
+        $this->source .= sprintf('"%s"', addcslashes($value, "\0\t\"\$\\"));
 
         return $this;
     }

@@ -33,10 +33,22 @@ final class Php70
         return ($dividend - ($dividend % $divisor)) / $divisor;
     }
 
+    private static function intArg($value, $caller, $pos)
+    {
+        if (\is_int($value)) {
+            return $value;
+        }
+        if (!\is_numeric($value) || PHP_INT_MAX <= ($value += 0) || ~PHP_INT_MAX >= $value) {
+            throw new \TypeError(sprintf('%s() expects parameter %d to be integer, %s given', $caller, $pos, \gettype($value)));
+        }
+
+        return (int)$value;
+    }
+
     public static function preg_replace_callback_array(array $patterns, $subject, $limit = -1, &$count = 0)
     {
         $count = 0;
-        $result = (string) $subject;
+        $result = (string)$subject;
         if (0 === $limit = self::intArg($limit, __FUNCTION__, 3)) {
             return $result;
         }
@@ -60,17 +72,5 @@ final class Php70
         set_error_handler($handler);
         @trigger_error('');
         restore_error_handler();
-    }
-
-    private static function intArg($value, $caller, $pos)
-    {
-        if (\is_int($value)) {
-            return $value;
-        }
-        if (!\is_numeric($value) || PHP_INT_MAX <= ($value += 0) || ~PHP_INT_MAX >= $value) {
-            throw new \TypeError(sprintf('%s() expects parameter %d to be integer, %s given', $caller, $pos, \gettype($value)));
-        }
-
-        return (int) $value;
     }
 }

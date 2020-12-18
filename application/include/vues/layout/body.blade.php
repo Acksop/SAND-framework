@@ -123,7 +123,7 @@
 
         <section id="page-content">
             <div class="container">
-            @yield('content')
+                @yield('content')
             </div>
         </section>
 

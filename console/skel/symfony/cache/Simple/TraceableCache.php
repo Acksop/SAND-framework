@@ -57,6 +57,15 @@ class TraceableCache implements Psr16CacheInterface, PruneableInterface, Resetta
         return $value;
     }
 
+    private function start(string $name): TraceableCacheEvent
+    {
+        $this->calls[] = $event = new TraceableCacheEvent();
+        $event->name = $name;
+        $event->start = microtime(true);
+
+        return $event;
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -235,15 +244,6 @@ class TraceableCache implements Psr16CacheInterface, PruneableInterface, Resetta
         } finally {
             $this->calls = [];
         }
-    }
-
-    private function start(string $name): TraceableCacheEvent
-    {
-        $this->calls[] = $event = new TraceableCacheEvent();
-        $event->name = $name;
-        $event->start = microtime(true);
-
-        return $event;
     }
 }
 

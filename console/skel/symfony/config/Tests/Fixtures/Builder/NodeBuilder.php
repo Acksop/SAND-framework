@@ -24,9 +24,9 @@ class NodeBuilder extends BaseNodeBuilder
     {
         switch ($type) {
             case 'variable':
-                return __NAMESPACE__.'\\'.ucfirst($type).'NodeDefinition';
+                return __NAMESPACE__ . '\\' . ucfirst($type) . 'NodeDefinition';
             case 'bar':
-                return __NAMESPACE__.'\\'.ucfirst($type).'NodeDefinition';
+                return __NAMESPACE__ . '\\' . ucfirst($type) . 'NodeDefinition';
             default:
                 return parent::getNodeClass($type);
         }

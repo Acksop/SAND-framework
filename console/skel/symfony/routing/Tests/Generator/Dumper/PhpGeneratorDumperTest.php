@@ -40,29 +40,6 @@ class PhpGeneratorDumperTest extends TestCase
      */
     private $largeTestTmpFilepath;
 
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->routeCollection = new RouteCollection();
-        $this->generatorDumper = new PhpGeneratorDumper($this->routeCollection);
-        $this->testTmpFilepath = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'php_generator.'.$this->getName().'.php';
-        $this->largeTestTmpFilepath = sys_get_temp_dir().\DIRECTORY_SEPARATOR.'php_generator.'.$this->getName().'.large.php';
-        @unlink($this->testTmpFilepath);
-        @unlink($this->largeTestTmpFilepath);
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        @unlink($this->testTmpFilepath);
-
-        $this->routeCollection = null;
-        $this->generatorDumper = null;
-        $this->testTmpFilepath = null;
-    }
-
     public function testDumpWithRoutes()
     {
         $this->routeCollection->add('Test', new Route('/testing/{foo}'));
@@ -92,7 +69,7 @@ class PhpGeneratorDumperTest extends TestCase
 
         $this->routeCollection->add('Test', new Route('/testing/{foo}'));
         for ($i = 0; $i < 32769; ++$i) {
-            $this->routeCollection->add('route_'.$i, new Route('/route_'.$i));
+            $this->routeCollection->add('route_' . $i, new Route('/route_' . $i));
         }
         $this->routeCollection->add('Test2', new Route('/testing2'));
 
@@ -173,5 +150,28 @@ class PhpGeneratorDumperTest extends TestCase
 
         $this->assertEquals('https://localhost/app.php/testing', $absoluteUrl);
         $this->assertEquals('/app.php/testing', $relativeUrl);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->routeCollection = new RouteCollection();
+        $this->generatorDumper = new PhpGeneratorDumper($this->routeCollection);
+        $this->testTmpFilepath = sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'php_generator.' . $this->getName() . '.php';
+        $this->largeTestTmpFilepath = sys_get_temp_dir() . \DIRECTORY_SEPARATOR . 'php_generator.' . $this->getName() . '.large.php';
+        @unlink($this->testTmpFilepath);
+        @unlink($this->largeTestTmpFilepath);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        @unlink($this->testTmpFilepath);
+
+        $this->routeCollection = null;
+        $this->generatorDumper = null;
+        $this->testTmpFilepath = null;
     }
 }

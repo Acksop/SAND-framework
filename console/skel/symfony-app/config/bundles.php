@@ -15,31 +15,4 @@ return [
     /*App\Session\AuthBundle\SessionAuthBundle::class => ['all' => true],*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ];
