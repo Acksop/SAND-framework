@@ -2,8 +2,6 @@
 
 namespace MVC\Classe;
 
-require APPLICATION_PATH . DIRECTORY_SEPARATOR . "parameters.php";
-
 class Application
 {
     public $http;
@@ -12,7 +10,8 @@ class Application
     public $route;
 
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->http = new HttpMethod();
         $this->browser = new Browser();
 
@@ -22,13 +21,13 @@ class Application
         $this->route = $dispacher->route;
     }
 
-    public function launch(){
+    public function launch()
+    {
         //print_r($this->route);
         $controlleur = new Controlleur($this);
         //si la page n'est un controlleur d'action alors on affiche l'écran
-        if(!$this->url->page['control']) {
+        if (!$this->url->page['control']) {
             print($controlleur->vue->ecran);
         }
     }
-
 }

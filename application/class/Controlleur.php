@@ -2,13 +2,13 @@
 
 namespace MVC\Classe;
 
-class Controlleur{
-	
-	public $modele;
-	public $vue;
-	
-	public function __construct($application){
-
+class Controlleur
+{
+    public $modele;
+    public $vue;
+    
+    public function __construct($application)
+    {
         switch ($application->http->method) {
             //cas des requètes PUT et DELETE
             case 'PUT':
@@ -20,8 +20,9 @@ class Controlleur{
                     $this->callHttpResponse($application);
                     die();
                 }
+                // no break
             default:
-                if ($application->route != NULL) {
+                if ($application->route != null) {
                     $conduit = explode('::', $application->route['controller']);
                     require CONDUIT_PATH . DIRECTORY_SEPARATOR . $conduit[0] . '.php';
                     $conduitRoute = "\\" . $conduit[0];
@@ -30,8 +31,7 @@ class Controlleur{
                     $class->initialize($application->route);
                     $this->vue = new VueVide();
                     $this->vue->ecran = $class->$method();
-
-                } else if ($application->url->page['control']) {
+                } elseif ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 } else {
@@ -39,9 +39,7 @@ class Controlleur{
                     $this->vue = new Vue($this);
                 }
         }
-
-
-	}
+    }
 
     public function callHttpResponse($application)
     {
@@ -56,11 +54,10 @@ class Controlleur{
         $reponse->instanciate($application->url, $application->http->getData());
         $method = strtolower($application->http->method);
 
-        Logger::addLog('http11'," $reponseHttp app {$application->http->method} request! ( ".get_class($reponse)."->$method() )");
+        Logger::addLog('http11', " $reponseHttp app {$application->http->method} request! ( ".get_class($reponse)."->$method() )");
 
         $this->vue = new VueVide();
         $this->vue->ecran = $reponse->$method();
         return;
     }
-	
 }

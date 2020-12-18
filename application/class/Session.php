@@ -3,64 +3,62 @@
 
 namespace MVC\Classe;
 
-
 class Session
 {
-
-    static public function start()
+    public static function start()
     {
         session_start();
         return;
     }
-    static public function destroy()
+    public static function destroy()
     {
         session_destroy();
         return;
     }
 
-    static public function setUserProfile($userProfile)
+    public static function setUserProfile($userProfile)
     {
         $_SESSION['userProfile'] = $userProfile;
         return;
     }
-    static public function setId($id)
+    public static function setId($id)
     {
         $_SESSION['id'] = $id;
         return;
     }
-    static public function setUserName($username)
+    public static function setUserName($username)
     {
         $_SESSION['username'] = $username;
         return;
     }
 
-    static public function setToken($token)
+    public static function setToken($token)
     {
         $_SESSION['userToken'] = $token;
         return;
     }
 
-    static public function setStorage($hybriauthStorage)
+    public static function setStorage($hybriauthStorage)
     {
         $_SESSION['storage'] = $hybriauthStorage;
         return;
     }
-    static public function getStorage()
+    public static function getStorage()
     {
         return $_SESSION['storage'] ;
     }
 
-    static public function setHybridAuth($hybriauth)
+    public static function setHybridAuth($hybriauth)
     {
         $_SESSION['auth'] = $hybriauth;
         return;
     }
-    static public function getHybridAuth()
+    public static function getHybridAuth()
     {
         return $_SESSION['auth'] ;
     }
 
-    static public function isRegistered()
+    public static function isRegistered()
     {
         if (isset($_SESSION['userProfile'])) {
             return true;
@@ -69,7 +67,7 @@ class Session
         }
     }
 
-    static public function redirectIfNotRegistered()
+    public static function redirectIfNotRegistered()
     {
         if (isset($_SESSION['userProfile'])) {
             return ;
@@ -78,5 +76,4 @@ class Session
             die('Ooops, something was wrong...');
         }
     }
-
 }
