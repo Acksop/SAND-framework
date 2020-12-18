@@ -174,7 +174,7 @@ class Module
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wordpress/ wordpress');
         print $git_ln_1;
 
-        $languages = shell_exec('cp '.CONSOLE_PATH.'/skel/wordpress '.MODULES_PATH.'-Rf');
+        $languages = shell_exec('cp '.CONSOLE_PATH.'/skel/wordpress '.MODULES_PATH.' -Rf');
 
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wordpress.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/wordpress.php');
