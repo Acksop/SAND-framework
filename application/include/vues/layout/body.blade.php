@@ -43,7 +43,7 @@
                 <div class="container">
                     <!--Logo-->
                     <div id="logo">
-                        <a href="{{ \MVC\Classe\Url::link_rewrite( false, 'index', []) }}">
+                        <a href="{{ \MVC\Classe\Url::link_rewrite( false, '', []) }}">
                             <span class="logo-default">SAND framework</span>
                             <span class="logo-dark">SAND framework</span>
                         </a>
