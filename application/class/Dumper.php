@@ -2,10 +2,10 @@
 
 namespace MVC\Classe;
 
-class Dumper
-{
-    public static function dump($var)
-    {
+
+class Dumper{
+
+    public static function dump($var){
         echo "<pre>";
         if (is_bool($var)) {
             echo ($var) ? "true" : "false";
@@ -21,6 +21,7 @@ class Dumper
      */
     public static function setPHPvalues()
     {
+
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         ini_set('memory_limit', -1);

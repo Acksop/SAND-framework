@@ -1,7 +1,8 @@
 <?php
 
+namespace MVC\Command;
 
-class symfony
+class Symfony
 {
 
     static public function help(){
