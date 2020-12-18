@@ -7,20 +7,3 @@ vendor
 .vscode
 .DS_store
 
-/application/modules/phplist
-/application/modules/symfony
-/application/modules/wordpress
-/application/modules/prestashop
-
-/public/prestashop/install-dev/theme/*
-/public/prestashop/js/*
-/public/prestashop/themes/*
-/public/wordpress/wp-admin/css/*
-/public/wordpress/wp-admin/js/*
-/public/wordpress/wp-content/themes/*
-/public/wordpress/wp-includes/css/*
-/public/wordpress/wp-includes/js/*
-=======
-.idea
-.php_cs.cache
->>>>>>> master-dev

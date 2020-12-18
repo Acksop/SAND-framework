@@ -1,0 +1,16 @@
+*~
+*.bak
+/.idea/
+/.project
+/.webprj
+/bin/
+/config/bundles.yml
+/config/config_modules.yml
+/config/parameters.yml
+/config/routing_modules.yml
+/nbproject
+/public/
+/var/cache/
+/var/logs/
+/var/sessions/
+/vendor/
