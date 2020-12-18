@@ -30,13 +30,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutSuccessHandlerInterface, AuthenticatorInterface {
-
+class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutSuccessHandlerInterface, AuthenticatorInterface
+{
     private $authService;
     private $urlGenerator;
     private $dispatcher;
 
-    public function __construct(AuthInterface $authService, Array $config, UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $dispatcher) {
+    public function __construct(AuthInterface $authService, array $config, UrlGeneratorInterface $urlGenerator, EventDispatcherInterface $dispatcher)
+    {
         $this->urlGenerator = $urlGenerator;
         //Récupérer le service déaclaré authService
         $this->authService = $authService;
@@ -48,7 +49,8 @@ class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
      * Called on every request. Return whatever credentials you want,
      * or null to stop authentication.
      */
-    public function getCredentials(Request $request) {
+    public function getCredentials(Request $request)
+    {
         if (!isset($_SERVER['HTTP_CT_REMOTE_USER']) || empty($_SERVER['HTTP_CT_REMOTE_USER'])) {
             $this->returnRequest = $request->getUri();
             throw new \LogicException("Impossible de continuer sous RSA : L'entête HTTP_CT_REMOTE_USER est vide ou manquante");
@@ -56,22 +58,24 @@ class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
         return true;
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider) {
+    public function getUser($credentials, UserProviderInterface $userProvider)
+    {
         $username = $_SERVER['HTTP_CT_REMOTE_USER'];
         $user = $userProvider->loadUserByUsername($username);
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user) {
-        $this->authService->ctrlAccess($user); 
+    public function checkCredentials($credentials, UserInterface $user)
+    {
+        $this->authService->ctrlAccess($user);
         // check credentials - e.g. make sure the password is valid
         // no credential check is needed in this case
         // return true to cause authentication success
         return true;
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey) {
-        
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    {
         $event = new OnAuthenticationSuccessEvent($request, $token, $providerKey);
         $this->dispatcher->dispatch(OnAuthenticationSuccessEvent::NAME, $event);
         
@@ -79,8 +83,8 @@ class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
         // on success, let the request continue
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception) {
-         
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
         $event = new OnAuthenticationFailureEvent($request, $exception);
         $this->dispatcher->dispatch(OnAuthenticationFailureEvent::NAME, $event);
 
@@ -95,23 +99,27 @@ class RsaAuthenticator extends AbstractFormLoginAuthenticator implements LogoutS
 //        return new RedirectResponse($url);
 //    }
 
-    public function supportsRememberMe() {
+    public function supportsRememberMe()
+    {
         return false;
     }
 
     //implementation LogoutSuccessHandlerInterface
-    public function onLogoutSuccess(Request $request) {
+    public function onLogoutSuccess(Request $request)
+    {
         $redirect = (isset($_SERVER['HTTP_FREDUURLRETOUR'])) ? $_SERVER['HTTP_FREDUURLRETOUR'] : $this->config['rsa']['logout_url'];
         return new RedirectResponse($redirect);
     }
 
-    protected function getLoginUrl() {
+    protected function getLoginUrl()
+    {
         $return_request = urlencode($this->returnRequest);
         $params = "?CT_ORIG_URL=" . $return_request;
         return $this->config['rsa']['login_url'] . $params;
     }
 
-    public function supports(Request $request) {
+    public function supports(Request $request)
+    {
         if (isset($this->config['environment']) && $this->config['environment'] == "test") {
             return false;
         }

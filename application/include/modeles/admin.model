@@ -1,0 +1,6 @@
+name : admin
+page_title : Administration de l'application
+description : Administration de l'application
+engine : blade
+params : params
+

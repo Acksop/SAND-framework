@@ -14,13 +14,14 @@ use Symfony\Component\DependencyInjection\ChildDefinition;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class SessionAuthExtension extends Extension {
+class SessionAuthExtension extends Extension
+{
 
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container) {
-
+    public function load(array $configs, ContainerBuilder $container)
+    {
         $configs[0]['environment'] = $container->getParameter("kernel.environment");
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -33,9 +34,9 @@ class SessionAuthExtension extends Extension {
 
         //definition du service d'authentification par défaut dans le cas où ce ne serait pas un service
         // fraichement créé par l'utilisateur dans le fichiers services.yaml
-        if(is_null($config["authentication_service"])){
+        if (is_null($config["authentication_service"])) {
             $authentication_service = "session_auth.authentification";
-        }else{
+        } else {
             $authentication_service = $config["authentication_service"];
         }
 
@@ -62,21 +63,21 @@ class SessionAuthExtension extends Extension {
                     ->addArgument(new Reference($authentication_service))
                     ->addArgument($config)
                     ->setPublic(false);
-        }else{
+        } else {
             $container->register('session_auth.user_provider', $config["provider"])
                 ->addArgument(new Reference($authentication_service))
                 ->addArgument($config)
                 ->setPublic(false);
         }
 
-        $container->setDefinition('session_auth.configuration', new \Symfony\Component\DependencyInjection\Definition( \App\Besancon\AuthBundle\DependencyInjection\Configuration::class) )
+        $container->setDefinition('session_auth.configuration', new \Symfony\Component\DependencyInjection\Definition(\App\Besancon\AuthBundle\DependencyInjection\Configuration::class))
                 ->setArguments([
                     $config,
         ]);
     }
 
-    public function getNamespace() {
+    public function getNamespace()
+    {
         return 'http://ac-besancon.fr/schema/dic/' . $this->getAlias();
     }
-
 }

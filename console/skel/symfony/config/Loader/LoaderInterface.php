@@ -26,7 +26,7 @@ interface LoaderInterface
      *
      * @throws \Exception If something went wrong
      */
-    public function load($resource, string $type = NULL);
+    public function load($resource, string $type = null);
 
     /**
      * Returns whether this class supports the given resource.
@@ -36,7 +36,7 @@ interface LoaderInterface
      *
      * @return bool True if this class supports the given resource, false otherwise
      */
-    public function supports($resource, string $type = NULL);
+    public function supports($resource, string $type = null);
 
     /**
      * Gets the loader resolver.

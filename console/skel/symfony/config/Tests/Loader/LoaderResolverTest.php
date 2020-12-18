@@ -34,7 +34,8 @@ class LoaderResolverTest extends TestCase
         $loader = $this->getMockBuilder('Symfony\Component\Config\Loader\LoaderInterface')->getMock();
         $loader->expects($this->once())->method('supports')->will($this->returnValue(true));
         $resolver = new LoaderResolver(array($loader));
-        $this->assertEquals($loader, $resolver->resolve(function () {}), '->resolve() returns the loader for the given resource');
+        $this->assertEquals($loader, $resolver->resolve(function () {
+        }), '->resolve() returns the loader for the given resource');
     }
 
     public function testLoaders()

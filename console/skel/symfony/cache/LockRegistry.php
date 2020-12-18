@@ -118,7 +118,9 @@ final class LockRegistry
             }
             static $signalingException, $signalingCallback;
             $signalingException = $signalingException ?? unserialize("O:9:\"Exception\":1:{s:16:\"\0Exception\0trace\";a:0:{}}");
-            $signalingCallback = $signalingCallback ?? function () use ($signalingException) { throw $signalingException; };
+            $signalingCallback = $signalingCallback ?? function () use ($signalingException) {
+                throw $signalingException;
+            };
 
             try {
                 $value = $pool->get($item->getKey(), $signalingCallback, 0);
@@ -142,7 +144,8 @@ final class LockRegistry
         if (null !== $h = self::$openedFiles[$key] ?? null) {
             return $h;
         }
-        set_error_handler(function () {});
+        set_error_handler(function () {
+        });
         try {
             $h = fopen(self::$files[$key], 'r+');
         } finally {

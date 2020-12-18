@@ -4,8 +4,8 @@ namespace App\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class AuthUser implements UserInterface{
-
+class AuthUser implements UserInterface
+{
     private $id;
     private $username;
     private $status;
@@ -14,7 +14,7 @@ class AuthUser implements UserInterface{
     private $credentials;
     private $roles = [];
 
-    public function __construct($id, $username,$credentials, array $roles = [])
+    public function __construct($id, $username, $credentials, array $roles = [])
     {
         $this->username = $username;
         $this->id = $id;
@@ -27,7 +27,7 @@ class AuthUser implements UserInterface{
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        if($this->getId() == 1587184) {
+        if ($this->getId() == 1587184) {
             $roles[] = 'ROLE_ADMIN';
         }
         return array_unique($roles);
@@ -43,7 +43,8 @@ class AuthUser implements UserInterface{
         return $this->username;
     }
 
-    public function getUser(){
+    public function getUser()
+    {
         return $this;
     }
 
@@ -93,5 +94,4 @@ class AuthUser implements UserInterface{
 
         return true;
     }
-
 }

@@ -94,8 +94,12 @@ abstract class AbstractFindAdapter extends AbstractAdapter
         $command->setErrorHandler(
             $this->ignoreUnreadableDirs
                 // If directory is unreadable and finder is set to ignore it, `stderr` is ignored.
-                ? function ($stderr) { return; }
-                : function ($stderr) { throw new AccessDeniedException($stderr); }
+                ? function ($stderr) {
+                    return;
+                }
+                : function ($stderr) {
+                    throw new AccessDeniedException($stderr);
+                }
         );
 
         $paths = $this->shell->testCommand('uniq') ? $command->add('| uniq')->execute() : array_unique($command->execute());
@@ -181,7 +185,8 @@ abstract class AbstractFindAdapter extends AbstractAdapter
 
             $command
                 ->add($i > 0 ? '-or' : null)
-                ->add($expr->isRegex()
+                ->add(
+                    $expr->isRegex()
                     ? ($expr->isCaseSensitive() ? '-regex' : '-iregex')
                     : ($expr->isCaseSensitive() ? '-name' : '-iname')
                 )
@@ -223,7 +228,8 @@ abstract class AbstractFindAdapter extends AbstractAdapter
 
             $command
                 ->add($i > 0 ? '-or' : null)
-                ->add($expr->isRegex()
+                ->add(
+                    $expr->isRegex()
                     ? ($expr->isCaseSensitive() ? '-regex' : '-iregex')
                     : ($expr->isCaseSensitive() ? '-path' : '-ipath')
                 )

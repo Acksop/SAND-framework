@@ -15,7 +15,8 @@ namespace App\Session\AuthBundle\Security\Abstracts;
 use App\Session\AuthBundle\Utils\Config;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthFinal extends AuthAbstract {
+class AuthFinal extends AuthAbstract
+{
 
     /**
      * Intancie le getters en fonction de la configuration
@@ -33,7 +34,8 @@ class AuthFinal extends AuthAbstract {
      * @return void
      *
      * */
-    public function setGetterAttributes($config) {
+    public function setGetterAttributes($config)
+    {
         $type_auth = Config::getDeclaredType($config);
         //dump('calls');
         $getters = "\App\Session\AuthBundle\Security\Getters\\" . $type_auth . "Attributes";
@@ -55,7 +57,8 @@ class AuthFinal extends AuthAbstract {
      * @return Symfony\Component\HttpFoundation\Response
      *
      * */
-    public function onAuthenticationFailure(\Symfony\Component\Security\Core\Exception\AuthenticationException $exception) {
+    public function onAuthenticationFailure(\Symfony\Component\Security\Core\Exception\AuthenticationException $exception)
+    {
         return new Response($exception->getMessage(), Response::HTTP_FORBIDDEN);
     }
 
@@ -76,12 +79,12 @@ class AuthFinal extends AuthAbstract {
      * @return \Symfony\Component\Security\Core\User\UserInterface
      *
      */
-    public function getUser($username) {
+    public function getUser($username)
+    {
         $roles_service = $this->getRoles();
         $roles = (!is_null($roles_service) && is_array($roles_service)) ? $roles_service : array();
         $user = new \App\Besancon\AuthBundle\Security\User\AuthUser($username, md5("8sQaz87dPPsdanYakq86f" . $username), $roles);
 
         return $user;
     }
-
 }

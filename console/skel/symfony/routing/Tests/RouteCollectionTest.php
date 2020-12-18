@@ -98,8 +98,11 @@ class RouteCollectionTest extends TestCase
         $collection->addCollection($collection1);
         $collection->add('last', $last = new Route('/last'));
 
-        $this->assertSame(['bar' => $bar, 'foo' => $foo, 'grandchild' => $grandchild, 'last' => $last], $collection->all(),
-            '->addCollection() imports routes of another collection, overrides if necessary and adds them at the end');
+        $this->assertSame(
+            ['bar' => $bar, 'foo' => $foo, 'grandchild' => $grandchild, 'last' => $last],
+            $collection->all(),
+            '->addCollection() imports routes of another collection, overrides if necessary and adds them at the end'
+        );
     }
 
     public function testAddCollectionWithResources()
@@ -117,25 +120,38 @@ class RouteCollectionTest extends TestCase
         $collection = new RouteCollection();
         $collection->add('foo', new Route('/{placeholder}'));
         $collection1 = new RouteCollection();
-        $collection1->add('bar', new Route('/{placeholder}',
-            ['_controller' => 'fixed', 'placeholder' => 'default'], ['placeholder' => '.+'], ['option' => 'value'])
+        $collection1->add(
+            'bar',
+            new Route(
+            '/{placeholder}',
+            ['_controller' => 'fixed', 'placeholder' => 'default'],
+            ['placeholder' => '.+'],
+            ['option' => 'value']
+        )
         );
         $collection->addCollection($collection1);
 
         $collection->addDefaults(['placeholder' => 'new-default']);
         $this->assertEquals(['placeholder' => 'new-default'], $collection->get('foo')->getDefaults(), '->addDefaults() adds defaults to all routes');
-        $this->assertEquals(['_controller' => 'fixed', 'placeholder' => 'new-default'], $collection->get('bar')->getDefaults(),
-            '->addDefaults() adds defaults to all routes and overwrites existing ones');
+        $this->assertEquals(
+            ['_controller' => 'fixed', 'placeholder' => 'new-default'],
+            $collection->get('bar')->getDefaults(),
+            '->addDefaults() adds defaults to all routes and overwrites existing ones'
+        );
 
         $collection->addRequirements(['placeholder' => '\d+']);
         $this->assertEquals(['placeholder' => '\d+'], $collection->get('foo')->getRequirements(), '->addRequirements() adds requirements to all routes');
-        $this->assertEquals(['placeholder' => '\d+'], $collection->get('bar')->getRequirements(),
-            '->addRequirements() adds requirements to all routes and overwrites existing ones');
+        $this->assertEquals(
+            ['placeholder' => '\d+'],
+            $collection->get('bar')->getRequirements(),
+            '->addRequirements() adds requirements to all routes and overwrites existing ones'
+        );
 
         $collection->addOptions(['option' => 'new-value']);
         $this->assertEquals(
             ['option' => 'new-value', 'compiler_class' => 'Symfony\\Component\\Routing\\RouteCompiler'],
-            $collection->get('bar')->getOptions(), '->addOptions() adds options to all routes and overwrites existing ones'
+            $collection->get('bar')->getOptions(),
+            '->addOptions() adds options to all routes and overwrites existing ones'
         );
     }
 
@@ -180,8 +196,11 @@ class RouteCollectionTest extends TestCase
         $collection->addResource($bar = new FileResource(__DIR__.'/Fixtures/bar.xml'));
         $collection->addResource(new FileResource(__DIR__.'/Fixtures/foo.xml'));
 
-        $this->assertEquals([$foo, $bar], $collection->getResources(),
-            '->addResource() adds a resource and getResources() only returns unique ones by comparing the string representation');
+        $this->assertEquals(
+            [$foo, $bar],
+            $collection->getResources(),
+            '->addResource() adds a resource and getResources() only returns unique ones by comparing the string representation'
+        );
     }
 
     public function testUniqueRouteWithGivenName()

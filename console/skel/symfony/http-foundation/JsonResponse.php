@@ -123,7 +123,9 @@ class JsonResponse extends Response
                     // PHP 5.3 triggers annoying warnings for some
                     // types that can't be serialized as JSON (INF, resources, etc.)
                     // but doesn't provide the JsonSerializable interface.
-                    set_error_handler(function () { return false; });
+                    set_error_handler(function () {
+                        return false;
+                    });
                     $data = @json_encode($data, $this->encodingOptions);
                     restore_error_handler();
                 } elseif (\PHP_VERSION_ID < 50500) {

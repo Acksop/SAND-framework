@@ -47,7 +47,8 @@ class EnumNode extends ScalarNode
                 'The value %s is not allowed for path "%s". Permissible values: %s',
                 json_encode($value),
                 $this->getPath(),
-                implode(', ', array_map('json_encode', $this->values))));
+                implode(', ', array_map('json_encode', $this->values))
+            ));
             $ex->setPath($this->getPath());
 
             throw $ex;

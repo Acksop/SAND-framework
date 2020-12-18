@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-
 class AuthUserProvider implements UserProviderInterface
 {
 
@@ -24,16 +23,17 @@ class AuthUserProvider implements UserProviderInterface
      *
      * @throws UsernameNotFoundException if the user is not found
      */
-     public function loadUserByUsername($username) {
+    public function loadUserByUsername($username)
+    {
         $entity_user = $this->entity_user;
 
         return $this->authService->getUser($username);
-         // Load a User object from your data source or throw UsernameNotFoundException.
+        // Load a User object from your data source or throw UsernameNotFoundException.
          // The $username argument may not actually be a username:
          // it is whatever value is being returned by the getUsername()
          // method in your User class.
 //         throw new \Exception('TODO: fill in loadUserByUsername() inside '.__FILE__);
-     }
+    }
 
     /**
      * Refreshes the user after being reloaded from the session.
@@ -49,13 +49,15 @@ class AuthUserProvider implements UserProviderInterface
      * @return UserInterface
      */
 
-    public function refreshUser(UserInterface $user) {
+    public function refreshUser(UserInterface $user)
+    {
         $user = $this->_ctrlInstanceUser($user);
 
         return $this->loadUserByUsername($user->getUsername());
     }
 
-    private function _ctrlInstanceUser(UserInterface $user) {
+    private function _ctrlInstanceUser(UserInterface $user)
+    {
         $entity_user = $this->entity_user;
 
         if (!$user instanceof $entity_user) {
