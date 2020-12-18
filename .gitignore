@@ -1,7 +1,11 @@
-/composer.lock
-/vendor/*
+composer.lock
+vendor
+
 /_relicats
-/.idea
+
+.idea
+.vscode
+.DS_store
 
 /application/modules/phplist
 /application/modules/symfony
