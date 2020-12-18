@@ -9,9 +9,8 @@
     <meta name="description" lang="fr" content="{{$description}}"/>
 
     @section('top-css')
-        <link rel="stylesheet" href="/assets/css/main.css">
-        <link rel="stylesheet" href="/assets/css/plugins.css">
-        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
     @show
 
 </head>
@@ -24,11 +23,8 @@
 @yield('body')
 
 @section('bottom-javascript')
-    <script src="/assets/js/script.js" defer="defer"></script>
-    <script src="/assets/js/jquery.js"></script>
-    <script src="/assets/js/plugins.js"></script>
-    <!--Template functions-->
-    <script src="/assets/js/functions.js"></script>
+    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
 @show
 
 </body>
