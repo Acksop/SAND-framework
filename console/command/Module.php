@@ -174,7 +174,7 @@ class Module
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wordpress/ wordpress');
         print $git_ln_1;
 
-        $languages = shell_exec('cp '.CONSOLE_PATH.'/skel/wordpress '.MODULES_PATH);
+        $languages = shell_exec('cp '.CONSOLE_PATH.'/skel/wordpress '.MODULES_PATH.'-Rf');
 
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wordpress.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/wordpress.php');
@@ -227,7 +227,7 @@ class Module
         print $git_chmod;
         $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/prestashop -R');
         print $git_chown;
-        $git_ln_2 = shell_exec('cd '.MODULES_PATH.'/prestashop && ln -s ../prestashop/ prestashop');
+        $git_ln_2 = shell_exec('cd '.MODULES_PATH.'/prestashop -Rf && ln -s ../prestashop/ prestashop');
         print $git_ln_2;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/prestashop.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/prestashop.php');
