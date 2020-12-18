@@ -20,3 +20,7 @@ vendor
 /public/wordpress/wp-content/themes/*
 /public/wordpress/wp-includes/css/*
 /public/wordpress/wp-includes/js/*
+=======
+.idea
+.php_cs.cache
+>>>>>>> master-dev
