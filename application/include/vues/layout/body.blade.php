@@ -10,6 +10,8 @@
                 <ul class="top-menu">
                     <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
                     <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
+                    <li @if($name == 'docs') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
+                    <li @if($name == 'beers') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'beers', []) }}">Support</a></li>
                 </ul>
             </div>
         </div>
@@ -37,7 +39,7 @@
                         <div class="container">
                             <nav>
                                 <ul>
-                                    <li @if($name == 'search') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
+                                    <li @if($name == 'index') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
                                     <li @if($name == 'admin') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
                                 </ul>
                             </nav>
