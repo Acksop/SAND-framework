@@ -11,6 +11,72 @@
 dl, ol, ul {
     margin: 0;
 }
+/** BRAND **/
+#logo {
+    float: left;
+}
+#logo > a {
+    color: white;
+    font-size: 2rem;
+    text-transform: capitalize;
+    text-decoration: none;
+}
+/** Footer **/
+.footer-content{
+    padding-top: 25px;
+    background-color: whitesmoke;
+}
+.copyright-content{
+    background-color: lightgrey;
+}
+/** Donate Footer **/
+.section-title {
+    text-align:center;
+    font-family:Panton,sans-serif;
+    font-size:5rem;
+    color:slategrey;
+    padding-top:1rem;
+    padding-bottom:1rem
+}
+.button:focus,.button:hover {
+    text-decoration: none;
+    color: #ff974a;
+}
+.button-secondary {
+    background: #f48d40;
+}
+.button{
+    background: antiquewhite;
+    color: whitesmoke;
+}
+.beer-button {
+    display: inline-block;
+    position: relative;
+    width: 250px;
+    border: 2px solid transparent;
+    margin: 0 auto;
+    margin-left: auto;
+    padding: 23px 30px;
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.2;
+    text-decoration: none;
+    border-radius: 50px;
+    text-align: center;
+    -webkit-transition: color 150ms,background-color 150ms;
+    -o-transition: color 150ms,background-color 150ms;
+    transition: color 150ms,background-color 150ms;
+}
+.donate-footer {
+    text-align: center;
+    background: antiquewhite;
+}
+/** Content **/
+#page-content {
+    padding-bottom: 2rem;
+}
+
 /** Sub Menu top bar, invisible on mobile **/
 .top-menu{
     display: flex;
@@ -36,7 +102,17 @@ nav > ul > li {
 nav > ul > li:hover{
     background-color: slategrey;
 }
-
+nav > ul > li > a {
+    color: white;
+    text-decoration: none;
+}
+ul.top-menu > li > a {
+    color: white;
+    text-decoration: none;
+}
+li.actual > a {
+    color: darkslateblue !important;
+}
 /** Liens de la page actuelle **/
 .actual{
     background-color: white;

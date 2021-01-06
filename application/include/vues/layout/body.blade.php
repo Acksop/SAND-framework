@@ -8,10 +8,11 @@
              style="background: rgba(0, 0, 0, 0.59);">
             <div class="container">
                 <ul class="top-menu">
-                    <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
+                    <li @if($name == 'docs_route' || $name == 'docs_name_route') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
+                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist/SAND-FrameWork', []) }}">Dépot</a></li>
+                    <li @if($name == 'donate') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
                     <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
-                    <li @if($name == 'docs') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
-                    <li @if($name == 'beers') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'beers', []) }}">Support</a></li>
+                    <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
                 </ul>
             </div>
         </div>
@@ -21,14 +22,6 @@
                 style="background: rgba(0, 0, 0, 0.59);">
             <div class="header-inner">
                 <div class="container">
-                    <!--Logo-->
-                    <div id="logo">
-                        <a href="#">
-                            <span class="logo-default"></span>
-                            <span class="logo-dark"></span>
-                        </a>
-                    </div>
-                    <!--End: Logo-->
                     <!--Navigation Resposnive Trigger-->
                     <div id="mainMenu-trigger">
                         <a class="lines-button x"><span class="lines"></span></a>
@@ -37,6 +30,13 @@
                     <!--Navigation-->
                     <div id="mainMenu">
                         <div class="container">
+                            <!--Logo-->
+                            <div id="logo">
+                                <a href="#">
+                                    SAND Framework
+                                </a>
+                            </div>
+                            <!--end: logo-->
                             <nav>
                                 <ul>
                                     <li @if($name == 'index') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
@@ -62,19 +62,34 @@
             <div class="footer-content">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-5">
+                        <div class="col-lg-3">
                             <div class="widget">
                                 <div class="widget-title"></div>
                                 <p class="mb-5">
-                                    <img src="{{ \MVC\Classe\Url::asset_rewrite('assets/img/beer.svg') }}" width="150">
+                                    <img src="{{ \MVC\Classe\Url::asset_rewrite('assets/img/1007698-ffeb3b.svg') }}" width="150">
                                 </p>
                             </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <p>
+                                SAND FrameWork is an CC-licensed or MIT-licenced open source project and completely free to use.
+                            </p>
+                            <p>
+                                However, the amount of effort needed to maintain and develop new features for the project is not
+                                sustainable without proper financial backing.
+                                You can support its ongoing development by being a backer or a sponsor on
+                                <a href="https://www.patreon.com/">Patreon campaign</a>
+                                (recurring, with perks for different tiers), and get your company logo here.
+                            </p>
+                            <p>
+                                Also, you can make a <a href="https://www.paypal.me/">one time donation via PayPal</a>.
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="copyright-content">
                     <div class="container">
-                        <div class="copyright-text text-center">&copy; 2020-2021 Built with SAND Framework - Responsive FrameWork Template.</div>
+                        <div class="copyright-text text-center">&copy; 2020-2021 Built with SAND Framework - Responsive SAND Template.</div>
                     </div>
                 </div>
             </div>

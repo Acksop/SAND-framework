@@ -23,6 +23,7 @@ class Controlleur
                 // no break
             default:
                 if ($application->route != null) {
+                    $application->url->page['name'] = $application->route['_route'];
                     $conduit = explode('::', $application->route['controller']);
                     require CONDUIT_PATH . DIRECTORY_SEPARATOR . $conduit[0] . '.php';
                     $conduitRoute = "\\" . $conduit[0];

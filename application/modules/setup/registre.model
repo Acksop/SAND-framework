@@ -4,3 +4,4 @@ prestashop : Application permettant de générer une site e-commerce prestashop
 phplist : Application permettant de générer une newsletter phplist
 wanewsletter : Application permettant de générer une newsletter wanewsletter
 phpmynewsletter : Application permettant de générer une newsletter phpmynewsletter
+gitlist : Application permettant de générer un dépot git

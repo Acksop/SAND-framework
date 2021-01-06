@@ -15,6 +15,8 @@ class Modular
 
         $this->app = $appName;
         switch ($type) {
+            case "gitlist":
+                break;
             case "symfony":
                 break;
             case "wordpress":
@@ -91,9 +93,12 @@ class Modular
     public function load($type = "symfony")
     {
         switch ($type) {
+            case "gitlist":
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "index.php";
+                break;
             case "symfony":
-            require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
-            break;
+                require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
+                break;
             case "wordpress":
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
