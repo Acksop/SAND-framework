@@ -92,6 +92,8 @@ class Modular
 
     public function load($type = "symfony")
     {
+        ob_start();
+
         switch ($type) {
             case "gitlist":
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "index.php";
@@ -115,5 +117,10 @@ class Modular
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
         }
+
+        $data = ob_get_contents();
+        ob_end_clean();
+
+        return $data;
     }
 }
