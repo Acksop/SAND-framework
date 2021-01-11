@@ -15,7 +15,7 @@ class ControlleurAction
             $slot = new $class();
             if (isset($action[1])) {
                 $method = $action[1];
-                return $slot->$method($data);
+                return $slot->$method(...$data);
             } else {
                 return $slot->default($data);
             }

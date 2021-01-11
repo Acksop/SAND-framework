@@ -28,6 +28,10 @@ class Bdd
         return $req;
     }
 
+    public function getLastInsertId(){
+        return $this->bdd->lastInsertId();
+    }
+
     /**
      *
      * Exemple:
