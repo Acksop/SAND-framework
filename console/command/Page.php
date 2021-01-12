@@ -17,36 +17,67 @@ class Page
         print "adding page...\n\n";
         print "Quel est le nom de la page a ajouter? ";
         $page = trim(fgets(STDIN));
-        
-        print "Es-ce une SPA vue.js?(Y,N) ";
+
+        /*print "Es-ce un template blade?(Y,N) Par defaut:Y ";
+        $template = trim(fgets(STDIN));
+        if($template == ''){
+            $template = 'Y';
+        }else if($template !== 'Y'){
+            $template = 'N';
+        }*/
+
+        print "Es-ce une SPA vue.js? (Y,N) Par defaut:N ";
         $vue = trim(fgets(STDIN));
-        if($vue !== 'Y'){
+        if($vue == ''){
+            $vue = 'N';
+        }else if($vue !== 'Y'){
             $vue = 'N';
         }
 
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/page.php '.CONTROLLERS_PATH.'/'.$page.'.php');
+        $shell_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/page.php '.CONTROLLERS_PATH.'/'.$page.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$page.'.php');
         $controlleur = preg_replace('%PAGE%', $page, $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/'.$page.'.php', $controlleur);
-        print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/page.model '.MODELS_PATH.'/'.$page.'.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/'.$page.'.model');
-        $controlleur = preg_replace('%PAGE%', $page, $controlleur);
-        file_put_contents(MODELS_PATH.'/'.$page.'.model', $controlleur);
-        print $git_modele;
+        print $shell_controlleur;
+
+        $shell_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/page.model '.MODELS_PATH.'/'.$page.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$page.'.model');
+        $modele = preg_replace('%PAGE%', $page, $modele);
+        file_put_contents(MODELS_PATH.'/'.$page.'.model', $modele);
+        print $shell_modele;
 
         if($vue == 'Y'){
-            $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
-            $controlleur = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
-            $controlleur = preg_replace('%PAGE%', $page, $controlleur);
-            file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $controlleur);
+            $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
         }else{
-            $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page-vuejs.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
-            $controlleur = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
-            $controlleur = preg_replace('%PAGE%', $page, $controlleur);
-            file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $controlleur);
+            $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page-vuejs.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
         }
-        print $git_view;
+        $view = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
+        $view = preg_replace('%PAGE%', $page, $view);
+        file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $view);
+        print $shell_view;
+    }
+    /**
+     * Dupliquer une page
+     */
+    public static function duplicate()
+    {
+        print "duplicating page...\n\n";
+        print "Quel est le nom de la page a dupliquer? ";
+        $handle = fopen("php://stdin", "r");
+        $page = fgets($handle);
+        print "Quel est le nouveau nom de la page? ";
+        $handle = fopen("php://stdin", "r");
+        $newpage = fgets($handle);
+
+        $controlleur = shell_exec('cp '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
+        print $controlleur;
+        $modele = shell_exec('cp '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$page.'.model');
+        $modele = preg_replace('name : '.$page, 'name : '.$newpage, $modele);
+        file_put_contents(MODELS_PATH.'/'.$page.'.model', $modele);
+        print $modele;
+        $view = shell_exec('cp '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        print $view;
     }
 
     /**
