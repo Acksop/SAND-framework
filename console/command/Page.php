@@ -17,6 +17,12 @@ class Page
         print "adding page...\n\n";
         print "Quel est le nom de la page a ajouter? ";
         $page = trim(fgets(STDIN));
+        
+        print "Es-ce une SPA vue.js?(Y,N) ";
+        $vue = trim(fgets(STDIN));
+        if($vue !== 'Y'){
+            $vue = 'N';
+        }
 
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/page.php '.CONTROLLERS_PATH.'/'.$page.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$page.'.php');
@@ -28,10 +34,18 @@ class Page
         $controlleur = preg_replace('%PAGE%', $page, $controlleur);
         file_put_contents(MODELS_PATH.'/'.$page.'.model', $controlleur);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
-        $controlleur = preg_replace('%PAGE%', $page, $controlleur);
-        file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $controlleur);
+
+        if($vue == 'Y'){
+            $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
+            $controlleur = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
+            $controlleur = preg_replace('%PAGE%', $page, $controlleur);
+            file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $controlleur);
+        }else{
+            $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page-vuejs.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
+            $controlleur = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
+            $controlleur = preg_replace('%PAGE%', $page, $controlleur);
+            file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $controlleur);
+        }
         print $git_view;
     }
 
