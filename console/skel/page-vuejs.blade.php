@@ -1,9 +1,9 @@
 @extends('body')
 
-@section('top-javascript'')
+@section('top-javascript')
     @parent
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
 @endsection
 
 @section('content')
@@ -18,19 +18,19 @@
                     <div>
                       <div>
                           <h2>
-                            {{ item.title }}
+                            @{{ item.title }}
                           </h2>
                         </div>
                     </div>
                     <div>
                         <p>
-                            {{ item.description.slice(0, 300) + "..." }}
+                            @{{ item.description.slice(0, 300) + "..." }}
                           </p>
                     </div>
                     <div>
-                      <span>Year : {{ item.release_date }}</span>
-                      <span>Director : {{ item.director }}</span>
-                      <span>Producer : {{ item.producer }}</span>
+                      <span>Year : @{{ item.release_date }}</span>
+                      <span>Director : @{{ item.director }}</span>
+                      <span>Producer : @{{ item.producer }}</span>
                     </div>
                 </a>
             </div>
@@ -38,7 +38,7 @@
         </div>
 @endsection
 
-@section('bottom-javascript'')
+@section('bottom-javascript')
     @parent
     <script>
         const vue = new Vue({

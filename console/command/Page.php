@@ -63,21 +63,40 @@ class Page
     {
         print "duplicating page...\n\n";
         print "Quel est le nom de la page a dupliquer? ";
-        $handle = fopen("php://stdin", "r");
-        $page = fgets($handle);
+        $page = trim(fgets(STDIN));
         print "Quel est le nouveau nom de la page? ";
-        $handle = fopen("php://stdin", "r");
-        $newpage = fgets($handle);
+        $newpage = trim(fgets(STDIN));
 
-        $controlleur = shell_exec('cp '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
-        print $controlleur;
-        $modele = shell_exec('cp '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
-        $modele = file_get_contents(MODELS_PATH.'/'.$page.'.model');
-        $modele = preg_replace('name : '.$page, 'name : '.$newpage, $modele);
-        file_put_contents(MODELS_PATH.'/'.$page.'.model', $modele);
-        print $modele;
-        $view = shell_exec('cp '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
-        print $view;
+        $shell_controlleur = shell_exec('cp '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
+        print $shell_controlleur;
+        $shell_modele = shell_exec('cp '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$newpage.'.model');
+        $modele = preg_replace('/name : '.$page.'/', 'name : '.$newpage, $modele);
+        file_put_contents(MODELS_PATH.'/'.$newpage.'.model', $modele);
+        print $shell_modele;
+        $shell_view = shell_exec('cp '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        print $shell_view;
+    }
+    /**
+     * Dupliquer une page
+     */
+    public static function rename()
+    {
+        print "renaming page...\n\n";
+        print "Quel est le nom de la page a renommer? ";
+        $page = trim(fgets(STDIN));
+        print "Quel est le nouveau nom de la page? ";
+        $newpage = trim(fgets(STDIN));
+
+        $shell_controlleur = shell_exec('mv '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
+        print $shell_controlleur;
+        $shell_modele = shell_exec('mv '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$newpage.'.model');
+        $modele = preg_replace('/name : '.$page.'/', 'name : '.$newpage, $modele);
+        file_put_contents(MODELS_PATH.'/'.$newpage.'.model', $modele);
+        print $shell_modele;
+        $shell_view = shell_exec('mv '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        print $shell_view;
     }
 
     /**
@@ -87,13 +106,12 @@ class Page
     {
         print "removing page...\n\n";
         print "Quel est le nom de la page a supprimer? ";
-        $handle = fopen("php://stdin", "r");
-        $page = fgets($handle);
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/'.$page.'.php', $git_controlleur_retval);
-        print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/'.$page.'.model', $git_modele_retval);
-        print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/'.$page.'.blade.php', $git_view_retval);
-        print $git_view_retval;
+        $page = trim(fgets(STDIN));
+        $shell_controlleur = shell_exec('rm -f '.CONTROLLERS_PATH.'/'.$page.'.php');
+        print $shell_controlleur;
+        $shell_modele = shell_exec('rm -f '.MODELS_PATH.'/'.$page.'.model');
+        print $shell_modele;
+        $shell_view = shell_exec('rm -f '.VIEW_PATH.'/view/'.$page.'.blade.php');
+        print $shell_view;
     }
 }
