@@ -1,3 +1,0 @@
-#besancon_auth_homepage:
-#    path:     /
-#    defaults: { _controller: BesanconAuthBundle:Default:index }
