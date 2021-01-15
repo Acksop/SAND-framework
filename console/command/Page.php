@@ -46,7 +46,7 @@ class Page
         file_put_contents(MODELS_PATH.'/'.$page.'.model', $modele);
         print $shell_modele;
 
-        if($vue == 'Y'){
+        if($vue == 'N'){
             $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
         }else{
             $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page-vuejs.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
