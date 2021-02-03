@@ -25,6 +25,11 @@ class Bdd
     public function faireSQLRequete($sql)
     {
         $req = $this->bdd->query($sql);
+        // Print Pdo::ERRORs
+        if (!$req && (ENV == 'TEST' || ENV == 'DEV')) {
+            echo "\nPDO::errorInfo():\n";
+            print_r($this->bdd->errorInfo());
+        }
         return $req;
     }
 
@@ -57,6 +62,11 @@ class Bdd
             }
         }
         $req->execute();
+        // Print Pdo::ERRORs
+        if (!$req && (ENV == 'TEST' || ENV == 'DEV')) {
+            echo "\nPDO::errorInfo():\n";
+            print_r($this->bdd->errorInfo());
+        }
         //$req->closeCursor();
         return $req;
     }

@@ -1,5 +1,4 @@
 name : error
-page_title: Erreurs de l'application
-description : abracadabla
-engine : blade
+page_title: Page 404 (Page Non Trouvé) de l'application
+description : Page 404 (Page Non Trouvé) de l'application
 params : params

@@ -53,7 +53,7 @@ class DefaultAction extends Action
         return $this->render('action', array('var1' => $var1, 'var2' => $var2, 'var3' => $var3));
     }
 
-    public function makeHttp11($data)
+    public function makeHttp11()
     {
         $data = array('myval' => 25);
         //Dumper::dump($data);
@@ -61,7 +61,7 @@ class DefaultAction extends Action
         $request = new HttpMethodRequete();
         $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->get($data);
         $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->post($data);
-        $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10' => 'val10']))->put($data);
+        $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->put($data);
         $request->setUrl(Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->delete($data);
     }
 }

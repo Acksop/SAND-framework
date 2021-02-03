@@ -7,5 +7,7 @@
 //          ou : "my-app/dev/
 define("BASE_SERVER_DIRECTORY", "");
 
-// Optionnel! il n'est nécessaire que si vous l'utilisez dans les fichier de traitement
+// Optionnel! il n'est nécessaire que si vous l'utilisez dans les fichiers de traitement
 define('PATH_URL', $_SERVER['REQUEST_SCHEME'] . "://www.domain.org");
+
+define('ENV', "TEST");

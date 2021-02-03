@@ -9,7 +9,7 @@
             <div class="container">
                 <ul class="top-menu">
                     <li @if($name == 'docs_route' || $name == 'docs_name_route') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
-                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist/SAND-FrameWork', []) }}">D�pot</a></li>
+                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist/SAND-FrameWork', []) }}">Dépot</a></li>
                     <li @if($name == 'donate') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
                     <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                     <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
@@ -50,10 +50,29 @@
             </div>
         </header>
         <!-- end: Header -->
-
+        <!-- Subbar -->
+        <div id="sub-bar" class="fullwidth">
+            <div class="container">
+                <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>
+                <span style="float:right;"><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
+            </div>
+        </div>
+        <!-- end: Subbar -->
         <section id="page-content">
             <div class="container">
+
+                <!--Alerts-->
+                @if(isset($_SESSION['alerts']))
+                    @foreach($_SESSION['alerts'] as $alert)
+                        <div class="alert alert-{{$alert['type']}} alert-dismissible fade show" role="alert">
+                            <strong>{{$alert['title']}}</strong> {{$alert['message']}}.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endforeach
+                @endif
+                <!--end: Alerts-->
                 @yield('content')
+
             </div>
         </section>
 
