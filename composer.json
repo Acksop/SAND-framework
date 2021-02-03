@@ -8,6 +8,7 @@
       ],
       "psr-4": {
           "MVC\\Classe\\" : "./application/class",
+          "MVC\\Object\\" : "./application/objets",
           "MVC\\Domain\\" : "./domain",
           "MVC\\Command\\": "./console/command"
       }
