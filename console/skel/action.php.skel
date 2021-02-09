@@ -1,0 +1,12 @@
+<?php
+
+class %%ACTION%%Action extends MVC\Classe\Implement\Action
+{
+
+    public function render()
+    {
+        return $this->render('', array());
+    }
+
+
+}

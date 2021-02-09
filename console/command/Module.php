@@ -117,17 +117,17 @@ class Module
         print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module_symfony.php '.CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
-        $controlleur = preg_replace('%MODULE%', $name, $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', $name, $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/'.$name.'.model');
         $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
-        $modele = preg_replace('%MODULE%', $name, $modele);
+        $modele = preg_replace('%%MODULE%%', $name, $modele);
         file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
         $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.blade.php');
-        $vue = preg_replace('%MODULE%', 'symfony', $vue);
+        $vue = preg_replace('%%MODULE%%', 'symfony', $vue);
         file_put_contents(VIEW_PATH.'/view/'.$name.'.blade.php', $vue);
         print $git_view;
 
@@ -178,17 +178,17 @@ class Module
 
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wordpress.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/wordpress.php');
-        $controlleur = preg_replace('%MODULE%', 'wordpress', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'wordpress', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/wordpress.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wordpress.model');
         $modele = file_get_contents(MODELS_PATH.'/wordpress.model');
-        $modele = preg_replace('%MODULE%', 'wordpress', $modele);
+        $modele = preg_replace('%%MODULE%%', 'wordpress', $modele);
         file_put_contents(MODELS_PATH.'/wordpress.model', $modele);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wordpress.blade.php');
         $vue = file_get_contents(VIEW_PATH.'/view/wordpress.blade.php');
-        $vue = preg_replace('%MODULE%', 'wordpress', $vue);
+        $vue = preg_replace('%%MODULE%%', 'wordpress', $vue);
         file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
         print $git_view;
 
@@ -231,17 +231,17 @@ class Module
         print $git_ln_2;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/prestashop.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/prestashop.php');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'prestashop', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/prestashop.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/prestashop.model');
         $controlleur = file_get_contents(MODELS_PATH.'/prestashop.model');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'prestashop', $controlleur);
         file_put_contents(MODELS_PATH.'/prestashop.model', $controlleur);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/prestashop.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/prestashop.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'prestashop', $controlleur);
         file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
         print $git_view;
 
@@ -292,17 +292,17 @@ class Module
         print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phplist.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/phplist.php');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phplist', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/phplist.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phplist.model');
         $controlleur = file_get_contents(MODELS_PATH.'/phplist.model');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phplist', $controlleur);
         file_put_contents(MODELS_PATH.'/phplist.model', $controlleur);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phplist.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/phplist.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phplist', $controlleur);
         file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
         print $git_view;
 
@@ -382,17 +382,17 @@ class Module
         print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wanewsletter.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/wanewsletter.php');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'wanewsletter', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/wanewsletter.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wanewsletter.model');
         $controlleur = file_get_contents(MODELS_PATH.'/wanewsletter.model');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'wanewsletter', $controlleur);
         file_put_contents(MODELS_PATH.'/wanewsletter.model', $controlleur);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wanewsletter.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/wanewsletter.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'wanewsletter', $controlleur);
         file_put_contents(VIEW_PATH.'/view/wanewsletter.blade.php', $controlleur);
         print $git_view;
 
@@ -470,17 +470,17 @@ class Module
         print $git_chown;
         $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phpmynewsletter.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/phpmynewsletter.php');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phpmynewsletter', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/phpmynewsletter.php', $controlleur);
         print $git_controlleur;
         $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phpmynewsletter.model');
         $controlleur = file_get_contents(MODELS_PATH.'/phpmynewsletter.model');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phpmynewsletter', $controlleur);
         file_put_contents(MODELS_PATH.'/phpmynewsletter.model', $controlleur);
         print $git_modele;
         $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phpmynewsletter.blade.php');
         $controlleur = file_get_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('%%MODULE%%', 'phpmynewsletter', $controlleur);
         file_put_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php', $controlleur);
         print $git_view;
 

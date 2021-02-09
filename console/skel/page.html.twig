@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block top-css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block top-javascript %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bottom-javascript %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <h1>%%PAGE%%</h1>
+    <p class="important">
+        Welcome to my awesome homepage.
+    </p>
+{% endblock %}

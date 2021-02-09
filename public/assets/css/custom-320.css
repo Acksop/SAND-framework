@@ -1,0 +1,32 @@
+/* 
+
+1. Add your custom Css styles below
+2. Place the this code in your template: 
+
+ <link href="asset/css/custom.css" rel="stylesheet">
+
+*/
+
+@media (max-width: 540px) {
+    table.contour_table tr td {
+        display: block;
+        text-align: center;
+    }
+    table.contour_table tr th {
+        display: block;
+        text-align: center;
+    }
+    .nav-link{
+        color:slategray !important;
+    }
+    .nav-link:hover{
+        color:darkslategray !important;
+    }
+    .nav-item {
+        background-color: white !important;
+    }
+    .navbar {
+        background-color: darkslateblue;
+        z-index: 100;
+    }
+}

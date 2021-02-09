@@ -51,13 +51,34 @@
         </header>
         <!-- end: Header -->
         <!-- Subbar -->
-        <div id="sub-bar" class="fullwidth">
+        <div id="subbar" class="fullwidth">
             <div class="container">
                 <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>
                 <span style="float:right;"><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
             </div>
         </div>
         <!-- end: Subbar -->
+
+        <!-- Breadcrumbs -->
+        @if (isset($ariane))
+            <div id="breadcrumbs" class="fullwidth">
+                <div class="container">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            @foreach($ariane as $value)
+                                @if($value == end($ariane))
+                                    <li class="breadcrumb-item active" aria-current="page">{{$value}}</li>
+                                @else
+                                    <li class="breadcrumb-item"><a href="{{\MVC\Classe\Url::link_rewrite(false,$arianelink[array_search($value,$ariane)])}}">{{$value}}</a></li>
+                                @endif
+                            @endforeach
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        @endif
+        <!-- end: BreadCrumbs -->
+
         <section id="page-content">
             <div class="container">
 

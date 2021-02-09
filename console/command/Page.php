@@ -9,51 +9,60 @@ class Page
         print "explaination of the command\n\n";
     }
 
-    /**
-     * TODO: ajouter en fonction du type de template  (blade ou twig)
-     */
     public static function add()
     {
         print "adding page...\n\n";
         print "Quel est le nom de la page a ajouter? ";
         $page = trim(fgets(STDIN));
 
-        /*print "Es-ce un template blade?(Y,N) Par defaut:Y ";
+        print "Es-ce un template blade?(Y,N) Par defaut:Y ";
         $template = trim(fgets(STDIN));
-        if($template == ''){
-            $template = 'Y';
-        }else if($template !== 'Y'){
-            $template = 'N';
-        }*/
+        $vue = "";
+        if ($template == '' || $template == 'Y') {
+            $template = 'blade';
 
-        print "Es-ce une SPA vue.js? (Y,N) Par defaut:N ";
-        $vue = trim(fgets(STDIN));
-        if($vue == ''){
-            $vue = 'N';
-        }else if($vue !== 'Y'){
-            $vue = 'N';
+            print "Es-ce une SPA vue.js? (Y,N) Par defaut:N ";
+            $vue = trim(fgets(STDIN));
+            if ($vue == '') {
+                $vue = 'N';
+            } else if ($vue !== 'Y') {
+                $vue = 'N';
+            }
+
+        } else if ($template !== 'Y') {
+            $template = 'twig';
         }
 
-        $shell_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/page.php '.CONTROLLERS_PATH.'/'.$page.'.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$page.'.php');
-        $controlleur = preg_replace('%PAGE%', $page, $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/'.$page.'.php', $controlleur);
+
+        $shell_controlleur = shell_exec('cp ' . CONSOLE_PATH . '/skel/page.php ' . CONTROLLERS_PATH . '/' . $page . '.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH . '/' . $page . '.php');
+        $controlleur = preg_replace('%%PAGE%%', $page, $controlleur);
+        file_put_contents(CONTROLLERS_PATH . '/' . $page . '.php', $controlleur);
         print $shell_controlleur;
 
-        $shell_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/page.model '.MODELS_PATH.'/'.$page.'.model');
-        $modele = file_get_contents(MODELS_PATH.'/'.$page.'.model');
-        $modele = preg_replace('%PAGE%', $page, $modele);
-        file_put_contents(MODELS_PATH.'/'.$page.'.model', $modele);
+        $shell_modele = shell_exec('cp ' . CONSOLE_PATH . '/skel/page.model ' . MODELS_PATH . '/' . $page . '.model');
+        $modele = file_get_contents(MODELS_PATH . '/' . $page . '.model');
+        $modele = preg_replace('%%PAGE%%', $page, $modele);
+        $modele = preg_replace('%%ENGINE%%', $template, $modele);
+        file_put_contents(MODELS_PATH . '/' . $page . '.model', $modele);
         print $shell_modele;
 
-        if($vue == 'N'){
-            $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
+        if ($template == 'blade'){
+            if ($vue == 'N') {
+                $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
+            } else {
+                $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page-vuejs.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
+            }
+            $view = file_get_contents(VIEW_PATH . '/view/' . $page . '.blade.php');
+            $view = preg_replace('%%PAGE%%', $page, $view);
+            file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $view);
         }else{
-            $shell_view = shell_exec('cp '.CONSOLE_PATH.'/skel/page-vuejs.blade.php '.VIEW_PATH.'/view/'.$page.'.blade.php');
+            $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page.html.twig ' . VIEW_PATH . '/view/' . $page . '.html.twig');
+            $view = file_get_contents(VIEW_PATH . '/view/' . $page . '.html.twig');
+            $view = preg_replace('%%PAGE%%', $page, $view);
+            file_put_contents(VIEW_PATH.'/view/'.$page.'.html.twig', $view);
         }
-        $view = file_get_contents(VIEW_PATH.'/view/'.$page.'.blade.php');
-        $view = preg_replace('%PAGE%', $page, $view);
-        file_put_contents(VIEW_PATH.'/view/'.$page.'.blade.php', $view);
+
         print $shell_view;
     }
     /**

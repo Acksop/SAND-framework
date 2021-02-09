@@ -1,6 +1,7 @@
-name : PAGE
+name : %%PAGE%%
 page_title : module_title
 description : module_description
-engine : blade
-params : module_params
+engine : %%ENGINE%%
+ariane : {acceuil, %%PAGE%%}
+arianelink : {index, %%PAGE%%}
 

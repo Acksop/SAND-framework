@@ -55,6 +55,7 @@ dl, ol, ul {
     width: 250px;
     border: 2px solid transparent;
     margin: 0 auto;
+    margin-left: auto;
     padding: 23px 30px;
     color: #fff;
     font-weight: 400;
@@ -76,15 +77,24 @@ dl, ol, ul {
     padding-bottom: 2rem;
 }
 
-/** Sub Menu sub bar, visible on mobile **/
-#sub-bar{
-    height: 25px;
+/** SubBar **/
+#subbar{
+    height: 1.2rem;
     background-color: antiquewhite;
     font-size: 0.7rem;
-    margin-bottom: 2rem;
-    padding-top: 5px;
 }
-/** Sub Menu top bar , invisible on mobile **/
+/** Breadcrumbs **/
+#breadcrumbs{
+    clear:both;
+    height: 1.2rem;
+    background-color: whitesmoke;
+    font-size: 0.7rem;
+}
+/** Page content spacing **/
+#page-content{
+    padding-top: 2rem;
+}
+/** Top menu bar ,invisible on mobile**/
 .top-menu{
     display: flex;
     justify-content: end;
@@ -97,6 +107,14 @@ dl, ol, ul {
 .top-menu > li:hover{
     background-color: slategrey;
 }
+.top-menu > li > a{
+    color:darkslategray;
+    text-decoration: none;
+}
+.top-menu > li > a:hover{
+    color: black;
+}
+
 /** Menu de navigation **/
 nav > ul {
     display:flex;

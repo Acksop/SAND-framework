@@ -1,0 +1,25 @@
+<?php
+
+use MVC\Classe\Implement\Conduit;
+
+class %%CONDUIT%%Conduit extends Conduit
+{
+    // Route('/ajax/get-service/{$id}')
+    public function getService()
+    {
+
+        \MVC\Object\Session::checkACL_heberges();
+
+        if ($this->id != 'undefined') {
+            $bdd = new \MVC\Classe\Bdd();
+            $sql = "SELECT * FROM table WHERE id = '{$this->id}';";
+            $req = $bdd->faireSQLRequete($sql);
+            $data = $bdd->exploiterResultat($req);
+        } else {
+            $data = false;
+        }
+
+        return $this->render('', array());
+    }
+
+}

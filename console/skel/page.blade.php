@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <h1>%PAGE% Controlleur</h1>
+    <h1>%%PAGE%% Controlleur</h1>
 	<br/><br/><br/>
     @if (isset($id))
         {{$id}}
