@@ -6,7 +6,8 @@
 //          ou : "my-app/dev/
 define("BASE_SERVER_DIRECTORY", "");
 
-// Optionnel! il n'est nécessaire que si vous l'utilisez dans les fichiers de traitement
-define('PATH_URL', $_SERVER['REQUEST_SCHEME'] . "://localhost.localdomain");
+// Optionnel! il n'est nécessaire que si vous l'utilisez dans les fichiers de traitement ou dans une commande console
+// si vous l'utilisez dans les fichiers de traitement -> il est plus simple d'utiliser l'Objet page précédente
+define('PATH_URL',"http://www.domain.org");
 
 define('ENV', "DEV");

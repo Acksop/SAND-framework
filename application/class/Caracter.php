@@ -14,11 +14,11 @@ class Caracter
 
     public static function fp_stripslashes($str)
     {
-        if (get_magic_quotes_gpc() == 1) {
+        /*if (get_magic_quotes_gpc() == 1) {
             return stripslashes($str);
-        } else {
+        } else {*/
             return $str;
-        }
+        /*}*/
     }
 
     public static function normalise_ChaineDeCaracteresUpload($chaine)
@@ -28,11 +28,11 @@ class Caracter
 
     public static function fp_addslashes($str)
     {
-        if (get_magic_quotes_gpc() == 1) {
+        /*if (get_magic_quotes_gpc() == 1) {
             return $str;
-        } else {
+        } else {*/
             return addslashes($str);
-        }
+        /*}*/
     }
 
     public static function remplacerAccents($chaine)

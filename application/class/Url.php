@@ -184,18 +184,24 @@ class Url
 
     public static function absolute_link_rewrite($isControlPatern, $page, $params = array())
     {
-        $url = $_SERVER['HTTP_HOST'];
+        if(isset($_SERVER['HTTP_HOST'])) {
+            $url = $_SERVER['HTTP_HOST'];
+            if (isset($_SERVER['REQUEST_SCHEME'])) {
+                $scheme = $_SERVER['REQUEST_SCHEME'];
+            } else {
+                $scheme = 'http';
+            }
+            $base_url = $scheme . "://" . $url;
+        }else{
+            $base_url = PATH_URL;
+        }
         if ($isControlPatern) {
             $uri = self::controlLink_rewrite($page, $params);
         } else {
             $uri = self::link_rewrite_slashParam($page, $params);
         }
-        if (isset($_SERVER['REQUEST_SCHEME'])) {
-            $scheme = $_SERVER['REQUEST_SCHEME'];
-        } else {
-            $scheme = 'http';
-        }
 
-        return ($scheme . "://" . BASE_SERVER_DIRECTORY . $url . $uri);
+
+        return ( $base_url . BASE_SERVER_DIRECTORY  . $uri);
     }
 }
