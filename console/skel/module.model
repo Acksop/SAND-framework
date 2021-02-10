@@ -1,6 +1,7 @@
 name : %%MODULE%%
 page_title : module_title
 description : module_description
+engine : blade
 ariane : {%%MODULE%%}
 arianelink : {%%MODULE%%}
 

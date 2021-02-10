@@ -1,5 +1,5 @@
 composer.lock
-vendor
+/vendor
 .idea
 .php_cs.cache
 
@@ -9,3 +9,5 @@ application/config/bdd-parameters.php
 application/config/cas-authentification-config.php
 application/config/hybrid-authentification-config.php
 application/config/soap-constantes.php
+
+application/include/vues/cache/*
