@@ -1,4 +1,4 @@
-# Comment troller efficacement
+#BONUS - Comment troller efficacement
 ##prendre en compte l'aspect actuel de l'information
 >en effet si absolument rendre compte que l'information n'est basé sur les faits divers et principalement sur l'actualité économique. En effet la plupart des médias ne parlent pas de l'information économique et informatique. En faisant cela vous devriez voir les niche qui doivent être visé par la trool attitude. Principalement parlez des faits divers ne nourris pas le trool. Et ne permet pas efficacement de nourrir une informations qui serait humoristique. Ainsi un troll d'humour serait basé sur des fait divers détourné et des sites comme le _Gorafi_ et l'_Echo de la boucle_ sont des niches a trool.
 
