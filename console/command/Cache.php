@@ -6,7 +6,10 @@ class Cache
 {
     public static function help()
     {
-        print "explaination of the command\n\n";
+        print "Cette commande permet de vider le cache du framework\n\n";
+        print "Elle peut accepter les attributs suivants\n";
+        print "\t- clear : pour vider les logs et le cache des vues\n";
+        print "\t- stabilize : pour vider uniquement le cache des vues\n";
     }
 
     public static function clear()

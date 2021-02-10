@@ -6,7 +6,12 @@ class Page
 {
     public static function help()
     {
-        print "explaination of the command\n\n";
+        print "Cette commande permet de manipuler les pages du framework\n\n";
+        print "Elle peut accepter les attributs suivants\n";
+        print "\t- add : pour ajouter une page\n";
+        print "\t- remove : pour supprimer une page\n";
+        print "\t- duplicate : pour dupliquer une page\n";
+        print "\t- rename : pour renommer une page\n";
     }
 
     public static function add()
@@ -76,6 +81,14 @@ class Page
         print "Quel est le nouveau nom de la page? ";
         $newpage = trim(fgets(STDIN));
 
+        print "Es-ce un template blade?(Y,N) Par defaut:Y ";
+        $template = trim(fgets(STDIN));
+        if ($template == '' || $template == 'Y') {
+            $template = 'blade';
+        } else if ($template !== 'Y') {
+            $template = 'twig';
+        }
+
         $shell_controlleur = shell_exec('cp '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
         print $shell_controlleur;
         $shell_modele = shell_exec('cp '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
@@ -83,7 +96,11 @@ class Page
         $modele = preg_replace('/name : '.$page.'/', 'name : '.$newpage, $modele);
         file_put_contents(MODELS_PATH.'/'.$newpage.'.model', $modele);
         print $shell_modele;
-        $shell_view = shell_exec('cp '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        if ($template == 'blade') {
+            $shell_view = shell_exec('cp ' . VIEW_PATH . '/view/' . $page . '.blade.php ' . VIEW_PATH . '/view/' . $newpage . '.blade.php');
+        }else{
+            $shell_view = shell_exec('cp ' . VIEW_PATH . '/view/' . $page . '.html.twig ' . VIEW_PATH . '/view/' . $newpage . '.html.twig');
+        }
         print $shell_view;
     }
     /**
@@ -97,6 +114,14 @@ class Page
         print "Quel est le nouveau nom de la page? ";
         $newpage = trim(fgets(STDIN));
 
+        print "Es-ce un template blade?(Y,N) Par defaut:Y ";
+        $template = trim(fgets(STDIN));
+        if ($template == '' || $template == 'Y') {
+            $template = 'blade';
+        } else if ($template !== 'Y') {
+            $template = 'twig';
+        }
+
         $shell_controlleur = shell_exec('mv '.CONTROLLERS_PATH.'/'.$page.'.php '.CONTROLLERS_PATH.'/'.$newpage.'.php');
         print $shell_controlleur;
         $shell_modele = shell_exec('mv '.MODELS_PATH.'/'.$page.'.model '.MODELS_PATH.'/'.$newpage.'.model');
@@ -104,7 +129,11 @@ class Page
         $modele = preg_replace('/name : '.$page.'/', 'name : '.$newpage, $modele);
         file_put_contents(MODELS_PATH.'/'.$newpage.'.model', $modele);
         print $shell_modele;
-        $shell_view = shell_exec('mv '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        if ($template == 'blade') {
+            $shell_view = shell_exec('mv '.VIEW_PATH.'/view/'.$page.'.blade.php '.VIEW_PATH.'/view/'.$newpage.'.blade.php');
+        }else {
+            $shell_view = shell_exec('mv '.VIEW_PATH.'/view/'.$page.'.html.twig '.VIEW_PATH.'/view/'.$newpage.'.html.twig');
+        }
         print $shell_view;
     }
 
@@ -116,11 +145,23 @@ class Page
         print "removing page...\n\n";
         print "Quel est le nom de la page a supprimer? ";
         $page = trim(fgets(STDIN));
+
+        print "Es-ce un template blade?(Y,N) Par defaut:Y ";
+        $template = trim(fgets(STDIN));
+        if ($template == '' || $template == 'Y') {
+            $template = 'blade';
+        } else if ($template !== 'Y') {
+            $template = 'twig';
+        }
         $shell_controlleur = shell_exec('rm -f '.CONTROLLERS_PATH.'/'.$page.'.php');
         print $shell_controlleur;
         $shell_modele = shell_exec('rm -f '.MODELS_PATH.'/'.$page.'.model');
         print $shell_modele;
-        $shell_view = shell_exec('rm -f '.VIEW_PATH.'/view/'.$page.'.blade.php');
+        if ($template == 'blade') {
+            $shell_view = shell_exec('rm -f '.VIEW_PATH.'/view/'.$page.'.blade.php');
+        }else {
+            $shell_view = shell_exec('rm -f '.VIEW_PATH.'/view/'.$page.'.html.twig');
+        }
         print $shell_view;
     }
 }

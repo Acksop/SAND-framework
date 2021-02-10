@@ -6,7 +6,9 @@ class Conduit
 {
     public static function help()
     {
-        print "explaination of the command\n\n";
+        print "Cette commande permet de manipuler les conduits du framework\n\n";
+        print "Elle peut accepter les attributs suivants\n";
+        print "\t- add : pour ajouter un conduit symfony\n";
     }
 
     public static function add()

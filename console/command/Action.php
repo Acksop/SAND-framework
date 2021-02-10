@@ -6,7 +6,9 @@ class Action
 {
     public static function help()
     {
-        print "explaination of the command\n\n";
+        print "Cette commande permet de manipuler les actions du framework\n\n";
+        print "Elle peut accepter les attributs suivants\n";
+        print "\t- add : pour ajouter une action\n";
     }
 
     public static function add()
