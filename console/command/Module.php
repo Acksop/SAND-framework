@@ -1,9 +1,16 @@
 <?php
 
 namespace MVC\Command;
-
+/**
+ * Class Module
+ * Commande Système du Framework permettant de gérer les modules
+ * @package MVC\Command
+ */
 class Module
 {
+    /**
+     * Méthode permettant d'afficher l'aide de la commande
+     */
     public static function help()
     {
         print "Cette commande permet de manipuler les modules du framework\n\n";

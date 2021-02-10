@@ -1,9 +1,16 @@
 <?php
 
 namespace MVC\Command;
-
+/**
+ * Class Conduit
+ * Commande Système du Framework permettant de gérer les conduits
+ * @package MVC\Command
+ */
 class Conduit
 {
+    /**
+     * Méthode permettant d'afficher l'aide de la commande
+     */
     public static function help()
     {
         print "Cette commande permet de manipuler les conduits du framework\n\n";

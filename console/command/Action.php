@@ -1,9 +1,16 @@
 <?php
 
 namespace MVC\Command;
-
+/**
+ * Class Action
+ * Commande Système du Framework permettant de gérer les actions
+ * @package MVC\Command
+ */
 class Action
 {
+    /**
+     * Méthode permettant d'afficher l'aide de la commande
+     */
     public static function help()
     {
         print "Cette commande permet de manipuler les actions du framework\n\n";

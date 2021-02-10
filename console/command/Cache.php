@@ -1,9 +1,16 @@
 <?php
 
 namespace MVC\Command;
-
+/**
+ * Class Cache
+ * Commande Système du Framework permettant de gérer le cache
+ * @package MVC\Command
+ */
 class Cache
 {
+    /**
+     * Méthode permettant d'afficher l'aide de la commande
+     */
     public static function help()
     {
         print "Cette commande permet de vider le cache du framework\n\n";
