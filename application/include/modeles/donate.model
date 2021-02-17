@@ -1,5 +1,10 @@
 name : donate
 page_title : Be a sponsor
 description : Page permettant de devenir un sponsor du framework SAND
-params : module_params
+
+engine : blade
+authentification : yes
+
+ariane : {acceuil}
+arianelink : {index}
 

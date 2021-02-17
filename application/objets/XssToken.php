@@ -7,7 +7,7 @@ class XssToken
 
     public static function getNew($title,$message,$type)
     {
-        $_SESSION['xss_token'] = generateUniqueToken('xss',25);
+        $_SESSION['xss_token'] = self::generateUniqueToken('xss',25);
     }
 
     public static function remove(){

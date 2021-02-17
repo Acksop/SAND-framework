@@ -1,5 +1,10 @@
 name : error-access-denied
 page_title : Page 403 (Accès restreint) de l'application
 description : Page 403 (Accès restreint) de l'application
-params : module_params
+
+engine : blade
+authentification : no
+
+ariane : {acceuil}
+arianelink : {index}
 

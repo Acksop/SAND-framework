@@ -1,5 +1,7 @@
 <?php
 
+\MVC\Object\Session::createAndTestSession();
+
 $path = PATH_URL;
 $bdd = new \MVC\Classe\Bdd();
 

@@ -1,4 +1,9 @@
 name : error
 page_title: Page 404 (Page Non Trouvé) de l'application
 description : Page 404 (Page Non Trouvé) de l'application
-params : params
+
+engine : blade
+authentification : no
+
+ariane : {acceuil}
+arianelink : {index}

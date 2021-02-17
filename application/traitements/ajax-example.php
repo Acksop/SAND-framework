@@ -2,6 +2,8 @@
 
 header("Content-Type: text/plain");
 
+\MVC\Object\Session::createAndTestSession();
+
 $bdd = new Bdd();
 $dns = \MVC\Domain\Dns::getDNS($bdd, $url_params['ip']);
 $alias = array();

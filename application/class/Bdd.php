@@ -6,7 +6,7 @@ class Bdd
 {
     public $bdd;
 
-    public function __construct($bdd = 'default')
+    public function __construct($bdd = 'bdd')
     {
         switch ($bdd) {
             case 'bdd1':

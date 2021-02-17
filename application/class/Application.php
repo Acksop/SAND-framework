@@ -23,10 +23,6 @@ class Application
 
     public function launch()
     {
-        //on declare la session lors du chargement du controlleur,
-        // ainsi on instancie la page précédente et le javascript et le css asynchrone
-        \MVC\Object\Session::createAndTestSession();
-
         $controlleur = new Controlleur($this);
         //si la page n'est un controlleur d'action alors on affiche l'écran
         if (!$this->url->page['control']) {

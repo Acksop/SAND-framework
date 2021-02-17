@@ -90,6 +90,13 @@ dl, ol, ul {
     background-color: whitesmoke;
     font-size: 0.7rem;
 }
+.breadcrumb-sand {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 0;
+    margin-bottom: 1rem;
+    list-style: none;
+}
 /** Page content spacing **/
 #page-content{
     padding-top: 2rem;

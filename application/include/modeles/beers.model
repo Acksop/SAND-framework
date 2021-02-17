@@ -1,5 +1,10 @@
 name : beers
 page_title : module_title
 description : module_description
-params : module_params
+
+engine : blade
+authentification : yes
+
+ariane : {acceuil}
+arianelink : {index}
 

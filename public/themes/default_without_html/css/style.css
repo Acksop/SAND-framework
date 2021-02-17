@@ -381,15 +381,15 @@ a:hover {
 }
 
 p {
-    margin: 0 0 9px;
+    /*margin: 0 0 9px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 13px;
-    line-height: 18px
+    line-height: 18px*/
 }
 
 p small {
-    font-size: 11px;
-    color: #999
+    /*font-size: 11px;
+    color: #999*/
 }
 
 .lead {
@@ -400,65 +400,65 @@ p small {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0;
+    /*margin: 0;
     font-family: inherit;
     font-weight: bold;
     color: inherit;
-    text-rendering: optimizelegibility
+    text-rendering: optimizelegibility*/
 }
 
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
-    font-weight: normal;
-    color: #999
+    /*font-weight: normal;
+    color: #999*/
 }
 
 h1 {
-    font-size: 30px;
-    line-height: 36px
+    /*font-size: 30px;
+    line-height: 36px*/
 }
 
 h1 small {
-    font-size: 18px
+    /*font-size: 18px*/
 }
 
 h2 {
-    font-size: 24px;
-    line-height: 36px
+    /*font-size: 24px;
+    line-height: 36px*/
 }
 
 h2 small {
-    font-size: 18px
+    /*font-size: 18px*/
 }
 
 h3 {
-    font-size: 18px;
-    line-height: 27px
+    /*font-size: 18px;
+    line-height: 27px*/
 }
 
 h3 small {
-    font-size: 14px
+    /*font-size: 14px*/
 }
 
 h4, h5, h6 {
-    line-height: 18px
+    /*line-height: 18px*/
 }
 
 h4 {
-    font-size: 14px
+    /*font-size: 14px*/
 }
 
 h4 small {
-    font-size: 12px
+    /*font-size: 12px*/
 }
 
 h5 {
-    font-size: 12px
+    /*font-size: 12px*/
 }
 
 h6 {
-    font-size: 11px;
+    /*font-size: 11px;
     color: #999;
-    text-transform: uppercase
+    text-transform: uppercase*/
 }
 
 .page-header {
@@ -477,7 +477,7 @@ ul, ol {
 }
 
 ul ul, ul ol, ol ol, ol ul {
-    margin-bottom: 0
+    /*margin-bottom: 0*/
 }
 
 ul {
@@ -1934,7 +1934,7 @@ table .span24 {
     height: 14px;
     *margin-right: .3em;
     line-height: 14px;
-    vertical-align: text-top;
+    /*vertical-align: text-top;*/
     background-image: url("../img/glyphicons-halflings.png");
     background-position: 14px 14px;
     background-repeat: no-repeat

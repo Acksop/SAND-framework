@@ -1,5 +1,10 @@
 name : gitlist
 page_title : Dépot Git
 description : Le dépot de travail du framework
-engine: blade
+
+engine : blade
+authentification : yes
+
+ariane : {acceuil, dépot git du framework}
+arianelink : {index, gitlist}
 

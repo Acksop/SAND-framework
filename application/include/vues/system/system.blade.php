@@ -45,14 +45,16 @@
     <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js')}}"></script>
     <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
 
-    /*
-    SCRIPT JS permettant de ne valider qu'une seule fois un formulaire
-        ATTENTION tous les formulaires sont affecté
-        Lors d'une validation bootstrap personnalisé veuillez utilisé
-         la class do-resubmit sur le formulaire afin de permettre
-         l'activation supplémentaire du bouton.
-    */
     <script>
+
+        /*
+        SCRIPT JS permettant de ne valider qu'une seule fois un formulaire
+            ATTENTION tous les formulaires sont affecté
+            Lors d'une validation bootstrap personnalisé veuillez utilisé
+             la class do-resubmit sur le formulaire afin de permettre
+             l'activation supplémentaire du bouton.
+        */
+
         window.onload = function() {
             let PreventAllforms = document.querySelectorAll("form");
             Array.prototype.slice.call(PreventAllforms)

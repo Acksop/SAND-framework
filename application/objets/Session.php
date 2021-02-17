@@ -35,7 +35,7 @@ class Session
     public static function authentification()
     {
         self::sessionStart();
-        $_SESSION['user_login'] = 'root';
+        $_SESSION['user_login'] = 'anonymous';
         $_SESSION['acl_admin'] = 0;
     }
 
@@ -46,7 +46,7 @@ class Session
             require_once CONFIG_PATH . DIRECTORY_SEPARATOR . 'cas-authentification-config.php';
 
             // Enable debugging
-            \phpCAS::setLogger();
+            \phpCAS::setDebug(LOG_PATH.'/cas.log');
             // Enable verbose error messages. Disable in production!
             \phpCAS::setVerbose(true);
 

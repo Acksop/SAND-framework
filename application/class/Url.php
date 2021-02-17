@@ -192,8 +192,10 @@ class Url
                 $scheme = 'http';
             }
             $base_url = $scheme . "://" . $url;
+            $url = $base_url;
         }else{
             $base_url = PATH_URL;
+            $url = $base_url . BASE_SERVER_DIRECTORY;
         }
         if ($isControlPatern) {
             $uri = self::controlLink_rewrite($page, $params);
@@ -202,6 +204,10 @@ class Url
         }
 
 
-        return ( $base_url . BASE_SERVER_DIRECTORY  . $uri);
+        return (  $url . $uri);
+    }
+
+    public static function getBaseDirectory(){
+        return '/' . BASE_SERVER_DIRECTORY;
     }
 }

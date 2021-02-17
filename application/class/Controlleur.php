@@ -37,6 +37,15 @@ class Controlleur
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 } else {
                     $this->modele = new Modele($application->url->page);
+                    if(isset($this->modele->page['authentification']) && $this->modele->page['authentification'] == 'yes'){
+                        //on declare la session lors du chargement du controlleur,
+                        // ainsi on instancie la page précédente et le javascript et le css asynchrone
+                        \MVC\Object\Session::createAndTestSession();
+                    }else{
+                        \MVC\Object\Session::sessionStart();
+                        \MVC\Object\History::setPagePrecedente();
+                        \MVC\Object\Asynchronous::declare();
+                    }
                     $this->vue = new Vue($this);
                 }
         }

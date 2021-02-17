@@ -64,7 +64,7 @@
             <div id="breadcrumbs" class="fullwidth">
                 <div class="container">
                     <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
+                        <ol class="breadcrumb-sand">
                             @foreach($ariane as $value)
                                 @if($value == end($ariane))
                                     <li class="breadcrumb-item active" aria-current="page">{{$value}}</li>
