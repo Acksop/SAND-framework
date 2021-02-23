@@ -3,42 +3,6 @@
 
 namespace MVC\Classe;
 
-/**
- * Class Response
- *
- * example use:
- * $data = array('a','b','c');
- *
- * Three Way to send a request
- *
- * $request = new Response('http://myurl','mymethod');
- * $request->addContent($data);
- * $request->send();
- *
- * OR
- *
- * $request = new Response('http://myurl');
- * (
- * $request->createContext('mymethod')
- * $request->addContent($data);
- * $request->send();
- * ) OR (
- * $request->get($data);
- * $request->post($data);
- * $request->put($data);
- * $request->delete($data);
- *
- *
- * OR
- *
- * $request = new Response();
- * $request->setUrl('http://myurl')->get($data)
- * $request->setUrl('http://myurl')->post($data)
- * $request->setUrl('http://myurl')->put($data)
- * $request->setUrl('http://myurl')->delete($data)
- *
- * @package MVC\Classe
- */
 class HttpMethodRequete
 {
     protected $url;

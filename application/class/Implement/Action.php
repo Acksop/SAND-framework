@@ -7,6 +7,25 @@ class Action
 {
     public function render($view, $data)
     {
+        return $this->renderBlade($view,$data);
+    }
+
+    public function renderTwig($view, $data)
+    {
+        $paths = new \SplPriorityQueue;
+
+        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
+        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
+        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
+
+        $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
+        $view .= '.html';
+
+        return $renderer->render($view, $data);
+    }
+
+    public function renderBlade($view, $data)
+    {
         $paths = new \SplPriorityQueue;
 
         $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);

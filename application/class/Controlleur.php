@@ -22,6 +22,7 @@ class Controlleur
                 }
                 // no break
             default:
+                //si c'est une route symfony alors on appelle le conduit associé
                 if ($application->route != null) {
                     $application->url->page['name'] = $application->route['_route'];
                     $conduit = explode('::', $application->route['controller']);
@@ -32,20 +33,20 @@ class Controlleur
                     $class->initialize($application);
                     $this->vue = new VueVide();
                     $this->vue->ecran = $class->$method();
+                //si c'est une page de traitement PRG on appelle le fichier de controle de formulaire
                 } elseif ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
+                //sinon c'est une page MVC normale
                 } else {
                     $this->modele = new Modele($application->url->page);
+                    //on appelle le garde d'authentification
                     if(isset($this->modele->page['authentification']) && $this->modele->page['authentification'] == 'yes'){
                         //on declare la session lors du chargement du controlleur,
                         // ainsi on instancie la page précédente et le javascript et le css asynchrone
                         \MVC\Object\Session::createAndTestSession();
-                    }else{
-                        \MVC\Object\Session::sessionStart();
-                        \MVC\Object\History::setPagePrecedente();
-                        \MVC\Object\Asynchronous::declare();
                     }
+                    //fixme: doit on passer l'application entière dans la vue ou seulement $application->modele->page ?
                     $this->vue = new Vue($this);
                 }
         }

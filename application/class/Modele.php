@@ -30,11 +30,20 @@ class Modele
                     $this->page[$matches[1]] = $matches[2];
                 }
             }
+
             $this->page['url_params'] = $base_param['params'];
+            //export nom a nom les variable dans la superglobale $_GET
+            foreach($base_param['params'] as $key => $value){
+                $_GET[$key] = $value;
+            }
         } else {
             $this->page['name'] = $base_param['name'];
             $this->page['description'] = $base_param['description'];
             $this->page['params'] = $base_param['params'];
+            //export nom a nom les variable dans la superglobale $_GET
+            foreach($base_param['params'] as $key => $value){
+                $_GET[$key] = $value;
+            }
         }
     }
 }

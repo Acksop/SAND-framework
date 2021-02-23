@@ -23,13 +23,8 @@ class HttpMethod
             case 'POST':
                 break;
             case 'PUT':
-                //$this->data['GET'] = ...
-                //POST DATA except enctype="multipart/form-data"
-                $this->data = json_decode(file_get_contents("php://input"), true);
-                // no break
             case 'DELETE':
-                //$this->data['GET'] = ...
-                //POST DATA except enctype="multipart/form-data"
+                //on décode les données depuis l'input afin de les traiter
                 $this->data = json_decode(file_get_contents("php://input"), true);
                 break;
             default:

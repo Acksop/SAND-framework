@@ -2,8 +2,6 @@
 
 namespace MVC\Classe;
 
-//require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR."define-constantes.php";
-
 class Url
 {
     public $page;
@@ -37,21 +35,20 @@ class Url
             }
         }
 
-        //print_r($urlParts);
+        //Récupération du nom de la page
         if (isset($urlParts[0])) {
-            //Récupération du nom de la page
-            ($urlParts[0] == 'index' || $urlParts[0] == '') ? $page['name'] = 'index' : $page['name'] = $urlParts[0];
+            //il se peut que l'on ait des variable avec ? dans l'url
+            $urlQuery = explode('?', $urlParts[0]);
+            $urlQueryPageName = $urlQuery[0];
+            ($urlQueryPageName == 'index' || $urlQueryPageName == '') ? $page['name'] = 'index' : $page['name'] = $urlQueryPageName;
             unset($urlParts[0]);
         } else {
             $page['name'] = 'index';
         }
 
-        //il se peut que l'on ait des variable avec ? dans l'url
-        $urlQuery = explode('?', $page['name']);
-        $page['name'] = $urlQuery[0];
-
         $page['name'] = strtolower($page['name']);
 
+        //si c'est une page de controle de formulaire : on renomme la page
         if ($page['name'] == 'control') {
             $page['control'] = true;
             ($urlParts[1] == 'index' || $urlParts[1] == '') ? $page['name']='index' : $page['name']=$urlParts[1];
@@ -60,7 +57,7 @@ class Url
 
         //vérification du nombre de parametres:
         $numParts = count($urlParts);
-        //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony
+        //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony ou tout autre module
         if ($numParts%2 != 0) {
             //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi un erreur
             if (!in_array($page['name'], $this->registre->getIndex())) {
@@ -81,10 +78,13 @@ class Url
             // si c'est un module alors on charge un a un les parametres
             if (in_array($page['name'], $this->registre->getIndex())) {
                 foreach ($urlParts as $key => $value) {
-                    $values[] = $value;
-                    $keys[] = $key;
+                    if ($key % 2 == 0) {
+                        $values[] = $value;
+                    } else {
+                        $keys[] = $value;
+                    }
                 }
-                $page['params'] = $values;
+                $page['params'] = array_combine($keys, $values);
             // sinon c'est une page normal du framework
             } else {
                 $values = array();
@@ -96,11 +96,7 @@ class Url
                         $keys[] = $value;
                     }
                 }
-                if ($page['control']) {
-                    $page['params'] = array_combine($values, $keys);
-                } else {
-                    $page['params'] = array_combine($keys, $values);
-                }
+                $page['params'] = array_combine($keys, $values);
             }
         }
         $page['name'] = lcfirst($page['name']);
@@ -112,21 +108,29 @@ class Url
             //recherche du fichier controlleur correpondant HTTP1.1 ou HTTP1.0
             switch ($method) {
                 //cas des requètes HTTP1.1
-                case 'PUT':
-                case 'DELETE':
                 case 'GET':
                 case 'POST':
                     if ($appRequest) {
                         $page['name'] = ucfirst($page['name']);
                         $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                        if (!file_exists($pageFile)) {
+                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                        }
                     } else {
-                        $page['name'] = lcfirst($page['name']);
                         $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
                         if (!file_exists($pageFile)) {
                             $page['name'] = ucfirst($page['name']);
                             $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                            if (!file_exists($pageFile)) {
+                                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                            }
                         }
                     }
+                    break;
+                case 'PUT':
+                case 'DELETE':
+                    $page['name'] = ucfirst($page['name']);
+                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
             }
         }
 
@@ -153,15 +157,6 @@ class Url
         } else {
             return self::link_rewrite_slashParam($page, $params);
         }
-    }
-
-    public static function module_link_rewrite($page, $params = array())
-    {
-        $stringParams = '';
-        foreach ($params as $values) {
-            $stringParams .= "/" . $values;
-        }
-        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
 
     private static function link_rewrite_slashParam($page, $params = array())
@@ -194,8 +189,7 @@ class Url
             $base_url = $scheme . "://" . $url;
             $url = $base_url;
         }else{
-            $base_url = PATH_URL;
-            $url = $base_url . BASE_SERVER_DIRECTORY;
+            $url = PATH_URL;
         }
         if ($isControlPatern) {
             $uri = self::controlLink_rewrite($page, $params);
@@ -209,5 +203,21 @@ class Url
 
     public static function getBaseDirectory(){
         return '/' . BASE_SERVER_DIRECTORY;
+    }
+
+    public static function getRootDirectoryUrl(){
+        if(isset($_SERVER['HTTP_HOST'])) {
+            $url = $_SERVER['HTTP_HOST'];
+            if (isset($_SERVER['REQUEST_SCHEME'])) {
+                $scheme = $_SERVER['REQUEST_SCHEME'];
+            } else {
+                $scheme = 'http';
+            }
+            $base_url = $scheme . "://" . $url;
+            $url = $base_url;
+        }else{
+            $url = PATH_URL;
+        }
+        return  $url . BASE_SERVER_DIRECTORY;
     }
 }

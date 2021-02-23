@@ -12,22 +12,33 @@ class Vue
         $templateData = array();
         extract($application->modele->page);
 
-        ob_start();
-        if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
+        if(!isset($engine)){$engine = 'blade';}
+        $flag_exist = false;
+        switch ($engine){
+            case 'twig':
+                if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".html.twig")) {
+                    $flag_exist = true;
+                }
+                break;
+            case 'blade':
+            default:
+                if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
+                    $flag_exist = true;
+                }
+        }
 
+        ob_start();
+
+        if($flag_exist){
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
             require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
 
-
-
-            //TEMPLATING BLADE
+            //WINWALKER TEMPLATING ENGINE
             $paths = new \SplPriorityQueue;
 
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
             $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
-
-            if(!isset($engine)){$engine = 'blade';}
 
             switch ($engine){
                 case 'twig':
@@ -36,7 +47,7 @@ class Vue
                     break;
                 case 'blade':
                 default:
-                $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
+                    $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
             }
 
 
@@ -44,6 +55,7 @@ class Vue
             foreach ($application->modele->page as $key => $value) {
                 $templateData[$key] = $value;
             }
+            //WINWALKER TEMPLATING ENGINE RENDER
             echo $renderer->render($name, $templateData);
         } else {
             include CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
