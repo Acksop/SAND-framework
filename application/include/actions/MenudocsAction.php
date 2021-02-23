@@ -5,7 +5,7 @@ use MVC\Classe\Response;
 
 class MenudocsAction extends Action
 {
-    public function default($data)
+    public function default()
     {
 
 

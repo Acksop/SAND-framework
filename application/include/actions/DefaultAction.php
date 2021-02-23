@@ -8,7 +8,7 @@ use MVC\Classe\Response;
 
 class DefaultAction extends Action
 {
-    public function default($data)
+    public function default()
     {
         /**your action algorythm**/
         if (isset($data[0])) {
