@@ -112,17 +112,17 @@ class Url
                 case 'POST':
                     if ($appRequest) {
                         $page['name'] = ucfirst($page['name']);
-                        $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                        $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
                         if (!file_exists($pageFile)) {
-                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
                         }
                     } else {
                         $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
                         if (!file_exists($pageFile)) {
                             $page['name'] = ucfirst($page['name']);
-                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
                             if (!file_exists($pageFile)) {
-                                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
                             }
                         }
                     }
@@ -134,11 +134,34 @@ class Url
             }
         }
 
+        //Test sur l'existence de la page actuelle et renvoi sur le controlleur 404 d'erreur si besoin
         if (!file_exists($pageFile)) {
             if ($appRequest) {
                 $page['name'] = 'Error';
+                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                if (!file_exists($pageFile)) {
+                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                }
             } else {
                 $page['name'] = 'error';
+                $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
+                if (!file_exists($pageFile)) {
+                    $page['name'] = ucfirst($page['name']);
+                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
+                    if (!file_exists($pageFile)) {
+                        $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                        if (!file_exists($pageFile)) {
+                            //FrameWork : expose undefined controlleur error
+                            // TODO: Send SANDerror
+                            die("le controlleur 404 d'erreur n'existe pas : \n"
+                                . CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php' . "\n"
+                                . "ou l'un des controlleurs 404 (REST ou HTTP) n'existe pas : \n"
+                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php \n'
+                                . " ou \n"
+                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php');
+                        }
+                    }
+                }
             }
         }
         $this->page = $page;
