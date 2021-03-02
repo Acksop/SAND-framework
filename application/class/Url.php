@@ -236,7 +236,7 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            $base_url = $scheme . "://" . $url;
+            $base_url = $scheme . "://" . $url . "/";
             $url = $base_url;
         }else{
             $url = PATH_URL;
