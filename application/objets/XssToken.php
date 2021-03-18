@@ -26,4 +26,12 @@ class XssToken
             return $prefix . substr(bin2hex($bytes), 0, $length);
     }
 
+    public static function generateFibonacciSequence($n)
+    {
+        $sequence = [0, 1];
+        for ($i = 2; $i < $n; $i++) {
+            $sequence[$i] = $sequence[$i-1] + $sequence[$i-2];
+        }
+        return $sequence;
+    }
 }
