@@ -1,0 +1,25 @@
+{
+    "autoload": {
+        "files": [
+            "./application/config/app-constantes.php",
+            "./application/config/app-parameters.php",
+            "./application/config/bdd-parameters.php"
+        ],
+        "psr-4": {
+            "MVC\\Classe\\" : "./application/class",
+            "MVC\\Object\\" : "./application/objets",
+            "MVC\\Domain\\" : "./domain",
+            "MVC\\Command\\": "./console/command"
+        }
+    },
+
+    "require": {
+        "behat/behat": "^3.8",
+        "behat/mink": "^1.8",
+        "behat/mink-goutte-driver": "^1.2"
+    },
+
+    "config": {
+        "bin-dir": "bin/"
+    }
+}

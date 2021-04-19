@@ -1,0 +1,75 @@
+book:
+    title:            "Le développement Avec Le Framework SAND"
+    subtitle:         "Documentation d'utilisation de base"
+    author:           "Emmanuel ROY"
+    edition:          "First edition"
+    language:         fr
+    publication_date: ~
+
+    generator: { name: easybook, version: 5.0-DEV }
+
+    contents:
+        # available content types: acknowledgement, afterword, appendix, author,
+        # chapter, conclusion, cover, dedication, edition, epilogue, foreword,
+        # glossary, introduction, license, lof (list of figures), lot (list of
+        # tables), part, preface, prologue, title, toc (table of contents)
+        #- { element: cover }
+        #- { element: toc   }
+
+        #- { element: introduction, content: func-introduction.md }
+        - { element: chapter, number: 1, content: 00.a. Configuration de départ.md }
+        - { element: chapter, number: 2, content: 00.b. Comment bien utiliser les urls.md }
+        - { element: chapter, number: 3, content: 00.c. Comment bien utiliser les commandes console.md }
+        - { element: chapter, number: 4, content: 00.d. Comment est architecturé le framework.md }
+        - { element: chapter, number: 5, content: 00.e. Comment modifier proprement une page.md }
+        - { element: chapter, number: 6, content: 00.f. Comment fonctionnent les objets de sessions.md }
+        - { element: chapter, number: 7, content: 00.g. Comment faire évoluer une application SAND.md }
+        
+       
+        #- { element: author, content: author.md }
+        #- { element: license, content: license.md }
+
+
+
+    editions:
+        ebook:
+            format:         epub
+            highlight_code: false
+            include_styles: true
+            labels:         ['appendix', 'chapter']  # labels also available for: "figure", "table"
+            theme:          clean
+            toc:
+                deep:       1
+                elements:   ["appendix", "chapter", "part"]
+
+        print:
+            format:         pdf
+            highlight_code: true
+            include_styles: true
+            isbn:           ~
+            labels:         ["appendix", "chapter"]  # labels also available for: "figure", "table"
+            margin:
+                top:        25mm
+                bottom:     25mm
+                inner:      30mm
+                outter:     20mm
+            page_size:      A4
+            theme:          clean
+            toc:
+                deep:       2
+                elements:   ["appendix", "chapter", "part"]
+            two_sided:      true
+
+        web:
+            format:         html
+            highlight_code: true
+            include_styles: true
+            labels:         ["appendix", "chapter"]  # labels also available for: "figure", "table"
+            theme:          clean
+            toc:
+                deep:       2
+                elements:   ["appendix", "chapter", "part"]
+
+        website:
+            extends:        web
+            format:         html_chunked

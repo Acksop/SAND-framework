@@ -243,4 +243,18 @@ class Url
         }
         return  $url . BASE_SERVER_DIRECTORY;
     }
+    /**
+     * Obtiens le fragment depuis une variable serveur,
+     * ce qui est selon moi possible avec une bonne configuration serveur
+     * sauf si le fragment est bloqué au niveau du navigateur (rétention d'informations)
+     *
+     * Selon QASTACK
+     * => https://qastack.fr/programming/2317508/get-fragment-value-after-hash-from-a-url-in-php
+     * ce n'est pas possible avec HTTP "standard" car cette valeur n'est jamais envoyée au serveur
+     * (par conséquent, elle ne sera pas disponible dans $_SERVER["REQUEST_URI"]ou similaire variables prédéfinies)
+     */
+    public static function getFragment(){
+        $fragment = parse_url($_SERVER['REQUEST_URI'],PHP_URL_FRAGMENT);
+        return $fragment;
+    }
 }

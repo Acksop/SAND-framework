@@ -1,0 +1,15 @@
+.tm_properties
+.idea
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+/vendor
+vendor
+vendor/
+vendor*
+composer.phar
+composer.lock
+Output
+*/Output
+build.sh

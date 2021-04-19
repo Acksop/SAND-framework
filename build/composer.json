@@ -1,0 +1,8 @@
+{
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "require": {
+        "pdepend/pdepend": "^2.9"
+    }
+}
