@@ -236,13 +236,18 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            $base_url = $scheme . "://" . $url . "/";
+            $base_url = $scheme . "://" . $url ;
             $url = $base_url;
         }else{
             $url = PATH_URL;
         }
-        return  $url . BASE_SERVER_DIRECTORY;
+        if(str_ends_with($url . "/" . BASE_SERVER_DIRECTORY , '/')){
+            return substr($url . "/" . BASE_SERVER_DIRECTORY,0,-1);
+        }else {
+            return $url . "/" . BASE_SERVER_DIRECTORY;
+        }
     }
+
     /**
      * Obtiens le fragment depuis une variable serveur,
      * ce qui est selon moi possible avec une bonne configuration serveur
