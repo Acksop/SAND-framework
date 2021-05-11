@@ -12,7 +12,10 @@
 	<div id="app">
             <div>
                 <input v-model="searchText" placeholder="Search...">
-            </div>    
+            </div>
+            <div v-if="is_loading">
+                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
             <div v-if="items" >
                 <a href="#" v-for="item in itemsSearched" :key="item.id">
                     <div>
@@ -45,13 +48,15 @@
             el: '#app',
             data: {
                 items: [],
-                searchText: ''
+                searchText: '',
+                is_loading: true,
             },
             mounted() {
                 axios
 					.get('https://ghibliapi.herokuapp.com/films')
 					.then(response => {
 						this.items = response.data;
+                        this.is_loading = false
 					})
                     .catch(error => console.log(error))
             },
