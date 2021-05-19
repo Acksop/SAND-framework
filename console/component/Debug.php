@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Command\Component;
+namespace MVC\Component;
 
 /**
  *  Composant permettant de debugger et d'initialiser certaines valeurs de php

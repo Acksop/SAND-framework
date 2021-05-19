@@ -2,15 +2,17 @@
 
     "autoload": {
       "files": [
-        "./application/config/app-constantes.php",
+        "./application/config/define-constantes.php",
         "./application/config/app-parameters.php",
-        "./application/config/bdd-parameters.php"
+        "./application/config/bdd-parameters.php",
+        "./application/config/console-parameters.php"
       ],
       "psr-4": {
           "MVC\\Classe\\" : "./application/class",
           "MVC\\Object\\" : "./application/objets",
           "MVC\\Domain\\" : "./domain",
-          "MVC\\Command\\": "./console/command"
+          "MVC\\Command\\": "./console/command",
+          "MVC\\Component\\" : "./console/component"
       }
     },
 

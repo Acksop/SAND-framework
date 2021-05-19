@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <h1>%PAGE% - VUE.js Controlleur</h1>
+    <h1>%%PAGE%% - VUE.js Controlleur</h1>
 	<br/><br/><br/>
 	<div id="app">
             <div>

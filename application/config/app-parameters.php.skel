@@ -9,4 +9,4 @@ define("BASE_SERVER_DIRECTORY", "");
 // Optionnel! il n'est nécessaire que si vous l'utilisez dans les fichiers de traitement ou dans une commande console
 define('PATH_URL',"http://www.domain.org/");
 
-define('ENV', "DEV");
+define('ENV', "DEV", true);

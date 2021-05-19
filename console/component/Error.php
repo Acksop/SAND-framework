@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Command\Component;
+namespace MVC\Component;
 
 /**
  *  Composant permettant de logger les erreurs de la commande courante

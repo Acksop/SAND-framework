@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Command\Sand
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Command\Sand;
 /**
  * Class Page
@@ -30,18 +37,26 @@ class Page
         print "Es-ce un template blade?(Y,N) Par defaut:Y ";
         $template = trim(fgets(STDIN));
         $vue = "";
-        if ($template == '' || $template == 'Y') {
+        $react = "";
+        if ($template !== 'N') {
             $template = 'blade';
 
             print "Es-ce une SPA vue.js? (Y,N) Par defaut:N ";
             $vue = trim(fgets(STDIN));
-            if ($vue == '') {
+            if ($vue !== 'Y') {
                 $vue = 'N';
-            } else if ($vue !== 'Y') {
-                $vue = 'N';
+                print "Es-ce une SPA react.js? (Y,N) Par defaut:N ";
+                $react = trim(fgets(STDIN));
+                if ($react !== 'Y') {
+                    $react = 'N';
+                }else{
+                    $react = 'Y';
+                }
+            }else{
+                $vue = 'Y';
             }
 
-        } else if ($template !== 'Y') {
+        } else {
             $template = 'twig';
         }
 
@@ -61,7 +76,11 @@ class Page
 
         if ($template == 'blade'){
             if ($vue == 'N') {
-                $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
+                if ($react == 'N') {
+                    $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page-vuejs.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
+                } else {
+                    $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page-reactjs.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
+                }
             } else {
                 $shell_view = shell_exec('cp ' . CONSOLE_PATH . '/skel/page-vuejs.blade.php ' . VIEW_PATH . '/view/' . $page . '.blade.php');
             }
@@ -144,6 +163,13 @@ class Page
         print $shell_view;
     }
 
+    /**
+     * Supprimer en fonction du template  contenu dans le model
+     */
+    public static function delete()
+    {
+        self::remove();
+    }
     /**
      * Supprimer en fonction du template  contenu dans le model
      */

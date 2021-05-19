@@ -10,65 +10,8 @@
  */
 global $argv;
 
-require dirname(__FILE__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
-
-\MVC\Command\Component\Debug::setPHPvalues();
-
-if (isset($argv[1])) {
-    $option = explode(':', $argv[1]);
-    $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
-    if (is_file($command_file)) {
-        $class = "Command\\" . lcfirst($option[0]);
-
-        if(isset($option[1]) && $option[1] !== '') {
-            $static_method = $option[1];
-            appel_cmd($class,$static_method);
-
-        }else{
-            $static_method = 'help';
-            $class::$static_method();
-        }
-    } else {
-        $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
-        if (is_file($command_file)) {
-            $class = "Command\\App\\" . lcfirst($option[0]);
-
-            if(isset($option[1]) && $option[1] !== '') {
-                $static_method = $option[1];
-                appel_cmd($class,$static_method);
-
-            }else{
-                $static_method = 'help';
-                $class::$static_method();
-            }
-        } else {
-            $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "sand" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
-            if (is_file($command_file)) {
-                $class = "Command\\Sand\\" . lcfirst($option[0]);
-
-                if(isset($option[1]) && $option[1] !== '') {
-                    $static_method = $option[1];
-                    appel_cmd($class,$static_method);
-
-                }else{
-                    $static_method = 'help';
-                    $class::$static_method();
-                }
-            } else {
-                print "SAND Command not found !\n";
-                $class = "Command\\Help";
-                $static_method = 'help';
-                $class::$static_method();
-            }
-        }
-    }
-} else {
-    print "No command was specified !\n";
-    $class = "Command\\Help";
-    $static_method = 'help';
-    $class::$static_method();
-
-}
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
+\MVC\Component\Debug::setPHPvalues();
 
 function appel_cmd($class,$static_method){
     if(method_exists($class,$static_method)) {
@@ -102,10 +45,65 @@ function appel_cmd($class,$static_method){
         $errors = $class::$static_method(...$arguments);
 
         if ($errors !== null) {
-            MVC\Command\Component\Error::logErrors($errors);
+            \MVC\Component\Error::logErrors($errors);
         }
     }else{
         $static_method = 'help';
         $class::$static_method();
     }
+}
+if (isset($argv[1])) {
+    $option = explode(':', $argv[1]);
+    $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+    if (is_file($command_file)) {
+        $class = "MVC\\Command\\" . lcfirst($option[0]);
+
+        if(isset($option[1]) && $option[1] !== '') {
+            $static_method = $option[1];
+            appel_cmd($class,$static_method);
+
+        }else{
+            $static_method = 'help';
+            $class::$static_method();
+        }
+    } else {
+        $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+        if (is_file($command_file)) {
+            $class = "MVC\\Command\\App\\" . lcfirst($option[0]);
+
+            if(isset($option[1]) && $option[1] !== '') {
+                $static_method = $option[1];
+                appel_cmd($class,$static_method);
+
+            }else{
+                $static_method = 'help';
+                $class::$static_method();
+            }
+        } else {
+            $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "sand" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+            if (is_file($command_file)) {
+                $class = "MVC\\Command\\Sand\\" . lcfirst($option[0]);
+
+                if(isset($option[1]) && $option[1] !== '') {
+                    $static_method = $option[1];
+                    appel_cmd($class,$static_method);
+
+                }else{
+                    $static_method = 'help';
+                    $class::$static_method();
+                }
+            } else {
+                print "SAND Command not found !\n";
+                $class = "MVC\\Command\\Help";
+                $static_method = 'help';
+                $class::$static_method();
+            }
+        }
+    }
+} else {
+    print "No command was specified !\n";
+    $class = "MVC\\Command\\Help";
+    $static_method = 'help';
+    $class::$static_method();
+
 }
