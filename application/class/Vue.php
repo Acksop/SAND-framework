@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Classe
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Classe;
 
 class Vue
@@ -7,10 +14,20 @@ class Vue
     public $ecran;
     public $block_body;
     
-    public function __construct($application)
+    public function __construct($page_params)
     {
-        $templateData = array();
-        extract($application->modele->page);
+        //$templateData = array();
+        $url_params = array();
+        $templateData = $page_params;
+
+        extract($page_params);
+        //de base on ajoute les parametres du .model et ceux provenant de l'url
+        foreach ($page_params['all_params'] as $key => $value) {
+            //$templateData[$key] = $value;
+            $_GET[$key] = $value;
+            $url_params[$key] = $value;
+        }
+
 
         if(!isset($engine)){$engine = 'blade';}
         $flag_exist = false;
@@ -50,16 +67,12 @@ class Vue
                     $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
             }
 
-
-            //de base on ajoute les parametres du .model et ceux provenant de l'url
-            foreach ($application->modele->page as $key => $value) {
-                $templateData[$key] = $value;
-            }
             //WINWALKER TEMPLATING ENGINE RENDER
             echo $renderer->render($name, $templateData);
         } else {
             include CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
         }
         $this->ecran = ob_get_clean();
+        return $this;
     }
 }

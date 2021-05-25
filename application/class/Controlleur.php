@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Classe
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Classe;
 
 class Controlleur
@@ -36,6 +43,10 @@ class Controlleur
                 //si c'est une page de traitement PRG on appelle le fichier de controle de formulaire
                 } elseif ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
+                    foreach($application->url->page['params'] as $key => $value){
+                        $_GET[$key] = $value;
+                        $url_params[$key] = $value;
+                    }
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 //sinon c'est une page MVC normale
                 } else {
@@ -46,10 +57,10 @@ class Controlleur
                         // ainsi on instancie la page précédente et le javascript et le css asynchrone
                         \MVC\Object\Session::createAndTestSession();
                     }
-                    //fixme: doit on passer l'application entière dans la vue ou seulement $application->modele->page ?
-                    $this->vue = new Vue($this);
+                    $this->vue = new Vue($this->modele->page);
                 }
         }
+        return $this;
     }
 
     public function callHttpResponse($application)

@@ -8,5 +8,7 @@ use MVC\Classe\Logger;
 
 \MVC\Classe\ControlleurAction::inserer('default.makeHttp11', []);
 
-$templateData = array("templating_a"=>'blade',"templating_b"=>'twig',"templating_c"=>'edge');
+$templateData["templating_a"] ='blade';
+$templateData["templating_b"] ='twig';
+$templateData["templating_c"] ='edge';
 Logger::addLog('ok', 'Hello world');

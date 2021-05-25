@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Classe
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Classe;
 
 class Application
@@ -8,6 +15,8 @@ class Application
     public $url;
     public $browser;
     public $route;
+
+    public $controlleur;
 
 
     public function __construct()
@@ -23,10 +32,10 @@ class Application
 
     public function launch()
     {
-        $controlleur = new Controlleur($this);
+        $this->controlleur = new Controlleur($this);
         //si la page n'est un controlleur d'action alors on affiche l'écran
         if (!$this->url->page['control']) {
-            print($controlleur->vue->ecran);
+            print($this->controlleur->vue->ecran);
             //si on affiche l'écran alors on vide les alertes de la session
             \MVC\Object\Alert::remove();
         }

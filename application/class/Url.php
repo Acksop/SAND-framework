@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Classe
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Classe;
 
 class Url
@@ -59,7 +66,7 @@ class Url
         $numParts = count($urlParts);
         //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony ou tout autre module
         if ($numParts%2 != 0) {
-            //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi un erreur
+            //si un module symfony n'est pas reférencé avec le nom de la page, on renvoi une erreur
             if (!in_array($page['name'], $this->registre->getIndex())) {
                 $page['name'] = 'error';
                 $page['params'] = array();
@@ -67,9 +74,10 @@ class Url
                 return;
             } else {
                 foreach ($urlParts as $key => $value) {
-                    $values[] = $value;
-                    $keys[] = $key;
+                        $values[] = $value;
+                        $keys[] = $value;
                 }
+                //$page['params'] = array_combine($keys, $values);
                 $page['params'] = $values;
             }
 
@@ -236,18 +244,13 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            $base_url = $scheme . "://" . $url ;
+            $base_url = $scheme . "://" . $url . "/";
             $url = $base_url;
         }else{
             $url = PATH_URL;
         }
-        if(str_ends_with($url . "/" . BASE_SERVER_DIRECTORY , '/')){
-            return substr($url . "/" . BASE_SERVER_DIRECTORY,0,-1);
-        }else {
-            return $url . "/" . BASE_SERVER_DIRECTORY;
-        }
+        return  $url . BASE_SERVER_DIRECTORY;
     }
-
     /**
      * Obtiens le fragment depuis une variable serveur,
      * ce qui est selon moi possible avec une bonne configuration serveur

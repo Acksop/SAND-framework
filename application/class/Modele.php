@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Package MVC\Classe
+ * @author Emmanuel ROY
+ * @license  MIT-licence (open source)
+ * @version 3.5
+ */
+
 namespace MVC\Classe;
 
 class Modele
@@ -31,7 +38,7 @@ class Modele
                 }
             }
 
-            $this->page['url_params'] = $base_param['params'];
+            $this->page['all_params'] = $base_param['params'];
             //export nom a nom les variable dans la superglobale $_GET
             foreach($base_param['params'] as $key => $value){
                 $_GET[$key] = $value;
@@ -39,11 +46,12 @@ class Modele
         } else {
             $this->page['name'] = $base_param['name'];
             $this->page['description'] = $base_param['description'];
-            $this->page['params'] = $base_param['params'];
+            $this->page['all_params'] = $base_param['params'];
             //export nom a nom les variable dans la superglobale $_GET
             foreach($base_param['params'] as $key => $value){
                 $_GET[$key] = $value;
             }
         }
+        return $this;
     }
 }
