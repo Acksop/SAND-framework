@@ -67,6 +67,10 @@ class Vue
                     $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
             }
 
+            foreach ($page_params as $key => $value) {
+                $templateData[$key] = $value;
+            }
+
             //WINWALKER TEMPLATING ENGINE RENDER
             echo $renderer->render($name, $templateData);
         } else {

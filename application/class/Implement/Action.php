@@ -10,6 +10,12 @@ class Action
         return $this->renderBlade($view,$data);
     }
 
+    public function renderJSON($json)
+    {
+        //header('Content-Type: application/json; charset=utf-8');
+        return json_encode($json, JSON_HEX_APOS);
+    }
+
     public function renderTwig($view, $data)
     {
         $paths = new \SplPriorityQueue;

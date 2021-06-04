@@ -244,12 +244,20 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            $base_url = $scheme . "://" . $url . "/";
+            if(BASE_SERVER_DIRECTORY == "") {
+                $base_url = $scheme . "://" . $url . "/";
+            }else{
+                $base_url = $scheme . "://" . $url;
+            }
             $url = $base_url;
         }else{
             $url = PATH_URL;
         }
-        return  $url . BASE_SERVER_DIRECTORY;
+        if( substr($url . BASE_SERVER_DIRECTORY, -1) == "/"){
+            return substr($url . BASE_SERVER_DIRECTORY, 0, -1);
+        }else {
+            return $url . BASE_SERVER_DIRECTORY;
+        }
     }
     /**
      * Obtiens le fragment depuis une variable serveur,

@@ -1,0 +1,8 @@
+name : react
+page_title : module_title
+description : module_description
+engine : blade
+authentification : yes
+ariane : {acceuil, react}
+arianelink : {index, react}
+

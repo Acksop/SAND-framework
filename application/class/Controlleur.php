@@ -47,6 +47,11 @@ class Controlleur
                         $_GET[$key] = $value;
                         $url_params[$key] = $value;
                     }
+                    //FIXME : Comportement anormal sur les traitements
+                    foreach($application->url->page['params'] as $value => $key){
+                        $_GET[$key] = $value;
+                        $url_params[$key] = $value;
+                    }
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 //sinon c'est une page MVC normale
                 } else {

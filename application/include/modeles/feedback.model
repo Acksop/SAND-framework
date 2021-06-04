@@ -1,0 +1,8 @@
+name : feedback
+page_title : Page de retour d'expérience utilisateur de l'application
+description : UFC - Page de retour d'expérience utilisateur de l'application
+engine : blade
+authentification : no
+ariane : {acceuil, retour d'expérience utilisateur}
+arianelink : {index, feedback}
+

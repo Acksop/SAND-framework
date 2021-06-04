@@ -1,0 +1,8 @@
+name : vuejs
+page_title : module_title
+description : module_description
+engine : blade
+authentification : yes
+ariane : {acceuil, vuejs}
+arianelink : {index, vuejs}
+

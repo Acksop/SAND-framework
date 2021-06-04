@@ -1,0 +1,49 @@
+{
+  "name": "star-rating.js",
+  "description": "This zero-dependency ES6 module transforms a SELECT into a dynamic star rating element.",
+  "version": "4.1.4",
+  "author": {
+    "name": "Paul Ryley",
+    "email": "paul@geminilabs.io",
+    "url": "http://geminilabs.io"
+  },
+  "homepage": "https://github.com/pryley/star-rating.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pryley/star-rating.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pryley/star-rating.js/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+    "@babel/preset-env": "^7.12.11",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-eslint": "^8.0.1",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "autoprefixer": "^10.2.3",
+    "gulp": "^4.0.2",
+    "gulp-bump": "^3.2.0",
+    "jshint": "^2.11.1",
+    "postcss-custom-properties": "^11.0.0",
+    "postcss-hexrgba": "^2.0.1",
+    "postcss-selector-namespace": "github:pryley/postcss-selector-namespace#v3.0.2-beta",
+    "pump": "^3.0.0",
+    "rollup": "^2.36.1",
+    "rollup-plugin-filesize": "^9.1.0",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "yargs": "^15.4.1"
+  },
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c",
+    "watch": "rollup -cw"
+  },
+  "main": "index.js",
+  "style": "src/index.css",
+  "dependencies": {
+    "detect-it": "^4.0.0"
+  }
+}

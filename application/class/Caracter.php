@@ -74,4 +74,17 @@ class Caracter
         $chaine = str_replace('"', '&#34;', $chaine);
         return $chaine;
     }
+    public static function avoid_sql_injection($chaine){
+        $chaine = preg_replace("/`;--/", "", $chaine);
+        $chaine = preg_replace("/';--/", "", $chaine);
+        $chaine = preg_replace('/";--/', "", $chaine);
+        $chaine = preg_replace("/;--/", "", $chaine);
+        return $chaine;
+    }
+    public static function avoid_guillemets($chaine)
+    {
+        $chaine = str_replace("'", "", $chaine);
+        $chaine = str_replace('"', '', $chaine);
+        return $chaine;
+    }
 }

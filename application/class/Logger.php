@@ -3,8 +3,6 @@
 
 namespace MVC\Classe;
 
-use Symfony\Component\Validator\Constraints\Date;
-
 class Logger
 {
     public static function addLog($type = 'default', $what = "")
@@ -28,14 +26,14 @@ class Logger
      */
     public static function logCommandErrors(array $errors)
     {
-        // log connection errors to the web service
+        // log connection errors
         ob_start();
         foreach ($errors as $key => $value) {
             echo "\n\n$key : \n";
             print_r($value);
         }
         $write_string = ob_get_clean();
-        file_put_contents(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "errors_command.log", $write_string);
+        file_put_contents(OUTPUT_PATH . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "errors_command.log", $write_string);
 
         return;
     }

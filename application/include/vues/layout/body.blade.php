@@ -14,6 +14,7 @@
                     <li @if($name == 'donate') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
                     <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                     <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
+                    <li @if($name == 'feedback') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Feedback', []) }}">Feedback</a></li>
                 </ul>
             </div>
         </div>
@@ -52,12 +53,14 @@
         </header>
         <!-- end: Header -->
         <!-- Subbar -->
+        @if($authentification == 'yes')
         <div id="subbar" class="fullwidth">
             <div class="container">
                 <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>
                 <span style="float:right;"><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
             </div>
         </div>
+        @endif
         <!-- end: Subbar -->
 
         <!-- Breadcrumbs -->
