@@ -3,6 +3,7 @@
         "bin-dir": "bin/"
     },
     "require": {
-        "pdepend/pdepend": "^2.9"
+        "pdepend/pdepend": "^2.9",
+        "phpmetrics/phpmetrics": "^2.7"
     }
 }
