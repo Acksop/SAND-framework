@@ -49,8 +49,9 @@ class Error
             }
         }
         $write_string = ob_get_clean();
-        file_put_contents(dirname(__DIR__) . DIRECTORY_SEPARATOR . "output" . DIRECTORY_SEPARATOR . ENV . DIRECTORY_SEPARATOR . "errors".$date->format("Y-m-d").".log", $write_string);
+        file_put_contents(OUTPUT_PATH . DIRECTORY_SEPARATOR . "output" . DIRECTORY_SEPARATOR . ENV . DIRECTORY_SEPARATOR . "errors".$date->format("Y-m-d").".log", $write_string);
 
         return;
     }
+
 }
