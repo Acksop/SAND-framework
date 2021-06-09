@@ -53,7 +53,7 @@
         </header>
         <!-- end: Header -->
         <!-- Subbar -->
-        @if($authentification == 'yes')
+        @if(isset($authentification) && $authentification == 'yes')
         <div id="subbar" class="fullwidth">
             <div class="container">
                 <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>

@@ -75,7 +75,7 @@ class Url
             } else {
                 foreach ($urlParts as $key => $value) {
                         $values[] = $value;
-                        $keys[] = $value;
+                        //$keys[] = $key;
                 }
                 //$page['params'] = array_combine($keys, $values);
                 $page['params'] = $values;
@@ -97,11 +97,21 @@ class Url
             } else {
                 $values = array();
                 $keys = array();
-                foreach ($urlParts as $key => $value) {
-                    if ($key % 2 == 0) {
-                        $values[] = $value;
-                    } else {
-                        $keys[] = $value;
+                if($page['control']){
+                    foreach ($urlParts as $key => $value) {
+                        if ($key % 2 == 1) {
+                            $values[] = $value;
+                        } else {
+                            $keys[] = $value;
+                        }
+                    }
+                }else {
+                    foreach ($urlParts as $key => $value) {
+                        if ($key % 2 == 0) {
+                            $values[] = $value;
+                        } else {
+                            $keys[] = $value;
+                        }
                     }
                 }
                 $page['params'] = array_combine($keys, $values);
@@ -217,10 +227,16 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            $base_url = $scheme . "://" . $url;
-            $url = $base_url;
+            $scheme_tab = explode("://",PATH_URL);
+            if( $scheme !== $scheme_tab[0]){
+                $scheme = $scheme_tab[0];
+            }
+            $url = $scheme . "://" . $url;
         }else{
             $url = PATH_URL;
+        }
+        if( substr($url , -1) == "/"){
+            $url = substr($url, 0, -1);
         }
         if ($isControlPatern) {
             $uri = self::controlLink_rewrite($page, $params);
@@ -244,19 +260,21 @@ class Url
             } else {
                 $scheme = 'http';
             }
-            if(BASE_SERVER_DIRECTORY == "") {
-                $base_url = $scheme . "://" . $url . "/";
-            }else{
-                $base_url = $scheme . "://" . $url;
+            $scheme_tab = explode("://",PATH_URL);
+            if( $scheme !== $scheme_tab[0]){
+                $scheme = $scheme_tab[0];
             }
-            $url = $base_url;
+            $url = $scheme . "://" . $url;
         }else{
             $url = PATH_URL;
         }
-        if( substr($url . BASE_SERVER_DIRECTORY, -1) == "/"){
-            return substr($url . BASE_SERVER_DIRECTORY, 0, -1);
+        if( substr($url , -1) == "/"){
+            $url = substr($url, 0, -1);
+        }
+        if( substr($url . "/" . BASE_SERVER_DIRECTORY, -1) == "/"){
+            return substr($url . "/" . BASE_SERVER_DIRECTORY, 0, -1);
         }else {
-            return $url . BASE_SERVER_DIRECTORY;
+            return $url . "/" . BASE_SERVER_DIRECTORY;
         }
     }
     /**

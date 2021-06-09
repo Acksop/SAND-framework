@@ -2,9 +2,9 @@
 
 namespace MVC\Command;
 /**
- * Class Cache
+ * Class Help
  * Commande d'aide principale du Framework
- * @package MVC\Command\Sand
+ * @package MVC\Command
  */
 class Help
 {

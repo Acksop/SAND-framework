@@ -43,15 +43,12 @@ class Controlleur
                 //si c'est une page de traitement PRG on appelle le fichier de controle de formulaire
                 } elseif ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
+
                     foreach($application->url->page['params'] as $key => $value){
                         $_GET[$key] = $value;
                         $url_params[$key] = $value;
                     }
-                    //FIXME : Comportement anormal sur les traitements
-                    foreach($application->url->page['params'] as $value => $key){
-                        $_GET[$key] = $value;
-                        $url_params[$key] = $value;
-                    }
+
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
                 //sinon c'est une page MVC normale
                 } else {
