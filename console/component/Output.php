@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Command\Component;
+namespace MVC\Component;
 
 use Tests\Behat\Gherkin\Loader\DirectoryLoaderTest;
 

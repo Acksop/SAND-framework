@@ -26,18 +26,10 @@ function appel_cmd($class,$static_method){
         //récupération des arguments maitres "--env=????????????? ou --debug-aff=TRUEor????????"
         $i = 0;
         foreach ($arguments as $master_arg) {
-            if (preg_match("/--env=([A-Z]*)/", $master_arg, $matches)) {
+            /*if (preg_match("/--env=([A-Z]*)/", $master_arg, $matches)) {
                 define("ENV", $matches[1]);
                 unset($arguments[$i]);
-            }
-            if (preg_match("/--debug-aff=([A-Z]*)/", $master_arg, $matches)) {
-                if ($matches[1] === 'TRUE') {
-                    define("LOG_AFF_ERROR", true);
-                } else {
-                    define("LOG_AFF_ERROR", false);
-                }
-                unset($arguments[$i]);
-            }
+            }*/
             $i++;
         }
 
@@ -52,11 +44,15 @@ function appel_cmd($class,$static_method){
         $class::$static_method();
     }
 }
+
+
+
+
 if (isset($argv[1])) {
     $option = explode(':', $argv[1]);
-    $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+    $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
     if (is_file($command_file)) {
-        $class = "MVC\\Command\\" . lcfirst($option[0]);
+        $class = "MVC\\Command\\" . ucfirst($option[0]);
 
         if(isset($option[1]) && $option[1] !== '') {
             $static_method = $option[1];
@@ -67,9 +63,9 @@ if (isset($argv[1])) {
             $class::$static_method();
         }
     } else {
-        $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+        $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "App" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
         if (is_file($command_file)) {
-            $class = "MVC\\Command\\App\\" . lcfirst($option[0]);
+            $class = "MVC\\Command\\App\\" . ucfirst($option[0]);
 
             if(isset($option[1]) && $option[1] !== '') {
                 $static_method = $option[1];
@@ -80,9 +76,9 @@ if (isset($argv[1])) {
                 $class::$static_method();
             }
         } else {
-            $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "sand" . DIRECTORY_SEPARATOR . lcfirst($option[0]) . ".php";
+            $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "Sand" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
             if (is_file($command_file)) {
-                $class = "MVC\\Command\\Sand\\" . lcfirst($option[0]);
+                $class = "MVC\\Command\\Sand\\" . ucfirst($option[0]);
 
                 if(isset($option[1]) && $option[1] !== '') {
                     $static_method = $option[1];
