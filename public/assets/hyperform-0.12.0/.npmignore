@@ -1,0 +1,8 @@
+**/.*
+bower.json
+bower_components
+examples
+.gitignore
+Makefile
+node_modules
+.travis.yml

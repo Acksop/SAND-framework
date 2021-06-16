@@ -1,0 +1,86 @@
+{
+  "name": "hyperform",
+  "version": "0.12.0",
+  "description": "Capture form validation back from the browser",
+  "main": "dist/hyperform.cjs.js",
+  "types": "index.d.ts",
+  "jsnext:main": "src/hyperform.js",
+  "module": "dist/hyperform.esm.js",
+  "style": "css/hyperform.css",
+  "scripts": {
+    "test": "jshint src && ava",
+    "preversion": "npm test",
+    "version": "make version VERSION=$npm_package_version && make all && git add src/version.js dist/ bower.json CHANGELOG.md",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperform/hyperform.git"
+  },
+  "keywords": [
+    "html5",
+    "form",
+    "forms",
+    "input",
+    "validation"
+  ],
+  "author": "Manuel Strehl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hyperform/hyperform/issues"
+  },
+  "homepage": "https://hyperform.js.org/",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "ava": "^3.5.1",
+    "jsdom": "^9.10.0",
+    "jshint": "^2.11.0",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-firefox-launcher": "^1.3.0",
+    "karma-mocha": "^1.3.0",
+    "karma-sauce-launcher": "^4.0.0",
+    "mocha": "^7.1.1",
+    "rollup": "^1.31.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-banner": "^0.2.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-uglify": "^6.0.4",
+    "selenium-webdriver": "^3.0.1"
+  },
+  "files": [
+    "css",
+    "dist",
+    "src",
+    "test",
+    "index.d.ts",
+    "rollup.config.js"
+  ],
+  "jshintConfig": {
+    "esversion": 6,
+    "strict": "global",
+    "laxbreak": true,
+    "globals": {
+      "window": true,
+      "document": true
+    }
+  },
+  "ava": {
+    "require": [
+      "@babel/register",
+      "./test/helpers/setup-browser-env.js"
+    ],
+    "files": [
+      "test/unit/**/*.js"
+    ],
+    "concurrency": 5
+  },
+  "babel": {
+    "presets": [
+      "@babel/env"
+    ]
+  }
+}

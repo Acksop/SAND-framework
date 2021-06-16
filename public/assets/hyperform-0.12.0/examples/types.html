@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Different Element Types</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/hyperform.css">
+    <link rel="stylesheet" href="examples.css">
+  </head>
+  <body>
+    <main>
+      <form id="types">
+        <div class="row">
+          <p class="col-md-4 form-group">
+            <label for="number">Number:</label>
+            <input type="number" name="number" id="number" class="form-control">
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="url">URL:</label>
+            <input type="url" name="url" id="url" class="form-control">
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="email">E-Mail address:</label>
+            <input type="email" name="email" id="email" class="form-control">
+          </p>
+        </div>
+        <div class="row">
+          <p class="col-md-4 form-group">
+            <label for="tel">Phone number:</label>
+            <input type="tel" name="tel" id="tel" class="form-control">
+            <span class="help-block">there is no default validation associated with those.</span>
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="color">Color:</label>
+            <input type="color" name="color" id="color" class="form-control">
+            <span class="help-block">must be in format <code>#[a-f0-9]{6}</code>.</span>
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="range">Range:</label>
+            <input type="range" name="range" id="range" class="form-control">
+          </p>
+        </div>
+        <div class="row">
+          <p class="col-md-4 form-group">
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date" class="form-control">
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="time">Time:</label>
+            <input type="time" name="time" id="time" class="form-control">
+            <span class="help-block">in 1-minute steps</span>
+          </p>
+          <p class="col-md-4 form-group">
+            <label for="month">Month:</label>
+            <input type="month" name="month" id="month" class="form-control">
+          </p>
+        </div>
+        <p>
+          <button class="btn btn-primary">go!</button>
+        </p>
+      </form>
+    </main>
+    <script src="../dist/hyperform.js"></script>
+    <script>hyperform(window);</script>
+  </body>
+</html>

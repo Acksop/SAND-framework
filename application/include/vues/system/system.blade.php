@@ -30,6 +30,10 @@
     @section('top-css')
         <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
+        @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
+            <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/html5-simple-date-input-polyfill-master/html5-simple-date-input-polyfill.css')}}">
+        <!--<link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/hyperform-0.12.0/css/hyperform.css')}}">-->
+        @endif
     @show
 
 </head>
@@ -37,6 +41,15 @@
 <body>
 
 @section('top-javascript')
+    @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
+        <!-- Polyfill.io will load polyfills your browser needs -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CNumber.parseInt%2CNumber.parseFloat%2CArray.prototype.find%2CArray.prototype.includes"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/html5-simple-date-input-polyfill-master/html5-simple-date-input-polyfill.js')}}"></script>
+        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/hyperform-0.12.0/dist/hyperform.js')}}"></script>
+        <script>hyperform(window);</script>
+    @endif
 @show
 
 @yield('body')
@@ -45,6 +58,7 @@
     <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js')}}"></script>
     <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
 
+    @if(\MVC\Classe\Browser::get() !== 'Internet Explorer')
     <script>
 
         /*
@@ -71,6 +85,7 @@
             }
         }
     </script>
+    @endif
 @show
 
 </body>

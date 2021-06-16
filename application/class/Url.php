@@ -277,6 +277,43 @@ class Url
             return $url . "/" . BASE_SERVER_DIRECTORY;
         }
     }
+
+    public static function getPageName(){
+
+        $url = parse_url($_SERVER['REQUEST_URI']);
+        $urlTrim = trim($url['path'], '/');
+        $urlParts = explode('/', $urlTrim);
+
+        //suppression des sous repertoires du BASE_SERVER_DIRECTORY
+        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
+        foreach($basePath as $subDir) {
+            if ($urlParts[0] == $subDir) {
+                array_shift($urlParts);
+            }
+        }
+
+        //Récupération du nom de la page
+        if (isset($urlParts[0])) {
+            //il se peut que l'on ait des variable avec ? dans l'url
+            $urlQuery = explode('?', $urlParts[0]);
+            $urlQueryPageName = $urlQuery[0];
+            ($urlQueryPageName == 'index' || $urlQueryPageName == '') ? $page['name'] = 'index' : $page['name'] = $urlQueryPageName;
+            unset($urlParts[0]);
+        } else {
+            $page['name'] = 'index';
+        }
+
+        $page['name'] = strtolower($page['name']);
+
+        //si c'est une page de controle de formulaire : on renomme la page
+        if ($page['name'] == 'control') {
+            $page['control'] = true;
+            ($urlParts[1] == 'index' || $urlParts[1] == '') ? $page['name']='index' : $page['name']=$urlParts[1];
+            unset($urlParts[1]);
+        }
+        return $page;
+    }
+
     /**
      * Obtiens le fragment depuis une variable serveur,
      * ce qui est selon moi possible avec une bonne configuration serveur
