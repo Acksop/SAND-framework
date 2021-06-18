@@ -9,7 +9,7 @@
     <bootstrap/>
 
     <!-- A phpDox project to process, you can have multiple projects in one config file -->
-    <project name="SAND Framework Application" source="${basedir}/" workdir="${basedir}/.phpdox/xml">
+    <project name="SAND Framework" source="C:\Users\eroy5\PhpstormProjects\DOCKER-LAMP\www\SAND-framework-dev" workdir="${basedir}/.phpdox/xml">
         <!--  @name    - The name of the project -->
         <!--  @source  - The source directory of the application to process -->
         <!--  @workdir - The directory to store the xml data files in -->
@@ -69,7 +69,7 @@
 
             <!-- A generation process consists of one or more build tasks and of (optional) enrich sources -->
 
-            <enrich base="${basedir}/data">
+            <enrich base="${basedir}/logs">
                 <!-- @base - (Base-)Directory of datafiles used for enrich process -->
 
                 <!--<source type="...">-->
@@ -81,39 +81,32 @@
                 <!--</source> -->
 
                 <!-- add phploc output -->
-                <!--<source type="phploc" />-->
+                <source type="phploc" />
 
                 <!-- git vcs information -->
-                <!--<source type="git">
-                    <git binary="C:\Program Files\Git\cmd\git.exe" />
+                <source type="git">
+                    <git binary="git" />
                     <history enabled="true" limit="15" cache="${phpDox.project.workdir}/gitlog.xml" />
-                </source>-->
+                </source>
                 -->
 
                 <!-- PHP Code Sniffer findings -->
-                <!--
                 <source type="phpcs">
-                    <file name="logs/phpcs.xml" />
+                    <file name="checkstyle.xml" />
                 </source>
-                -->
+
 
                 <!-- PHPMessDetector -->
-                <!--
                 <source type="pmd">
-                    <file name="pmd.xml" />
+                    <file name="phpmd.xml" />
                 </source>
-                -->
+
 
                 <!-- PHPUnit Coverage XML -->
-                <!-- <source type="phpunit">  -->
-                <!-- <coverage path="" /> -->
+                 <source type="phpunit">
+                     <coverage path="" />
                 <!--           @path - the directory where the xml code coverage report can be found -->
-                <!--</source>-->
-                <!--
-                <source type="phpunit">
-                    <filter directory="${phpDox.project.source}" />
                 </source>
-                -->
 
             </enrich>
 
