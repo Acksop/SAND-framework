@@ -13,7 +13,7 @@ global $argv;
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
 \MVC\Component\Debug::setPHPvalues();
 
-function appel_cmd($class,$static_method){
+function appel_cmd($class,$static_method,$argv){
     if(method_exists($class,$static_method)) {
 
         //récupération des arguments de la commande pour passage en paramètre de la méthode
@@ -56,7 +56,7 @@ if (isset($argv[1])) {
 
         if(isset($option[1]) && $option[1] !== '') {
             $static_method = $option[1];
-            appel_cmd($class,$static_method);
+            appel_cmd($class,$static_method,$argv);
 
         }else{
             $static_method = 'help';
@@ -69,7 +69,7 @@ if (isset($argv[1])) {
 
             if(isset($option[1]) && $option[1] !== '') {
                 $static_method = $option[1];
-                appel_cmd($class,$static_method);
+                appel_cmd($class,$static_method,$argv);
 
             }else{
                 $static_method = 'help';
@@ -82,7 +82,7 @@ if (isset($argv[1])) {
 
                 if(isset($option[1]) && $option[1] !== '') {
                     $static_method = $option[1];
-                    appel_cmd($class,$static_method);
+                    appel_cmd($class,$static_method,$argv);
 
                 }else{
                     $static_method = 'help';
