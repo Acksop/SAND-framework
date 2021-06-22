@@ -40,16 +40,16 @@ class Controlleur
                     $class->initialize($application);
                     $this->vue = new VueVide();
                     $this->vue->ecran = $class->$method();
+
                 //si c'est une page de traitement PRG on appelle le fichier de controle de formulaire
                 } elseif ($application->url->page['control']) {
                     $url_params = $application->url->page['params'];
-
                     foreach($application->url->page['params'] as $key => $value){
                         $_GET[$key] = $value;
                         $url_params[$key] = $value;
                     }
-
                     require TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $application->url->page['name'] . '.php';
+
                 //sinon c'est une page MVC normale
                 } else {
                     $this->modele = new Modele($application->url->page);
@@ -58,6 +58,8 @@ class Controlleur
                         //on declare la session lors du chargement du controlleur,
                         // ainsi on instancie la page précédente et le javascript et le css asynchrone
                         \MVC\Object\Session::createAndTestSession();
+                    }else{
+                        \MVC\Object\Session::sessionStart();
                     }
                     $this->vue = new Vue($this->modele->page);
                 }
