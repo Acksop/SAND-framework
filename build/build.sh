@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # PHP METRICS
-./bin/phpmetrics --report-html=./data/phpmetrics ../ --exclude="vendor","build","tests","data","console/skel","application/modules","application/include/vues/cache"
+./bin/phpmetrics --report-html=./data/phpmetrics ../ --exclude="vendor","build","tests","data","skel","modules","cache"
 
 # PHP DOCUMENTOR
 php ./bin/phpDocumentor.phar -d ../application -d ../console -d ../domain --ignore "vendor/*,build/*,data/*,tests/*,console/skel/*,application/modules/*,application/inculde/vues/cache/*" -t ./data/api-docs/
@@ -14,7 +14,7 @@ php ./bin/phpmd.phar ../ xml codesize,naming,unusedcode --exclude '*vendor*' --e
 ./bin/phpcs -p --extensions=php --ignore=*/vendor/*,*/build/*,*/data/*,*/test/*,*/skel/*,*/modules/*,*/cache/*,*/public/* --report-xml=./logs/checkstyle.xml ../
 
 # CHARTS OF PROJECTS
-./bin/pdepend --jdepend-chart=data/jdepend-chart.svg --overview-pyramid=data/jdepend-overview.svg --summary-xml=data/jdepend-summary.xml --ignore=vendor,tests,build,data,console/skel,application/modules,application/inculde/vues/cache ../
+./bin/pdepend --jdepend-chart=data/jdepend-chart.svg --overview-pyramid=data/jdepend-overview.svg --summary-xml=data/jdepend-summary.xml --ignore=vendor,tests,build,data,skel,modules,cache ../
 
 # TEXT METRIC OF PROJECT
 php ./bin/phploc-7.0.2.phar ../ --exclude ../vendor --exclude ../build --exclude ../tests --exclude ../data --exclude ../console/skel --exclude ../application/modules --exclude ../application/include/vues/cache --log-xml logs/phploc.xml > data/phploc.txt
