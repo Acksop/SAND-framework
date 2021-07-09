@@ -60,6 +60,7 @@ class Vue
             switch ($engine){
                 case 'twig':
                     $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
+                    $renderer->addExtension(new \MVC\Classe\TwigControlleurAction);
                     $name .= '.html';
                     break;
                 case 'blade':

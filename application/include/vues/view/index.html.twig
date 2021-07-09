@@ -1,1 +1,10 @@
-INDEX
+{% extends "body.html.twig" %}
+
+{% block content %}
+<h1>Accueil de l'url</h1>
+<h2> {{server('SERVER_NAME')}}</h2>
+<br /><br /><br />
+<hr/>
+{{templating_a}}::{{templating_b}}::{{templating_c}}
+{{ action('default.default',[4,5,6]) }}
+{% endblock %}
