@@ -44,4 +44,4 @@ avec en plus de cela :
 
 Pour les modules, c'est un peu plus compliqué : il faut instancier ces trois précédents fichiers en faisant appel la class Modular,
 ne pas oublier de référencer le module dans le dossier modules > setup > registre.model, ajouter le dossier contenant le code du module
-et faire correspondre le nom du controlleurs frontal du module avec le registre.
+et faire correspondre le nom du controlleur frontal du module avec le registre.

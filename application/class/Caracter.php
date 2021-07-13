@@ -87,4 +87,41 @@ class Caracter
         $chaine = str_replace('"', '', $chaine);
         return $chaine;
     }
+    public static function mettreEnMajusculeAccents($chaine, $trueAccent = false)
+    {
+        if (!$trueAccent) {
+            $chaine = str_replace('é', 'E', $chaine);
+            $chaine = str_replace('è', 'E', $chaine);
+            $chaine = str_replace('ë', 'E', $chaine);
+            $chaine = str_replace('ê', 'E', $chaine);
+            $chaine = str_replace('ç', 'C', $chaine);
+            $chaine = str_replace('Ç', 'C', $chaine);
+            $chaine = str_replace('à', 'A', $chaine);
+            // $chaine = str_replace('','&aeacute;',$chaine);
+            $chaine = str_replace('â', 'A', $chaine);
+            $chaine = str_replace('ä', 'A', $chaine);
+            $chaine = str_replace('î', 'I', $chaine);
+            $chaine = str_replace('ï', 'I', $chaine);
+            $chaine = str_replace('ù', 'U', $chaine);
+            $chaine = str_replace('û', 'U', $chaine);
+            $chaine = str_replace('ü', 'U', $chaine);
+        } else {
+            $chaine = str_replace('é', 'É', $chaine);
+            $chaine = str_replace('è', 'È', $chaine);
+            $chaine = str_replace('ë', 'Ë', $chaine);
+            $chaine = str_replace('ê', 'Ê', $chaine);
+            $chaine = str_replace('ç', 'Ç', $chaine);
+            $chaine = str_replace('Ç', 'Ç', $chaine);
+            $chaine = str_replace('à', 'À', $chaine);
+            // $chaine = str_replace('','&aeacute;',$chaine);
+            $chaine = str_replace('â', 'Â', $chaine);
+            $chaine = str_replace('ä', 'Ä', $chaine);
+            $chaine = str_replace('î', 'Î', $chaine);
+            $chaine = str_replace('ï', 'Ï', $chaine);
+            $chaine = str_replace('ù', 'Ù', $chaine);
+            $chaine = str_replace('û', 'Û', $chaine);
+            $chaine = str_replace('ü', 'Ü', $chaine);
+        }
+        return $chaine;
+    }
 }
