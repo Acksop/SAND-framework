@@ -1,3 +1,4 @@
+{% extends "system.html.twig" %}
 
 {% block body %}
     <!-- Body Inner -->
@@ -7,11 +8,12 @@
              style="background: rgba(0, 0, 0, 0.59);">
             <div class="container">
                 <ul class="top-menu">
-                    <li {% if name == 'docs_route' || name == 'docs_name_route' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
-                    <li {% if name == 'depots' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist/SAND-FrameWork', []) }}">Dépot</a></li>
-                    <li {% if name == 'donate' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
-                    <li {% if name == 'cgu' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
-                    <li {% if name == 'policy' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
+                    {{call('\\MVC\\Object\\Environment','getTextEnvironment',[]) | raw}}
+                    <li {% if name == 'docs_route' or name == 'docs_name_route' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'docs', []]) }}">Documentation</a></li>
+                    <li {% if name == 'depots' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'gitlist/SAND-FrameWork', []]) }}">Dépot</a></li>
+                    <li {% if name == 'donate' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'Donate', []]) }}">Donate</a></li>
+                    <li {% if name == 'cgu' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'CGU', []]) }}"> CGU Terms</a></li>
+                    <li {% if name == 'policy' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'Policy', []]) }}">Policy</a></li>
                 </ul>
             </div>
         </div>
@@ -38,8 +40,8 @@
                             <!--end: logo-->
                             <nav>
                                 <ul>
-                                    <li {% if name == 'index' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
-                                    <li {% if name == 'admin' %} class="actual" {% endif %} ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
+                                    <li {% if name == 'index' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[false, 'Index', []]) }}">Index</a></li>
+                                    <li {% if name == 'admin' %} class="actual" {% endif %} ><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[false, 'Admin', []]) }}">Admin</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -52,24 +54,43 @@
         <!-- Subbar -->
         <div id="subbar" class="fullwidth">
             <div class="container">
-                <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>
-                <span style="float:right;"><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
+                <span style="float:left;">Vous êtes connecté en tant que {{session('user_login')}}</span>
+                <span style="float:right;"><a href="{{ call("\\MVC\\Classe\\Url","link_rewrite",[ false, 'Logout', []]) }}">Se Deconnecter</a></span>
             </div>
         </div>
         <!-- end: Subbar -->
+        <!-- Breadcrumbs -->
+        {%if ariane is defined %}
+            <div id="breadcrumbs" class="fullwidth">
+                <div class="container">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            {% for value in ariane %}
+                                {% if value == ariane|last %}
+                                    <li class="breadcrumb-item active" aria-current="page">{{value}}</li>
+                                {% else %}
+                                    <li class="breadcrumb-item"><a href="{{call("\\MVC\\Classe\\Url","link_rewrite",[false,arianelink[value.index],[] ])}}">{{value}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        {% endif %}
         <section id="page-content">
             <div class="container">
 
                 <!--Alerts-->
-                {% if $_SESSION['alerts'] is defined %}
-                    {% foreach $_SESSION['alerts'] as alert %}
+                {% if not session('alerts') == null %}
+                    {% for alert in session('alerts') %}
                         <div class="alert alert-{{alert.type}} alert-dismissible fade show" role="alert">
                             <strong>{{alert.title}}</strong> {{alert.message}}.
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    {% endforeach %}
+                    {% endfor %}
                     {% endif %}
                 <!--end: Alerts-->
+
                 {% block content %}{% endblock %}
 
             </div>
@@ -84,7 +105,7 @@
                             <div class="widget">
                                 <div class="widget-title"></div>
                                 <p class="mb-5">
-                                    <img src="{{ \MVC\Classe\Url::asset_rewrite('assets/img/1007698-ffeb3b.svg') }}" width="150">
+                                    <img src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/img/1007698-ffeb3b.svg']) }}" width="150">
                                 </p>
                             </div>
                         </div>
@@ -116,4 +137,4 @@
 
     </div>
     <!-- end: Body Inner -->
-{% endblock %}}
+{% endblock %}

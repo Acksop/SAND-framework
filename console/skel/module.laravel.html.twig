@@ -1,0 +1,7 @@
+{% extends "body.html.twig" %}
+
+{% block content %}
+
+{{ subcall( app, 'load', ['%%MODULE%%'] ) | raw }}
+
+{% endblock %}

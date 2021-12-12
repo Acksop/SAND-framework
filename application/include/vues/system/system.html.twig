@@ -27,29 +27,29 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
-        {% block top-css %}
-            <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css')}}">
-            <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
+        {% block topCss %}
+            <link rel="stylesheet" href="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css'])}}">
+            <link rel="stylesheet" href="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/css/custom.css'])}}">
         {% endblock %}
     {% endblock %}
 </head>
 <body>
 
-{% block top-javascript %}{% endblock %}
+{% block topJavascript %}{% endblock %}
 
 {% block body %}{% endblock %}
 
-{% block bottom-javascript %}
-<script src="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js')}}"></script>
-<script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
+{% block bottomJavascript %}
+<script src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js'])}}"></script>
+<script src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/js/custom.js'])}}"></script>
 
-/*
+{#
 SCRIPT JS permettant de ne valider qu'une seule fois un formulaire
 ATTENTION tous les formulaires sont affecté
 Lors d'une validation bootstrap personnalisé veuillez utilisé
 la class do-resubmit sur le formulaire afin de permettre
 l'activation supplémentaire du bouton.
-*/
+#}
 <script>
     window.onload = function() {
         let PreventAllforms = document.querySelectorAll("form");
