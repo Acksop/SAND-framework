@@ -1,6 +1,8 @@
 name : %%MODULE_NAME%%
 page_title : module_title
 description : module_description
+engine : twig
+authentification : no
 ariane : {%%MODULE%%}
 arianelink : {%%MODULE_NAME%%}
 

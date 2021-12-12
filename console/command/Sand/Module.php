@@ -22,16 +22,30 @@ class Module
     public static function add()
     {
         print "adding module...\n\n";
-        print "Quel est le module a ajouter ?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
+        print "Quel est le module a ajouter ?\n0.Laravel\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
         $module = trim(fgets(STDIN));
         switch ($module) {
+            case 0:
+                print "Quel est le nom du module laravel à ajouter (default : laravel) ? ";
+                $name = trim(fgets(STDIN));
+                if ($name !== '' && preg_match('#(.)+#', $name)) {
+                    Module::addLaravel($name);
+                } else {
+                    Module::addLaravel('symfony');
+                }
+                break;
             case 1:
                 print "Quel est le nom du module symfony à ajouter (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
+                print "Quel est la version de Symfony à ajouter (default : 4.4) ? ";
+                $version = trim(fgets(STDIN));
+                if ($version == '' && !preg_match('#(.)\.(.)\.(.)\.(.)#', $version)) {
+                    $version = "4.4";
+                }
                 if ($name !== '' && preg_match('#(.)+#', $name)) {
-                    Module::addSymfony($name);
+                    Module::addSymfony($name,$version);
                 } else {
-                    Module::addSymfony('symfony');
+                    Module::addSymfony('symfony',$version);
                 }
                 break;
             case 2:
@@ -117,33 +131,86 @@ class Module
         }
     }
 
-    private static function addSymfony($name = 'symfony')
+    private static function addLaravel($name = 'laravel')
     {
-        $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project symfony/website-skeleton '.$name);
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project laravel/laravel '.$name);
         print $git_clone;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/'.$name.' -R');
+        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.'/'.$name.' -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
         print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module_symfony.php '.CONTROLLERS_PATH.'/'.$name.'.php');
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.php '.CONTROLLERS_PATH.'/'.$name.'.php');
         $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
-        $controlleur = preg_replace('%MODULE%', $name, $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', $name, $controlleur);
+        $controlleur = preg_replace('/%%MODULE%%/', 'laravel', $controlleur);
         file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/'.$name.'.model');
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.model '.MODELS_PATH.'/'.$name.'.model');
         $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
-        $modele = preg_replace('%MODULE%', $name, $modele);
+        $modele = preg_replace('/%%MODULE_NAME%%/', $name, $modele);
+        $modele = preg_replace('/%%MODULE%%/', 'laravel', $modele);
         file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.html.twig '.VIEW_PATH.'/view/'.$name.'.blade.php');
+        $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.html.twig');
+        $vue = preg_replace('/%%MODULE_NAME%%/', $name, $vue);
+        $vue = preg_replace('/%%MODULE%%/', 'laravel', $vue);
+        file_put_contents(VIEW_PATH.'/view/'.$name.'.html.twig', $vue);
+        print $git_view;
+
+        //stabilize symfony application
+        //print "stabilize symfony module...\n\n";
+        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/* '.MODULES_PATH.'/'.$name.' -Rf');
+        //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
+
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
+            ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"
+            ."\n "
+            ."\n et de créer la base de données!\n";
+    }
+    public static function removeLaravel($name = 'laravel')
+    {
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/'.$name, $git_clone_retval);
+        print $git_clone_retval;
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/'.$name.'.php', $git_controlleur_retval);
+        print $git_controlleur_retval;
+        $git_modele = system('rm -f '.MODELS_PATH.'/'.$name.'.model', $git_modele_retval);
+        print $git_modele_retval;
+        $git_view = system('rm -f '.VIEW_PATH.'/view/'.$name.'.html.twig', $git_view_retval);
+        print $git_view_retval;
+    }
+
+    private static function addSymfony($name = 'symfony',$version="4.4")
+    {
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project symfony/website-skeleton:"^'.$version.'" '.$name);
+        print $git_clone;
+        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.'/'.$name.' -R');
+        print $git_chmod;
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
+        print $git_chown;
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.php '.CONTROLLERS_PATH.'/'.$name.'.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', $name, $controlleur);
+        $controlleur = preg_replace('/%%MODULE%%/', 'symfony', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
+        print $git_controlleur;
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.model '.MODELS_PATH.'/'.$name.'.model');
+        $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
+        $modele = preg_replace('/%%MODULE_NAME%%/', $name, $modele);
+        $modele = preg_replace('/%%MODULE%%/', 'symfony', $modele);
+        file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
+        print $git_modele;
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
         $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.blade.php');
-        $vue = preg_replace('%MODULE%', 'symfony', $vue);
+        $vue = preg_replace('/%%MODULE_NAME%%/', $name, $vue);
+        $vue = preg_replace('/%%MODULE%%/', 'symfony', $vue);
         file_put_contents(VIEW_PATH.'/view/'.$name.'.blade.php', $vue);
         print $git_view;
 
         //stabilize symfony application
-        include dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Symfony.php';
-        $symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
+        //print "stabilize symfony module...\n\n";
+        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/* '.MODULES_PATH.'/'.$name.' -Rf');
+        //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"

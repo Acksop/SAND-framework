@@ -19,6 +19,8 @@ class Modular
                 break;
             case "symfony":
                 break;
+            case "laravel":
+                break;
             case "wordpress":
                 if (isset($options[0])) {
                     switch ($options[0]) {
@@ -92,35 +94,69 @@ class Modular
 
     public function load($type = "symfony")
     {
-        ob_start();
-
+        global $buffer_sand;
         switch ($type) {
             case "gitlist":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "symfony":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
+                $path = MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
+                return require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
+                break;
+            case "laravel":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "wordpress":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
             case "prestashop":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "phplist":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "wanewsletter":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
             case "phpmynewsletter":
+                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
         }
-
-        $data = ob_get_contents();
-        ob_end_clean();
-
-        return $data;
+        $buffer_sand = "";
+        if (ob_get_level() == $level) {
+            if (ob_get_level() > 1) {
+                $buffer_sand = ob_get_contents();
+                ob_end_clean();
+            } else {
+                $buffer_sand = "BUFFER CLOSURE BY FRAMEWORK !<br/>".$buffer_sand;
+            }
+        }else{
+            $final_level = ob_get_level();
+            $buffer_sand = "BUFFER LEVEL $level CLOSURE $final_level BY FRAMEWORK !<br/>".$buffer_sand;
+        }
+        return $buffer_sand;
     }
+    public static function rappel($buffer)
+        {
+            global $buffer_sand;
+            $buffer_sand = $buffer;
+            // remplace toutes les pommes par des carottes
+            return $buffer;
+        }
 }
