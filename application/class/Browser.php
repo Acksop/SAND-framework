@@ -210,10 +210,22 @@ class Browser
 
     public function isAppRequest()
     {
-        if (preg_match('#App#', $this->user)) {
-            return true;
-        } else {
-            return false;
+        switch(APP_STATE) {
+            case "CLOSED":
+            case "MAINTAINED":
+                return false;
+                break;
+            case "OPEN":
+                if(\MVC\Classe\Application::is_under_update()) {
+                    return false;
+                    break;
+                }
+            default:
+                if (preg_match('#App#', $this->user)) {
+                    return true;
+                } else {
+                    return false;
+                }
         }
     }
 }

@@ -62,6 +62,22 @@ class Url
             unset($urlParts[1]);
         }
 
+        //Mise en place du statut de l'application
+        switch(APP_STATE){
+            case "CLOSED":
+                $page['name'] = "error-application-closed";
+                break;
+            case "MAINTAINED":
+                $page['name'] = "error-application-maintained";
+                break;
+            case "OPEN":
+                if(\MVC\Classe\Application::is_under_update()) {
+                    $page['name'] = "error-application-maintained";
+                    break;
+                }
+            default:
+        }
+
         //vérification du nombre de parametres:
         $numParts = count($urlParts);
         //s'il n'existe pas autant de clé que de valeurs, ce peut ^etre un module symfony ou tout autre module
