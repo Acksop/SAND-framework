@@ -26,8 +26,21 @@ class Application
 
         $this->url = new Url($this->http->method, $this->browser->isAppRequest());
 
-        $dispacher = new Dispacher();
-        $this->route = $dispacher->route;
+        switch(APP_STATE) {
+            case "CLOSED":
+            case "MAINTAINED":
+                $this->route = null;
+                break;
+            case "OPEN":
+                if(\MVC\Classe\Application::is_under_update()) {
+                    $this->route = null;
+                    break;
+                }
+            default:
+                $dispacher = new Dispacher();
+                $this->route = $dispacher->route;
+        }
+
     }
 
     public function launch()
@@ -38,6 +51,17 @@ class Application
             print($this->controlleur->vue->ecran);
             //si on affiche l'écran alors on vide les alertes de la session
             \MVC\Object\Alert::remove();
+        }
+    }
+
+    public static function is_under_update(){
+        $ajh = new \DateTime('NOW');
+        $maintenance_begin = new \DateTime(MAINTENANCE_DATE_DEBUT);
+        $maintenance_fin = new \DateTime(MAINTENANCE_DATE_FIN);
+        if($maintenance_begin < $ajh && $ajh < $maintenance_fin) {
+            return true;
+        }else{
+            return false;
         }
     }
 }

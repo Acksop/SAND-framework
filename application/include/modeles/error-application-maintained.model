@@ -1,0 +1,6 @@
+name : error-application-maintained
+page_title : Page de maintenance de l'application
+description : UFC - Page de maintenance de l'application
+engine : blade
+authentification : no
+

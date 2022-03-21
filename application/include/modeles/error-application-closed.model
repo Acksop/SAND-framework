@@ -1,0 +1,6 @@
+name : error-application-closed
+page_title : Page de fermeture de l'application
+description : UFC - Page de fermeture de l'application
+engine : blade
+authentification : no
+
