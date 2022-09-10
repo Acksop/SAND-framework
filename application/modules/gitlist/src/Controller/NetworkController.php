@@ -14,7 +14,7 @@ class NetworkController implements ControllerProviderInterface
         $route = $app['controllers_factory'];
 
         $route->get(
-            MODULE_NAME.'/{repo}/network/{commitishPath}/{page}.json',
+            'gitlist/{repo}/network/{commitishPath}/{page}.json',
             function ($repo, $commitishPath, $page) use ($app) {
                 /** @var Repository $repository  */
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
@@ -98,7 +98,7 @@ class NetworkController implements ControllerProviderInterface
         ->bind('networkData');
 
         $route->get(
-            MODULE_NAME.'/{repo}/network/{commitishPath}',
+            '{repo}/network/{commitishPath}',
             function ($repo, $commitishPath) use ($app) {
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 

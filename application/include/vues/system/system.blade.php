@@ -47,7 +47,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
         <script src="{{\MVC\Classe\Url::asset_rewrite('assets/html5-simple-date-input-polyfill-master/html5-simple-date-input-polyfill.js')}}"></script>
-        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/hyperform-0.12.0/dist/hyperform.js')}}"></script>
+        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/hyperform/dist/hyperform.js')}}"></script>
         <script>hyperform(window);</script>
     @endif
 @show

@@ -12,7 +12,7 @@ class CommitController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get(MODULE_NAME.'/{repo}/commits/search', function (Request $request, $repo) use ($app) {
+        $route->get('gitlist/{repo}/commits/search', function (Request $request, $repo) use ($app) {
             $subRequest = Request::create(
                 '/' . $repo . '/commits/master/search',
                 'POST',
@@ -22,7 +22,7 @@ class CommitController implements ControllerProviderInterface
             return $app->handle($subRequest, \Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST);
         })->assert('repo', $app['util.routing']->getRepositoryRegex());
 
-        $route->get(MODULE_NAME.'/{repo}/commits/{commitishPath}', function (Request $request, $repo, $commitishPath) use ($app) {
+        $route->get('gitlist/{repo}/commits/{commitishPath}', function (Request $request, $repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             if ($commitishPath === null) {
@@ -63,7 +63,7 @@ class CommitController implements ControllerProviderInterface
           ->convert('commitishPath', 'escaper.argument:escape')
           ->bind('commits');
 
-        $route->post(MODULE_NAME.'/{repo}/commits/{branch}/search', function (Request $request, $repo, $branch = '') use ($app) {
+        $route->post('gitlist/{repo}/commits/{branch}/search', function (Request $request, $repo, $branch = '') use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             $query = $request->get('query');
 
@@ -90,7 +90,7 @@ class CommitController implements ControllerProviderInterface
           ->convert('branch', 'escaper.argument:escape')
           ->bind('searchcommits');
 
-        $route->get(MODULE_NAME.'/{repo}/commit/{commit}', function ($repo, $commit) use ($app) {
+        $route->get('gitlist/{repo}/commit/{commit}', function ($repo, $commit) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             $commit = $repository->getCommit($commit);
             $branch = $repository->getHead();
@@ -104,7 +104,7 @@ class CommitController implements ControllerProviderInterface
           ->assert('commit', '[a-f0-9^]+')
           ->bind('commit');
 
-        $route->get(MODULE_NAME.'/{repo}/blame/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('gitlist/{repo}/blame/{commitishPath}', function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']
