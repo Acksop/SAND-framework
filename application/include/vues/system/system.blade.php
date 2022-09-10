@@ -28,11 +28,11 @@
     <meta name="theme-color" content="#ffffff">
 
     @section('top-css')
-        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
         @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
-            <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/html5-simple-date-input-polyfill-master/html5-simple-date-input-polyfill.css')}}">
-        <!--<link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/hyperform-0.12.0/css/hyperform.css')}}">-->
+            <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.css')}}">
+        <!--<link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/hyperform/css/hyperform.css')}}">-->
         @endif
     @show
 
@@ -42,11 +42,16 @@
 
 @section('top-javascript')
     @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
+        <!--
+        INCLUSION DE SCRIPT JS permettant de corriger les erreurs de navigateurs ancien, particulièrement Internet Explorer
+        qui as été abandonné pour Edge depuis Windows10.
+        -->
+
         <!-- Polyfill.io will load polyfills your browser needs -->
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CNumber.parseInt%2CNumber.parseFloat%2CArray.prototype.find%2CArray.prototype.includes"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
-        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/html5-simple-date-input-polyfill-master/html5-simple-date-input-polyfill.js')}}"></script>
+        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/promise-polyfill/dist/polyfill.min.js')}}"></script>
+        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.js')}}"></script>
         <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/hyperform/dist/hyperform.js')}}"></script>
         <script>hyperform(window);</script>
     @endif
@@ -55,7 +60,7 @@
 @yield('body')
 
 @section('bottom-javascript')
-    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
     <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
 
     @if(\MVC\Classe\Browser::get() !== 'Internet Explorer')
@@ -64,7 +69,7 @@
         /*
         SCRIPT JS permettant de ne valider qu'une seule fois un formulaire
             ATTENTION tous les formulaires sont affecté
-            Lors d'une validation bootstrap personnalisé veuillez utilisé
+            Lors d'une validation bootstrap personnalisé veuillez utiliser
              la class do-resubmit sur le formulaire afin de permettre
              l'activation supplémentaire du bouton.
         */
