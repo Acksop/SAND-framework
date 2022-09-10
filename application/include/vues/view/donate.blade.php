@@ -12,8 +12,8 @@
         </div>
 
         <div class="donate-footer" style="margin:auto;">
-            <a href="https://www.patreon.com/" class="beer-button button">Be a sponsor on Patreon</a>
-            <a href="https://www.paypal.me/" class="beer-button button-secondary">Donate via PayPal</a>
+            <a href="https://www.patreon.com/besancon25" class="beer-button button">Be a sponsor on Patreon</a>
+            <a href="https://www.paypal.me/Acksop" class="beer-button button-secondary">Donate via PayPal</a>
         </div>
 
 

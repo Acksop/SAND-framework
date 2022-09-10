@@ -12,3 +12,4 @@ application/config/soap-constantes.php
 application/config/console-parameters.php
 
 application/include/vues/cache/*
+/application/modules/gitlist/

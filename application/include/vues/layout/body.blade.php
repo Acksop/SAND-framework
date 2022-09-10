@@ -10,7 +10,7 @@
                 <ul class="top-menu">
                     {{\MVC\Object\Environment::getTextEnvironment()}}
                     <li @if($name == 'docs_route' || $name == 'docs_name_route') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
-                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist/SAND-FrameWork', []) }}">Dépot</a></li>
+                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist', []) }}">Dépot</a></li>
                     <li @if($name == 'donate') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
                     <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
                     <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
@@ -122,11 +122,11 @@
                                 However, the amount of effort needed to maintain and develop new features for the project is not
                                 sustainable without proper financial backing.
                                 You can support its ongoing development by being a backer or a sponsor on
-                                <a href="https://www.patreon.com/">Patreon campaign</a>
+                                <a href="https://www.patreon.com/besancon25">Patreon campaign</a>
                                 (recurring, with perks for different tiers), and get your company logo here.
                             </p>
                             <p>
-                                Also, you can make a <a href="https://www.paypal.me/">one time donation via PayPal</a>.
+                                Also, you can make a <a href="https://www.paypal.me/Acksop">one time donation via PayPal</a>.
                             </p>
                         </div>
                     </div>

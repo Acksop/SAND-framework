@@ -13,7 +13,7 @@ class MainController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get(MODULE_NAME.'/', function () use ($app) {
+        $route->get('/gitlist/', function () use ($app) {
             $repositories = $app['git']->getRepositories($app['git.repos']);
 
             return $app['twig']->render('index.twig', array(
@@ -21,12 +21,12 @@ class MainController implements ControllerProviderInterface
             ));
         })->bind('homepage');
 
-        $route->get(MODULE_NAME.'/refresh', function (Request $request) use ($app) {
+        $route->get('/gitlist/refresh', function (Request $request) use ($app) {
             // Go back to calling page
             return $app->redirect($request->headers->get('Referer'));
         })->bind('refresh');
 
-        $route->get(MODULE_NAME.'/{repo}/stats/{branch}', function ($repo, $branch) use ($app) {
+        $route->get('{repo}/stats/{branch}', function ($repo, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             if ($branch === null) {
@@ -50,7 +50,7 @@ class MainController implements ControllerProviderInterface
           ->convert('branch', 'escaper.argument:escape')
           ->bind('stats');
 
-        $route->get(MODULE_NAME.'/{repo}/{branch}/rss/', function ($repo, $branch) use ($app) {
+        $route->get('gitlist/{repo}/{branch}/rss/', function ($repo, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             if ($branch === null) {
