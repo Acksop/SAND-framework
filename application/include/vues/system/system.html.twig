@@ -28,7 +28,7 @@
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
         {% block topCss %}
-            <link rel="stylesheet" href="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/bootstrap-5.0.0-beta1-dist/css/bootstrap.min.css'])}}">
+            <link rel="stylesheet" href="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/git-submodules/bootstrap/dist/css/bootstrap.min.css'])}}">
             <link rel="stylesheet" href="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/css/custom.css'])}}">
         {% endblock %}
     {% endblock %}
@@ -40,7 +40,7 @@
 {% block body %}{% endblock %}
 
 {% block bottomJavascript %}
-<script src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/bootstrap-5.0.0-beta1-dist/js/bootstrap.min.js'])}}"></script>
+<script src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/git-submodules/bootstrap/dist/js/bootstrap.min.js'])}}"></script>
 <script src="{{ call("\\MVC\\Classe\\Url","asset_rewrite",['assets/js/custom.js'])}}"></script>
 
 {#
