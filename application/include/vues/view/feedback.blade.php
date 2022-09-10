@@ -35,12 +35,12 @@
 
 @section('top-css')
     @parent
-    <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/star-rating.js-master/dist/star-rating.css')}}">
+    <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.css')}}">
 @endsection
 
 @section('top-javascript')
     @parent
-    <script src="{{\MVC\Classe\Url::asset_rewrite('assets/star-rating.js-master/dist/star-rating.js')}}"></script>
+    <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.js')}}"></script>
 @endsection
 
 @section('bottom-javascript')
