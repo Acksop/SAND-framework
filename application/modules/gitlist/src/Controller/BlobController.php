@@ -12,7 +12,7 @@ class BlobController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get(MODULE_NAME.'/{repo}/blob/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('gitlist/{repo}/blob/{commitishPath}', function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']
@@ -46,7 +46,7 @@ class BlobController implements ControllerProviderInterface
           ->convert('commitishPath', 'escaper.argument:escape')
           ->bind('blob');
 
-        $route->get(MODULE_NAME.'/{repo}/raw/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('gitlist/{repo}/raw/{commitishPath}', function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']
@@ -70,7 +70,7 @@ class BlobController implements ControllerProviderInterface
           ->convert('commitishPath', 'escaper.argument:escape')
           ->bind('blob_raw');
 
-        $route->get(MODULE_NAME.'/{repo}/logpatch/{commitishPath}', function ($repo, $commitishPath) use ($app) {
+        $route->get('gitlist/{repo}/logpatch/{commitishPath}', function ($repo, $commitishPath) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             list($branch, $file) = $app['util.routing']

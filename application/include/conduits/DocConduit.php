@@ -53,7 +53,7 @@ class DocConduit extends Conduit
             closedir($handle);
         }
 
-        asort($files);
+        sort($files);
 
         $key_file = array_search($this->file,$files);
 

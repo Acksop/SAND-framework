@@ -1,5 +1,8 @@
 <?php
 
+ini_set('error_reporting', ~E_ALL);
+ini_set('display_errors', 0);
+
 /**
  * GitList: an elegant and modern git repository viewer
  * http://gitlist.org
@@ -17,9 +20,9 @@ if (!is_writable(__DIR__ . DIRECTORY_SEPARATOR . 'cache')) {
     die(sprintf('The "%s" folder must be writable for GitList to run.', __DIR__ . DIRECTORY_SEPARATOR . 'cache'));
 }
 
-require dirname(__FILE__).DIRECTORY_SEPARATOR.'vendor/autoload.php';
+require 'vendor/autoload.php';
 
-$config = GitList\Config::fromFile(dirname(__FILE__).DIRECTORY_SEPARATOR.'config.ini');
+$config = GitList\Config::fromFile(__DIR__.'/config.ini');
 
 if ($config->get('date', 'timezone')) {
     date_default_timezone_set($config->get('date', 'timezone'));

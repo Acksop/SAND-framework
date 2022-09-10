@@ -1,7 +1,5 @@
 <?php
 
-define('MODULE_NAME','gitlist');
-
 // Startup and configure Silex application
 $app = new GitList\Application($config, __DIR__);
 

@@ -13,7 +13,7 @@ class TreeController implements ControllerProviderInterface
     {
         $route = $app['controllers_factory'];
 
-        $route->get(MODULE_NAME.'/{repo}/tree/{commitishPath}/', $treeController = function ($repo, $commitishPath = '') use ($app) {
+        $route->get('gitlist/{repo}/tree/{commitishPath}/', $treeController = function ($repo, $commitishPath = '') use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             if (!$commitishPath) {
                 $commitishPath = $repository->getHead();
@@ -48,7 +48,7 @@ class TreeController implements ControllerProviderInterface
           ->convert('commitishPath', 'escaper.argument:escape')
           ->bind('tree');
 
-        $route->post(MODULE_NAME.'/{repo}/tree/{branch}/search', function (Request $request, $repo, $branch = '', $tree = '') use ($app) {
+        $route->post('{repo}/tree/{branch}/search', function (Request $request, $repo, $branch = '', $tree = '') use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
             if (!$branch) {
                 $branch = $repository->getHead();
@@ -73,7 +73,7 @@ class TreeController implements ControllerProviderInterface
           ->convert('branch', 'escaper.argument:escape')
           ->bind('search');
 
-        $route->get(MODULE_NAME.'/{repo}/{format}ball/{branch}', function ($repo, $format, $branch) use ($app) {
+        $route->get('gitlist/{repo}/{format}ball/{branch}', function ($repo, $format, $branch) use ($app) {
             $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
 
             $tree = $repository->getBranchTree($branch);
@@ -111,14 +111,14 @@ class TreeController implements ControllerProviderInterface
           ->convert('branch', 'escaper.argument:escape')
           ->bind('archive');
 
-        $route->get(MODULE_NAME.'/{repo}/{branch}/', function ($repo, $branch) use ($app, $treeController) {
+        $route->get('gitlist/{repo}/{branch}/', function ($repo, $branch) use ($app, $treeController) {
             return $treeController($repo, $branch);
         })->assert('repo', $app['util.routing']->getRepositoryRegex())
           ->assert('branch', $app['util.routing']->getBranchRegex())
           ->convert('branch', 'escaper.argument:escape')
           ->bind('branch');
 
-        $route->get(MODULE_NAME.'/{repo}/', function ($repo) use ($app, $treeController) {
+        $route->get('gitlist/{repo}/', function ($repo) use ($app, $treeController) {
             return $treeController($repo);
         })->assert('repo', $app['util.routing']->getRepositoryRegex())
           ->bind('repository');
