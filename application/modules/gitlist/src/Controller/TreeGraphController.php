@@ -12,7 +12,7 @@ class TreeGraphController implements ControllerProviderInterface
         $route = $app['controllers_factory'];
 
         $route->get(
-            MODULE_NAME.'/{repo}/treegraph/{commitishPath}',
+            'gitlist/{repo}/treegraph/{commitishPath}',
             function ($repo, $commitishPath) use ($app) {
                 /** @var \GitList\Git\Repository $repository */
                 $repository = $app['git']->getRepositoryFromName($app['git.repos'], $repo);
