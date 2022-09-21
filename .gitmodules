@@ -1,0 +1,19 @@
+[submodule "bootstrap"]
+	path = public/assets/git-submodules/bootstrap
+	url = https://github.com/twbs/bootstrap.git
+
+[submodule "html5-simple-date-input-polyfill"]
+	path = public/assets/git-submodules/html5-simple-date-input-polyfill
+	url = https://github.com/liorwohl/html5-simple-date-input-polyfill.git
+
+[submodule "hyperform"]
+	path = public/assets/git-submodules/hyperform
+	url = https://github.com/hyperform/hyperform.git
+
+[submodule "promise-polyfill"]
+	path = public/assets/git-submodules/promise-polyfill
+	url = https://github.com/taylorhakes/promise-polyfill.git
+
+[submodule "star-rating"]
+	path = public/assets/git-submodules/star-rating
+	url = https://github.com/pryley/star-rating.js.git
