@@ -11,10 +11,15 @@
 <p>
 
 > Domain And Test(PHPUnit-Behat) Driven Development.
+ 
 > A building metrics toujours disponible  
+ 
 > Plusieurs modules déjà disponible (Worpress, PHPList, Gitlist, ...)
+ 
 > Possibilité de créer des modules SAND pour un Projet SAND (plusieurs modules SAND-view-symfony pour un projet SAND-blade, par exemple)
+ 
 > Un système d'authentification fonctionnellement testé avec des authenfication hybrides (Github, Google, Facebook, ...) et CAS
+ 
 > Des commandes consoles faciles à mettre en place pour les applications nécessitant de la maintenance journalière automatisée
 
 </p>
@@ -94,4 +99,5 @@ D'avance, merci aux futurs formidables contributeurs :
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Ce projet suit la spécification [all-contributors](https://github.com/all-contributors/all-contributors). Les contributions de tout type sont les bienvenues !
-This project follows the [all-contributors](https://allcontributors.org) specification.Contributions of any kind are welcome!
+
+This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
