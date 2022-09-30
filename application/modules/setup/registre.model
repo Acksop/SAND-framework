@@ -1,4 +1,5 @@
-symfony : Application permettant de tester l'intégration d'un module avec symfony5.1
+symfony : Application permettant de tester l'intégration d'un module avec symfony
+laravel : Application permettant de tester l'intégration d'un module avec laravel
 wordpress : Application permettant de générer un blog wordpress
 prestashop : Application permettant de générer une site e-commerce prestashop
 phplist : Application permettant de générer une newsletter phplist
