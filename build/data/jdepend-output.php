@@ -1,4 +1,3 @@
-
 <?php
 
 // CHargement du source XML

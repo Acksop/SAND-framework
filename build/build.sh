@@ -10,7 +10,7 @@ php ./bin/phpDocumentor.phar -d ../application -d ../console -d ../domain --igno
 php ./bin/phpmd.phar ../ html codesize,naming,unusedcode --exclude '*vendor*' --exclude '*tests*' --exclude '*build*' --exclude '*data*' --exclude '*skel*' --exclude '*modules*' --exclude '*cache*' ./data/phpmd.html
 php ./bin/phpmd.phar ../ xml codesize,naming,unusedcode --exclude '*vendor*' --exclude '*tests*' --exclude '*build*' --exclude '*data*' --exclude '*skel*' --exclude '*modules*' --exclude '*cache*' ./logs/phpmd.xml
 
-#CHECKSTYLE OF THE PROJECT
+# CHECKSTYLE OF THE PROJECT
 ./bin/phpcs -p --extensions=php --ignore=*/vendor/*,*/build/*,*/data/*,*/test/*,*/skel/*,*/modules/*,*/cache/*,*/public/* --report-xml=./logs/checkstyle.xml ../
 
 # CHARTS OF PROJECTS

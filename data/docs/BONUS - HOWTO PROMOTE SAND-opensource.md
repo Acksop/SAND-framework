@@ -1,16 +1,15 @@
-<p align="center">
-    <img alt="oss image" src="./imgs/zoss-logo.svg" height="200px" width="200px">
-</p>
 
 <p align="center">
   <a href="https://twitter.com/intent/tweet?text=How%20to%20promote%20your%20open-source%20projects%20@ZenikaOSS&url=https://github.com/zenika-open-source/open-source-promotion-cheat-sheet&hashtags=OpenSource,CheatSheet">
     <img alt="tweet" src="https://img.shields.io/twitter/url/https/twitter?label=Partager%20sur%20twitter&style=social" target="_blank" />
   </a>
-    From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
+  
+  <br/>
+  
+  From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
 </p>
 
 <h1 align="center">Cheat sheet : Promouvoir un projet open-source</h1>
-
 
 > Cette CheatSheet résume les étapes importantes à suivre pour promouvoir un projet open-source dans les meilleures conditions. Il est possible d’afficher des informations supplémentaires pour un élément de la liste en cliquant dessus.
 
