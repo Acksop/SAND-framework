@@ -31,7 +31,7 @@ class Module
                 if ($name !== '' && preg_match('#(.)+#', $name)) {
                     Module::addLaravel($name);
                 } else {
-                    Module::addLaravel('symfony');
+                    Module::addLaravel('laravel');
                 }
                 break;
             case 1:
@@ -109,9 +109,18 @@ class Module
     public static function remove()
     {
         print "removing module...\n\n";
-        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n7.GitList\n>";
+        print "Quel est le module a supprimer?\n0.Laravel\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n7.GitList\n>";
         $module = trim(fgets(STDIN));
-        switch ($module) {
+        switch ($module) {			
+            case 0:
+                print "Quel est le nom du module laravel à supprimer (default : laravel) ? ";
+                $name = trim(fgets(STDIN));
+                if ($name !== '' && preg_match('#(.)+#', $name)) {
+                    Module::removeLaravel($name);
+                } else {
+                    Module::removeLaravel('laravel');
+                }
+                break;
             case 1:
                 print "Quel est le nom du module symfony à supprimer (default : symfony) ? ";
                 $name = trim(fgets(STDIN));
@@ -176,7 +185,7 @@ class Module
         //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
-            ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"
+            ."\n'$name' : Application permettant d'intégrer un module avec laravel"
             ."\n "
             ."\n et de créer la base de données!\n";
     }
@@ -225,7 +234,7 @@ class Module
         //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
-            ."\n'.$name.' : Application permettant d'intégrer un module avec symfony"
+            ."\n'$name' : Application permettant d'intégrer un module avec symfony"
             ."\n "
             ."\n et de créer la base de données!\n";
     }
