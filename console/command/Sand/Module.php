@@ -22,7 +22,7 @@ class Module
     public static function add()
     {
         print "adding module...\n\n";
-        print "Quel est le module a ajouter ?\n0.Laravel\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
+        print "Quel est le module a ajouter ?\n0.Laravel\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n7.GitList\n>";
         $module = trim(fgets(STDIN));
         switch ($module) {
             case 0:
@@ -93,6 +93,15 @@ class Module
                     Module::addPHPMyNewsletter('v2.0.5');
                 }
                 break;
+			case 7:
+                print "Quel est la version de Gitlist à ajouter (default : 1.1.0) ? ";
+                $version = trim(fgets(STDIN));
+                if ($version !== '' && preg_match('#(.)\.(.)\.(.)#', $version)) {
+                    Module::addGitlist($version);
+                } else {
+                    Module::addGitlist('1.1.1');
+                }
+                break;
             default:
         }
     }
@@ -100,7 +109,7 @@ class Module
     public static function remove()
     {
         print "removing module...\n\n";
-        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n>";
+        print "Quel est le module a supprimer?\n1.Symfony\n2.Wordpress\n3.Prestashop\n4.PhpList\n5.Wanewsletter\n6.PHPmyNewletter\n7.GitList\n>";
         $module = trim(fgets(STDIN));
         switch ($module) {
             case 1:
@@ -126,6 +135,9 @@ class Module
                 break;
             case 6:
                 Module::removePHPMyNewsletter();
+                break;
+            case 7:
+                Module::removeGitlist();
                 break;
             default:
         }
@@ -599,6 +611,7 @@ class Module
             ."\n "
             ."\n et de créer la base de données!\n";
     }
+	
     public static function removePHPMyNewsletter()
     {
         $git_clone = system('rm -Rf '.MODULES_PATH.'/phpmynewsletter', $git_clone_retval);
@@ -613,3 +626,56 @@ class Module
         print $git_view_retval;
     }
 }
+
+	
+	public static function addGitlist($version = '1.1.0')
+    {
+        $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/klaussilveira/gitlist.git gitlist');
+        print $git_clone;
+        $git_fetch = shell_exec('cd '.MODULES_PATH.'/gitlist && git fetch --all --tags');
+        print $git_fetch;
+        $git_checkout = shell_exec('cd '.MODULES_PATH.'/gitlist && git checkout tags/'.$version.' -b actual-dev');
+        print $git_checkout;
+        $composer_update = shell_exec('cd '.MODULES_PATH.'/gitlist && composer update');
+        print $composer_update;
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/gitlist/themes themes');
+        print $git_ln_1;
+        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/gitlist -R');
+        print $git_chmod;
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/gitlist -R');
+        print $git_chown;
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/gitlist.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.'/gitlist.php');
+        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.'/gitlist.php', $controlleur);
+        print $git_controlleur;
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/gitlist.model');
+        $controlleur = file_get_contents(MODELS_PATH.'/gitlist.model');
+        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
+        file_put_contents(MODELS_PATH.'/gitlist.model', $controlleur);
+        print $git_modele;
+        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/gitlist.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.'/view/gitlist.blade.php');
+        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
+        file_put_contents(VIEW_PATH.'/view/gitlist.blade.php', $controlleur);
+        print $git_view;
+
+        print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
+            ."\ngitlist : Application permettant  mettre en ligne des code source au format git sur des sites web en php"
+            ."\n ";
+    }
+	
+	    public static function removeGitlist()
+    {
+        $git_clone = system('rm -Rf '.MODULES_PATH.'/gitlist', $git_clone_retval);
+        print $git_clone_retval;
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/gitlist', $git_ln_1_retval);
+        print $git_ln_1_retval;
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/gitlist.php', $git_controlleur_retval);
+        print $git_controlleur_retval;
+        $git_modele = system('rm -f '.MODELS_PATH.'/gitlist.model', $git_modele_retval);
+        print $git_modele_retval;
+        $git_view = system('rm -f '.VIEW_PATH.'/view/gitlist.blade.php', $git_view_retval);
+        print $git_view_retval;
+    }
+
