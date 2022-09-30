@@ -1,8 +1,8 @@
 symfony : Application permettant de tester l'intégration d'un module avec symfony
 laravel : Application permettant de tester l'intégration d'un module avec laravel
-wordpress : Application permettant de générer un blog wordpress
-prestashop : Application permettant de générer une site e-commerce prestashop
-phplist : Application permettant de générer une newsletter phplist
-wanewsletter : Application permettant de générer une newsletter wanewsletter
-phpmynewsletter : Application permettant de générer une newsletter phpmynewsletter
-gitlist : Application permettant de générer un dépot git
+wordpress : Application permettant de générer un blog avec wordpress 
+prestashop : Application permettant de générer une site e-commerce avec prestashop
+phplist : Application permettant de générer une newsletter avec phplist
+wanewsletter : Application permettant de générer une newsletter avec wanewsletter
+phpmynewsletter : Application permettant de générer une newsletter avec phpmynewsletter
+gitlist : Application permettant de générer des visualisation de dépot git avec php
