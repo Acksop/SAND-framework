@@ -625,10 +625,8 @@ class Module
         $git_view = system('rm -f '.VIEW_PATH.'/view/phpmynewsletter.blade.php', $git_view_retval);
         print $git_view_retval;
     }
-}
 
-	
-	public static function addGitlist($version = '1.1.0')
+    public static function addGitlist($version = '1.1.0')
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/klaussilveira/gitlist.git gitlist');
         print $git_clone;
@@ -659,13 +657,14 @@ class Module
         $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
         file_put_contents(VIEW_PATH.'/view/gitlist.blade.php', $controlleur);
         print $git_view;
-
+		//add skel rewriting of module
+		$git_stabilise = shell_exec('cp '.CONSOLE_PATH.'/skel/gitlist/* '.MODULES_PATH.'/gitlist/');
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\ngitlist : Application permettant  mettre en ligne des code source au format git sur des sites web en php"
             ."\n ";
     }
 	
-	    public static function removeGitlist()
+	public static function removeGitlist()
     {
         $git_clone = system('rm -Rf '.MODULES_PATH.'/gitlist', $git_clone_retval);
         print $git_clone_retval;
@@ -679,3 +678,4 @@ class Module
         print $git_view_retval;
     }
 
+}
