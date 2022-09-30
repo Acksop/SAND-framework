@@ -1,6 +1,39 @@
 # SAND-FRAMEWORK for Modular-Applications
 
 ---
+
+## 1. 🎢 Do you want to know more ?
+
+<br />
+
+<details>
+<summary>💪 Les points forts du projet SAND-framework dans sa version actuelle</summary>
+<p>
+
+> Domain And Test(PHPUnit-Behat) Driven Development.
+ 
+> A building metrics toujours disponible  
+ 
+> Plusieurs modules déjà disponible (Worpress, PHPList, Gitlist, ...)
+ 
+> Possibilité de créer des modules SAND pour un Projet SAND (plusieurs modules SAND-view-symfony pour un projet SAND-blade, par exemple)
+ 
+> Un système d'authentification fonctionnellement testé avec des authenfication hybrides (Github, Google, Facebook, ...) et CAS
+ 
+> Des commandes consoles faciles à mettre en place pour les applications nécessitant de la maintenance journalière automatisée
+
+</p>
+</details>
+
+<details>
+<summary>👌 Trouvez-vous que ce projet soit assez mature ?</summary>
+<p>
+
+> N'hésitez pas à commenter dans les Discussions.
+
+</p>
+</details>
+
 ---
 
 Cette architecture MVC Objet est composée d'un moteur de template (Blade ou Twig)
@@ -42,6 +75,29 @@ avec en plus de cela :
 > 
 > `php console/bin.php page:add`
 
-Pour les modules, c'est un peu plus compliqué : il faut instancier ces trois précédents fichiers en faisant appel la class Modular,
+Pour les modules, c'est beaucoup plus compliqué : il faut instancier ces trois précédents fichiers en faisant appel la class Modular,
 ne pas oublier de référencer le module dans le dossier modules > setup > registre.model, ajouter le dossier contenant le code du module
 et faire correspondre le nom du controlleur frontal du module avec le registre.
+
+> Mais bon, vous pouvez aussi tout à fait utiliser la commande:
+> 
+> `php console/bin.php module:add`
+
+
+## ❤️ Contributeurs
+
+D'avance, merci aux futurs formidables contributeurs :
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<!--<table>
+  <tr>
+    <td align="center"><a href="https://emmanuelroy.name/"><img src="https://avatars3.githubusercontent.com/u/9840435?v=4" width="100px;" alt="Emmanuel ROY"/><br /><sub><b>Emmanuel ROY</b></sub></a><br /><a href="https://github.com/Acksop/SAND-framework/commits?author=acksop" title="Project Owner">🎢</a></td>
+  </tr>
+</table> -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+Ce projet suit la spécification [all-contributors](https://github.com/all-contributors/all-contributors). Les contributions de tout type sont les bienvenues !
+
+This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
