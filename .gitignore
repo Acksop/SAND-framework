@@ -16,4 +16,9 @@ application/config/ldap-parameters.php
 domain/Component/*
 
 application/include/vues/cache/*
-/application/modules/gitlist/
+
+!application/modules/setup
+!application/modules/setup/*
+application/modules/*
+
+data/doc-prince-book-generation
