@@ -36,9 +36,9 @@
 
 ---
 
-Cette architecture MVC Objet est composée d'un moteur de template (Blade ou Twig)
+Cette architecture MVC Objet est composée d'un moteur de template (Blade ou Twig) provenant d'un projet de Simon Asika (Ventoviro) -> https://github.com/windwalker-io/renderer.git
 
-Les urls d'accès sont de type www.domain.tld/le_nom_de_mapage/varname1/varvalue1/varname2/varvalue2/ ...
+Les urls d'accès basiques sont de type `www.domain.tld/le_nom_de_mapage/varname1/varvalue1/varname2/varvalue2/ ...`
 
 Afin de créer une nouvelle page vous devez instancier trois fichiers contenant diverses variables, dont voici les adresses:
 
@@ -56,15 +56,17 @@ Afin de créer une nouvelle page vous devez instancier trois fichiers contenant 
 ```
 name : le_nom_de_mapage
 page_title : le title du head de la page html rendue
-description : ma description pour les moteurs de recherche
-engine : none
-authentification : no
+description : la description pour les moteurs de recherche
+engine : none | blade | twig
+authentification : no | yes
 ariane : {acceuil, test d'acceuil}
 arianelink : {index, le_nom_de_mapage}
-paramsN : paramètre(s) supplémentaire(s)
+paramsN : tout(s) paramètre(s) supplémentaire(s)
 ```
 avec en plus de cela : 
 `engine : blade` pour un layout blade ou `engine : twig` pour un layout twig
+si l'engine est a `none` alors vous pouvez tout à fait afficher la page directement dans le controlleur,
+seulement il vous faudra réaliser à la main le template l'affichant en recréant un systeme de chargement complet.
 
 ---
 
@@ -86,7 +88,7 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 
 ## ❤️ Contributeurs
 
-D'avance, merci aux futurs formidables contributeurs :
+D'avance, merci aux futurs formidables contributeurs, et s'il veulent se manifester: je suis tout ouïe
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
