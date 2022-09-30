@@ -87,7 +87,7 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 
 ## ❤️ Contributeurs
 
-D'avance, merci aux futurs formidables contributeurs, et s'il veulent se manifester: je suis tout ouïe
+D'avance, merci aux futurs formidables contributeurs, et s'il veulent se manifester : je suis tout ouïe
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
