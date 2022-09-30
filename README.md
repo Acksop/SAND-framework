@@ -64,8 +64,7 @@ arianelink : {index, le_nom_de_mapage}
 paramsN : tout(s) paramètre(s) supplémentaire(s)
 ```
 avec en plus de cela : 
-`engine : blade` pour un layout blade ou `engine : twig` pour un layout twig
-si l'engine est a `none` alors vous pouvez tout à fait afficher la page directement dans le controlleur,
+`engine : blade` pour un layout blade ou `engine : twig` pour un layout twig. Dans le cas où l'engine est a `none` alors vous pouvez tout à fait afficher la page directement dans le controlleur,
 seulement il vous faudra réaliser à la main le template l'affichant en recréant un systeme de chargement complet.
 
 ---
