@@ -1,9 +1,12 @@
 # Documentation sur le developement dirigé par le Domaine Métier
 
-https://alexsoyes.com/ddd-domain-driven-design/
-https://manifesto.softwarecraftsmanship.org/#/fr-fr
-https://refactoring.guru/fr/design-patterns
-https://refactoring.guru/fr/design-patterns/catalog
+> https://alexsoyes.com/ddd-domain-driven-design/
+
+> https://manifesto.softwarecraftsmanship.org/#/fr-fr
+
+> https://refactoring.guru/fr/design-patterns
+
+> https://refactoring.guru/fr/design-patterns/catalog
 
 
 
