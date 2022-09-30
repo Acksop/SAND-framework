@@ -11,6 +11,9 @@ application/config/cas-authentification-config.php
 application/config/hybrid-authentification-config.php
 application/config/soap-constantes.php
 application/config/console-parameters.php
+application/config/ldap-parameters.php
+
+domain/Component/*
 
 application/include/vues/cache/*
 /application/modules/gitlist/
