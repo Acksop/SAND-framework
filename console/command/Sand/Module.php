@@ -94,7 +94,7 @@ class Module
                 }
                 break;
 			case 7:
-                print "Quel est la version de Gitlist à ajouter (default : 1.1.0) ? ";
+                print "Quel est la version de Gitlist à ajouter (default : 1.1.1) ? ";
                 $version = trim(fgets(STDIN));
                 if ($version !== '' && preg_match('#(.)\.(.)\.(.)#', $version)) {
                     Module::addGitlist($version);
@@ -156,33 +156,33 @@ class Module
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project laravel/laravel '.$name);
         print $git_clone;
-        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.'/'.$name.' -R');
+        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -R');
         print $git_chmod;
-        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -R');
         print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.php '.CONTROLLERS_PATH.'/'.$name.'.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.laravel.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php');
         $controlleur = preg_replace('/%%MODULE_NAME%%/', $name, $controlleur);
         $controlleur = preg_replace('/%%MODULE%%/', 'laravel', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.model '.MODELS_PATH.'/'.$name.'.model');
-        $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.laravel.model '.MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model');
+        $modele = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model');
         $modele = preg_replace('/%%MODULE_NAME%%/', $name, $modele);
         $modele = preg_replace('/%%MODULE%%/', 'laravel', $modele);
-        file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model', $modele);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.laravel.html.twig '.VIEW_PATH.'/view/'.$name.'.blade.php');
-        $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.html.twig');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.laravel.html.twig '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.blade.php');
+        $vue = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.html.twig');
         $vue = preg_replace('/%%MODULE_NAME%%/', $name, $vue);
         $vue = preg_replace('/%%MODULE%%/', 'laravel', $vue);
-        file_put_contents(VIEW_PATH.'/view/'.$name.'.html.twig', $vue);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.html.twig', $vue);
         print $git_view;
 
         //stabilize symfony application
         //print "stabilize symfony module...\n\n";
-        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/* '.MODULES_PATH.'/'.$name.' -Rf');
-        //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
+        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'symfony-app/* '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -Rf');
+        //$symfony_composer = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\n'$name' : Application permettant d'intégrer un module avec laravel"
@@ -191,13 +191,13 @@ class Module
     }
     public static function removeLaravel($name = 'laravel')
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/'.$name, $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.$name, $git_clone_retval);
         print $git_clone_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/'.$name.'.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/'.$name.'.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/'.$name.'.html.twig', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.html.twig', $git_view_retval);
         print $git_view_retval;
     }
 
@@ -205,33 +205,33 @@ class Module
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && composer create-project symfony/website-skeleton:"^'.$version.'" '.$name);
         print $git_clone;
-        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.'/'.$name.' -R');
+        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -R');
         print $git_chmod;
-        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.'/'.$name.' -R');
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -R');
         print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.php '.CONTROLLERS_PATH.'/'.$name.'.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/'.$name.'.php');
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.symfony.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php');
         $controlleur = preg_replace('/%%MODULE_NAME%%/', $name, $controlleur);
         $controlleur = preg_replace('/%%MODULE%%/', 'symfony', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/'.$name.'.php', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.model '.MODELS_PATH.'/'.$name.'.model');
-        $modele = file_get_contents(MODELS_PATH.'/'.$name.'.model');
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.symfony.model '.MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model');
+        $modele = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model');
         $modele = preg_replace('/%%MODULE_NAME%%/', $name, $modele);
         $modele = preg_replace('/%%MODULE%%/', 'symfony', $modele);
-        file_put_contents(MODELS_PATH.'/'.$name.'.model', $modele);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model', $modele);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.symfony.blade.php '.VIEW_PATH.'/view/'.$name.'.blade.php');
-        $vue = file_get_contents(VIEW_PATH.'/view/'.$name.'.blade.php');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.symfony.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.blade.php');
+        $vue = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.blade.php');
         $vue = preg_replace('/%%MODULE_NAME%%/', $name, $vue);
         $vue = preg_replace('/%%MODULE%%/', 'symfony', $vue);
-        file_put_contents(VIEW_PATH.'/view/'.$name.'.blade.php', $vue);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.blade.php', $vue);
         print $git_view;
 
         //stabilize symfony application
         //print "stabilize symfony module...\n\n";
-        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.'/skel/symfony-app/* '.MODULES_PATH.'/'.$name.' -Rf');
-        //$symfony_composer = shell_exec('cd '.MODULES_PATH.'/'.$name.' && composer update');
+        //$symfony_module = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'symfony-app/* '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' -Rf');
+        //$symfony_composer = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.$name.' && composer update');
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\n'$name' : Application permettant d'intégrer un module avec symfony"
@@ -240,15 +240,15 @@ class Module
     }
     public static function removeSymfony($name = 'symfony')
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/'.$name, $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.$name, $git_clone_retval);
         print $git_clone_retval;
-        /*$git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/'.$name, $git_ln_1_retval);
+        /*$git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.$name, $git_ln_1_retval);
         print $git_ln_1_retval;*/
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/'.$name.'.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.$name.'.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/'.$name.'.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.$name.'.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/'.$name.'.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.''.$name.'.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 
@@ -256,33 +256,36 @@ class Module
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/WordPress/WordPress.git wordpress');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/wordpress && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'wordpress && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/wordpress && git checkout tags/'.$version.' -b actual-branch');
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'wordpress && git checkout tags/'.$version.' -b actual-branch');
         print $git_checkout;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wordpress -R');
+        /*$git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'wordpress -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/wordpress -R');
-        print $git_chown;
-        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wordpress/ wordpress');
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'wordpress -R');
+        print $git_chown;*/
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'wordpress'.DIRECTORY_SEPARATOR.' wordpress');
         print $git_ln_1;
 
-        $languages = shell_exec('cp '.CONSOLE_PATH.'/skel/wordpress '.MODULES_PATH);
+        $languages = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'wordpress '.MODULES_PATH);
 
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wordpress.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/wordpress.php');
-        $controlleur = preg_replace('%MODULE%', 'wordpress', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/wordpress.php', $controlleur);
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wordpress.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wordpress.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'wordpress', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wordpress', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wordpress.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wordpress.model');
-        $modele = file_get_contents(MODELS_PATH.'/wordpress.model');
-        $modele = preg_replace('%MODULE%', 'wordpress', $modele);
-        file_put_contents(MODELS_PATH.'/wordpress.model', $modele);
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'wordpress.model');
+        $modele = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'wordpress.model');
+        $modele = preg_replace('/%%MODULE%%/', 'wordpress', $modele);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wordpress', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'wordpress.model', $modele);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wordpress.blade.php');
-        $vue = file_get_contents(VIEW_PATH.'/view/wordpress.blade.php');
-        $vue = preg_replace('%MODULE%', 'wordpress', $vue);
-        file_put_contents(VIEW_PATH.'/view/wordpress.blade.php', $vue);
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wordpress.blade.php');
+        $vue = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wordpress.blade.php');
+        $vue = preg_replace('/%%MODULE%%/', 'wordpress', $vue);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wordpress', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wordpress.blade.php', $vue);
         print $git_view;
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
@@ -292,15 +295,15 @@ class Module
     }
     public static function removeWordpress()
     {
-        $git_clone = system('sudo rm -Rf '.MODULES_PATH.'/wordpress', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'wordpress', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/wordpress', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'wordpress', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/wordpress.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wordpress.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/wordpress.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'wordpress.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/wordpress.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wordpress.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 
@@ -308,34 +311,37 @@ class Module
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/PrestaShop/PrestaShop.git prestashop');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/prestashop && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/prestashop && git checkout tags/'.$version.' -b actual-branch ');
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop && git checkout tags/'.$version.' -b actual-branch ');
         print $git_checkout;
-        $composer_update = shell_exec('cd '.MODULES_PATH.'/prestashop && composer update');
+        $composer_update = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop && composer update');
         print $composer_update;
         $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/prestashop/ prestashop');
         print $git_ln_1;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/prestashop -R');
+        /*$git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/prestashop -R');
-        print $git_chown;
-        $git_ln_2 = shell_exec('cd '.MODULES_PATH.'/prestashop && ln -s ../prestashop/ prestashop');
+        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop -R');
+        print $git_chown;*/
+        $git_ln_2 = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop && ln -s ..'.DIRECTORY_SEPARATOR.'prestashop'.DIRECTORY_SEPARATOR.' prestashop');
         print $git_ln_2;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/prestashop.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/prestashop.php');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/prestashop.php', $controlleur);
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'prestashop.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'prestashop.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'prestashop', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'prestashop', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'prestashop.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/prestashop.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/prestashop.model');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
-        file_put_contents(MODELS_PATH.'/prestashop.model', $controlleur);
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'prestashop.model');
+        $controlleur = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'prestashop.model');
+        $controlleur = preg_replace('/%%MODULE%%/', 'prestashop', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'prestashop', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'prestashop.model', $controlleur);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/prestashop.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/prestashop.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'prestashop', $controlleur);
-        file_put_contents(VIEW_PATH.'/view/prestashop.blade.php', $controlleur);
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'prestashop.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'prestashop.blade.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'prestashop', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'prestashop', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'prestashop.blade.php', $controlleur);
         print $git_view;
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
@@ -345,15 +351,15 @@ class Module
     }
     public static function removePrestashop()
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/prestashop', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'prestashop', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/prestashop', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'prestashop', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/prestashop.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'prestashop.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/prestashop.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'prestashop.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/prestashop.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'prestashop.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 
@@ -362,41 +368,44 @@ class Module
 
         /*$git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/phpList/phplist3.git phplist');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/phplist && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phplist && git checkout '.$version);
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist && git checkout '.$version);
         print $git_checkout;
-        $composer_update = shell_exec('cd '.MODULES_PATH.'/phplist && composer update');
+        $composer_update = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist && composer update');
         print $composer_update;*/
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist/'.$version.'/phplist-'.$version.'.tgz/download');
-        //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist-development/'.$version.'/phplist-'.$version.'.tgz/download');
-        $wget_sourceforge = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist-'.$version.'.tar.gz');
+        //$wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && wget -O phplist-'.$version.'.tar.gz https://sourceforge.net/projects/phplist/files/phplist-development/'.$version.DIRECTORY_SEPARATOR.'phplist-'.$version.'.tgz/download');
+        $wget_sourceforge = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist-'.$version.'.tar.gz');
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && gunzip ./phplist-'.$version.'.tar.gz');
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && tar -xvf ./phplist-'.$version.'.tar');
         $wget_sourceforge = shell_exec('cd '.MODULES_PATH.' && mv phplist-'.$version.' phplist');
-        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phplist/public_html/lists phplist');
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'phplist'.DIRECTORY_SEPARATOR.'public_html'.DIRECTORY_SEPARATOR.'lists phplist');
         print $git_ln_1;
         $upload_images = shell_exec('cd '.PUBLIC_PATH.' && mkdir uploadimages');
         print $upload_images;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phplist -R');
-        $git_chmod = shell_exec('sudo chmod 775 '.PUBLIC_PATH.'/uploadimages');
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phplist -R');
-        $git_chown = shell_exec('sudo chown acksop:www-data '.PUBLIC_PATH.'/uploadimages');
+        $git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist -R');
+        $git_chmod = shell_exec('chmod 775 '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'uploadimages');
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist -R');
+        $git_chown = shell_exec('chown acksop:www-data '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'uploadimages');
         print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phplist.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/phplist.php');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/phplist.php', $controlleur);
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phplist.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phplist.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phplist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phplist', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phplist.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phplist.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/phplist.model');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
-        file_put_contents(MODELS_PATH.'/phplist.model', $controlleur);
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'phplist.model');
+        $controlleur = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'phplist.model');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phplist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phplist', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'phplist.model', $controlleur);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phplist.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/phplist.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'phplist', $controlleur);
-        file_put_contents(VIEW_PATH.'/view/phplist.blade.php', $controlleur);
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phplist.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phplist.blade.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phplist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phplist', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phplist.blade.php', $controlleur);
         print $git_view;
 
         print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
@@ -428,14 +437,14 @@ class Module
             $pass = 'sand';
         }
 
-        $config_skel = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
-        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $config_skel = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'phplist'.DIRECTORY_SEPARATOR.'config.skel.php '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist'.DIRECTORY_SEPARATOR.'public_html'.DIRECTORY_SEPARATOR.'lists'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php');
+        $config = file_get_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist'.DIRECTORY_SEPARATOR.'public_html'.DIRECTORY_SEPARATOR.'lists'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php');
         $config = preg_replace('%HOST_HOSTNAME%', $host, $config);
         $config = preg_replace('%HOST_USERNAME%', $user, $config);
         $config = preg_replace('%HOST_NAME%', $host_name, $config);
         $config = preg_replace('%HOST_PASSWORD%', $pass, $config);
-        $config = preg_replace('%HOST_PAGEROOT%', '/phplist', $config);
-        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php', $config);
+        $config = preg_replace('%HOST_PAGEROOT%', DIRECTORY_SEPARATOR.'phplist', $config);
+        file_put_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist'.DIRECTORY_SEPARATOR.'public_html'.DIRECTORY_SEPARATOR.'lists'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'config.php', $config);
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nphplist : Application permettant de générer une newsletter phplist"
@@ -444,49 +453,52 @@ class Module
     }
     public static function removePhplist()
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/phplist', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phplist', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'phplist', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/uploadimages', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'uploadimages', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phplist.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phplist.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/phplist.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'phplist.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/phplist.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phplist.blade.php', $git_view_retval);
         print $git_view_retval;
     }
     public static function addWanewsletter($version = 'release-3.0.1')
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/wascripts/wanewsletter.git wanewsletter');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/wanewsletter && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/wanewsletter && git checkout tags/'.$version);
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter && git checkout tags/'.$version);
         print $git_checkout;
-        $composer_update = shell_exec('cd '.MODULES_PATH.'/wanewsletter && composer update');
+        $composer_update = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter && composer update');
         print $composer_update;
-        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/wanewsletter wanewsletter');
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'wanewsletter wanewsletter');
         print $git_ln_1;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/wanewsletter -R');
+        /*$git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/wanewsletter -R');
-        print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/wanewsletter.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/wanewsletter.php');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/wanewsletter.php', $controlleur);
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter -R');
+        print $git_chown;*/
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wanewsletter', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/wanewsletter.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/wanewsletter.model');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
-        file_put_contents(MODELS_PATH.'/wanewsletter.model', $controlleur);
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.model');
+        $controlleur = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.model');
+        $controlleur = preg_replace('/%%MODULE%%/', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wanewsletter', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.model', $controlleur);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/wanewsletter.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/wanewsletter.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'wanewsletter', $controlleur);
-        file_put_contents(VIEW_PATH.'/view/wanewsletter.blade.php', $controlleur);
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wanewsletter.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wanewsletter.blade.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'wanewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'wanewsletter', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wanewsletter.blade.php', $controlleur);
         print $git_view;
 
         /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
@@ -518,14 +530,14 @@ class Module
             $pass = 'sand';
         }
 
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
-        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'phplist/config.skel.php '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php');
         $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
         $config = preg_replace('%HOST_USERNAME%',$user,$config);
         $config = preg_replace('%HOST_NAME%',$host_name,$config);
         $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
-        $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
-        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
+        $config = preg_replace('%HOST_PAGEROOT%',DIRECTORY_SEPARATOR.'phplist',$config);
+        file_put_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php',$config);*/
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nwanewsletter : Application permettant de générer une newsletter wanewsletter"
@@ -534,47 +546,50 @@ class Module
     }
     public static function removeWanewsletter()
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/wanewsletter', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'wanewsletter', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/wanewsletter', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'wanewsletter', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/wanewsletter.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/wanewsletter.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'wanewsletter.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/wanewsletter.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'wanewsletter.blade.php', $git_view_retval);
         print $git_view_retval;
     }
     public static function addPHPMyNewsletter($version = 'v2.0.5')
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/Arnaud69/phpmynewsletter-2.0.git phpmynewsletter');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && git checkout tags/'.$version.' -b actual-dev');
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter && git checkout tags/'.$version.' -b actual-dev');
         print $git_checkout;
-        //$composer_update = shell_exec('cd '.MODULES_PATH.'/phpmynewsletter && composer update');
+        //$composer_update = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter && composer update');
         //print $composer_update;
-        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/phpmynewsletter phpmynewsletter');
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'phpmynewsletter phpmynewsletter');
         print $git_ln_1;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/phpmynewsletter -R');
+        /*$git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/phpmynewsletter -R');
-        print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/phpmynewsletter.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/phpmynewsletter.php');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/phpmynewsletter.php', $controlleur);
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter -R');
+        print $git_chown;*/
+        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phpmynewsletter', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.php', $controlleur);
         print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/phpmynewsletter.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/phpmynewsletter.model');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
-        file_put_contents(MODELS_PATH.'/phpmynewsletter.model', $controlleur);
+        $git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.model');
+        $controlleur = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.model');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phpmynewsletter', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.model', $controlleur);
         print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/phpmynewsletter.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'phpmynewsletter', $controlleur);
-        file_put_contents(VIEW_PATH.'/view/phpmynewsletter.blade.php', $controlleur);
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phpmynewsletter.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phpmynewsletter.blade.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'phpmynewsletter', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'phpmynewsletter', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phpmynewsletter.blade.php', $controlleur);
         print $git_view;
 
         /*print "Quel est le host de la base de donnees (default:192.168.1.70) ? ";
@@ -606,14 +621,14 @@ class Module
             $pass = 'sand';
         }
 
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/phplist/config.skel.php '.MODULES_PATH.'/phplist/public_html/lists/config/config.php');
-        $config = file_get_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php');
+        $git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'phplist/config.skel.php '.MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php');
+        $config = file_get_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php');
         $config = preg_replace('%HOST_HOSTNAME%',$host,$config);
         $config = preg_replace('%HOST_USERNAME%',$user,$config);
         $config = preg_replace('%HOST_NAME%',$host_name,$config);
         $config = preg_replace('%HOST_PASSWORD%',$pass,$config);
-        $config = preg_replace('%HOST_PAGEROOT%','/phplist',$config);
-        file_put_contents(MODULES_PATH.'/phplist/public_html/lists/config/config.php',$config);*/
+        $config = preg_replace('%HOST_PAGEROOT%',DIRECTORY_SEPARATOR.'phplist',$config);
+        file_put_contents(MODULES_PATH.DIRECTORY_SEPARATOR.'phplist/public_html/lists/config/config.php',$config);*/
 
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\nphpmynewsletter : Application permettant de générer une newsletter phpmynewsletter"
@@ -623,67 +638,83 @@ class Module
 	
     public static function removePHPMyNewsletter()
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/phpmynewsletter', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/phpmynewsletter', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/phpmynewsletter.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/phpmynewsletter.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'phpmynewsletter.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/phpmynewsletter.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'phpmynewsletter.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 
-    public static function addGitlist($version = '1.1.0')
+    public static function addGitlist($version = '1.1.1')
     {
         $git_clone = shell_exec('cd '.MODULES_PATH.' && git clone https://github.com/klaussilveira/gitlist.git gitlist');
         print $git_clone;
-        $git_fetch = shell_exec('cd '.MODULES_PATH.'/gitlist && git fetch --all --tags');
+        $git_fetch = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist && git fetch --all --tags');
         print $git_fetch;
-        $git_checkout = shell_exec('cd '.MODULES_PATH.'/gitlist && git checkout tags/'.$version.' -b actual-dev');
+        $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist && git checkout tags/'.$version.' -b actual-dev');
         print $git_checkout;
-        $composer_update = shell_exec('cd '.MODULES_PATH.'/gitlist && composer update');
+        //add skel rewriting path of module
+        /*if (!\MVC\Component\Copy::rcopy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'*', MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist')) {
+            echo "failed to copy gitlist controlleur skeleton...\n";
+        }*/
+        $git_stabilise = shell_exec('cp -Rf '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'* '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR);
+        $composer_update = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist && composer update');
         print $composer_update;
-        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ../application/modules/gitlist/themes themes');
+        $git_ln_1 = shell_exec('cd '.PUBLIC_PATH.' && ln -s ..'.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'themes themes');
         print $git_ln_1;
-        $git_chmod = shell_exec('sudo chmod 775 '.MODULES_PATH.'/gitlist -R');
+        /*$git_chmod = shell_exec('chmod 775 '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist -R');
         print $git_chmod;
-        $git_chown = shell_exec('sudo chown acksop:www-data '.MODULES_PATH.'/gitlist -R');
-        print $git_chown;
-        $git_controlleur = shell_exec('cp '.CONSOLE_PATH.'/skel/module.php '.CONTROLLERS_PATH.'/gitlist.php');
-        $controlleur = file_get_contents(CONTROLLERS_PATH.'/gitlist.php');
-        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
-        file_put_contents(CONTROLLERS_PATH.'/gitlist.php', $controlleur);
-        print $git_controlleur;
-        $git_modele = shell_exec('cp '.CONSOLE_PATH.'/skel/module.model '.MODELS_PATH.'/gitlist.model');
-        $controlleur = file_get_contents(MODELS_PATH.'/gitlist.model');
-        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
-        file_put_contents(MODELS_PATH.'/gitlist.model', $controlleur);
-        print $git_modele;
-        $git_view = shell_exec('cp '.CONSOLE_PATH.'/skel/module.blade.php '.VIEW_PATH.'/view/gitlist.blade.php');
-        $controlleur = file_get_contents(VIEW_PATH.'/view/gitlist.blade.php');
-        $controlleur = preg_replace('%MODULE%', 'gitlist', $controlleur);
-        file_put_contents(VIEW_PATH.'/view/gitlist.blade.php', $controlleur);
-        print $git_view;
-		//add skel rewriting of module
-		$git_stabilise = shell_exec('cp '.CONSOLE_PATH.'/skel/gitlist/* '.MODULES_PATH.'/gitlist/');
+        $git_chown = shell_exec('chown acksop:www-data '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist -R');
+        print $git_chown;*/
+        if (!copy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php', CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'gitlist.php')) {
+            echo "failed to copy controlleur skel...\n";
+        }
+        //$git_controlleur = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.php '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'gitlist.php');
+        $controlleur = file_get_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'gitlist.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'gitlist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'gitlist', $controlleur);
+        file_put_contents(CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'gitlist.php', $controlleur);
+        //print $git_controlleur;
+        if (!copy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model', MODELS_PATH.DIRECTORY_SEPARATOR.'gitlist.model')) {
+            echo "failed to copy model skel...\n";
+        }
+        //$git_modele = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.model '.MODELS_PATH.DIRECTORY_SEPARATOR.'gitlist.model');
+        $controlleur = file_get_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'gitlist.model');
+        $controlleur = preg_replace('/%%MODULE%%/', 'gitlist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'gitlist', $controlleur);
+        file_put_contents(MODELS_PATH.DIRECTORY_SEPARATOR.'gitlist.model', $controlleur);
+        //print $git_modele;
+        if (!copy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php', VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'gitlist.blade.php')) {
+            echo "failed to copy view blade skel...\n";
+        }
+        //$git_view = shell_exec('cp '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'module.blade.php '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'gitlist.blade.php');
+        $controlleur = file_get_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'gitlist.blade.php');
+        $controlleur = preg_replace('/%%MODULE%%/', 'gitlist', $controlleur);
+        $controlleur = preg_replace('/%%MODULE_NAME%%/', 'gitlist', $controlleur);
+        file_put_contents(VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'gitlist.blade.php', $controlleur);
+        //print $git_view;
+
         print "\n\nN'oubliez pas d'ajouter au fichier '/application/modules/setup/registre.model' :"
             ."\ngitlist : Application permettant  mettre en ligne des code source au format git sur des sites web en php"
-            ."\n ";
+            ."\n ha, et si une des copy du skeleton n'as pas fonctionné : tenter de la réaliser à la main, sous windows la commande copy de php est encore perfectible....";
     }
 	
 	public static function removeGitlist()
     {
-        $git_clone = system('rm -Rf '.MODULES_PATH.'/gitlist', $git_clone_retval);
+        $git_clone = system('rm -Rf '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist', $git_clone_retval);
         print $git_clone_retval;
-        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.'/gitlist', $git_ln_1_retval);
+        $git_ln_1 = system('rm -Rf '.PUBLIC_PATH.DIRECTORY_SEPARATOR.'gitlist', $git_ln_1_retval);
         print $git_ln_1_retval;
-        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.'/gitlist.php', $git_controlleur_retval);
+        $git_controlleur = system('rm -f '.CONTROLLERS_PATH.DIRECTORY_SEPARATOR.'gitlist.php', $git_controlleur_retval);
         print $git_controlleur_retval;
-        $git_modele = system('rm -f '.MODELS_PATH.'/gitlist.model', $git_modele_retval);
+        $git_modele = system('rm -f '.MODELS_PATH.DIRECTORY_SEPARATOR.'gitlist.model', $git_modele_retval);
         print $git_modele_retval;
-        $git_view = system('rm -f '.VIEW_PATH.'/view/gitlist.blade.php', $git_view_retval);
+        $git_view = system('rm -f '.VIEW_PATH.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.'gitlist.blade.php', $git_view_retval);
         print $git_view_retval;
     }
 

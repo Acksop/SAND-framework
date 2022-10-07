@@ -1,13 +1,4 @@
-
-<p align="center">
-  <a href="https://twitter.com/intent/tweet?text=How%20to%20promote%20your%20open-source%20projects%20@ZenikaOSS&url=https://github.com/zenika-open-source/open-source-promotion-cheat-sheet&hashtags=OpenSource,CheatSheet">
-    <img alt="tweet" src="https://img.shields.io/twitter/url/https/twitter?label=Partager%20sur%20twitter&style=social" target="_blank" />
-  </a>
-  
-  <br/>
-  
-  From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
-</p>
+From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
 
 <h1 align="center">Cheat sheet : Promouvoir un projet open-source</h1>
 
