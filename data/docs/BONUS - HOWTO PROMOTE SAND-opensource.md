@@ -1,4 +1,4 @@
-  From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
+From <a href='https://github.com/zenika-open-source/open-source-promotion-cheat-sheet'>https://github.com/zenika-open-source/open-source-promotion-cheat-sheet</a>
 
 <h1 align="center">Cheat sheet : Promouvoir un projet open-source</h1>
 
