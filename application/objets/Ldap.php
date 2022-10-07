@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Object;
+namespace SAND\Object;
 
 
 class Ldap

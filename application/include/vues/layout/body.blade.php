@@ -8,13 +8,13 @@
              style="background: rgba(0, 0, 0, 0.59);">
             <div class="container">
                 <ul class="top-menu">
-                    {{\MVC\Object\Environment::getTextEnvironment()}}
-                    <li @if($name == 'docs_route' || $name == 'docs_name_route') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
-                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'gitlist', []) }}">Dépot</a></li>
-                    <li @if($name == 'donate') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
-                    <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
-                    <li @if($name == 'policy') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
-                    <li @if($name == 'feedback') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Feedback', []) }}">Feedback</a></li>
+                    {!! \SAND\Object\Environment::getTextEnvironment() !!}
+                    <li @if($name == 'docs_route' || $name == 'docs_name_route') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'docs', []) }}">Documentation</a></li>
+                    <li @if($name == 'depots') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'gitlist', []) }}">Dépot</a></li>
+                    <li @if($name == 'donate') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Donate', []) }}">Donate</a></li>
+                    <li @if($name == 'cgu') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'CGU', []) }}"> CGU Terms</a></li>
+                    <li @if($name == 'policy') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Policy', []) }}">Policy</a></li>
+                    <li @if($name == 'feedback') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Feedback', []) }}">Feedback</a></li>
                 </ul>
             </div>
         </div>
@@ -41,8 +41,8 @@
                             <!--end: logo-->
                             <nav>
                                 <ul>
-                                    <li @if($name == 'index') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
-                                    <li @if($name == 'admin') class="actual" @endif ><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
+                                    <li @if($name == 'index') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Index', []) }}">Index</a></li>
+                                    <li @if($name == 'admin') class="actual" @endif ><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Admin', []) }}">Admin</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -57,7 +57,7 @@
         <div id="subbar" class="fullwidth">
             <div class="container">
                 <span style="float:left;">Vous êtes connecté en tant que {{$_SESSION['user_login']}}</span>
-                <span style="float:right;"><a href="{{ \MVC\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
+                <span style="float:right;"><a href="{{ \SAND\Classe\Url::link_rewrite( false, 'Logout', []) }}">Se Deconnecter</a></span>
             </div>
         </div>
         @endif
@@ -73,7 +73,7 @@
                                 @if($value == end($ariane))
                                     <li class="breadcrumb-item active" aria-current="page">{{$value}}</li>
                                 @else
-                                    <li class="breadcrumb-item"><a href="{{\MVC\Classe\Url::link_rewrite(false,$arianelink[array_search($value,$ariane)])}}">{{$value}}</a></li>
+                                    <li class="breadcrumb-item"><a href="{{\SAND\Classe\Url::link_rewrite(false,$arianelink[array_search($value,$ariane)])}}">{{$value}}</a></li>
                                 @endif
                             @endforeach
                         </ol>
@@ -110,7 +110,7 @@
                             <div class="widget">
                                 <div class="widget-title"></div>
                                 <p class="mb-5">
-                                    <img src="{{ \MVC\Classe\Url::asset_rewrite('assets/img/1007698-ffeb3b.svg') }}" width="150">
+                                    <img src="{{ \SAND\Classe\Url::asset_rewrite('assets/img/1007698-ffeb3b.svg') }}" width="150">
                                 </p>
                             </div>
                         </div>

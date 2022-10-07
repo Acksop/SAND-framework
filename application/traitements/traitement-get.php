@@ -1,7 +1,7 @@
 <?php
 
-\MVC\Object\Session::createAndTestSession();
+\SAND\Object\Session::createAndTestSession();
 
-\MVC\Classe\Dumper::dump($_GET);
-\MVC\Classe\Dumper::dump($url_params);
-\MVC\Classe\Dumper::dump($GLOBALS);
+\SAND\Classe\Dumper::dump($_GET);
+\SAND\Classe\Dumper::dump($url_params);
+\SAND\Classe\Dumper::dump($GLOBALS);

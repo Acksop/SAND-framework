@@ -6,7 +6,7 @@
         De 1 à 10, combien d'étoiles donneriez-vous pour le framework SAND?
         <br/><br/><br/>
         <div class="form-field box">
-            <form method="POST" action="{{\MVC\Classe\Url::link_rewrite(true,"send-feedback")}}">
+            <form method="POST" action="{{\SAND\Classe\Url::link_rewrite(true,"send-feedback")}}">
             <select name="glsr-custom-options" id="glsr-custom-options" class="star-rating" data-options='{"clearable":false, "tooltip":true}'>
                 <option value="">Select a rating</option>
                 <option value="10">10</option>
@@ -35,12 +35,12 @@
 
 @section('top-css')
     @parent
-    <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.css')}}">
+    <link rel="stylesheet" href="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.css')}}">
 @endsection
 
 @section('top-javascript')
     @parent
-    <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.js')}}"></script>
+    <script src="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/star-rating/dist/star-rating.js')}}"></script>
 @endsection
 
 @section('bottom-javascript')

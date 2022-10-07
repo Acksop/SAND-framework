@@ -14,7 +14,7 @@ final class UrlTest extends TestCase
 {
     public function testCompareCharge(): void
     {
-        $baseDirectory = \MVC\Classe\Url::getBaseDirectory();
+        $baseDirectory = \SAND\Classe\Url::getBaseDirectory();
         if('/' . BASE_SERVER_DIRECTORY == $baseDirectory) {
             $this->assertTrue(true);
         }else{

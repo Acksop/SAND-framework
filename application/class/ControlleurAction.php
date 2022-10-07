@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class ControlleurAction
 {

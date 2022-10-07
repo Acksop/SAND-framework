@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 use Symfony\Component\Config\FileLocator as FileLocator;
 use Symfony\Component\Routing\Matcher\UrlMatcher as UrlMatcher;

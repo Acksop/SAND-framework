@@ -1,6 +1,6 @@
 <?php
 
-class DefaultAction extends \MVC\Classe\Implement\Action
+class DefaultAction extends \SAND\Classe\Implement\Action
 {
     public function default()
     {
@@ -92,11 +92,11 @@ class DefaultAction extends \MVC\Classe\Implement\Action
     {
         $data = array('myval' => 25);
         //Dumper::dump($data);
-        \MVC\Classe\Logger::addLog('action', 'http11 make request');
-        $request = new \MVC\Classe\HttpMethodRequete();
-        $request->setUrl(\MVC\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->get($data);
-        $request->setUrl(\MVC\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->post($data);
-        $request->setUrl(\MVC\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->put($data);
-        $request->setUrl(\MVC\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->delete($data);
+        \SAND\Classe\Logger::addLog('action', 'http11 make request');
+        $request = new \SAND\Classe\HttpMethodRequete();
+        $request->setUrl(\SAND\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->get($data);
+        $request->setUrl(\SAND\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->post($data);
+        $request->setUrl(\SAND\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->put($data);
+        $request->setUrl(\SAND\Classe\Url::absolute_link_rewrite(false, 'accueil', ['var10'=>'val10']))->delete($data);
     }
 }

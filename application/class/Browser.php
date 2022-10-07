@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Browser
 {
@@ -216,7 +216,7 @@ class Browser
                 return false;
                 break;
             case "OPEN":
-                if(\MVC\Classe\Application::is_under_update()) {
+                if(\SAND\Classe\Application::is_under_update()) {
                     return false;
                     break;
                 }

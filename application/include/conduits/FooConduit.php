@@ -1,14 +1,14 @@
 <?php
 
 
-use MVC\Classe\Implement\Conduit;
+use SAND\Classe\Implement\Conduit;
 
 class FooConduit extends Conduit
 {
     // Route('/foo')
     public function index()
     {
-        \MVC\Object\Session::createAndTestSession();
+        \SAND\Object\Session::createAndTestSession();
         echo "blob of foo";
         return $this->render('foo', array('page_title' => 'Foo', 'description' => 'FooConduit'));
     }
@@ -16,7 +16,7 @@ class FooConduit extends Conduit
     // Route('/foo/{id}')
     public function load()
     {
-        \MVC\Object\Session::createAndTestSession();
+        \SAND\Object\Session::createAndTestSession();
         echo "load of foo";
         return $this->render('foo', array('page_title' => 'Foo', 'description' => 'FooConduit', 'id' => $this->id));
     }

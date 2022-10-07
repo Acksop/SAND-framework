@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Modular
 {
@@ -97,43 +97,43 @@ class Modular
         global $buffer_sand;
         switch ($type) {
             case "gitlist":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "symfony":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 $path = MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
                 return require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "laravel":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "wordpress":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
             case "prestashop":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "phplist":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . "index.php";
                 break;
             case "wanewsletter":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;
             case "phpmynewsletter":
-                ob_start(array('\\MVC\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
+                ob_start(array('\\SAND\\Classe\\Modular', 'rappel'),0,PHP_OUTPUT_HANDLER_STDFLAGS ^ PHP_OUTPUT_HANDLER_FLUSHABLE);
                 $level = ob_get_level();
                 require MODULES_PATH . DIRECTORY_SEPARATOR . $this->getAppName() . $this->subapp_dir . DIRECTORY_SEPARATOR . $this->subfile;
                 break;

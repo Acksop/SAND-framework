@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Package MVC\Classe
+ * Package SAND\Classe
  * @author Emmanuel ROY
  * @license  MIT-licence (open source)
  * @version 3.5
  */
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Application
 {
@@ -32,7 +32,7 @@ class Application
                 $this->route = null;
                 break;
             case "OPEN":
-                if(\MVC\Classe\Application::is_under_update()) {
+                if(\SAND\Classe\Application::is_under_update()) {
                     $this->route = null;
                     break;
                 }
@@ -50,7 +50,7 @@ class Application
         if (!$this->url->page['control']) {
             print($this->controlleur->vue->ecran);
             //si on affiche l'écran alors on vide les alertes de la session
-            \MVC\Object\Alert::remove();
+            \SAND\Object\Alert::remove();
         }
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 
 /**
@@ -9,7 +9,7 @@ namespace MVC\Classe;
  *  with call {{ static_call("AppBundle\Entity\YourEntity", "GetSomething", ["var1", "var2"]) }}
  *  other {{ action("AppBundle\Entity\YourEntity", "GetSomething", ["var1", "var2"]) }}
  *
- * @package MVC\Classe
+ * @package SAND\Classe
  */
 
 class TwigControlleurAction extends \Twig\Extension\AbstractExtension
