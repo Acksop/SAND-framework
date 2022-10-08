@@ -14,22 +14,22 @@ $config = [
     'providers' => [
         'GitHub' => [
             'enabled' => true,
-            'keys' => ['id' => '4cc55bcafbf8ea77ae14', 'secret' => 'e0b7c5091d7af4f4e5ced843f2e8ce1f38f02578'],
+            'keys' => ['id' => '', 'secret' => ''],
         ],
 
         'Google' => [
             'enabled' => true,
-            'keys' => ['id' => '686670374445-mhktaj9gp08p6oiu8e1aue3ckua6e3s3.apps.googleusercontent.com', 'secret' => '4yOeNxYuYE4H8DFhVzQlOb_U'],
+            'keys' => ['id' => '', 'secret' => ''],
         ],
 
         'Facebook' => [
             'enabled' => true,
-            'keys' => ['id' => '432266300978748', 'secret' => '43815184db62771fce19b64cdd80110a'],
+            'keys' => ['id' => '', 'secret' => ''],
         ],
 
         'Twitter' => [
             'enabled' => true,
-            'keys' => ['key' => 'gnsmsVW0EkdpSVeqwCOG7V1H5', 'secret' => 'cdv71bFMUV4OBpkjFIwPNOlbRBQhrAaWBTmLF8aPzZBeMf3PyQ'],
+            'keys' => ['key' => '', 'secret' => ''],
         ]
     ],
     //optional : set debug mode
