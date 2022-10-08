@@ -9,3 +9,7 @@ vendor
 
 application/modules/*
 !application/modules/setup
+/application/modules/phpmynewsletter/
+/application/modules/prestashop/
+/application/modules/setup/
+/application/modules/wordpress/
