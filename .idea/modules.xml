@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MVC---Objet.iml" filepath="$PROJECT_DIR$/.idea/MVC---Objet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SAND-framework-v0.iml" filepath="$PROJECT_DIR$/.idea/SAND-framework-v0.iml" />
     </modules>
   </component>
 </project>
