@@ -40,9 +40,19 @@ Cette architecture MVC Objet est composée d'un moteur de template (Blade ou Twi
 
 Les urls d'accès basiques sont de type `www.domain.tld/le_nom_de_mapage/varname1/varvalue1/varname2/varvalue2/ ...`
 
-Afin de créer une nouvelle page vous devez instancier trois fichiers contenant diverses variables, dont voici les adresses:
+Avant toute chose après le clonage de cette branche et avant le lancement du docker, vous executerez les commandes suivantes:
+
+```
+composer  update
+git submodule init
+git submodule update
+```
+
+cela permettra de stabiliser les ressources publiques tierces, pour que tout fonctionne bien.
 
 ---
+
+### Afin de créer une nouvelle page vous devez instancier trois fichiers contenant diverses variables, dont voici les adresses:
 
 `application > include > controlleurs > le_nom_de_mapage.php` contenant:
  - les commandes permettant de gérer un formulaire
