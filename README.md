@@ -94,6 +94,9 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 > 
 > `php console/bin.php module:add`
 
+## 🙏 Montrez votre support
+
+N'hésitez pas à mettre une ⭐ si ce projet vous a aidé.
 
 ## ❤️ Contributeurs
 
