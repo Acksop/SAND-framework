@@ -1,1 +1,1 @@
-{{$app->load('%%MODULE%%')}}
+{!! $app->load('%%MODULE%%') !!}

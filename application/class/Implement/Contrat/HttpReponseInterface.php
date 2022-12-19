@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classe\Implement\Contrat;
+namespace SAND\Classe\Implement\Contrat;
 
 interface HttpReponseInterface
 {

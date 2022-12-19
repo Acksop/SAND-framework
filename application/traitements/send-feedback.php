@@ -5,8 +5,8 @@
  */
 
 
-\MVC\Object\Session::createAndTestSession();
+\SAND\Object\Session::createAndTestSession();
 
 $note = $_POST['glsr-custom-options'];
 
-header('location:'.\MVC\Classe\Url::link_rewrite(false, "donate", []));
+header('location:'. \SAND\Classe\Url::link_rewrite(false, "donate", []));

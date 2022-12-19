@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Object;
+namespace SAND\Object;
 
 class History
 {

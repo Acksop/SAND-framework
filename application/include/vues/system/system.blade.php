@@ -28,11 +28,11 @@
     <meta name="theme-color" content="#ffffff">
 
     @section('top-css')
-        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/css/bootstrap.min.css')}}">
-        <link rel="stylesheet" href="{{ \MVC\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
-        @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
-            <link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.css')}}">
-        <!--<link rel="stylesheet" href="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/hyperform/css/hyperform.css')}}">-->
+        <link rel="stylesheet" href="{{ \SAND\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{ \SAND\Classe\Url::asset_rewrite('assets/css/custom.css')}}">
+        @if(\SAND\Classe\Browser::get() == 'Internet Explorer')
+            <link rel="stylesheet" href="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.css')}}">
+        <!--<link rel="stylesheet" href="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/hyperform/css/hyperform.css')}}">-->
         @endif
     @show
 
@@ -41,7 +41,7 @@
 <body>
 
 @section('top-javascript')
-    @if(\MVC\Classe\Browser::get() == 'Internet Explorer')
+    @if(\SAND\Classe\Browser::get() == 'Internet Explorer')
         <!--
         INCLUSION DE SCRIPT JS permettant de corriger les erreurs de navigateurs ancien, particulièrement Internet Explorer
         qui as été abandonné pour Edge depuis Windows10.
@@ -50,9 +50,9 @@
         <!-- Polyfill.io will load polyfills your browser needs -->
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2CNumber.parseInt%2CNumber.parseFloat%2CArray.prototype.find%2CArray.prototype.includes"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/promise-polyfill/dist/polyfill.min.js')}}"></script>
-        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.js')}}"></script>
-        <script src="{{\MVC\Classe\Url::asset_rewrite('assets/git-submodules/hyperform/dist/hyperform.js')}}"></script>
+        <script src="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/promise-polyfill/dist/polyfill.min.js')}}"></script>
+        <script src="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/html5-simple-date-input-polyfill/html5-simple-date-input-polyfill.js')}}"></script>
+        <script src="{{\SAND\Classe\Url::asset_rewrite('assets/git-submodules/hyperform/dist/hyperform.js')}}"></script>
         <script>hyperform(window);</script>
     @endif
 @show
@@ -60,10 +60,10 @@
 @yield('body')
 
 @section('bottom-javascript')
-    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-    <script src="{{ \MVC\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
+    <script src="{{ \SAND\Classe\Url::asset_rewrite('assets/git-submodules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+    <script src="{{ \SAND\Classe\Url::asset_rewrite('assets/js/custom.js')}}"></script>
 
-    @if(\MVC\Classe\Browser::get() !== 'Internet Explorer')
+    @if(\SAND\Classe\Browser::get() !== 'Internet Explorer')
     <script>
 
         /*

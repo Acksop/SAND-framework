@@ -1,9 +1,9 @@
 <?php
 
 
-namespace MVC\Classe\Implement;
+namespace SAND\Classe\Implement;
 
-use MVC\Classe\Implement\Contrat\HttpReponseInterface;
+use SAND\Classe\Implement\Contrat\HttpReponseInterface;
 
 class HttpReponse extends Action implements HttpReponseInterface
 {

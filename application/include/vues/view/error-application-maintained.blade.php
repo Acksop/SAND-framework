@@ -514,7 +514,7 @@
             <h1>:) Oops!</h1>
             <br /><br />
             <h2>Temporairement fermée pour maintenance</h2>
-            @if(\MVC\Classe\Application::is_under_update())
+            @if(\SAND\Classe\Application::is_under_update())
                 <pre>{{MAINTENANCE_MESSAGE}}</pre>
             @endif
             <br /><br />

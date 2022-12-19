@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Classe\Implement;
+namespace SAND\Classe\Implement;
 
 class Action
 {

@@ -3,7 +3,7 @@
 
 namespace App\Security;
 
-use MVC\Classe\Dumper;
+use SAND\Classe\Dumper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Command\Sand;
+namespace SAND\Command\Sand;
 /**
  * Class Cache
  * Commande Système du Framework permettant de gérer le cache

@@ -1,11 +1,11 @@
 <?php
 
-\MVC\Object\Session::createAndTestSession();
+\SAND\Object\Session::createAndTestSession();
 
 $path = PATH_URL;
-$bdd = new \MVC\Classe\Bdd();
+$bdd = new \SAND\Classe\Bdd();
 
-\MVC\Domain\Host::addHost($bdd, $_POST['ip'], $_POST['nom']);
+\SAND\Domain\Host::addHost($bdd, $_POST['ip'], $_POST['nom']);
 
 switch ($_POST['from']) {
     case "vlan-zone+":

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Package MVC\Classe
+ * Package SAND\Classe
  * @author Emmanuel ROY
  * @license  MIT-licence (open source)
  * @version 3.5
  */
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Url
 {
@@ -20,7 +20,7 @@ class Url
     {
 
         //on créé le registre des modules d'applications tierces
-        $this->registre = new \MVC\Classe\ModularRegister();
+        $this->registre = new \SAND\Classe\ModularRegister();
 
         //définition des parametres de base
         $page = array();
@@ -71,7 +71,7 @@ class Url
                 $page['name'] = "error-application-maintained";
                 break;
             case "OPEN":
-                if(\MVC\Classe\Application::is_under_update()) {
+                if(\SAND\Classe\Application::is_under_update()) {
                     $page['name'] = "error-application-maintained";
                     break;
                 }

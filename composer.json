@@ -8,24 +8,27 @@
         "./application/config/console-parameters.php"
       ],
       "psr-4": {
-          "MVC\\Classe\\" : "./application/class",
-          "MVC\\Object\\" : "./application/objets",
-          "MVC\\Domain\\" : "./domain",
-          "MVC\\Command\\": "./console/command",
-          "MVC\\Component\\" : "./console/component"
+          "SAND\\Classe\\" : "./application/class",
+          "SAND\\Object\\" : "./application/objets",
+          "APP\\Domain\\" : "./domain",
+          "SAND\\Command\\": "./console/command",
+          "SAND\\Component\\" : "./console/component"
       }
     },
 
     "require": {
       "windwalker/renderer": "3.*",
-      "illuminate/view": "4.*",
+      "illuminate/view": "9.*",
+      "twig/twig": "2.*",
+
       "neitanod/forceutf8": "^2.0",
+
       "symfony/routing": "3.4.36",
       "symfony/http-foundation": "~2.8",
       "symfony/yaml": "~4.0",
       "symfony/expression-language": "~3.0",
-      "symfony/config": "3.3.2",
-      "twig/twig": "1.*"
+      "symfony/config": "3.3.2"
+
     },
 
     "require-dev": {

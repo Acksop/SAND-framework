@@ -1,7 +1,7 @@
 <?php
 
-use MVC\Classe\Session;
+use SAND\Classe\Session;
 
 Session::start();
-$app = new MVC\Classe\Modular($name, '%%MODULE%%', $url_params);
+$app = new SAND\Classe\Modular($name, '%%MODULE%%', $url_params);
 $templateData = array('app' => $app);
