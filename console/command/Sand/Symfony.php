@@ -1,10 +1,10 @@
 <?php
 
-namespace MVC\Command\Sand;
+namespace SAND\Command\Sand;
 /**
  * Class Symfony
  * Commande Système du Framework permettant de gèrer les modules Symfony
- * @package MVC\Command\Sand
+ * @package SAND\Command\Sand
  */
 class Symfony
 {

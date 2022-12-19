@@ -1,7 +1,7 @@
 <?php
 
-use MVC\Classe\Implement\Action;
-use MVC\Classe\Response;
+use SAND\Classe\Implement\Action;
+use SAND\Classe\Response;
 
 class MenudocsAction extends Action
 {

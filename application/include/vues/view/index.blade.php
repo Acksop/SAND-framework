@@ -13,9 +13,9 @@
     <hr/>
     {{$templating_a}}::{{$templating_b}}::{{$templating_c}}
 
-    {{\MVC\Classe\ControlleurAction::inserer('default',[])}}
-    {{\MVC\Classe\ControlleurAction::inserer('default.defaultBlade',[4,5,6])}}
-    {{\MVC\Classe\ControlleurAction::inserer('default.variableSlug',['var1','var2','var3'])}}
+    {{\SAND\Classe\ControlleurAction::inserer('default',[])}}
+    {{\SAND\Classe\ControlleurAction::inserer('default.defaultBlade',[4,5,6])}}
+    {{\SAND\Classe\ControlleurAction::inserer('default.variableSlug',['var1','var2','var3'])}}
 
 @endsection
 

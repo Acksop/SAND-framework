@@ -1,10 +1,10 @@
 <?php
 
-namespace MVC\Command;
+namespace SAND\Command;
 /**
  * Class Help
  * Commande d'aide principale du Framework
- * @package MVC\Command
+ * @package SAND\Command
  */
 class Help
 {

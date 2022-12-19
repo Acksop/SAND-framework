@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Bdd
 {
@@ -24,7 +24,7 @@ class Bdd
 
     public function faireSQLRequete($sql)
     {
-        $sql = \MVC\Classe\Caracter::avoid_sql_injection($sql);
+        $sql = \SAND\Classe\Caracter::avoid_sql_injection($sql);
         $req = $this->bdd->query($sql);
         // Print Pdo::ERRORs
         if (!$req && (ENV == 'TEST' || ENV == 'DEVEL')) {

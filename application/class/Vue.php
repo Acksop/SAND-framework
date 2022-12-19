@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Package MVC\Classe
+ * Package SAND\Classe
  * @author Emmanuel ROY
  * @license  MIT-licence (open source)
  * @version 3.5
  */
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Vue
 {
@@ -60,7 +60,7 @@ class Vue
             switch ($engine){
                 case 'twig':
                     $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
-                    $renderer->addExtension(new \MVC\Classe\TwigControlleurAction);
+                    $renderer->addExtension(new \SAND\Classe\TwigControlleurAction);
                     $name .= '.html';
                     break;
                 case 'blade':

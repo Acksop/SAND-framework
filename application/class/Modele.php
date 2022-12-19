@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Package MVC\Classe
+ * Package SAND\Classe
  * @author Emmanuel ROY
  * @license  MIT-licence (open source)
  * @version 3.5
  */
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Modele
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use MVC\Classe\Caracter;
+use SAND\Classe\Caracter;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -37,7 +37,7 @@ function appel_cmd($class,$static_method,$argv){
         $errors = $class::$static_method(...$arguments);
 
         if ($errors !== null) {
-            \MVC\Component\Error::logErrors($errors);
+            \SAND\Component\Error::logErrors($errors);
         }
     }else{
         $static_method = 'help';
@@ -52,7 +52,7 @@ if (isset($argv[1])) {
     $option = explode(':', $argv[1]);
     $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
     if (is_file($command_file)) {
-        $class = "MVC\\Command\\" . ucfirst($option[0]);
+        $class = "SAND\\Command\\" . ucfirst($option[0]);
 
         if(isset($option[1]) && $option[1] !== '') {
             $static_method = $option[1];
@@ -65,7 +65,7 @@ if (isset($argv[1])) {
     } else {
         $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "App" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
         if (is_file($command_file)) {
-            $class = "MVC\\Command\\App\\" . ucfirst($option[0]);
+            $class = "SAND\\Command\\App\\" . ucfirst($option[0]);
 
             if(isset($option[1]) && $option[1] !== '') {
                 $static_method = $option[1];
@@ -78,7 +78,7 @@ if (isset($argv[1])) {
         } else {
             $command_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . "command" . DIRECTORY_SEPARATOR . "Sand" . DIRECTORY_SEPARATOR . ucfirst($option[0]) . ".php";
             if (is_file($command_file)) {
-                $class = "MVC\\Command\\Sand\\" . ucfirst($option[0]);
+                $class = "SAND\\Command\\Sand\\" . ucfirst($option[0]);
 
                 if(isset($option[1]) && $option[1] !== '') {
                     $static_method = $option[1];
@@ -90,7 +90,7 @@ if (isset($argv[1])) {
                 }
             } else {
                 print "SAND Command not found !\n";
-                $class = "MVC\\Command\\Help";
+                $class = "SAND\\Command\\Help";
                 $static_method = 'help';
                 $class::$static_method();
             }
@@ -98,7 +98,7 @@ if (isset($argv[1])) {
     }
 } else {
     print "No command was specified !\n";
-    $class = "MVC\\Command\\Help";
+    $class = "SAND\\Command\\Help";
     $static_method = 'help';
     $class::$static_method();
 

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace MVC\Classe\Implement;
+namespace SAND\Classe\Implement;
 
-use MVC\Classe\Dumper;
-use MVC\Classe\Url;
-use MVC\Classe\HttpMethod;
-use MVC\Classe\Implement\Contrat\RestReponseInterface;
+use SAND\Classe\Dumper;
+use SAND\Classe\Url;
+use SAND\Classe\HttpMethod;
+use SAND\Classe\Implement\Contrat\RestReponseInterface;
 
 class RestReponse implements RestReponseInterface
 {

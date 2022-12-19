@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Object;
+namespace SAND\Object;
 
 /**
  * Class Session
@@ -16,8 +16,8 @@ class Session
     {
         self::authentification();
         self::checkSession();
-        \MVC\Object\History::setPagePrecedente();
-        \MVC\Object\Asynchronous::declare();
+        \SAND\Object\History::setPagePrecedente();
+        \SAND\Object\Asynchronous::declare();
     }
 
     /**
@@ -25,7 +25,13 @@ class Session
      */
     public static function sessionStart()
     {
-        session_start();
+        if (!isset($_COOKIE["PHPSESSID"])) {
+            session_start();
+        }else{
+            if(session_status() !== PHP_SESSION_ACTIVE ) {
+                session_start();
+            }
+        }
     }
 
     /**
@@ -100,10 +106,10 @@ class Session
     public static function checkACL_admin()
     {
         if (!isset($_SESSION['acl_admin'])) {
-            header('location:'.\MVC\Classe\Url::link_rewrite(false, "error-access-denied", []));
+            header('location:'. \SAND\Classe\Url::link_rewrite(false, "error-access-denied", []));
             die();
         } elseif ($_SESSION['acl_admin'] != 1) {
-            header('location:'.\MVC\Classe\Url::link_rewrite(false, "error-access-denied", []));
+            header('location:'. \SAND\Classe\Url::link_rewrite(false, "error-access-denied", []));
             die();
         }
     }

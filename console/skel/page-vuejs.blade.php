@@ -44,7 +44,7 @@
 @section('bottom-javascript')
     @parent
     <script>
-        @if(\MVC\Classe\Browser::get() !== 'Internet Explorer')
+        @if(\SAND\Classe\Browser::get() !== 'Internet Explorer')
         const vue = new Vue({
             el: '#app',
             data: {

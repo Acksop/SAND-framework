@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Package MVC\Command\Sand
+ * Package SAND\Command\Sand
  * @author Emmanuel ROY
  * @license  MIT-licence (open source)
  * @version 3.5
  */
 
-namespace MVC\Command\Sand;
+namespace SAND\Command\Sand;
 /**
  * Class Page
  * Commande Système du Framework permettant de gérer les pages

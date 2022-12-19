@@ -7,7 +7,7 @@
  * @version 3.5
  */
 
-namespace MVC\Classe;
+namespace SAND\Classe;
 
 class Controlleur
 {
@@ -57,9 +57,9 @@ class Controlleur
                     if(isset($this->modele->page['authentification']) && $this->modele->page['authentification'] == 'yes'){
                         //on declare la session lors du chargement du controlleur,
                         // ainsi on instancie la page précédente et le javascript et le css asynchrone
-                        \MVC\Object\Session::createAndTestSession();
+                        \SAND\Object\Session::createAndTestSession();
                     }else{
-                        \MVC\Object\Session::sessionStart();
+                        \SAND\Object\Session::sessionStart();
                     }
                     $this->vue = new Vue($this->modele->page);
                 }

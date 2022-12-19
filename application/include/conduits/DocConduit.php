@@ -1,14 +1,14 @@
 <?php
 
 use Michelf\MarkdownExtra;
-use MVC\Classe\Implement\Conduit;
+use SAND\Classe\Implement\Conduit;
 
 class DocConduit extends Conduit
 {
     // Route('/docs')
     public function index()
     {
-        \MVC\Object\Session::createAndTestSession();
+        \SAND\Object\Session::createAndTestSession();
         $files = array();
 
         if ($handle = opendir(DATA_PATH . '/docs')) {
@@ -36,7 +36,7 @@ class DocConduit extends Conduit
     // Route('/docs/file/{file}')
     public function readfile()
     {
-        \MVC\Object\Session::createAndTestSession();
+        \SAND\Object\Session::createAndTestSession();
 
         $files = array();
 
