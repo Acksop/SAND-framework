@@ -7,6 +7,26 @@
 <br />
 
 <details>
+<summary>↗️ A quelle utilisation se destine le framework SAND ?</summary>
+<p>
+
+> Voici quelques exemples de projets pour lesquels SAND a été ou peu être utilisé :
+>
+> - Un site comprenant documentation MARKDOWN et depot git personnel (https://code-source.sand-framework.app)
+> - Un outil full console pour partager les accès entre un LDAP et une grosse application de droits et de paiement de salariés
+> - Une application permettant de communiquer avec un LDAP pour une gestion des droits de personnels exterieurs à une université comprenant logs et multiples droits accès
+> - Une application web de newsletter avec envoi en mode console par tache CRON
+> - Une application web de curriculum vitae
+> - Une application web de créations de pages dynamiques
+> - Une application web comprenant un wordpress, un phplist et un site reliés sur le même domaine
+> - Une application comprennant un ou plusieurs module symfony avec gestion des droits d'accès par SAND
+> - Une applications comprennant un ou plusieurs module laravel avec gestion des droits d'accès par SAND
+> - Une application REST comprennant des appels dynamique injectés en curl 
+
+</p>
+</details>
+
+<details>
 <summary>💪 Les points forts du projet SAND-framework dans sa version actuelle</summary>
 <p>
 
@@ -29,7 +49,7 @@
 <summary>👌 Trouvez-vous que ce projet soit assez mature ?</summary>
 <p>
 
-> N'hésitez pas à commenter dans les Discussions.
+> N'hésitez pas à commenter dans les discussions.
 
 </p>
 </details>
