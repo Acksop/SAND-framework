@@ -10,9 +10,9 @@
 <summary>↗️ A quelle utilisation se destine le framework SAND ?</summary>
 <p>
 
-> Voici quelques exemples de projets pour lesquels SAND a été ou peu être utilisé :
+> Voici quelques exemples de projets pour lesquels SAND a été ou pourrait être utilisé :
 >
-> - Un site comprenant documentation MARKDOWN et depot git personnel (https://code-source.sand-framework.app)
+> - Un site comprenant une documentation interne en MARKDOWN et un depot git privé (https://code-source.sand-framework.app)
 > - Un outil full console pour partager les accès entre un LDAP et une grosse application de droits et de paiement de salariés
 > - Une application permettant de communiquer avec un LDAP pour une gestion des droits de personnels exterieurs à une université comprenant logs et multiples droits accès
 > - Une application web de newsletter avec envoi en mode console par tache CRON
