@@ -21,7 +21,6 @@
       "php": "^8.2",
       "windwalker/renderer": "~4.1.8",
       "illuminate/view": "^12.0",
-      "neitanod/forceutf8": "^2.0",
       "psr/container": "^2.0",
       "symfony/cache": "^6.4",
       "symfony/config": "^6.4",

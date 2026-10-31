@@ -191,7 +191,7 @@ final class BddTest extends TestCase
         $bdd->bdd->exec('DELETE FROM nb');
         $bdd->bdd->exec("INSERT INTO nb (v) VALUES ('a'), ('a'), ('b')");
 
-        // Sans paramètre lié : la dépréciation utf8_decode() de forceutf8 est traitée à part.
+        // Requête avec paramètres liés : voir CaracterTest (aucune dépréciation).
         $req = $bdd->faireBindRequete("UPDATE nb SET v = 'c' WHERE v = 'a'");
 
         $this->assertSame(2, $bdd->exploiterNbResultat($req));
