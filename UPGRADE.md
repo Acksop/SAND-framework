@@ -95,6 +95,19 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **Chemins du serveur :** si aucun contrôleur d'erreur n'existe, l'erreur est journalisée (`app.error.log`) avec les chemins et la réponse vaut 500. Les chemins ne sont affichés qu'en mode `DEBUG`.
 - **Chaîne de requête :** `Url` la relit dans `$_GET` sans écraser les clés déjà présentes. Un paramètre sans `=` vaut une chaîne vide.
 
+## 12. Session, Guard et jeton XSS
+
+- **Nouvelles constantes** (valeurs par défaut dans `application/config/constantes-par-defaut.php`, surchargeables dans `app-parameters.php`) :
+  - `SESSION_CLE_ID_UTILISATEUR` (défaut `'id_user'`) : clé de `$_SESSION` qui porte l'identifiant de l'utilisateur connecté ;
+  - `PAGE_IDENTIFICATION` (défaut `'index'`) : page de connexion.
+
+  **À faire :** si l'application range l'identifiant sous une autre clé (par exemple `id_utilisateur`), ajouter `define('SESSION_CLE_ID_UTILISATEUR', 'id_utilisateur');` dans `app-parameters.php`. Faire de même pour `PAGE_IDENTIFICATION` si la page de connexion n'est pas `index`.
+- **`Session::refuserAcces()`** centralise le refus : un visiteur dont `$_SESSION[SESSION_CLE_ID_UTILISATEUR]` est vide (non connecté ou session expirée) va vers `PAGE_IDENTIFICATION`, un utilisateur connecté vers `error-access-denied`. `checkSession()` l'appelle. L'ancien `checkSession()` appelait `Url::link_rewrite()` sans qualification, ce qui provoquait une erreur fatale (`MVC\Object\Url` n'existe pas).
+- **`MVC\Object\Guard::exiger(...$acl)`** refuse par `refuserAcces()` si `$_SESSION['acl_admin']` ne vaut aucune des valeurs données (`1` et `'1'` sont égaux). `Session::checkACL_admin()` vaut `Guard::exiger(1)`. **Changement de comportement :** un visiteur non connecté qui atteint une page `admin-*` est désormais redirigé vers `PAGE_IDENTIFICATION`, et non plus vers `error-access-denied`.
+- **`Session::getUser()`** (`$_SESSION['user_login']`) et **`Session::getIdUser()`** (`$_SESSION[SESSION_CLE_ID_UTILISATEUR]`) renvoient `null` si la valeur manque.
+- **`Session::sessionStart()`** n'appelle plus `session_start()` si une session est déjà active.
+- **`XssToken::getNew()`** ne prend plus de paramètre et renvoie le jeton (toujours rangé dans `$_SESSION['xss_token']`). PHP accepte encore les anciens appels à trois arguments. **À faire :** retirer ces arguments inutiles.
+
 ## Vérification
 
 ```bash

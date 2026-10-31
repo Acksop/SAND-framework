@@ -21,11 +21,31 @@ class Session
     }
 
     /**
-     * Méthode permettant de lancer la session, obsolète depuis phpCAS 1.3.9
+     * Méthode permettant de lancer la session, obsolète depuis phpCAS 1.3.9.
+     * Une session déjà ouverte (par l'hôte, par exemple) n'est pas rouverte.
      */
     public static function sessionStart()
     {
-        session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+    }
+
+    /**
+     * Identifiant de connexion de l'utilisateur ($_SESSION['user_login']).
+     */
+    public static function getUser(): mixed
+    {
+        return $_SESSION['user_login'] ?? null;
+    }
+
+    /**
+     * Identifiant de l'utilisateur, lu sous la clé SESSION_CLE_ID_UTILISATEUR
+     * (par défaut 'id_user'). Vaut null si aucun utilisateur n'est connecté.
+     */
+    public static function getIdUser(): mixed
+    {
+        return $_SESSION[SESSION_CLE_ID_UTILISATEUR] ?? null;
     }
 
     /**
@@ -90,22 +110,42 @@ class Session
     public static function checkSession()
     {
         if (!isset($_SESSION['user_login'])) {
-            header('location:' . Url::link_rewrite(false, 'index'));
-            die();
+            self::refuserAcces();
         }
     }
+
     /**
      * Méthode permettant de rediriger le visiteur si son utilisateur n'as pas les droits administrateur
+     * (acl_admin = 1). Le refus passe par refuserAcces().
      */
     public static function checkACL_admin()
     {
-        if (!isset($_SESSION['acl_admin'])) {
-            header('location:'.\MVC\Classe\Url::link_rewrite(false, "error-access-denied", []));
-            die();
-        } elseif ($_SESSION['acl_admin'] != 1) {
-            header('location:'.\MVC\Classe\Url::link_rewrite(false, "error-access-denied", []));
-            die();
+        Guard::exiger(1);
+    }
+
+    /**
+     * Refuse l'accès et termine la requête : un visiteur non connecté (ou dont
+     * la session a expiré) est redirigé vers PAGE_IDENTIFICATION, un
+     * utilisateur connecté vers la page error-access-denied.
+     */
+    public static function refuserAcces(): never
+    {
+        header('location:' . self::cibleRefus());
+        die();
+    }
+
+    /**
+     * Page de redirection d'un refus d'accès. Un visiteur est connecté si
+     * $_SESSION[SESSION_CLE_ID_UTILISATEUR] est renseigné.
+     */
+    private static function cibleRefus(): string
+    {
+        $idUtilisateur = $_SESSION[SESSION_CLE_ID_UTILISATEUR] ?? null;
+        if ($idUtilisateur === null || $idUtilisateur === '') {
+            return \MVC\Classe\Url::link_rewrite(false, PAGE_IDENTIFICATION);
         }
+
+        return \MVC\Classe\Url::link_rewrite(false, 'error-access-denied', []);
     }
 
 }
