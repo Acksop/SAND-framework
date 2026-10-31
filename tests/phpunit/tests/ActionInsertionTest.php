@@ -45,7 +45,7 @@ final class ActionInsertionTest extends TestCase
     {
         $resultat = null;
         $ajout = $this->journalPendant(function () use (&$resultat): void {
-            $resultat = ControlleurAction::inserer('introuvableXyz.render', []);
+            $resultat = ControlleurAction::inserer('introuvableXyz.renderMenu', []);
         });
 
         $this->assertSame('', $resultat);
@@ -104,6 +104,72 @@ final class ActionInsertionTest extends TestCase
 
         $this->assertSame('<p class="module">Module Blade</p>', trim($html));
         $this->assertNotEmpty(glob($this->dossier . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . '*.php'));
+        $this->assertSame(
+            [],
+            glob(\TestAction::$cache . DIRECTORY_SEPARATOR . '*') ?: [],
+            'Avec $dir, le cache par défaut (cheminCache()) ne doit pas être écrit.'
+        );
+    }
+
+    /**
+     * @dataProvider methodesRefusees
+     */
+    public function testUneMethodeNonAutoriseeEstRefusee(string $appel): void
+    {
+        $resultat = null;
+        $ajout = $this->journalPendant(function () use ($appel, &$resultat): void {
+            $resultat = ControlleurAction::inserer($appel, ['action-module', ['qui' => 'X'], $this->dossier]);
+        });
+
+        $this->assertSame('', $resultat);
+        $this->assertStringContainsString('méthode refusée', $ajout);
+        $this->assertSame([], glob($this->dossier . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . '*') ?: []);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public function methodesRefusees(): array
+    {
+        return [
+            'méthode magique' => ['test.__destruct'],
+            'renderBlade du parent' => ['test.renderBlade'],
+            'render du parent' => ['test.render'],
+            'renderJSON du parent' => ['test.renderJSON'],
+            'racineVues du parent' => ['test.racineVues'],
+            'initiale majuscule' => ['test.RenderSalut'],
+            'saut de ligne final' => ["test.renderSalut\n"],
+        ];
+    }
+
+    public function testUnTamponOuvertParUneActionEnErreurEstReferme(): void
+    {
+        $niveau = ob_get_level();
+        $resultat = null;
+        $this->journalPendant(function () use (&$resultat): void {
+            $resultat = ControlleurAction::inserer('echec.leverDansUnTampon', []);
+        });
+
+        $this->assertSame('', $resultat);
+        $this->assertSame($niveau, ob_get_level());
+    }
+
+    public function testEnDebogageLExceptionDeLActionEstRelancee(): void
+    {
+        $tests = __DIR__ . DIRECTORY_SEPARATOR;
+        $code = '$_SERVER["REQUEST_SCHEME"] = "http"; $_SERVER["HTTP_HOST"] = "localhost";'
+            . ' $_SERVER["HTTP_USER_AGENT"] = "phpunit"; define("DEBUG", true);'
+            . ' require ' . var_export($tests . 'connexions-bdd.php', true) . ';'
+            . ' require ' . var_export(dirname(__DIR__, 3) . '/vendor/autoload.php', true) . ';'
+            . ' require ' . var_export($tests . 'EchecAction.php', true) . ';'
+            . ' try { \MVC\Classe\ControlleurAction::inserer("echec.lever", ["boum"]); echo "renvoyee"; }'
+            . ' catch (\RuntimeException $e) { echo "relancee:", $e->getMessage(); }';
+
+        $sortie = [];
+        exec(escapeshellarg(PHP_BINARY) . ' -r ' . escapeshellarg($code) . ' 2>&1', $sortie, $retour);
+
+        $this->assertSame(0, $retour, implode("\n", $sortie));
+        $this->assertSame('relancee:boum', trim(implode("\n", $sortie)));
     }
 
     public function testSansTroisiemeParametreLaRacineResteRacineVues(): void

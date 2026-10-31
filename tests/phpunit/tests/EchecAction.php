@@ -11,4 +11,14 @@ class EchecAction extends \MVC\Classe\Implement\Action
     {
         throw new \RuntimeException($message);
     }
+
+    /**
+     * Ouvre un tampon de sortie puis lève une exception sans le refermer.
+     */
+    public function leverDansUnTampon()
+    {
+        ob_start();
+        echo 'sortie partielle';
+        throw new \RuntimeException('tampon laissé ouvert');
+    }
 }

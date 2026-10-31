@@ -23,13 +23,20 @@ class ControlleurAction
         //on extrait la classe d'appel de l'action
         $action = explode('.', (string) $action);
         $class = ucfirst($action[0]) . "Action";
-        $appel = $class . '::' . ($action[1] ?? 'default');
+        //méthode pointée (« nom.methode ») si fournie, sinon la méthode default()
+        $method = $action[1] ?? 'default';
+        $appel = $class . '::' . $method;
 
-        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $class)) {
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/D', $class)) {
             self::journaliser('action « ' . $appel . ' » introuvable : nom invalide');
             return '';
         }
+        if (!self::methodeAutorisee($method)) {
+            self::journaliser('action « ' . $appel . ' » : méthode refusée');
+            return '';
+        }
 
+        $niveauTampon = ob_get_level();
         try {
             $fichier = ACTION_PATH . DIRECTORY_SEPARATOR . $class . ".php";
             if (!class_exists($class, false) && is_file($fichier)) {
@@ -42,22 +49,49 @@ class ControlleurAction
             }
             //On charge la classe Action de façon réflexive
             $slot = new $class();
-            //méthode pointée (« nom.methode ») si fournie, sinon la méthode default()
-            $method = $action[1] ?? 'default';
 
             return $slot->$method(...$data);
         } catch (\Throwable $e) {
-            $message = 'action « ' . $appel . ' » : ' . get_class($e) . ' : ' . self::assainir($e->getMessage());
-            if (Environment::debug()) {
-                $message .= ' (' . $e->getFile() . ':' . $e->getLine() . ')';
+            // tampons de sortie laissés ouverts par l'action
+            while (ob_get_level() > $niveauTampon) {
+                ob_end_clean();
             }
-            self::journaliser($message);
+            try {
+                $message = 'action « ' . $appel . ' » : ' . get_class($e) . ' : ' . self::assainir($e->getMessage());
+                if (Environment::debug()) {
+                    $message .= ' (' . $e->getFile() . ':' . $e->getLine() . ')';
+                }
+                self::journaliser($message);
+            } catch (\Throwable $echecJournal) {
+                // le journal ne doit jamais masquer l'exception d'origine
+            }
             if (Environment::debug()) {
                 throw $e;
             }
 
             return '';
         }
+    }
+
+    /**
+     * Une méthode appelable depuis un gabarit commence par une minuscule
+     * (pas de méthode magique « __ ») et n'est pas déclarée par
+     * Implement\Action (render, renderTwig, renderBlade, renderJSON…).
+     */
+    private static function methodeAutorisee(string $methode): bool
+    {
+        static $methodesDuParent = null;
+        if (!preg_match('/^[a-z][A-Za-z0-9_]*$/D', $methode)) {
+            return false;
+        }
+        if ($methodesDuParent === null) {
+            $methodesDuParent = [];
+            foreach ((new \ReflectionClass(Implement\Action::class))->getMethods() as $reflexion) {
+                $methodesDuParent[strtolower($reflexion->getName())] = true;
+            }
+        }
+
+        return !isset($methodesDuParent[strtolower($methode)]);
     }
 
     /**
