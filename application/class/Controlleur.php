@@ -22,7 +22,7 @@ class Controlleur
             case 'DELETE':
             case 'POST':
             case 'GET':
-                if ($application->browser->isAppRequest()) {
+                if ($application->browser->isAppRequest() && self::estFichierReponse($application->url->pageFile)) {
                     require $application->url->pageFile;
                     $this->callHttpResponse($application);
                     die();
@@ -67,17 +67,20 @@ class Controlleur
         return $this;
     }
 
+    /**
+     * Vrai si le fichier résolu par Url est une réponse REST/HTTP existante
+     * (une requête « App » sans réponse dédiée est servie comme une page MVC).
+     */
+    private static function estFichierReponse($pageFile): bool
+    {
+        return is_file($pageFile) && preg_match('#(Rest|Http)Reponse\.php$#', $pageFile) === 1;
+    }
+
     public function callHttpResponse($application)
     {
         $reponseHttp = "\\" . $application->url->page['name'] . 'HttpReponse';
 
-        //FIXME:
-        //Le passage par le contructeur dans le cas d'une instanciation dynamique ne fonctionne pas
-        //$reponse = new $reponseHttp($application->url, $application->http->getData());
-        //il faut passer par une fonction personnelle permettant l'instanciation des variables
-
-        $reponse = new $reponseHttp();
-        $reponse->instanciate($application->url, $application->http->getData());
+        $reponse = new $reponseHttp($application->url, $application->http->getData());
         $method = strtolower($application->http->method);
 
         Logger::addLog('http11', " $reponseHttp app {$application->http->method} request! ( ".get_class($reponse)."->$method() )");

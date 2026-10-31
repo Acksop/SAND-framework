@@ -16,8 +16,11 @@ class Dispacher
     public function __construct()
     {
 
+        //chemin seul : la chaîne de requête n'entre pas dans le routage
+        $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
         //Avoid callback from empty homepage
-        if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '') {
+        if (!is_string($chemin) || $chemin == '/' || $chemin == '') {
             $this->route = null;
         } else {
             //Test the route from config file
@@ -32,7 +35,7 @@ class Dispacher
                 $matcher = new UrlMatcher($routes, $context);
 
                 // Find the current route
-                $parameters = $matcher->match($_SERVER['REQUEST_URI']);
+                $parameters = $matcher->match($chemin);
 
                 $this->route = $parameters;
             } catch (ResourceNotFoundException $e) {

@@ -15,19 +15,19 @@ class RestReponse implements RestReponseInterface
     public $data;
 
     /**
-     * Le passage par le contructeur dans le cas d'une instanciation dynamique ne fonctionne pas
-     * http://www.thedarksideofthewebblog.com/appel-dynamique-de-constructeur-en-php/
-     * il faut passer par une fonction personnelle permettant l'instanciation des variables
-     * @param $url
-     * @param $requestData
+     * L'instanciation dynamique (new $classe($url, $data)) passe par le constructeur :
+     * l'ancien échec venait du nom mal orthographié (__contruct).
+     * @param \MVC\Classe\Url|null $url
+     * @param mixed $requestData
      */
-    public function __contruct($url, $requestData)
+    public function __construct($url = null, $requestData = null)
     {
-        $this->url = $url;
-        $this->params = $url->page['params'];
-        $this->data = $requestData;
+        if ($url !== null) {
+            $this->instanciate($url, $requestData);
+        }
     }
 
+    // conservée pour les appels existants (new sans argument puis instanciate())
     public function instanciate($url, $requestData)
     {
         $this->url = $url;

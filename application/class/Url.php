@@ -33,14 +33,11 @@ class Url
         $url = parse_url($_SERVER['REQUEST_URI']);
         $urlTrim = trim($url['path'], '/');
         $urlParts = explode('/', $urlTrim);
+        //la chaîne de requête est relue dans $_GET (sans écraser les clés présentes)
+        self::lireChaineRequete($url['query'] ?? '');
 
         //suppression des sous repertoires du BASE_SERVER_DIRECTORY
-        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
-        foreach($basePath as $subDir) {
-            if ($urlParts[0] == $subDir) {
-                array_shift($urlParts);
-            }
-        }
+        $urlParts = self::retirerSousRepertoires($urlParts);
 
         //Récupération du nom de la page
         if (isset($urlParts[0])) {
@@ -150,6 +147,12 @@ class Url
                         if (!file_exists($pageFile)) {
                             $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
                         }
+                        // aucune réponse REST/HTTP pour cette page : on sert la page MVC classique
+                        $pageMvc = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . lcfirst($page['name']) . '.php';
+                        if (!file_exists($pageFile) && file_exists($pageMvc)) {
+                            $page['name'] = lcfirst($page['name']);
+                            $pageFile = $pageMvc;
+                        }
                     } else {
                         $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
                         if (!file_exists($pageFile)) {
@@ -185,14 +188,16 @@ class Url
                     if (!file_exists($pageFile)) {
                         $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
                         if (!file_exists($pageFile)) {
-                            //FrameWork : expose undefined controlleur error
-                            // TODO: Send SANDerror
-                            die("le controlleur 404 d'erreur n'existe pas : \n"
+                            $erreur = "le controlleur 404 d'erreur n'existe pas : \n"
                                 . CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php' . "\n"
                                 . "ou l'un des controlleurs 404 (REST ou HTTP) n'existe pas : \n"
                                 . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php \n'
                                 . " ou \n"
-                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php');
+                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
+                            // erreur journalisée ; les chemins du serveur ne sont affichés qu'en DEBUG
+                            Logger::addLog('error', $erreur);
+                            http_response_code(500);
+                            die(self::messageErreurConfiguration($erreur, defined('DEBUG') && DEBUG == true));
                         }
                     }
                 }
@@ -200,6 +205,42 @@ class Url
         }
         $this->page = $page;
         $this->pageFile = $pageFile;
+    }
+
+    /**
+     * Relit la chaîne de requête de l'URL dans $_GET (utile quand le routage de
+     * l'hôte ne la transmet pas) : les clés déjà présentes ne sont pas écrasées
+     * et un paramètre sans « = » vaut une chaîne vide.
+     */
+    private static function lireChaineRequete(string $query): void
+    {
+        if ($query === '') {
+            return;
+        }
+        parse_str($query, $params);
+        $_GET += $params;
+    }
+
+    /**
+     * Retire du début du chemin les sous-répertoires de BASE_SERVER_DIRECTORY.
+     */
+    private static function retirerSousRepertoires(array $urlParts, string $base = BASE_SERVER_DIRECTORY): array
+    {
+        foreach (explode('/', $base) as $subDir) {
+            if (isset($urlParts[0]) && $urlParts[0] == $subDir) {
+                array_shift($urlParts);
+            }
+        }
+        return $urlParts;
+    }
+
+    /**
+     * Message affiché pour une erreur de configuration : le détail (chemins du
+     * serveur compris) n'est montré qu'en mode débogage.
+     */
+    public static function messageErreurConfiguration(string $detail, bool $debug): string
+    {
+        return $debug ? $detail : "Erreur de configuration : contrôleur d'erreur introuvable.";
     }
 
     public static function asset_rewrite($urlAsset)
@@ -219,8 +260,10 @@ class Url
     private static function link_rewrite_slashParam($page, $params = array())
     {
         $stringParams = '';
-        foreach ($params as $key => $values) {
-            $stringParams .= "/" . $key . "/" . $values;
+        if (is_array($params)) {
+            foreach ($params as $key => $values) {
+                $stringParams .= "/" . $key . "/" . $values;
+            }
         }
         return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
     }
@@ -228,8 +271,10 @@ class Url
     private static function controlLink_rewrite($page, $params = array())
     {
         $stringParams = '';
-        foreach ($params as $key => $values) {
-            $stringParams .= "/" . $key . "/" . $values;
+        if (is_array($params)) {
+            foreach ($params as $key => $values) {
+                $stringParams .= "/" . $key . "/" . $values;
+            }
         }
         return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
     }
@@ -301,12 +346,7 @@ class Url
         $urlParts = explode('/', $urlTrim);
 
         //suppression des sous repertoires du BASE_SERVER_DIRECTORY
-        $basePath = explode( '/', BASE_SERVER_DIRECTORY);
-        foreach($basePath as $subDir) {
-            if ($urlParts[0] == $subDir) {
-                array_shift($urlParts);
-            }
-        }
+        $urlParts = self::retirerSousRepertoires($urlParts);
 
         //Récupération du nom de la page
         if (isset($urlParts[0])) {

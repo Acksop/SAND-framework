@@ -15,6 +15,10 @@ define('PATH_URL', $_SERVER['REQUEST_SCHEME'] . "://localhost.localdomain");
 //only PROD send email to right user
 define('ENV', "DEV");
 
+// Mode débogage : affiche le détail des erreurs (chemins du serveur compris).
+// À laisser à false en production.
+define('DEBUG', false);
+
 //Possible values are OPEN CLOSED MAINTAINED
 define('APP_STATE', "OPEN");
 

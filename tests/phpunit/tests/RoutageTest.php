@@ -79,14 +79,22 @@ final class RoutageTest extends TestCase
     }
 
     /**
-     * Le Dispacher passe REQUEST_URI brut au matcher : une chaîne de requête
-     * empêche la correspondance et la page retombe sur le routage MVC
-     * (comportement actuel, documenté et non modifié).
+     * Le Dispacher passe au matcher le chemin sans chaîne de requête :
+     * une route suivie de « ?x=1 » correspond toujours.
      */
-    public function testChaineDeRequeteNeCorrespondPas(): void
+    public function testChaineDeRequeteCorrespond(): void
     {
-        $this->assertNull($this->router('/foo?x=1'));
-        $this->assertNull($this->router('/foo/42?x=1'));
+        $route = $this->router('/foo?x=1');
+        $this->assertSame('foo_route', $route['_route']);
+
+        $route = $this->router('/foo/42?x=1&y');
+        $this->assertSame('foo_placeholder_route', $route['_route']);
+        $this->assertSame('42', $route['id']);
+    }
+
+    public function testAccueilAvecChaineDeRequeteSansRoute(): void
+    {
+        $this->assertNull($this->router('/?x=1'));
     }
 
     /**
