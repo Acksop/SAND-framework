@@ -235,6 +235,24 @@ final class BddTest extends TestCase
         $this->assertStringNotContainsString(str_repeat('z', 120), $ajout);
     }
 
+    public function testFaireSQLRequeteInvalideNAffichePasEtJournaliseSansSqlNiSecret(): void
+    {
+        $bdd = new Bdd('testsqlite');
+        $this->expectOutputString('');
+
+        $resultat = null;
+        $ajout = $this->journalPendant(function () use ($bdd, &$resultat): void {
+            $resultat = $bdd->faireSQLRequete("SELECT 'marqueur-sql-confidentiel' FROM");
+        }, $bdd);
+
+        $this->assertFalse($resultat);
+        $this->assertStringContainsString('[Bdd::faireSQLRequete] connexion « testsqlite » : query() a échoué : SQLSTATE', $ajout);
+        $this->assertStringNotContainsString('marqueur-sql-confidentiel', $ajout);
+        $this->assertStringNotContainsString('sqlite::memory:', $ajout);
+        $this->assertStringNotContainsString('utilisateur-secret-test', $ajout);
+        $this->assertStringNotContainsString('mot-de-passe-secret-test', $ajout);
+    }
+
     /**
      * Exécute $action et renvoie ce qu'elle a ajouté à app.error.log. Si
      * $bdd est donné, sa connexion passe en ERRMODE_SILENT le temps de l'action.

@@ -31,7 +31,7 @@ class Url
 
 
         $url = parse_url($_SERVER['REQUEST_URI']);
-        $urlTrim = trim($url['path'], '/');
+        $urlTrim = trim($url['path'] ?? '/', '/');
         $urlParts = explode('/', $urlTrim);
         //la chaîne de requête est relue dans $_GET (sans écraser les clés présentes)
         self::lireChaineRequete($url['query'] ?? '');
@@ -191,7 +191,7 @@ class Url
     public static function getPageName(){
 
         $url = parse_url($_SERVER['REQUEST_URI']);
-        $urlTrim = trim($url['path'], '/');
+        $urlTrim = trim($url['path'] ?? '/', '/');
         $urlParts = explode('/', $urlTrim);
 
         //suppression des sous repertoires du BASE_SERVER_DIRECTORY

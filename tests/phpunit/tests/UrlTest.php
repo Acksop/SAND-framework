@@ -21,4 +21,30 @@ final class UrlTest extends TestCase
             $this->assertTrue(false);
         }
     }
+
+    public function testUriSansCheminOuAvecHoteNeLeveNiAvertissementNiDeprecation(): void
+    {
+        $avant = $_SERVER['REQUEST_URI'] ?? null;
+        $erreurs = [];
+        set_error_handler(static function (int $niveau, string $message) use (&$erreurs): bool {
+            $erreurs[] = $niveau . ' ' . $message;
+            return true;
+        });
+
+        try {
+            foreach (['//hote/x', '//hote'] as $uri) {
+                $_SERVER['REQUEST_URI'] = $uri;
+                \MVC\Classe\Url::getPageName();
+            }
+        } finally {
+            restore_error_handler();
+            if ($avant === null) {
+                unset($_SERVER['REQUEST_URI']);
+            } else {
+                $_SERVER['REQUEST_URI'] = $avant;
+            }
+        }
+
+        $this->assertSame([], $erreurs);
+    }
 }

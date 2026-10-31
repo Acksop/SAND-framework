@@ -146,7 +146,7 @@ final class Requete
     private function corps(): string
     {
         if ($this->corpsLu === null) {
-            $max = $this->tailleMax ?? (defined('API_TAILLE_MAX_CORPS') ? (int) API_TAILLE_MAX_CORPS : 1048576);
+            $max = $this->tailleMax ?? (int) API_TAILLE_MAX_CORPS;
             $brut = $this->corps instanceof \Closure ? (string) ($this->corps)($max + 1) : $this->corps;
             if (strlen($brut) > $max) {
                 throw new ApiException('Corps de requête trop volumineux', 413);

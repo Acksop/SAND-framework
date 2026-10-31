@@ -127,7 +127,7 @@ class Browser
      * si browscap est configuré dans php.ini. Sans browscap, seuls les
      * en-têtes et le User-Agent comptent. Aucun service externe n'est appelé.
      */
-    public static function detection_mobile(): bool
+    public static function detectionMobile(): bool
     {
         if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
             return true;
@@ -147,6 +147,14 @@ class Browser
         $infos = get_browser($userAgent, true);
 
         return is_array($infos) && !empty($infos['ismobiledevice']);
+    }
+
+    /**
+     * Ancien nom (compatibilité avec B25) : délègue à detectionMobile().
+     */
+    public static function detection_mobile(): bool
+    {
+        return self::detectionMobile();
     }
 
     protected function get_browser_name()

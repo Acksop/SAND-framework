@@ -159,11 +159,9 @@ class Bdd
     {
         $sql = \MVC\Classe\Caracter::avoid_sql_injection($sql);
         $req = $this->bdd->query($sql);
-        // Print Pdo::ERRORs
-        if (!$req && (ENV == 'TEST' || ENV == 'DEVEL')) {
-            echo "\nPDO::errorInfo():\n";
-            print_r($this->bdd->errorInfo());
-            print_r($sql);
+        if (!$req) {
+            // Journalisé (SQLSTATE, code et message tronqué du pilote), jamais affiché
+            $this->journaliserEchec('query()', $this->bdd->errorInfo(), 'faireSQLRequete');
         }
         return $req;
     }
@@ -223,13 +221,13 @@ class Bdd
      * tronqué) avec le nom validé de la connexion. Jamais de DSN, d'utilisateur
      * ni de mot de passe.
      */
-    private function journaliserEchec(string $etape, array $erreur): int
+    private function journaliserEchec(string $etape, array $erreur, string $methode = 'faireBindRequete'): int
     {
         $message = preg_replace('/[\x00-\x1F\x7F]+/', ' ', (string) ($erreur[2] ?? ''));
         $message = mb_substr($message, 0, self::LONGUEUR_MESSAGE_JOURNAL);
         Logger::addLog(
             'error',
-            '[Bdd::faireBindRequete] connexion « ' . $this->nom . ' » : ' . $etape . ' a échoué : SQLSTATE '
+            '[Bdd::' . $methode . '] connexion « ' . $this->nom . ' » : ' . $etape . ' a échoué : SQLSTATE '
             . preg_replace('/[^0-9A-Za-z]/', '', (string) ($erreur[0] ?? ''))
             . ' | code ' . (int) ($erreur[1] ?? 0) . ' | ' . $message
         );

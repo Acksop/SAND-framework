@@ -23,7 +23,7 @@ class Posts extends AbstractController
      */
     public static function getItems(int $page = 1, int $per_page = 20): Response
     {
-        return Response::erreur("Posts introuvables, ceci n'est pas du Worpress et je suis une Mouette !", 404);
+        return Response::erreur("Posts introuvables, ceci n'est pas du WordPress et je suis une Mouette !", 404);
     }
 
     /**
@@ -31,7 +31,7 @@ class Posts extends AbstractController
      */
     public static function getItem(string $id): Response
     {
-        return Response::erreur("Post non référencé, ceci n'est pas du Worpress et je suis une Mouette !", 404);
+        return Response::erreur("Post non référencé, ceci n'est pas du WordPress et je suis une Mouette !", 404);
     }
 
     public static function createItem(array $body = []): Response
