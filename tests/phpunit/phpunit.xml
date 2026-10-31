@@ -32,6 +32,7 @@
       <file>./tests/DumperTest.php</file>
       <file>./tests/JournalTest.php</file>
       <file>./tests/CaracterTest.php</file>
+      <file>./tests/ConversionErreursTest.php</file>
     </testsuite>
   </testsuites>
 
