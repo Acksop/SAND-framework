@@ -113,6 +113,34 @@ class Browser
         return $os_platform;
     }
 
+    /**
+     * Vrai si la requête vient d'un appareil mobile : en-têtes WAP, puis
+     * User-Agent « Mobile » ou « Opera Mini », puis get_browser() seulement
+     * si browscap est configuré dans php.ini. Sans browscap, seuls les
+     * en-têtes et le User-Agent comptent. Aucun service externe n'est appelé.
+     */
+    public static function detection_mobile(): bool
+    {
+        if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
+            return true;
+        }
+        if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'wap') !== false) {
+            return true;
+        }
+
+        $userAgent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
+        if (preg_match('/Mobile|Opera Mini/', $userAgent)) {
+            return true;
+        }
+        if ($userAgent === '' || !ini_get('browscap')) {
+            return false;
+        }
+
+        $infos = get_browser($userAgent, true);
+
+        return is_array($infos) && !empty($infos['ismobiledevice']);
+    }
+
     protected function get_browser_name()
     {
 

@@ -129,6 +129,10 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **`Implement\Action::renderTwig($vue, $donnees, $dir = null)`** et **`renderBlade($vue, $donnees, $dir = null)`** acceptent une racine de vues facultative (avec Blade, cache dans `$dir/cache`). Sans `$dir`, rien ne change. **À faire :** une sous-classe qui redéfinit `renderTwig()` ou `renderBlade()` doit déclarer ce troisième paramètre, sinon PHP refuse la déclaration.
 - **`Vue::titrePage()`** et **`Vue::descriptionPage()`** (nouveaux) renvoient `page_title` et `description` du `.model` de la première vue rendue qui a un titre ; `Vue::reinitialiserPage()` les oublie. Voir `data/docs/07.b. modules - comment bien les utiliser.md`.
 
+## 15. Divers
+
+- **`Browser::detection_mobile()`** (nouveau) renvoie vrai pour un appareil mobile : en-têtes WAP (`X-Wap-Profile`, `Profile`, `Accept` contenant `wap`), puis User-Agent contenant `Mobile` ou `Opera Mini`, puis `get_browser()` **seulement si** la directive `browscap` de `php.ini` est renseignée. Sans browscap, seuls les en-têtes et le User-Agent comptent : un mobile reconnu uniquement par browscap (vieux téléphone MIDP, par exemple) est alors vu comme non mobile. Aucun service externe n'est appelé.
+
 ## Vérification
 
 ```bash

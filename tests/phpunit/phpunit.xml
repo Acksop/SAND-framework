@@ -27,6 +27,7 @@
     </testsuite>
     <testsuite name="SAND Divers">
       <file>./tests/ModeleTest.php</file>
+      <file>./tests/BrowserTest.php</file>
     </testsuite>
   </testsuites>
 
