@@ -33,3 +33,10 @@ defined('API_FICHIER_ROUTES') or define('API_FICHIER_ROUTES', dirname(__DIR__, 2
 // Classe de l'hôte qui implémente MVC\Api\Contrat\DepotSoumissions (route Ereferer) ;
 // null : la route /wp-json/v1/ereferer répond 501
 defined('API_DEPOT_SOUMISSIONS') or define('API_DEPOT_SOUMISSIONS', null);
+
+// Taille maximale (octets) du corps d'une requête d'API ; au-delà : 413
+defined('API_TAILLE_MAX_CORPS') or define('API_TAILLE_MAX_CORPS', 1048576);
+
+// L'API (/wp-json/, /api/) reste joignable pendant une maintenance du site ;
+// false : elle répond 503 en JSON tant que dure la maintenance
+defined('API_PENDANT_MAINTENANCE') or define('API_PENDANT_MAINTENANCE', true);

@@ -59,7 +59,10 @@ final class Response
         return $this->entetes;
     }
 
-    public function emettre(): void
+    /**
+     * @param bool $sansCorps vrai pour une requête HEAD : en-têtes seulement
+     */
+    public function emettre(bool $sansCorps = false): void
     {
         if (!headers_sent()) {
             http_response_code($this->statut);
@@ -68,6 +71,8 @@ final class Response
                 header($nom . ': ' . $valeur);
             }
         }
-        echo json_encode($this->donnees, self::OPTIONS_JSON);
+        if (!$sansCorps) {
+            echo json_encode($this->donnees, self::OPTIONS_JSON);
+        }
     }
 }

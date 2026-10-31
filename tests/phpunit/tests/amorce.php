@@ -33,6 +33,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestAction.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'EchecAction.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestConduit.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'DepotSoumissionsFactice.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'ServeurPhpIntegre.php';
 
 // Fin du chargement : on rend la main au gestionnaire de PHPUnit (sinon
 // convertDeprecationsToExceptions et les conversions d'erreurs sont inactives).

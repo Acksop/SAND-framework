@@ -26,7 +26,9 @@
     # RewriteOptions <options>
 
     # (6) En-tête Authorization (clés de l'API /wp-json/, /api/) transmis à PHP-FPM/CGI
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # limité aux chemins de l'API. Alternative (Apache 2.4.13 et plus) : CGIPassAuth On
+    RewriteCond %{HTTP:Authorization} .+
+    RewriteRule ^(wp-json|api)(/|$) - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # (7) Tout chemin qui n'est pas un fichier (pages MVC, /wp-json/…, /api/…) va à index.php
 	RewriteCond %{REQUEST_FILENAME} !-f

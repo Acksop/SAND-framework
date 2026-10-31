@@ -23,11 +23,12 @@ final class DepotSoumissionsFactice implements DepotSoumissions
 
     public function enregistrer(array $soumission): array
     {
+        self::journaliser('enregistrer ' . $soumission['id_externe']);
         if ($this->mode === 'refus') {
             throw new SoumissionNonModifiable('Soumission déjà publiée.');
         }
         if ($this->mode === 'panne') {
-            throw new \RuntimeException('Échec SQL dans /chemin/serveur/secret.php');
+            throw new \RuntimeException('Échec SQL ' . str_repeat('y', 500) . ' dans /chemin/serveur/secret.php');
         }
         $this->enregistrees[] = $soumission;
 
@@ -40,8 +41,19 @@ final class DepotSoumissionsFactice implements DepotSoumissions
 
     public function supprimer(string $idExterne): bool
     {
+        self::journaliser('supprimer ' . $idExterne);
         $this->supprimees[] = $idExterne;
 
         return $idExterne !== '404';
+    }
+
+    /**
+     * Tests HTTP (php -S) : les appels sont notés dans le fichier SAND_TEST_JOURNAL_DEPOT.
+     */
+    private static function journaliser(string $appel): void
+    {
+        if (defined('SAND_TEST_JOURNAL_DEPOT')) {
+            file_put_contents(SAND_TEST_JOURNAL_DEPOT, $appel . PHP_EOL, FILE_APPEND);
+        }
     }
 }

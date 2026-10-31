@@ -9,6 +9,10 @@
  * Le rappel reçoit les paramètres nommés du motif et le corps JSON décodé ;
  * il renvoie un tableau (200) ou une MVC\Api\Component\Response.
  *
+ * Attention : une route GET (ou HEAD) est publique, sans clé d'API, comme toute
+ * lecture. Déclarer en POST (clé exigée) une route qui expose des données réservées,
+ * ou vérifier le droit d'accès dans le rappel.
+ *
  * Aucune route n'est active par défaut. Exemple, en requête préparée :
  *
  * use MVC\Api\Component\Response;

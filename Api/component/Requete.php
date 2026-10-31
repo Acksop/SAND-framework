@@ -11,42 +11,70 @@ namespace MVC\Api\Component;
 /**
  * Requête reçue par l'API : méthode, chemin, paramètres et en-tête Authorization.
  * Construite depuis les variables globales en production, à la main dans les tests.
+ *
+ * Le corps n'est lu qu'à la première demande (après l'authentification, dans
+ * Router), dans la limite de API_TAILLE_MAX_CORPS octets (sinon 413) ; le JSON
+ * est décodé avec une profondeur maximale de PROFONDEUR_JSON (sinon 400).
  */
 final class Requete
 {
-    /** Préfixes qui désignent l'API (premier segment du chemin). */
+    /** Préfixes qui désignent l'API (premier segment du chemin, casse exacte). */
     public const PREFIXES = ['wp-json', 'api'];
+    public const PROFONDEUR_JSON = 32;
 
     private string $methode;
+    private ?string $corpsLu = null;
 
+    /**
+     * @param string|\Closure $corps     corps brut, ou lecteur fn(int $octets): string
+     * @param int|null        $tailleMax octets admis (défaut API_TAILLE_MAX_CORPS)
+     */
     public function __construct(
         string $methode,
         private string $uri,
-        private string $corps = '',
-        private ?string $autorisation = null
+        private string|\Closure $corps = '',
+        private ?string $autorisation = null,
+        private ?int $tailleMax = null
     ) {
         $this->methode = strtoupper($methode);
     }
 
-    public static function depuisGlobales(): self
+    /**
+     * @param string $flux source du corps (php://input ; un fichier dans les tests)
+     */
+    public static function depuisGlobales(string $flux = 'php://input'): self
     {
-        $corps = file_get_contents('php://input');
+        $longueur = $_SERVER['CONTENT_LENGTH'] ?? null;
+        $lecteur = static function (int $octets) use ($flux, $longueur): string {
+            if (is_numeric($longueur) && (int) $longueur >= $octets) {
+                return str_repeat(' ', $octets); // annoncé trop long : refusé sans lire le flux
+            }
+            $ressource = str_starts_with($flux, 'php://') || is_readable($flux) ? fopen($flux, 'rb') : false;
+            if ($ressource === false) {
+                return '';
+            }
+            $contenu = stream_get_contents($ressource, $octets);
+            fclose($ressource);
+
+            return $contenu === false ? '' : $contenu;
+        };
 
         return new self(
             (string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'),
             (string) ($_SERVER['REQUEST_URI'] ?? '/'),
-            $corps === false ? '' : $corps,
+            $lecteur,
             self::enteteAutorisation()
         );
     }
 
     /**
-     * Chemin de l'API sans le préfixe (« wp/v2/posts »), ou null si l'URI
-     * ne commence pas par /wp-json ou /api (après BASE_SERVER_DIRECTORY).
+     * Chemin de l'API sans le préfixe (« wp/v2/posts »), ou null si l'URI ne
+     * commence pas par /wp-json ou /api (après BASE_SERVER_DIRECTORY).
+     * Les barres obliques répétées sont ignorées ; « %2F » n'est pas décodé.
      */
     public static function cheminApi(string $uri): ?string
     {
-        $chemin = (string) parse_url($uri, PHP_URL_PATH);
+        $chemin = preg_split('/[?#]/', $uri, 2)[0];
         $segments = array_values(array_filter(explode('/', $chemin), static fn ($s) => $s !== ''));
         $base = defined('BASE_SERVER_DIRECTORY') ? (string) BASE_SERVER_DIRECTORY : '';
         foreach (array_filter(explode('/', $base), static fn ($s) => $s !== '') as $sousRepertoire) {
@@ -79,14 +107,15 @@ final class Requete
 
     /**
      * Paramètres de la chaîne de requête (un paramètre sans « = » vaut '')
-     * et, sous la clé « body », le corps JSON décodé s'il s'agit d'un objet.
+     * et, sous la clé « body », le corps JSON décodé.
      *
      * @return array<string, mixed>
      */
     public function parametres(): array
     {
         $parametres = [];
-        parse_str((string) parse_url($this->uri, PHP_URL_QUERY), $parametres);
+        $chaine = preg_split('/[?#]/', $this->uri . '#', 3);
+        parse_str(str_contains($this->uri, '?') ? (string) $chaine[1] : '', $parametres);
         unset($parametres['body']);
         $corps = $this->corpsJson();
         if ($corps !== null) {
@@ -97,16 +126,35 @@ final class Requete
     }
 
     /**
-     * @return array<mixed>|null
+     * @return array<mixed>|null null si le corps est vide
+     * @throws ApiException 413 si le corps dépasse la limite, 400 s'il n'est pas un objet JSON
      */
     public function corpsJson(): ?array
     {
-        if ($this->corps === '') {
+        $corps = $this->corps();
+        if (trim($corps) === '') {
             return null;
         }
-        $decode = json_decode($this->corps, true);
+        $decode = json_decode($corps, true, self::PROFONDEUR_JSON);
+        if (!is_array($decode)) {
+            throw new ApiException('Corps JSON invalide', 400);
+        }
 
-        return is_array($decode) ? $decode : null;
+        return $decode;
+    }
+
+    private function corps(): string
+    {
+        if ($this->corpsLu === null) {
+            $max = $this->tailleMax ?? (defined('API_TAILLE_MAX_CORPS') ? (int) API_TAILLE_MAX_CORPS : 1048576);
+            $brut = $this->corps instanceof \Closure ? (string) ($this->corps)($max + 1) : $this->corps;
+            if (strlen($brut) > $max) {
+                throw new ApiException('Corps de requête trop volumineux', 413);
+            }
+            $this->corpsLu = $brut;
+        }
+
+        return $this->corpsLu;
     }
 
     /**

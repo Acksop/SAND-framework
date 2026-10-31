@@ -21,12 +21,17 @@ class Application
     /** Requête destinée à l'API (/wp-json/… ou /api/…) : traitée par MVC\Api\Component\Router. */
     public $api = false;
 
+    /** API fermée : maintenance en cours et API_PENDANT_MAINTENANCE à false (réponse 503). */
+    public $apiFermee = false;
+
 
     public function __construct()
     {
-        // L'API passe avant tout le reste (maintenance, routage MVC, Browser...).
+        // L'API passe avant tout le reste (routage MVC, Browser...) ; pendant une
+        // maintenance, elle reste ouverte sauf si API_PENDANT_MAINTENANCE vaut false.
         if (self::estRequeteApi((string) ($_SERVER['REQUEST_URI'] ?? '/'))) {
             $this->api = true;
+            $this->apiFermee = self::apiFermee(API_PENDANT_MAINTENANCE !== false, self::estEnMaintenance());
             return;
         }
 
@@ -54,6 +59,11 @@ class Application
 
     public function launch()
     {
+        if ($this->api && $this->apiFermee) {
+            $reponse = \MVC\Api\Component\Response::erreur('Service en maintenance', 503, ['Retry-After' => '3600']);
+            $reponse->emettre(strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'HEAD');
+            return;
+        }
         if ($this->api) {
             \MVC\Api\Component\Router::dispatch();
             return;
@@ -73,6 +83,24 @@ class Application
     public static function estRequeteApi(string $uri): bool
     {
         return \MVC\Api\Component\Requete::cheminApi($uri) !== null;
+    }
+
+    /**
+     * Même critère que le constructeur pour le site : APP_STATE CLOSED ou
+     * MAINTAINED, ou OPEN pendant la plage MAINTENANCE_DATE_DEBUT/FIN.
+     */
+    public static function estEnMaintenance(): bool
+    {
+        if (in_array(APP_STATE, ['CLOSED', 'MAINTAINED'], true)) {
+            return true;
+        }
+
+        return APP_STATE === 'OPEN' && self::is_under_update();
+    }
+
+    public static function apiFermee(bool $pendantMaintenance, bool $enMaintenance): bool
+    {
+        return $enMaintenance && !$pendantMaintenance;
     }
 
     public static function is_under_update(){

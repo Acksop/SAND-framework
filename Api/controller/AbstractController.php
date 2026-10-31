@@ -39,8 +39,9 @@ abstract class AbstractController
             ];
         }
 
+        // nom de la ressource tel qu'il apparaît dans l'URL, sans l'espace de noms interne
         return [
-            'resource' => static::class,
+            'resource' => strtolower($reflexion->getShortName()),
             'available_actions' => $actions,
         ];
     }

@@ -27,6 +27,7 @@ final class Router
     /** Méthode HTTP + collection ou élément => action du contrôleur. */
     private const ACTIONS = [
         'GET' => ['collection' => 'getItems', 'item' => 'getItem'],
+        'HEAD' => ['collection' => 'getItems', 'item' => 'getItem'],
         'POST' => ['collection' => 'createItem'],
         'PUT' => ['item' => 'updateItem'],
         'PATCH' => ['item' => 'updateItem'],
@@ -35,6 +36,9 @@ final class Router
     ];
 
     private const ESPACE_CONTROLEURS = 'MVC\\Api\\Controller\\';
+
+    /** Longueur maximale du message d'exception journalisé. */
+    private const LONGUEUR_JOURNAL = 160;
 
     public function __construct(private Auth $auth, private RouteRegistry $registre)
     {
@@ -60,12 +64,13 @@ final class Router
      */
     public static function dispatch(): void
     {
+        $requete = Requete::depuisGlobales();
         try {
-            $reponse = self::depuisConfiguration()->traiter(Requete::depuisGlobales());
+            $reponse = self::depuisConfiguration()->traiter($requete);
         } catch (\Throwable $e) {
             $reponse = self::erreurInterne($e);
         }
-        $reponse->emettre();
+        $reponse->emettre($requete->methode() === 'HEAD');
     }
 
     public function traiter(Requete $requete): Response
@@ -85,9 +90,11 @@ final class Router
         if ($chemin === null) {
             throw new ApiException('Chemin hors de l\'API', 404);
         }
+        // l'authentification précède toute lecture du corps de la requête
         $this->auth->exiger($requete);
 
-        $explicite = $this->registre->match($requete->methode(), $chemin);
+        $methode = $requete->methode() === 'HEAD' ? 'GET' : $requete->methode();
+        $explicite = $this->registre->match($methode, $chemin);
         if ($explicite !== null) {
             [$rappel, $params] = $explicite;
 
@@ -99,7 +106,7 @@ final class Router
         $action = self::ACTIONS[$requete->methode()][$type] ?? null;
         if ($action === null || !is_callable([$classe, $action])) {
             throw new ApiException(
-                'Méthode HTTP ' . $requete->methode() . ' non autorisée sur cette ressource',
+                'Méthode HTTP non autorisée sur cette ressource',
                 405,
                 ['Allow' => implode(', ', self::methodesAutorisees($classe, $type))]
             );
@@ -164,13 +171,14 @@ final class Router
     }
 
     /**
-     * 500 générique ; le détail (classe, message, fichier, ligne) est journalisé
-     * dans app.api.log et ne parvient au client qu'en débogage.
+     * 500 générique. Le journal app.api.log ne garde que la classe de l'exception
+     * et son message tronqué sur une ligne (ni trace, ni corps de la requête) ;
+     * le message ne parvient au client qu'en débogage.
      */
     private static function erreurInterne(\Throwable $e): Response
     {
-        $lieu = ' (' . $e->getFile() . ':' . $e->getLine() . ')';
-        Logger::addLog('api', get_class($e) . ' : ' . $e->getMessage() . $lieu);
+        $message = (string) preg_replace('/\s+/', ' ', $e->getMessage());
+        Logger::addLog('api', get_class($e) . ' : ' . mb_strimwidth($message, 0, self::LONGUEUR_JOURNAL, '…'));
 
         return Response::erreur(Environment::debug() ? $e->getMessage() : 'Erreur interne', 500);
     }

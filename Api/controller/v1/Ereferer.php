@@ -36,6 +36,19 @@ class Ereferer extends AbstractController
         'custom_field' => 'source_image',
     ];
 
+    /** Longueurs maximales (caractères) ; au-delà : 422 incorrect_post ou incorrect_field. */
+    public const LONGUEURS_MAX = [
+        'post_title' => 255,
+        'post_content' => 200000,
+        'front_image' => 2048,
+        'meta_title' => 255,
+        'meta_description' => 500,
+        'custom_field' => 255,
+    ];
+    public const CATEGORIES_MAX = 20;
+    /** Nombre maximal d'entrées au premier niveau du corps JSON. */
+    public const ENTREES_MAX = 50;
+
     private static ?DepotSoumissions $depot = null;
 
     /**
@@ -56,14 +69,17 @@ class Ereferer extends AbstractController
         if ($depot === null) {
             return self::echec('not_implemented', 'Aucun dépôt de soumissions n\'est configuré.', 501);
         }
-        if (!empty($body['test_connection'])) {
+        if (count($body) > self::ENTREES_MAX) {
+            return self::echec('incorrect_field', 'Trop d\'entrées dans le corps de la requête.');
+        }
+        if (self::vrai($body['test_connection'] ?? false)) {
             return self::succes(['code' => 'success_connection', 'message' => 'Success connection']);
         }
         $id = $body['id'] ?? null;
         if (!(is_int($id) || (is_string($id) && ctype_digit($id))) || (int) $id <= 0) {
             return self::echec('incorrect_post_id', 'L\'identifiant (id) doit être un entier positif.');
         }
-        if (!empty($body['delete'])) {
+        if (self::vrai($body['delete'] ?? false)) {
             return $depot->supprimer((string) $id)
                 ? self::succes(['code' => 'success_delete', 'message' => 'Success'])
                 : self::echec('failed_delete', 'Soumission inconnue.', 404);
@@ -87,22 +103,41 @@ class Ereferer extends AbstractController
             if (!is_string($body[$champ] ?? null) || trim($body[$champ]) === '') {
                 return self::echec('incorrect_post', 'Le titre et le contenu ne peuvent pas être vides.');
             }
+            if (mb_strlen($body[$champ]) > self::LONGUEURS_MAX[$champ]) {
+                return self::echec('incorrect_post', self::tropLong($champ));
+            }
         }
         $categories = $body['categories'] ?? [];
         if (!is_array($categories) || array_filter($categories, static fn ($c) => !is_scalar($c)) !== []) {
             return self::echec('incorrect_field', 'categories doit être une liste de valeurs simples.');
         }
+        if (count($categories) > self::CATEGORIES_MAX) {
+            return self::echec('incorrect_field', 'Au plus ' . self::CATEGORIES_MAX . ' catégories.');
+        }
         $image = $body['front_image'] ?? null;
         if ($image !== null && $image !== '' && !self::estUrlWeb($image)) {
             return self::echec('incorrect_field', 'front_image doit être une URL http(s).');
         }
-        foreach (array_keys(self::CHAINES_FACULTATIVES) as $champ) {
+        foreach (['front_image', ...array_keys(self::CHAINES_FACULTATIVES)] as $champ) {
             if (isset($body[$champ]) && !is_string($body[$champ])) {
                 return self::echec('incorrect_field', $champ . ' doit être une chaîne.');
+            }
+            if (isset($body[$champ]) && mb_strlen($body[$champ]) > self::LONGUEURS_MAX[$champ]) {
+                return self::echec('incorrect_field', self::tropLong($champ));
             }
         }
 
         return null;
+    }
+
+    private static function tropLong(string $champ): string
+    {
+        return $champ . ' dépasse ' . self::LONGUEURS_MAX[$champ] . ' caractères.';
+    }
+
+    private static function vrai(mixed $valeur): bool
+    {
+        return filter_var($valeur, FILTER_VALIDATE_BOOLEAN);
     }
 
     private static function estUrlWeb(mixed $url): bool
@@ -129,7 +164,7 @@ class Ereferer extends AbstractController
         foreach (self::CHAINES_FACULTATIVES as $champ => $cle) {
             $soumission[$cle] = ($body[$champ] ?? '') !== '' ? $body[$champ] : null;
         }
-        $soumission['forcer'] = filter_var($body['force'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $soumission['forcer'] = self::vrai($body['force'] ?? false);
 
         return $soumission;
     }

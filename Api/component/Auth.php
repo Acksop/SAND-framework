@@ -27,11 +27,18 @@ final class Auth
     /** Valeur factice de api_keys.php.skel : jamais acceptée, même copiée telle quelle. */
     public const CLE_FACTICE = 'remplacer-par-une-cle-generee-par-bin2hex-random_bytes-32';
 
+    /** @var array<string, string> empreinte en minuscules => nom du client */
+    private array $empreintes = [];
+
     /**
      * @param array<string, string> $empreintes empreinte SHA-256 de la clé => nom du client
      */
-    public function __construct(private array $empreintes)
+    public function __construct(array $empreintes)
     {
+        // minuscules d'abord : une empreinte factice écrite en majuscules est aussi retirée
+        foreach ($empreintes as $empreinte => $nom) {
+            $this->empreintes[strtolower(trim((string) $empreinte))] = (string) $nom;
+        }
         unset($this->empreintes[hash('sha256', self::CLE_FACTICE)]);
     }
 
@@ -70,8 +77,8 @@ final class Auth
         $trouve = null;
         foreach ($this->empreintes as $stockee => $nom) {
             // pas d'arrêt anticipé : la durée ne dépend pas de la position de la clé
-            if (hash_equals(strtolower((string) $stockee), $empreinte) && $trouve === null) {
-                $trouve = (string) $nom;
+            if (hash_equals((string) $stockee, $empreinte) && $trouve === null) {
+                $trouve = $nom;
             }
         }
 

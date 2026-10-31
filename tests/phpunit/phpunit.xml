@@ -37,6 +37,8 @@
     <testsuite name="SAND Api">
       <file>./tests/ApiRoutageTest.php</file>
       <file>./tests/ApiErefererTest.php</file>
+      <file>./tests/ApiDurcissementTest.php</file>
+      <file>./tests/ApiHttpTest.php</file>
     </testsuite>
   </testsuites>
 

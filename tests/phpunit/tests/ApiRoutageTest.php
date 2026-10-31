@@ -82,6 +82,7 @@ final class ApiRoutageTest extends TestCase
             $reponse = $this->traiter('GET', $uri);
             $this->assertSame(405, $reponse->statut(), $uri);
             $this->assertSame('POST, OPTIONS', $reponse->entetes()['Allow']);
+            $this->assertStringNotContainsString('GET', $reponse->donnees()['message']);
         }
     }
 
@@ -90,6 +91,8 @@ final class ApiRoutageTest extends TestCase
         $reponse = $this->traiter('OPTIONS', '/wp-json/v1/ereferer');
         $this->assertSame(200, $reponse->statut());
         $noms = array_column($reponse->donnees()['available_actions'], 'name');
+        $this->assertSame('ereferer', $reponse->donnees()['resource']);
+        $this->assertStringNotContainsString('MVC', (string) json_encode($reponse->donnees()));
         $this->assertContains('createItem', $noms);
     }
 
@@ -125,6 +128,9 @@ final class ApiRoutageTest extends TestCase
         $this->assertNull(Requete::cheminApi('/index'));
         $this->assertNull(Requete::cheminApi('/apiculture'));
         $this->assertNull(Requete::cheminApi('/page/wp-json/x'));
+        $this->assertSame('v1/ereferer', Requete::cheminApi('//wp-json//v1/ereferer'));
+        $this->assertNull(Requete::cheminApi('/wp-json%2Fv1%2Fereferer'));
+        $this->assertNull(Requete::cheminApi('/WP-JSON/v1/ereferer'));
     }
 
     public function testEmissionJson(): void
@@ -176,6 +182,10 @@ final class ApiRoutageTest extends TestCase
     {
         $htaccess = (string) file_get_contents(dirname(__DIR__, 3) . '/public/.htaccess');
         $this->assertMatchesRegularExpression('/^\s*RewriteRule \. index\.php \[L\]/m', $htaccess);
-        $this->assertStringContainsString('E=HTTP_AUTHORIZATION:%{HTTP:Authorization}', $htaccess);
+        $this->assertMatchesRegularExpression(
+            '#RewriteRule \^\(wp-json\|api\)\(/\|\$\) - \[E=HTTP_AUTHORIZATION:%\{HTTP:Authorization\}\]#',
+            $htaccess
+        );
+        $this->assertStringContainsString('CGIPassAuth On', $htaccess);
     }
 }
