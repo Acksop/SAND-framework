@@ -24,13 +24,25 @@ class Action
         return json_encode($json, JSON_HEX_APOS);
     }
 
-    public function renderTwig($view, $data)
+    /**
+     * Rend un gabarit Twig. $dir (facultatif) remplace racineVues() pour cet
+     * appel : par exemple le dossier « vues » d'un module.
+     */
+    public function renderTwig($view, $data, ?string $dir = null)
     {
-        return Rendu::rendre('twig', $view, $data, $this->racineVues());
+        return Rendu::rendre('twig', $view, $data, $dir ?? $this->racineVues());
     }
 
-    public function renderBlade($view, $data)
+    /**
+     * Rend un gabarit Blade. Avec $dir, les gabarits sont lus sous $dir et
+     * compilés dans $dir/cache ; sans $dir, racineVues() et cheminCache().
+     */
+    public function renderBlade($view, $data, ?string $dir = null)
     {
+        if ($dir !== null) {
+            return Rendu::rendre('blade', $view, $data, $dir, $dir . DIRECTORY_SEPARATOR . 'cache');
+        }
+
         return Rendu::rendre('blade', $view, $data, $this->racineVues(), $this->cheminCache());
     }
 

@@ -21,6 +21,52 @@ class Vue
     /** @var string|null Cache Blade (null : racine des vues/cache). */
     private $cacheBlade;
 
+    /** @var string|null Titre de la page rendue (page_title de son .model). */
+    private static $titrePage = null;
+    /** @var string|null Description de la page rendue (description de son .model). */
+    private static $descriptionPage = null;
+
+    /**
+     * Titre de la page : page_title de la première vue rendue qui en a un
+     * (null si aucune). Un site hôte qui embarque un module s'en sert pour son <title>.
+     */
+    public static function titrePage(): ?string
+    {
+        return self::$titrePage;
+    }
+
+    /**
+     * Description de la page : description du .model de la vue qui a fixé
+     * titrePage() (null si absente).
+     */
+    public static function descriptionPage(): ?string
+    {
+        return self::$descriptionPage;
+    }
+
+    /**
+     * Oublie le titre et la description retenus (tests, traitement de
+     * plusieurs pages dans un même processus).
+     */
+    public static function reinitialiserPage(): void
+    {
+        self::$titrePage = null;
+        self::$descriptionPage = null;
+    }
+
+    /**
+     * Retient page_title et description de la première vue qui a un titre.
+     */
+    private static function retenirPage(array $page_params): void
+    {
+        if (self::$titrePage !== null || !isset($page_params['page_title']) || !is_scalar($page_params['page_title'])) {
+            return;
+        }
+        self::$titrePage = (string) $page_params['page_title'];
+        $description = $page_params['description'] ?? null;
+        self::$descriptionPage = is_scalar($description) ? (string) $description : null;
+    }
+
     /**
      * Les trois derniers paramètres sont facultatifs : par défaut VIEW_PATH,
      * CONTROLLER_PATH et VIEW_PATH/cache (les tests y passent leurs dossiers).
@@ -32,6 +78,7 @@ class Vue
         $this->dossierControleurs = $dossierControleurs ?? CONTROLLER_PATH;
         $this->cacheBlade = $cacheBlade;
         unset($racineVues, $dossierControleurs, $cacheBlade);
+        self::retenirPage($page_params);
 
         //$templateData = array();
         $url_params = array();

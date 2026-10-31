@@ -25,6 +25,7 @@ final class VueTest extends TestCase
         $this->gabarits = __DIR__ . DIRECTORY_SEPARATOR . 'gabarits';
         $this->cache = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'sand-vue-' . uniqid();
         $this->getAvant = $_GET;
+        Vue::reinitialiserPage();
         set_error_handler(
             static function (int $niveau, string $message, string $fichier = '', int $ligne = 0): bool {
                 throw new \ErrorException('Dépréciation : ' . $message, 0, $niveau, $fichier, $ligne);
@@ -37,6 +38,7 @@ final class VueTest extends TestCase
     {
         restore_error_handler();
         $_GET = $this->getAvant;
+        Vue::reinitialiserPage();
         foreach (glob($this->cache . DIRECTORY_SEPARATOR . '*') ?: [] as $fichier) {
             unlink($fichier);
         }
@@ -67,17 +69,50 @@ final class VueTest extends TestCase
         );
     }
 
+    public function testLaPremiereVueRenduePorteLeTitreEtLaDescriptionDeLaPage(): void
+    {
+        $this->assertNull(Vue::titrePage());
+        $this->assertNull(Vue::descriptionPage());
+
+        $this->vue('blade', ['description' => 'Description blade']);
+        $this->vue('twig', ['description' => 'Description twig']);
+
+        $this->assertSame('Titre blade', Vue::titrePage());
+        $this->assertSame('Description blade', Vue::descriptionPage());
+    }
+
+    public function testSansDescriptionLeTitreEstExposeEtLaDescriptionVautNull(): void
+    {
+        $this->vue('twig');
+
+        $this->assertSame('Titre twig', Vue::titrePage());
+        $this->assertNull(Vue::descriptionPage());
+    }
+
+    public function testUneVueSansTitreNeFigePasLaPage(): void
+    {
+        $this->vue('blade', ['page_title' => null]);
+        $this->assertNull(Vue::titrePage());
+
+        $this->vue('twig');
+        $this->assertSame('Titre twig', Vue::titrePage());
+
+        Vue::reinitialiserPage();
+        $this->assertNull(Vue::titrePage());
+        $this->assertNull(Vue::descriptionPage());
+    }
+
     /**
      * Construit la Vue de la page de test « page-vue » avec le moteur donné.
      */
-    private function vue(string $moteur): Vue
+    private function vue(string $moteur, array $autres = []): Vue
     {
-        $parametres = [
+        $parametres = array_merge([
             'name' => 'page-vue',
             'engine' => $moteur,
             'page_title' => 'Titre ' . $moteur,
             'all_params' => ['cle' => 'valeur'],
-        ];
+        ], $autres);
 
         $controleurs = $this->gabarits . DIRECTORY_SEPARATOR . 'controlleurs';
 

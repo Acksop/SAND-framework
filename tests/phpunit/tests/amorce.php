@@ -30,4 +30,5 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'connexions-bdd.php';
 
 require_once dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestAction.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'EchecAction.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestConduit.php';

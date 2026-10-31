@@ -23,6 +23,7 @@
       <file>./tests/RenduTest.php</file>
       <file>./tests/VueTest.php</file>
       <file>./tests/TwigEchappementTest.php</file>
+      <file>./tests/ActionInsertionTest.php</file>
     </testsuite>
   </testsuites>
 

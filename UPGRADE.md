@@ -121,6 +121,13 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **`faireBindRequete()`** renvoie `0` si la préparation, l'exécution ou PDO échoue, et journalise dans `app.error.log` le SQLSTATE, le code du pilote et le message du pilote sur une ligne, tronqué à 120 caractères (sans DSN ni mot de passe). Les anciens blocs `catch` visaient `MVC\Classe\PDOException` (classe inexistante) : une `PDOException` remontait à l'appelant ; elle est maintenant interceptée, journalisée et la méthode renvoie `0`. **À faire :** tester `=== 0` avant `exploiterResultat()`.
 - **`exploiterNbResultat($req)`** renvoie `rowCount()`.
 
+## 14. Actions et vues
+
+- **`ControlleurAction::inserer()`** renvoie `''` au lieu de `null` quand l'action est introuvable, et journalise l'absence dans `app.error.log`. Un nom d'action qui n'est pas un identifiant PHP est traité comme introuvable. **À faire :** remplacer les tests `=== null` sur le retour d'`inserer()` par `=== ''`.
+- **Action en erreur :** une exception levée par une action est journalisée. Hors débogage, l'appel renvoie alors `''` au lieu de laisser l'exception remonter jusqu'à la page ; en débogage (`DEBUG === true`), elle est relancée. **À faire :** une page qui comptait sur l'exception d'une action pour s'interrompre doit tester le retour ou faire la vérification hors de l'action.
+- **`Implement\Action::renderTwig($vue, $donnees, $dir = null)`** et **`renderBlade($vue, $donnees, $dir = null)`** acceptent une racine de vues facultative (avec Blade, cache dans `$dir/cache`). Sans `$dir`, rien ne change. **À faire :** une sous-classe qui redéfinit `renderTwig()` ou `renderBlade()` doit déclarer ce troisième paramètre, sinon PHP refuse la déclaration.
+- **`Vue::titrePage()`** et **`Vue::descriptionPage()`** (nouveaux) renvoient `page_title` et `description` du `.model` de la première vue rendue qui a un titre ; `Vue::reinitialiserPage()` les oublie. Voir `data/docs/07.b. modules - comment bien les utiliser.md`.
+
 ## Vérification
 
 ```bash
