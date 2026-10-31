@@ -7,6 +7,8 @@
   <testsuites>
     <testsuite name="SAND Classes">
       <file>./tests/UrlTest.php</file>
+      <file>./tests/RoutageTest.php</file>
+      <file>./tests/DependancesTest.php</file>
     </testsuite>
     <testsuite name="SAND Rendu">
       <file>./tests/RenduTest.php</file>
