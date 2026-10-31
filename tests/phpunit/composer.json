@@ -1,20 +1,13 @@
 {
-    "autoload": {
-        "files": [
-            "./application/config/app-constantes.php",
-            "./application/config/app-parameters.php",
-            "./application/config/bdd-parameters.php"
-        ],
+    "description": "Tests PHPUnit du SAND-framework (l'autoload de la racine est chargé par tests/amorce.php)",
+    "autoload-dev": {
         "psr-4": {
-            "MVC\\Classe\\" : "./application/class",
-            "MVC\\Object\\" : "./application/objets",
-            "MVC\\Domain\\" : "./domain",
-            "MVC\\Command\\": "./console/command"
+            "Tests\\": "tests/"
         }
     },
 
     "require": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.6"
     },
 
     "config": {

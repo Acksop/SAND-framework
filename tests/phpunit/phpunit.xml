@@ -1,13 +1,19 @@
-<phpunit colors="true">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="tests/amorce.php"
+         colors="true">
   <testsuites>
     <testsuite name="SAND Classes">
       <file>./tests/UrlTest.php</file>
     </testsuite>
+    <testsuite name="SAND Rendu">
+      <file>./tests/RenduTest.php</file>
+    </testsuite>
   </testsuites>
-  
+
   <logging>
-    <log type="junit" target="../build/logs/phpunit.xml" />
-    <log type="testdox-html" target="../build/logs/phpunit.html" />
+    <junit outputFile="../build/logs/phpunit.xml"/>
+    <testdoxHtml outputFile="../build/logs/phpunit.html"/>
   </logging>
-  
 </phpunit>
