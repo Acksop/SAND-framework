@@ -58,4 +58,33 @@ class Asynchonous
     {
         echo $this->_footer_javascript;
     }
+
+    /**
+     * Ancienne API à un seul tampon JavaScript, conservée pour compatibilité.
+     * Le tampon de pied de page est le plus proche : un script ajouté après
+     * coup s'exécute en fin de page, sans bloquer le rendu, et addJs() puis
+     * printJs() lisent toujours le même tampon.
+     *
+     * @deprecated utiliser addFooterJs() (ou addHeaderJs() pour l'en-tête)
+     */
+    public function addJs($code)
+    {
+        trigger_error(
+            'Asynchonous::addJs() est dépréciée, utiliser Asynchonous::addFooterJs()',
+            E_USER_DEPRECATED
+        );
+        $this->addFooterJs($code);
+    }
+
+    /**
+     * @deprecated utiliser printFooterJs() (ou printHeaderJs() pour l'en-tête)
+     */
+    public function printJs()
+    {
+        trigger_error(
+            'Asynchonous::printJs() est dépréciée, utiliser Asynchonous::printFooterJs()',
+            E_USER_DEPRECATED
+        );
+        $this->printFooterJs();
+    }
 }

@@ -28,6 +28,7 @@
     <testsuite name="SAND Divers">
       <file>./tests/ModeleTest.php</file>
       <file>./tests/BrowserTest.php</file>
+      <file>./tests/AsynchonousTest.php</file>
     </testsuite>
   </testsuites>
 

@@ -132,6 +132,7 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 ## 15. Divers
 
 - **`Browser::detection_mobile()`** (nouveau) renvoie vrai pour un appareil mobile : en-têtes WAP (`X-Wap-Profile`, `Profile`, `Accept` contenant `wap`), puis User-Agent contenant `Mobile` ou `Opera Mini`, puis `get_browser()` **seulement si** la directive `browscap` de `php.ini` est renseignée. Sans browscap, seuls les en-têtes et le User-Agent comptent : un mobile reconnu uniquement par browscap (vieux téléphone MIDP, par exemple) est alors vu comme non mobile. Aucun service externe n'est appelé.
+- **`Asynchonous::addJs()` et `printJs()`** (ancienne API à un seul tampon JavaScript) reviennent comme **alias dépréciés** de `addFooterJs()` et `printFooterJs()` : ils fonctionnent, mais émettent un `E_USER_DEPRECATED`. Le tampon de pied de page est retenu parce qu'un script ajouté après coup s'y exécute en fin de page sans bloquer le rendu, et parce que `addJs()` puis `printJs()` lisent ainsi toujours le même tampon. **À faire :** remplacer `addJs()`/`printJs()` par `addFooterJs()`/`printFooterJs()`, ou par `addHeaderJs()`/`printHeaderJs()` pour un script qui doit être chargé dans l'en-tête. La classe `MVC\Object\Asynchronous` (stockage en session) n'est pas concernée.
 
 ## Vérification
 
