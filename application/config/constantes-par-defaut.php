@@ -14,6 +14,9 @@ defined('DEBUG') or define('DEBUG', false);
 // (Session::getIdUser(), Session::refuserAcces())
 defined('SESSION_CLE_ID_UTILISATEUR') or define('SESSION_CLE_ID_UTILISATEUR', 'id_user');
 
+// Clé de $_SESSION qui porte le profil (ACL) lu par Guard::exiger()
+defined('SESSION_CLE_ACL') or define('SESSION_CLE_ACL', 'acl_admin');
+
 // Page de connexion vers laquelle Session::refuserAcces() redirige un
 // visiteur non connecté ou dont la session a expiré
 defined('PAGE_IDENTIFICATION') or define('PAGE_IDENTIFICATION', 'index');

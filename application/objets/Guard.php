@@ -12,9 +12,11 @@ namespace MVC\Object;
 class Guard
 {
     /**
-     * Exige que $_SESSION['acl_admin'] vaille l'une des valeurs données
-     * (comparaison en chaîne : 1 et '1' sont égaux). Sinon, l'accès est refusé
-     * par Session::refuserAcces(), qui termine la requête.
+     * Exige que $_SESSION[SESSION_CLE_ACL] (par défaut 'acl_admin') vaille
+     * l'une des valeurs données. Seuls un entier ou une chaîne d'entier sont
+     * acceptés (1 et '1' sont égaux ; true, 1.0 ou 'admin' sont refusés).
+     * Sinon, l'accès est refusé par Session::refuserAcces(), qui termine la
+     * requête.
      *
      * Exemple : Guard::exiger(1) pour l'administrateur, Guard::exiger(2, 3)
      * pour deux profils.
@@ -33,8 +35,9 @@ class Guard
      */
     private static function autorise(array $aclAutorisees): bool
     {
-        $acl = $_SESSION['acl_admin'] ?? null;
-        if ($acl === null || !is_scalar($acl)) {
+        $acl = $_SESSION[SESSION_CLE_ACL] ?? null;
+        $estEntier = is_int($acl) || (is_string($acl) && preg_match('/^-?\d+$/', $acl) === 1);
+        if (!$estEntier) {
             return false;
         }
 

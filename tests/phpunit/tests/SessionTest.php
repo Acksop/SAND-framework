@@ -17,22 +17,84 @@ use PHPUnit\Framework\TestCase;
 final class SessionTest extends TestCase
 {
     private array $sessionAvant = [];
+    private ?string $uriAvant = null;
 
     protected function setUp(): void
     {
         $this->sessionAvant = $_SESSION ?? [];
+        $this->uriAvant = $_SERVER['REQUEST_URI'] ?? null;
         $_SESSION = [];
+        unset($_SERVER['REQUEST_URI']);
     }
 
     protected function tearDown(): void
     {
         $_SESSION = $this->sessionAvant;
+        if ($this->uriAvant === null) {
+            unset($_SERVER['REQUEST_URI']);
+        } else {
+            $_SERVER['REQUEST_URI'] = $this->uriAvant;
+        }
     }
 
     public function testConstantesParDefaut(): void
     {
         $this->assertSame('id_user', SESSION_CLE_ID_UTILISATEUR);
+        $this->assertSame('acl_admin', SESSION_CLE_ACL);
         $this->assertSame('index', PAGE_IDENTIFICATION);
+    }
+
+    /**
+     * @dataProvider sessionsConnexion
+     */
+    public function testEstConnecte(array $session, bool $attendu): void
+    {
+        $_SESSION = $session;
+
+        $this->assertSame($attendu, Session::estConnecte());
+    }
+
+    public function sessionsConnexion(): array
+    {
+        return [
+            'session vide' => [[], false],
+            'visiteur anonymous' => [['user_login' => 'anonymous', 'acl_admin' => 0], false],
+            'login vide' => [['user_login' => ''], false],
+            'utilisateur CAS' => [['user_login' => 'jdupont', 'acl_admin' => 0], true],
+            'hôte qui ne pose que id_user' => [['id_user' => 42], true],
+            'identifiant 0' => [['id_user' => 0], true],
+            'identifiant nul' => [['user_login' => 'anonymous', 'id_user' => null], false],
+        ];
+    }
+
+    public function testUtilisateurCasSansDroitsRefuseVersAccesRefuse(): void
+    {
+        $_SESSION = ['user_login' => 'jdupont', 'acl_admin' => 0];
+
+        $this->assertFalse((new \ReflectionMethod(Guard::class, 'autorise'))->invoke(null, [1]));
+        $this->assertSame(Url::link_rewrite(false, 'error-access-denied', []), $this->cibleRefus());
+    }
+
+    public function testVisiteurAnonymousRenvoyeVersLaPageIdentification(): void
+    {
+        $_SESSION = ['user_login' => 'anonymous', 'acl_admin' => 0];
+
+        $this->assertSame(Url::link_rewrite(false, PAGE_IDENTIFICATION), $this->cibleRefus());
+    }
+
+    public function testPasDeBoucleSurLaPageIdentification(): void
+    {
+        $_SERVER['REQUEST_URI'] = Url::link_rewrite(false, PAGE_IDENTIFICATION) . '?x=1';
+
+        $this->assertSame(Url::link_rewrite(false, 'error-access-denied', []), $this->cibleRefus());
+    }
+
+    public function testPasDeBoucleSurLaPageAccesRefuse(): void
+    {
+        $_SESSION = ['user_login' => 'jdupont'];
+        $_SERVER['REQUEST_URI'] = Url::link_rewrite(false, 'error-access-denied', []);
+
+        $this->assertNull($this->cibleRefus());
     }
 
     public function testVisiteurNonConnecteRenvoyeVersLaPageIdentification(): void
@@ -73,7 +135,7 @@ final class SessionTest extends TestCase
     public function testGuardDecision($acl, array $autorises, bool $attendu): void
     {
         if ($acl !== null) {
-            $_SESSION['acl_admin'] = $acl;
+            $_SESSION[SESSION_CLE_ACL] = $acl;
         }
         $methode = new \ReflectionMethod(Guard::class, 'autorise');
 
@@ -89,6 +151,10 @@ final class SessionTest extends TestCase
             'acl parmi plusieurs' => [3, [1, 3], true],
             'acl non autorisée' => [0, [1], false],
             'aucune acl autorisée' => [1, [], false],
+            'acl booléenne' => [true, [1], false],
+            'acl flottante' => [1.0, [1], false],
+            'acl chaîne non entière' => ['1.0', [1], false],
+            'acl chaîne non numérique' => ['admin', [1], false],
         ];
     }
 
@@ -148,7 +214,20 @@ final class SessionTest extends TestCase
         $this->assertSame('', trim(implode("\n", $sortie)));
     }
 
-    private function cibleRefus(): string
+    /**
+     * checkSession() vérifie que la session est initialisée : le visiteur
+     * anonymous du squelette n'est pas refusé (sinon die()).
+     */
+    public function testCheckSessionLaissePasserLeVisiteurAnonymous(): void
+    {
+        $_SESSION = ['user_login' => 'anonymous', 'acl_admin' => 0];
+
+        Session::checkSession();
+
+        $this->addToAssertionCount(1);
+    }
+
+    private function cibleRefus(): ?string
     {
         return (new \ReflectionMethod(Session::class, 'cibleRefus'))->invoke(null);
     }
