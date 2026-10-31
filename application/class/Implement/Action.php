@@ -1,13 +1,21 @@
 <?php
 
-
 namespace MVC\Classe\Implement;
+
+use MVC\Classe\Rendu;
 
 class Action
 {
-    public function render($view, $data)
+    /**
+     * Rend un gabarit d'action ; Blade par défaut, Twig si $engine vaut 'twig'.
+     */
+    public function render($view, $data, $engine = 'blade')
     {
-        return $this->renderBlade($view,$data);
+        if ($engine === 'twig') {
+            return $this->renderTwig($view, $data);
+        }
+
+        return $this->renderBlade($view, $data);
     }
 
     public function renderJSON($json)
@@ -18,28 +26,27 @@ class Action
 
     public function renderTwig($view, $data)
     {
-        $paths = new \SplPriorityQueue;
-
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
-
-        $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
-        $view .= '.html';
-
-        return $renderer->render($view, $data);
+        return Rendu::rendre('twig', $view, $data, $this->racineVues());
     }
 
     public function renderBlade($view, $data)
     {
-        $paths = new \SplPriorityQueue;
+        return Rendu::rendre('blade', $view, $data, $this->racineVues(), $this->cheminCache());
+    }
 
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
+    /**
+     * Racine des gabarits (sous-dossiers view, layout, system).
+     */
+    protected function racineVues(): string
+    {
+        return VIEW_PATH;
+    }
 
-        $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
-
-        return $renderer->render($view, $data);
+    /**
+     * Dossier de cache de compilation Blade.
+     */
+    protected function cheminCache(): string
+    {
+        return VIEW_PATH . DIRECTORY_SEPARATOR . 'cache';
     }
 }

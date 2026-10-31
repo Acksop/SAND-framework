@@ -50,30 +50,12 @@ class Vue
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
             require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
 
-            //WINWALKER TEMPLATING ENGINE
-            $paths = new \SplPriorityQueue;
-
-            $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
-            $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
-            $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
-
-            switch ($engine){
-                case 'twig':
-                    $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
-                    $renderer->addExtension(new \MVC\Classe\TwigControlleurAction);
-                    $name .= '.html';
-                    break;
-                case 'blade':
-                default:
-                    $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
-            }
-
             foreach ($page_params as $key => $value) {
                 $templateData[$key] = $value;
             }
 
-            //WINWALKER TEMPLATING ENGINE RENDER
-            echo $renderer->render($name, $templateData);
+            // Rendu windwalker/renderer 4 : view > layout > system, cache Blade dans VIEW_PATH/cache
+            echo Rendu::rendre($engine === 'twig' ? 'twig' : 'blade', $name, $templateData);
         } else {
             include CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
         }
