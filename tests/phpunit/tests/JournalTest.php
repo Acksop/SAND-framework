@@ -53,10 +53,12 @@ final class JournalTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Agent/1.0 (essai)';
         $type = 'test-ua-' . bin2hex(random_bytes(4));
+        $fichier = $this->fichierJournal($type);
 
         Logger::addLog($type, 'message');
 
-        $this->assertStringContainsString('Agent/1.0 (essai)', (string) file_get_contents($this->fichierJournal($type)));
+        $contenu = (string) file_get_contents($fichier);
+        $this->assertStringContainsString('Agent/1.0 (essai)', $contenu);
     }
 
     public function testHttpMethodNeJournaliseRienHorsDebogage(): void
