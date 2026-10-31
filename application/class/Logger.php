@@ -8,12 +8,11 @@ class Logger
     public static function addLog($type = 'default', $what = "")
     {
         $file = LOG_PATH . DIRECTORY_SEPARATOR . 'app.' . $type . '.log';
-        // User-Agent brut (absent en ligne de commande). Browser ne fait que
-        // des comparaisons de chaînes : aucun service externe n'est appelé.
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'inconnu';
+        // User-Agent brut, « inconnu » en ligne de commande. Browser ne fait
+        // que des comparaisons de chaînes : aucun service externe n'est appelé.
         $browser = new Browser();
         $date = date("F j, Y, g:i a");
-        $what = PHP_EOL . '[' . $date . ' by ' . $browser->user . ']' . PHP_EOL . $userAgent . PHP_EOL . $what;
+        $what = PHP_EOL . '[' . $date . ' by ' . $browser->user . ']' . PHP_EOL . $browser->userAgent . PHP_EOL . $what;
         //$what = PHP_EOL . '[' . $date . ' by ]' . PHP_EOL . $what;
         if (is_file($file)) {
             file_put_contents($file, PHP_EOL . $what, FILE_APPEND | LOCK_EX);

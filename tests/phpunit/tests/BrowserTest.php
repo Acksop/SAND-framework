@@ -87,6 +87,17 @@ final class BrowserTest extends TestCase
         $this->assertFalse(Browser::detection_mobile());
     }
 
+    public function testSansUserAgentAucunAvertissement(): void
+    {
+        // setUp() a retiré HTTP_USER_AGENT ; un avertissement lèverait une exception.
+        $this->assertNull(Browser::get());
+        $this->assertSame('not-firefox', Browser::get_firefox_version());
+        $this->assertSame('Inconnu', Browser::get_os());
+        $navigateur = new Browser();
+        $this->assertSame('inconnu', $navigateur->userAgent);
+        $this->assertSame('Other (Unknown)', $navigateur->user);
+    }
+
     /**
      * Lance detection_mobile() dans un processus sans browscap ; la sortie
      * comprend tout avertissement émis, qui ferait échouer la comparaison.
