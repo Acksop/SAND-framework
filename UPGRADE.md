@@ -61,6 +61,10 @@ Le troisième paramètre était ignoré : le rendu se faisait toujours en Blade.
 
 **À faire :** vérifier les appels qui passent `'twig'`. Le gabarit `<vue>.html.twig` doit exister, et l'échappement automatique de Twig s'applique aux variables de ce gabarit (utiliser `|raw` pour une variable HTML de confiance). L'appel `{{ action(...) }}` lui-même n'a pas besoin de `|raw` : la fonction `action` est déclarée sûre.
 
+**Sécurité :** la sortie d'une action est donc insérée telle quelle. L'action est responsable de l'échappement de toute donnée venant d'un utilisateur : en Blade, `{{ }}` est brut, utiliser `{{{ }}}` ; en Twig, pas de `|raw` sur une donnée utilisateur ; ne jamais renvoyer une chaîne non maîtrisée.
+
+**Dossier des actions :** l'ancienne documentation indiquait `application/include/action/` ; le dossier réel est `application/include/actions/`.
+
 ## 8. `Vue`
 
 Le constructeur `Vue($page_params, $racineVues = null, $dossierControleurs = null, $cacheBlade = null)` accepte trois paramètres facultatifs. Leurs valeurs par défaut sont `VIEW_PATH`, `CONTROLLER_PATH` et `VIEW_PATH/cache`.
@@ -71,7 +75,7 @@ Le constructeur `Vue($page_params, $racineVues = null, $dossierControleurs = nul
 
 Les gabarits compilés par illuminate/view 4 sont incompatibles avec la v12.
 
-**À faire :** vider `application/include/vues/cache/` à chaque déploiement de cette version, par exemple avec `rm -f application/include/vues/cache/*.php`.
+**À faire :** vider `application/include/vues/cache/` à chaque déploiement de cette version, avec `find application/include/vues/cache -type f ! -name '.gitignore' -delete`.
 
 ## 10. Éléments obsolètes
 
