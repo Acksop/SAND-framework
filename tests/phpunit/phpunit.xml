@@ -30,6 +30,7 @@
       <file>./tests/BrowserTest.php</file>
       <file>./tests/AsynchonousTest.php</file>
       <file>./tests/DumperTest.php</file>
+      <file>./tests/JournalTest.php</file>
     </testsuite>
   </testsuites>
 

@@ -10,7 +10,7 @@ class Browser
 
     public function __construct()
     {
-        $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $this->userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'inconnu';
         $this->user = $this->get_browser_name();
         //Logger::addLog('http.browser',$this->user);
     }
