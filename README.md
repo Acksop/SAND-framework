@@ -34,7 +34,7 @@
  
 > A building metrics toujours disponible  
  
-> Plusieurs modules déjà disponible (Worpress, PHPList, Gitlist, ...)
+> Plusieurs modules déjà disponible (WordPress, PHPList, Gitlist, ...)
  
 > Possibilité de créer des modules SAND pour un Projet SAND (plusieurs modules SAND-view-symfony pour un projet SAND-blade, par exemple)
  
