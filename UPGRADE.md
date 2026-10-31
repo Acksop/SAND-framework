@@ -148,6 +148,17 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **Clés :** copier `Api/config/api_keys.php.skel` en `Api/config/api_keys.php` (ignoré par git) et y mettre une clé générée par `bin2hex(random_bytes(32))`, ou son empreinte SHA-256. Sans ce fichier, toute écriture (`POST`, `PUT`, `PATCH`, `DELETE`) répond 401.
 - **Nouvelles constantes** (dans `constantes-par-defaut.php`) : `API_FICHIER_CLES`, `API_FICHIER_ROUTES` et `API_DEPOT_SOUMISSIONS` (défaut `null`). **À faire :** pour recevoir les articles d'ereferer.com, implémenter `MVC\Api\Contrat\DepotSoumissions` et déclarer la classe dans `API_DEPOT_SOUMISSIONS`. Sans cela, `/wp-json/v1/ereferer` répond 501.
 - **Reprise depuis l'ancienne API de B25 (`application/__api`) :** espaces de noms `B25\Api\…` → `MVC\Api\…` ; actions `get_items`, `get_item`, `create_item`, `update_item`, `delete_item` → `getItems`, `getItem`, `createItem`, `updateItem`, `deleteItem` (PSR-1). Un contrôleur renvoie un tableau ou une `Response`, sans `echo` ni `die()`. Une clé invalide donne 401 (et non plus 403). Il n'y a plus de sortie HTML (`?format=html`). Les routes explicites s'écrivent `$registre->register(...)`.
+- **Durcissements (tour 1) :**
+  - le corps n'est lu qu'après l'authentification ;
+  - **`API_TAILLE_MAX_CORPS`** (défaut 1 Mo) : au-delà, 413 ;
+  - JSON limité à 32 niveaux ; JSON invalide : 400 ;
+  - limites Ereferer : titre 255, contenu 200 000, 20 catégories, `meta_title` 255, `meta_description` 500, 50 entrées ; au-delà : 422 ;
+  - `HEAD` traité comme `GET`, sans corps ;
+  - empreintes normalisées en minuscules ;
+  - message 405 sans la méthode, `OPTIONS` sans nom de classe, journal limité à la classe et au message tronqué.
+- **Maintenance :** la nouvelle constante **`API_PENDANT_MAINTENANCE`** vaut `true` par défaut, et l'API reste joignable pendant une maintenance. **À faire :** pour la fermer, la mettre à `false` dans `app-parameters.php` ; elle répond alors 503 en JSON.
+- **`.htaccess` :** la copie de l'en-tête `Authorization` est limitée aux chemins `^(wp-json|api)/`. **À faire :** reprendre ces deux lignes (`RewriteCond` et `RewriteRule`), ou `CGIPassAuth On`.
+- **Routes explicites :** une route `GET` de `Api/config/routes.php` est publique, sans clé.
 - Voir `data/docs/18. API wp-json et Ereferer.md`.
 
 ## Vérification
