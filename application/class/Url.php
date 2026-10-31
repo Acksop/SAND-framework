@@ -131,78 +131,8 @@ class Url
             }
         }
         $page['name'] = lcfirst($page['name']);
-        $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
-        //verification de l'existence de la page dans les controlleurs
-        if ($page['control']) {
-            $pageFile = TRAITEMENT_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
-        } else {
-            //recherche du fichier controlleur correpondant HTTP1.1 ou HTTP1.0
-            switch ($method) {
-                //cas des requètes HTTP1.1
-                case 'GET':
-                case 'POST':
-                    if ($appRequest) {
-                        $page['name'] = ucfirst($page['name']);
-                        $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
-                        if (!file_exists($pageFile)) {
-                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
-                        }
-                        // aucune réponse REST/HTTP pour cette page : on sert la page MVC classique
-                        $pageMvc = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . lcfirst($page['name']) . '.php';
-                        if (!file_exists($pageFile) && file_exists($pageMvc)) {
-                            $page['name'] = lcfirst($page['name']);
-                            $pageFile = $pageMvc;
-                        }
-                    } else {
-                        $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
-                        if (!file_exists($pageFile)) {
-                            $page['name'] = ucfirst($page['name']);
-                            $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
-                            if (!file_exists($pageFile)) {
-                                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
-                            }
-                        }
-                    }
-                    break;
-                case 'PUT':
-                case 'DELETE':
-                    $page['name'] = ucfirst($page['name']);
-                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
-            }
-        }
-
-        //Test sur l'existence de la page actuelle et renvoi sur le controlleur 404 d'erreur si besoin
-        if (!file_exists($pageFile)) {
-            if ($appRequest) {
-                $page['name'] = 'Error';
-                $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
-                if (!file_exists($pageFile)) {
-                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
-                }
-            } else {
-                $page['name'] = 'error';
-                $pageFile = CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php';
-                if (!file_exists($pageFile)) {
-                    $page['name'] = ucfirst($page['name']);
-                    $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php';
-                    if (!file_exists($pageFile)) {
-                        $pageFile = CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
-                        if (!file_exists($pageFile)) {
-                            $erreur = "le controlleur 404 d'erreur n'existe pas : \n"
-                                . CONTROLLERS_PATH . DIRECTORY_SEPARATOR . $page['name'] . '.php' . "\n"
-                                . "ou l'un des controlleurs 404 (REST ou HTTP) n'existe pas : \n"
-                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'RestReponse.php \n'
-                                . " ou \n"
-                                . CONTROLLER_PATH . DIRECTORY_SEPARATOR . $page['name'] . 'HttpReponse.php';
-                            // erreur journalisée ; les chemins du serveur ne sont affichés qu'en DEBUG
-                            Logger::addLog('error', $erreur);
-                            http_response_code(500);
-                            die(self::messageErreurConfiguration($erreur, defined('DEBUG') && DEBUG == true));
-                        }
-                    }
-                }
-            }
-        }
+        //fichier controlleur (MVC, traitement, REST ou HTTP), sinon controlleur d'erreur
+        [$page, $pageFile] = UrlResolveur::resoudre($page, $method, $appRequest);
         $this->page = $page;
         $this->pageFile = $pageFile;
     }
@@ -234,109 +164,28 @@ class Url
         return $urlParts;
     }
 
-    /**
-     * Message affiché pour une erreur de configuration : le détail (chemins du
-     * serveur compris) n'est montré qu'en mode débogage.
-     */
-    public static function messageErreurConfiguration(string $detail, bool $debug): string
-    {
-        return $debug ? $detail : "Erreur de configuration : contrôleur d'erreur introuvable.";
-    }
-
     public static function asset_rewrite($urlAsset)
     {
-        return '/' . BASE_SERVER_DIRECTORY . $urlAsset;
+        return UrlLiens::asset_rewrite($urlAsset);
     }
 
     public static function link_rewrite($isControlPatern, $page, $params = array())
     {
-        if ($isControlPatern) {
-            return self::controlLink_rewrite($page, $params);
-        } else {
-            return self::link_rewrite_slashParam($page, $params);
-        }
-    }
-
-    private static function link_rewrite_slashParam($page, $params = array())
-    {
-        $stringParams = '';
-        if (is_array($params)) {
-            foreach ($params as $key => $values) {
-                $stringParams .= "/" . $key . "/" . $values;
-            }
-        }
-        return '/' . BASE_SERVER_DIRECTORY . $page . $stringParams;
-    }
-
-    private static function controlLink_rewrite($page, $params = array())
-    {
-        $stringParams = '';
-        if (is_array($params)) {
-            foreach ($params as $key => $values) {
-                $stringParams .= "/" . $key . "/" . $values;
-            }
-        }
-        return '/' . BASE_SERVER_DIRECTORY . 'control' . '/' . $page . $stringParams;
+        return UrlLiens::link_rewrite($isControlPatern, $page, $params);
     }
 
     public static function absolute_link_rewrite($isControlPatern, $page, $params = array())
     {
-        if(isset($_SERVER['HTTP_HOST'])) {
-            $url = $_SERVER['HTTP_HOST'];
-            if (isset($_SERVER['REQUEST_SCHEME'])) {
-                $scheme = $_SERVER['REQUEST_SCHEME'];
-            } else {
-                $scheme = 'http';
-            }
-            $scheme_tab = explode("://",PATH_URL);
-            if( $scheme !== $scheme_tab[0]){
-                $scheme = $scheme_tab[0];
-            }
-            $url = $scheme . "://" . $url;
-        }else{
-            $url = PATH_URL;
-        }
-        if( substr($url , -1) == "/"){
-            $url = substr($url, 0, -1);
-        }
-        if ($isControlPatern) {
-            $uri = self::controlLink_rewrite($page, $params);
-        } else {
-            $uri = self::link_rewrite_slashParam($page, $params);
-        }
-
-
-        return (  $url . $uri);
+        return UrlLiens::absolute_link_rewrite($isControlPatern, $page, $params);
     }
 
     public static function getBaseDirectory(){
         return '/' . BASE_SERVER_DIRECTORY;
     }
 
-    public static function getRootDirectoryUrl(){
-        if(isset($_SERVER['HTTP_HOST'])) {
-            $url = $_SERVER['HTTP_HOST'];
-            if (isset($_SERVER['REQUEST_SCHEME'])) {
-                $scheme = $_SERVER['REQUEST_SCHEME'];
-            } else {
-                $scheme = 'http';
-            }
-            $scheme_tab = explode("://",PATH_URL);
-            if( $scheme !== $scheme_tab[0]){
-                $scheme = $scheme_tab[0];
-            }
-            $url = $scheme . "://" . $url;
-        }else{
-            $url = PATH_URL;
-        }
-        if( substr($url , -1) == "/"){
-            $url = substr($url, 0, -1);
-        }
-        if( substr($url . "/" . BASE_SERVER_DIRECTORY, -1) == "/"){
-            return substr($url . "/" . BASE_SERVER_DIRECTORY, 0, -1);
-        }else {
-            return $url . "/" . BASE_SERVER_DIRECTORY;
-        }
+    public static function getRootDirectoryUrl()
+    {
+        return UrlLiens::getRootDirectoryUrl();
     }
 
     public static function getPageName(){

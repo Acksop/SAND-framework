@@ -9,6 +9,8 @@
       <file>./tests/UrlTest.php</file>
       <file>./tests/RoutageTest.php</file>
       <file>./tests/UrlRoutageTest.php</file>
+      <file>./tests/UrlLiensTest.php</file>
+      <file>./tests/DebugEtReponsesTest.php</file>
       <file>./tests/DependancesTest.php</file>
     </testsuite>
     <testsuite name="SAND Rendu">

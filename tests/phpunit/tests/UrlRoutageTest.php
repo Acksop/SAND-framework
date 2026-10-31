@@ -8,6 +8,7 @@ use MVC\Classe\Controlleur;
 use MVC\Classe\Implement\HttpReponse;
 use MVC\Classe\Implement\RestReponse;
 use MVC\Classe\Url;
+use MVC\Classe\UrlResolveur;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -59,9 +60,22 @@ final class UrlRoutageTest extends TestCase
         $this->assertSame('trois mots', $_GET['c']);
     }
 
+    public function testChaineDeRequeteAvecTableaux(): void
+    {
+        $_GET = ['t' => ['deja']];
+        $_SERVER['REQUEST_URI'] = '/index?a[]=1&a[]=2&t[]=autre&t=scalaire';
+
+        new Url('GET', false);
+
+        $this->assertSame(['1', '2'], $_GET['a']);
+        $this->assertSame(['deja'], $_GET['t']);
+    }
+
     /**
-     * Sous-répertoire « my-app/ » : l'URL « /my-app » vide le chemin avant
-     * le dernier segment (vide) de BASE_SERVER_DIRECTORY, sans avertissement.
+     * Ligne 19 : avec BASE_SERVER_DIRECTORY = "my-app/", explode() donne
+     * ['my-app', '']. Pour l'URL « /my-app », le premier segment retire
+     * 'my-app' et vide le chemin ; le second (chaîne vide) ne doit plus lire
+     * $urlParts[0] inexistant (avertissement « Undefined array key 0 »).
      */
     public function testRacineDuSousRepertoireSansAvertissement(): void
     {
@@ -103,8 +117,9 @@ final class UrlRoutageTest extends TestCase
     {
         $detail = "contrôleur absent : /srv/secret/error.php";
 
-        $production = Url::messageErreurConfiguration($detail, false);
-        $debogage = Url::messageErreurConfiguration($detail, true);
+        $message = new \ReflectionMethod(UrlResolveur::class, 'messageErreurConfiguration');
+        $production = $message->invoke(null, $detail, false);
+        $debogage = $message->invoke(null, $detail, true);
 
         $this->assertStringNotContainsString('/srv/secret', $production);
         $this->assertNotSame('', $production);

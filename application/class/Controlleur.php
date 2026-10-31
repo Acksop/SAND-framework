@@ -80,7 +80,12 @@ class Controlleur
     {
         $reponseHttp = "\\" . $application->url->page['name'] . 'HttpReponse';
 
-        $reponse = new $reponseHttp($application->url, $application->http->getData());
+        $donnees = $application->http->getData();
+        $reponse = new $reponseHttp($application->url, $donnees);
+        // sous-classe avec son propre constructeur, sans parent::__construct() : repli
+        if ($reponse->url === null) {
+            $reponse->instanciate($application->url, $donnees);
+        }
         $method = strtolower($application->http->method);
 
         Logger::addLog('http11', " $reponseHttp app {$application->http->method} request! ( ".get_class($reponse)."->$method() )");

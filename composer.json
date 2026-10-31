@@ -5,7 +5,8 @@
         "./application/config/define-constantes.php",
         "./application/config/app-parameters.php",
         "./application/config/bdd-parameters.php",
-        "./application/config/console-parameters.php"
+        "./application/config/console-parameters.php",
+        "./application/config/constantes-par-defaut.php"
       ],
       "psr-4": {
           "MVC\\Classe\\" : "./application/class",

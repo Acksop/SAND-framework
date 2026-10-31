@@ -13,7 +13,7 @@ Ce guide liste les ruptures introduites par la branche `feature/convention-php83
 `symfony/routing`, `config`, `yaml`, `expression-language` et `http-foundation` passent en `^6.4`. `symfony/cache` est épinglé en `^6.4`.
 
 - Le routage du framework (`Dispacher`, `application/config/files/routing.yml`) fonctionne sans changement. La clé `controller` doit rester sous `defaults`.
-- Une URL avec chaîne de requête (`/foo?x=1`) ou avec slash final non déclaré (`/foo/`) ne correspond à aucune route Symfony. Elle retombe sur le routage MVC, comme auparavant.
+- Le `Dispacher` passe au routeur le chemin sans chaîne de requête : `/foo?x=1` correspond à la route `/foo`. Un slash final non déclaré (`/foo/`) ne correspond toujours à aucune route Symfony et retombe sur le routage MVC.
 - **http-foundation 2.8 vers 6.4 :** les applications et modules qui utilisent `Request`, `Response` ou `Session` doivent migrer. Les points principaux :
   - `Request::get()` est déprécié : passer par `$request->query` et `$request->request` ;
   - la session passe par `$request->getSession()` et les interfaces `SessionInterface` ;
@@ -87,6 +87,13 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - `console/skel/symfony-app/` repose sur Symfony 5.0 et PHP 7.2.
 
 **À faire :** ne pas lancer ces scripts. Les modules embarqués (Symfony, Laravel) gèrent leurs propres dépendances avec leur `composer.json`, à monter séparément.
+
+## 11. Routage, réponses HTTP/REST et mode débogage
+
+- **Constructeur des réponses :** `Implement\HttpReponse` et `Implement\RestReponse` ont un vrai `__construct($url = null, $requestData = null)` (l'ancien `__contruct` mal orthographié n'était jamais appelé). Le framework instancie la réponse avec `new $classe($url, $data)`. **À faire :** dans une réponse qui définit son propre constructeur, appeler `parent::__construct($url, $requestData)`. Sans cet appel, le framework se replie sur `instanciate()`, qui reste disponible.
+- **Constante `DEBUG` :** sa valeur par défaut (`false`) est définie dans `application/config/constantes-par-defaut.php`, chargé en dernier par l'autoload Composer. **À faire :** après la mise à jour, lancer une fois `composer dump-autoload` (nouveau fichier dans `autoload.files`) ; pour activer le débogage, ajouter `define('DEBUG', true);` dans `app-parameters.php`, jamais en production. Seul le booléen `true` active le mode (`MVC\Object\Environment::debug()`).
+- **Chemins du serveur :** si aucun contrôleur d'erreur n'existe, l'erreur est journalisée (`app.error.log`) avec les chemins et la réponse vaut 500. Les chemins ne sont affichés qu'en mode `DEBUG`.
+- **Chaîne de requête :** `Url` la relit dans `$_GET` sans écraser les clés déjà présentes. Un paramètre sans `=` vaut une chaîne vide.
 
 ## Vérification
 
