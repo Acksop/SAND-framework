@@ -90,6 +90,21 @@ final class CaracterTest extends TestCase
         $this->assertSame('Été', $bdd->bdd->query('SELECT v FROM accents WHERE id = 1')->fetchColumn());
     }
 
+    public function testExploiterResultatCorrigeLeDoubleEncodage(): void
+    {
+        $bdd = new Bdd('testsqlite');
+        $bdd->bdd->exec('CREATE TABLE IF NOT EXISTS lus (id INTEGER, v TEXT)');
+        $bdd->bdd->exec('DELETE FROM lus');
+        $insertion = $bdd->bdd->prepare('INSERT INTO lus (id, v) VALUES (?, ?)');
+        $insertion->execute([1, mb_convert_encoding('Été à Besançon', 'UTF-8', 'ISO-8859-1')]);
+        $insertion->execute([2, 'déjà bon']);
+
+        $lignes = $bdd->exploiterResultat($bdd->faireBindRequete('SELECT id, v FROM lus ORDER BY id'));
+
+        $this->assertSame(['Été à Besançon', 'déjà bon'], array_column($lignes, 'v'));
+        $this->assertEquals([1, 2], array_column($lignes, 'id'));
+    }
+
     /**
      * Exécute $code et renvoie toutes les erreurs PHP émises (dépréciations comprises).
      */

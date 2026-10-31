@@ -119,6 +119,7 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **Une connexion PDO par nom :** toutes les instances d'un même nom partagent la transaction en cours (pas de `beginTransaction()` imbriqué : `PDOException`), `lastInsertId()` et les attributs PDO. **À faire :** revoir le code qui ouvrait deux `new Bdd()` pour isoler deux transactions.
 - **`Bdd::pourPage(array $page)`** ouvre la connexion déclarée par la clé `bdd` du `.model` (sinon `default`). À n'utiliser qu'avec une définition de page issue d'un `.model`, jamais avec des paramètres d'URL.
 - **`faireBindRequete()`** renvoie `0` si la préparation, l'exécution ou PDO échoue, et journalise dans `app.error.log` le SQLSTATE, le code du pilote et le message du pilote sur une ligne, tronqué à 120 caractères (sans DSN ni mot de passe). Les anciens blocs `catch` visaient `MVC\Classe\PDOException` (classe inexistante) : une `PDOException` remontait à l'appelant ; elle est maintenant interceptée, journalisée et la méthode renvoie `0`. **À faire :** tester `=== 0` avant `exploiterResultat()`.
+- **`exploiterResultat($req)`** normalise réellement les chaînes des lignes renvoyées (`Caracter::corrigerUtf8()`) : l'ancienne boucle travaillait sur une copie et rendait les lignes brutes. Une valeur ISO-8859-1 ou doublement encodée en base revient donc désormais en UTF-8 corrigé.
 - **`exploiterNbResultat($req)`** renvoie `rowCount()`.
 
 ## 14. Actions et vues

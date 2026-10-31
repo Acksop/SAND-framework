@@ -239,16 +239,9 @@ class Bdd
 
     public function exploiterResultat($req)
     {
-        $res = $req->fetchAll();
-        foreach ($res as $data) {
-            foreach ($data as $key => $row) {
-                if (is_string($row)) {
-                    $row = Caracter::normalise_ChaineDeCaracteres($row);
-                }
-                $data[$key] = $row;
-            }
-        }
-        return $res;
+        // Chaque ligne est normalisée (chaînes seulement, les autres types
+        // sont rendus tels quels). L'ancienne boucle travaillait sur une copie.
+        return array_map([Caracter::class, 'corrigerUtf8'], $req->fetchAll());
     }
 
     /**
