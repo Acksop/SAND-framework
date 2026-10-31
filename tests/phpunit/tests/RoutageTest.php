@@ -78,6 +78,27 @@ final class RoutageTest extends TestCase
         $this->assertNull($this->router('/route-inconnue'));
     }
 
+    /**
+     * Le Dispacher passe REQUEST_URI brut au matcher : une chaîne de requête
+     * empêche la correspondance et la page retombe sur le routage MVC
+     * (comportement actuel, documenté et non modifié).
+     */
+    public function testChaineDeRequeteNeCorrespondPas(): void
+    {
+        $this->assertNull($this->router('/foo?x=1'));
+        $this->assertNull($this->router('/foo/42?x=1'));
+    }
+
+    /**
+     * UrlMatcher sans redirection : un slash final non déclaré dans
+     * routing.yml ne correspond pas (comportement actuel, non modifié).
+     */
+    public function testSlashFinalNeCorrespondPas(): void
+    {
+        $this->assertNull($this->router('/foo/'));
+        $this->assertNull($this->router('/foo/42/'));
+    }
+
     public function testAccueilSansRoute(): void
     {
         $this->assertNull($this->router('/'));
