@@ -34,6 +34,10 @@
       <file>./tests/CaracterTest.php</file>
       <file>./tests/ConversionErreursTest.php</file>
     </testsuite>
+    <testsuite name="SAND Api">
+      <file>./tests/ApiRoutageTest.php</file>
+      <file>./tests/ApiErefererTest.php</file>
+    </testsuite>
   </testsuites>
 
   <logging>

@@ -13,7 +13,10 @@
           "MVC\\Object\\" : "./application/objets",
           "MVC\\Domain\\" : "./domain",
           "MVC\\Command\\": "./console/command",
-          "MVC\\Component\\" : "./console/component"
+          "MVC\\Component\\" : "./console/component",
+          "MVC\\Api\\Component\\" : "./Api/component",
+          "MVC\\Api\\Controller\\" : "./Api/controller",
+          "MVC\\Api\\" : "./Api"
       }
     },
 

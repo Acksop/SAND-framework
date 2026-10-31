@@ -18,9 +18,18 @@ class Application
 
     public $controlleur;
 
+    /** Requête destinée à l'API (/wp-json/… ou /api/…) : traitée par MVC\Api\Component\Router. */
+    public $api = false;
+
 
     public function __construct()
     {
+        // L'API passe avant tout le reste (maintenance, routage MVC, Browser...).
+        if (self::estRequeteApi((string) ($_SERVER['REQUEST_URI'] ?? '/'))) {
+            $this->api = true;
+            return;
+        }
+
         $this->http = new HttpMethod();
         $this->browser = new Browser();
 
@@ -45,6 +54,10 @@ class Application
 
     public function launch()
     {
+        if ($this->api) {
+            \MVC\Api\Component\Router::dispatch();
+            return;
+        }
         $this->controlleur = new Controlleur($this);
         //si la page n'est un controlleur d'action alors on affiche l'écran
         if (!$this->url->page['control']) {
@@ -52,6 +65,14 @@ class Application
             //si on affiche l'écran alors on vide les alertes de la session
             \MVC\Object\Alert::remove();
         }
+    }
+
+    /**
+     * Vrai si le chemin commence par /wp-json ou /api (après BASE_SERVER_DIRECTORY).
+     */
+    public static function estRequeteApi(string $uri): bool
+    {
+        return \MVC\Api\Component\Requete::cheminApi($uri) !== null;
     }
 
     public static function is_under_update(){
