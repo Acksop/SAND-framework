@@ -114,6 +114,10 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 > 
 > `php console/bin.php module:add`
 
+## Documentation
+
+La documentation est dans `data/docs/`. La convention de nommage des fichiers et le choix des méthodes HTTP sont décrits dans [l'annexe 20](<data/docs/20. Annexe - Convention de nommage et méthodes HTTP.md>).
+
 ## 🙏 Montrez votre support
 
 N'hésitez pas à mettre une ⭐ si ce projet vous a aidé.
