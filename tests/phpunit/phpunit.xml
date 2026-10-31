@@ -16,6 +16,9 @@
     <testsuite name="SAND Session">
       <file>./tests/SessionTest.php</file>
     </testsuite>
+    <testsuite name="SAND Bdd">
+      <file>./tests/BddTest.php</file>
+    </testsuite>
     <testsuite name="SAND Rendu">
       <file>./tests/RenduTest.php</file>
       <file>./tests/VueTest.php</file>

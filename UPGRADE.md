@@ -111,6 +111,13 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **`Session::sessionStart()`** n'appelle plus `session_start()` si une session est déjà active.
 - **`XssToken::getNew()`** ne prend plus de paramètre et renvoie le jeton (toujours rangé dans `$_SESSION['xss_token']`). PHP accepte encore les anciens appels à trois arguments. **À faire :** retirer ces arguments inutiles.
 
+## 13. Connexions aux bases de données (`Bdd`)
+
+- **Connexions nommées :** `new Bdd('<nom>')` lit `DSN_BDD_<NOM>`, `USER_BDD_<NOM>` et `PASS_BDD_<NOM>`, puis la forme historique `DSN_<NOM>` : `default`, `bdd1` et `bdd2` fonctionnent sans changement. Une seule connexion PDO est ouverte par nom pendant la requête. Un nom inconnu lève une `RuntimeException` (auparavant, tout nom inconnu ouvrait silencieusement `default`). **À faire :** déclarer dans `bdd-parameters.php` toute connexion utilisée sous un autre nom que `default`, `bdd1` ou `bdd2`. Voir `data/docs/01.j. Les connexions aux bases de données.md`.
+- **`Bdd::pourPage(array $page)`** ouvre la connexion déclarée par la clé `bdd` du `.model` (sinon `default`). À n'utiliser qu'avec une définition de page issue d'un `.model`, jamais avec des paramètres d'URL.
+- **`faireBindRequete()`** renvoie `0` si la préparation, l'exécution ou PDO échoue, et journalise `errorInfo()` dans `app.error.log` (sans DSN ni mot de passe). Les anciens blocs `catch` visaient `MVC\Classe\PDOException` (classe inexistante) : une `PDOException` remontait à l'appelant ; elle est maintenant interceptée, journalisée et la méthode renvoie `0`. **À faire :** tester `=== 0` avant `exploiterResultat()`.
+- **`exploiterNbResultat($req)`** renvoie `rowCount()`.
+
 ## Vérification
 
 ```bash
