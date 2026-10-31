@@ -20,3 +20,7 @@ defined('SESSION_CLE_ACL') or define('SESSION_CLE_ACL', 'acl_admin');
 // Page de connexion vers laquelle Session::refuserAcces() redirige un
 // visiteur non connecté ou dont la session a expiré
 defined('PAGE_IDENTIFICATION') or define('PAGE_IDENTIFICATION', 'index');
+
+// Noms de connexion acceptés par Bdd (new Bdd('<nom>'), Bdd::pourPage()) :
+// tout autre nom est refusé, même si ses constantes DSN_BDD_<NOM> existent
+defined('BDD_CONNEXIONS_AUTORISEES') or define('BDD_CONNEXIONS_AUTORISEES', ['default', 'bdd1', 'bdd2']);

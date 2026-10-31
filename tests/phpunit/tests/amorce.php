@@ -24,6 +24,10 @@ set_error_handler(
 $_SERVER['REQUEST_SCHEME'] = $_SERVER['REQUEST_SCHEME'] ?? 'http';
 $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
 
+// Connexions BDD des tests, chargées avant l'autoload : constantes-par-defaut.php
+// ne redéfinit pas BDD_CONNEXIONS_AUTORISEES.
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'connexions-bdd.php';
+
 require_once dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestAction.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestConduit.php';

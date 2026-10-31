@@ -4,10 +4,21 @@ namespace MVC\Classe;
 
 class Bdd
 {
+    /**
+     * Format d'un nom de connexion : minuscule, chiffres et _, 32 caractères au plus
+     * (modificateur D : un saut de ligne final n'est pas toléré par $).
+     */
+    public const FORMAT_NOM = '/^[a-z][a-z0-9_]{0,31}$/D';
+
+    /**
+     * Longueur maximale du message du pilote recopié dans le journal.
+     */
+    private const LONGUEUR_MESSAGE_JOURNAL = 120;
+
     public $bdd;
 
     /**
-     * Nom de la connexion utilisée par cette instance (jamais le DSN).
+     * Nom de la connexion utilisée par cette instance (validé, jamais le DSN).
      */
     private string $nom;
 
@@ -20,44 +31,68 @@ class Bdd
     private static array $connexions = [];
 
     /**
-     * @param string $bdd nom de la connexion : 'default', 'bdd1', 'bdd2' ou tout
-     *                    nom déclaré dans bdd-parameters.php
+     * @param string $bdd nom de la connexion, autorisé par BDD_CONNEXIONS_AUTORISEES
+     *                    et déclaré dans bdd-parameters.php
      *                    (DSN_BDD_<NOM>, USER_BDD_<NOM>, PASS_BDD_<NOM>)
      */
     public function __construct($bdd = 'default')
     {
-        $this->nom = (string) $bdd;
+        $this->nom = self::nomValide($bdd);
         $this->bdd = self::connexion($this->nom);
     }
 
     /**
      * Connexion PDO du nom donné, ouverte une seule fois par requête.
+     *
+     * @throws \RuntimeException si la connexion ne peut pas être ouverte
+     *                           (sans l'exception PDO d'origine, qui porte les identifiants)
      */
     public static function connexion(string $nom): \PDO
     {
-        $cle = self::suffixe($nom);
-        if (!isset(self::$connexions[$cle])) {
-            [$dsn, $utilisateur, $motDePasse] = self::identifiants($nom);
-            $pdo = new \PDO($dsn, $utilisateur, $motDePasse);
+        [$dsn, $utilisateur, $motDePasse] = self::identifiants($nom);
+        if (!isset(self::$connexions[$nom])) {
+            try {
+                $pdo = new \PDO($dsn, $utilisateur, $motDePasse);
+            } catch (\PDOException $e) {
+                $etat = preg_match('/SQLSTATE\[([0-9A-Z]{5})\]/', $e->getMessage(), $m) ? $m[1] : 'inconnu';
+                Logger::addLog('error', '[Bdd::connexion] connexion « ' . $nom . ' » impossible : SQLSTATE ' . $etat);
+                throw new \RuntimeException('Connexion BDD « ' . $nom . ' » impossible');
+            }
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
             $pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-            self::$connexions[$cle] = $pdo;
+            self::$connexions[$nom] = $pdo;
         }
 
-        return self::$connexions[$cle];
+        return self::$connexions[$nom];
     }
 
     /**
-     * Constantes de la connexion : DSN_BDD_<NOM>, puis la forme historique
-     * DSN_<NOM> (DSN_BDD1, DSN_BDD2). USER_ et PASS_ sont facultatives.
+     * Constantes de la connexion : DSN_BDD_<NOM> ; pour un nom bdd<chiffres>
+     * seulement, la forme historique DSN_<NOM> (DSN_BDD1, DSN_BDD2).
+     * USER_ et PASS_ sont facultatives.
      *
      * @return array{0: string, 1: string, 2: string} [dsn, utilisateur, mot de passe]
-     * @throws \RuntimeException si aucune des deux formes n'est définie
+     * @throws \InvalidArgumentException nom mal formé ou absent de BDD_CONNEXIONS_AUTORISEES
+     * @throws \RuntimeException         si aucune constante DSN n'est définie
      */
     public static function identifiants(string $nom): array
     {
-        $suffixe = self::suffixe($nom);
-        foreach (['BDD_' . $suffixe, $suffixe] as $cle) {
+        $nom = self::nomValide($nom);
+        $autorises = defined('BDD_CONNEXIONS_AUTORISEES') && is_array(BDD_CONNEXIONS_AUTORISEES)
+            ? BDD_CONNEXIONS_AUTORISEES
+            : [];
+        if (!in_array($nom, $autorises, true)) {
+            throw new \InvalidArgumentException(
+                'Connexion BDD « ' . $nom . ' » non autorisée : l\'ajouter à BDD_CONNEXIONS_AUTORISEES'
+            );
+        }
+
+        $suffixe = strtoupper($nom);
+        $cles = ['BDD_' . $suffixe];
+        if (preg_match('/^bdd[0-9]+$/D', $nom)) {
+            $cles[] = $suffixe;
+        }
+        foreach ($cles as $cle) {
             if (defined('DSN_' . $cle)) {
                 return [
                     (string) constant('DSN_' . $cle),
@@ -74,10 +109,27 @@ class Bdd
     }
 
     /**
+     * Vérifie le format d'un nom de connexion. Le message d'erreur ne
+     * reprend jamais la valeur reçue.
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function nomValide($nom): string
+    {
+        if (!is_string($nom) || !preg_match(self::FORMAT_NOM, $nom)) {
+            throw new \InvalidArgumentException(
+                'Nom de connexion BDD invalide (format attendu : ^[a-z][a-z0-9_]{0,31}$)'
+            );
+        }
+
+        return $nom;
+    }
+
+    /**
      * Connexion déclarée par une définition de page issue d'un fichier .model
      * (clé « bdd »), sinon 'default'.
      *
-     * Ne jamais passer de paramètres d'URL ($_GET, page['params']) : le nom
+     * Ne jamais passer de paramètres d'URL ($_GET, page['all_params']) : le nom
      * de la connexion doit venir du .model, pas du visiteur.
      */
     public static function pourPage(array $page): self
@@ -88,7 +140,7 @@ class Bdd
     /**
      * Nom de connexion déclaré par la clé « bdd » d'une définition de page.
      *
-     * @throws \InvalidArgumentException si la clé « bdd » n'est pas une chaîne
+     * @throws \InvalidArgumentException si la clé « bdd » n'est pas un nom valide
      */
     public static function nomPourPage(array $page): string
     {
@@ -100,15 +152,7 @@ class Bdd
         }
         $nom = trim($page['bdd']);
 
-        return $nom === '' ? 'default' : $nom;
-    }
-
-    /**
-     * Suffixe normalisé : 'bdd1' et 'BDD1' partagent la même connexion.
-     */
-    private static function suffixe(string $nom): string
-    {
-        return strtoupper(preg_replace('/[^A-Za-z0-9_]/', '_', $nom));
+        return $nom === '' ? 'default' : self::nomValide($nom);
     }
 
     public function faireSQLRequete($sql)
@@ -175,15 +219,19 @@ class Bdd
     }
 
     /**
-     * Journalise errorInfo() (SQLSTATE, code du pilote, message) avec le nom
-     * de la connexion. Jamais de DSN, d'utilisateur ni de mot de passe.
+     * Journalise SQLSTATE, code du pilote et message du pilote (sur une ligne,
+     * tronqué) avec le nom validé de la connexion. Jamais de DSN, d'utilisateur
+     * ni de mot de passe.
      */
     private function journaliserEchec(string $etape, array $erreur): int
     {
+        $message = preg_replace('/[\x00-\x1F\x7F]+/', ' ', (string) ($erreur[2] ?? ''));
+        $message = mb_substr($message, 0, self::LONGUEUR_MESSAGE_JOURNAL);
         Logger::addLog(
             'error',
-            '[Bdd::faireBindRequete] connexion « ' . $this->nom . ' » : ' . $etape . ' a échoué : '
-            . implode(' | ', array_map('strval', $erreur))
+            '[Bdd::faireBindRequete] connexion « ' . $this->nom . ' » : ' . $etape . ' a échoué : SQLSTATE '
+            . preg_replace('/[^0-9A-Za-z]/', '', (string) ($erreur[0] ?? ''))
+            . ' | code ' . (int) ($erreur[1] ?? 0) . ' | ' . $message
         );
 
         return 0;
