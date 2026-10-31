@@ -58,6 +58,53 @@ final class ModeleTest extends TestCase
         $this->assertSame('4', $_GET['id']);
     }
 
+    /**
+     * @dataProvider valeursAvecSousTableaux
+     */
+    public function testSousTableauxDansUneValeur(string $valeur, array $attendu): void
+    {
+        $this->assertSame($attendu, Modele::analyserValeur($valeur));
+    }
+
+    public function valeursAvecSousTableaux(): array
+    {
+        return [
+            'vide puis associatif' => ['{[], [id=4]}', [[], ['id' => '4']]],
+            'liste' => ['{[a, b]}', [['a', 'b']]],
+            'un seul vide' => ['{[]}', [[]]],
+            'deux vides' => ['{[], []}', [[], []]],
+            'mélange simple et associatif' => ['{x, [k=v]}', ['x', ['k' => 'v']]],
+            'espaces parasites' => [
+                '{  [ id = 4 ,  nom= dupont ] ,   page  , [  ] }',
+                [['id' => '4', 'nom' => 'dupont'], 'page', []],
+            ],
+            'accents' => ['{Été, [titre=Château à Besançon, ville=Besançon]}', [
+                'Été',
+                ['titre' => 'Château à Besançon', 'ville' => 'Besançon'],
+            ]],
+            'éléments simples inchangés' => ['{ accueil , page }', ['accueil', 'page']],
+            'imbrication hors périmètre : texte brut' => ['{[[a]]}', [['[a]']]],
+        ];
+    }
+
+    public function testValeurSimpleInchangee(): void
+    {
+        $this->assertSame('Titre', Modele::analyserValeur('  Titre '));
+    }
+
+    public function testArianeParamsDepuisUnFichierEtLienReecrit(): void
+    {
+        $page = $this->lire("ariane : {accueil, page}\narianelink : {index, page}\narianeparams : {[], [id=4]}\n");
+
+        $this->assertSame([[], ['id' => '4']], $page['arianeparams']);
+        foreach ([0 => 'index', 1 => 'page/id/4'] as $i => $chemin) {
+            $this->assertSame(
+                '/' . BASE_SERVER_DIRECTORY . $chemin,
+                \MVC\Classe\Url::link_rewrite(false, $page['arianelink'][$i], $page['arianeparams'][$i])
+            );
+        }
+    }
+
     private function lire(string $contenu, array $params = []): array
     {
         file_put_contents($this->dossier . DIRECTORY_SEPARATOR . 'essai.model', $contenu);
