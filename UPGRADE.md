@@ -59,7 +59,7 @@ Les gabarits existants gardent donc leur rendu.
 
 Le troisième paramètre était ignoré : le rendu se faisait toujours en Blade. `render($vue, $donnees, 'twig')` rend désormais réellement en Twig.
 
-**À faire :** vérifier les appels qui passent `'twig'`. Le gabarit `<vue>.html.twig` doit exister, et l'échappement automatique de Twig s'applique (utiliser `|raw` pour du HTML de confiance).
+**À faire :** vérifier les appels qui passent `'twig'`. Le gabarit `<vue>.html.twig` doit exister, et l'échappement automatique de Twig s'applique aux variables de ce gabarit (utiliser `|raw` pour une variable HTML de confiance). L'appel `{{ action(...) }}` lui-même n'a pas besoin de `|raw` : la fonction `action` est déclarée sûre.
 
 ## 8. `Vue`
 

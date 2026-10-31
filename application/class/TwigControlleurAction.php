@@ -21,7 +21,10 @@ class TwigControlleurAction extends \Twig\Extension\AbstractExtension
      */
     public function getFunctions() {
         return array(
-            new \Twig\TwigFunction("action", array($this, "inserer")),
+            // action() insère un fragment déjà rendu (et échappé) par son propre moteur :
+            // il est déclaré sûr, comme sous Twig 1 + windwalker 3. call, session et
+            // server renvoient des valeurs quelconques : ils restent échappés.
+            new \Twig\TwigFunction("action", array($this, "inserer"), ['is_safe' => ['html']]),
             new \Twig\TwigFunction("call", array($this, "getClassMethodStatic")),
             new \Twig\TwigFunction("session", array($this, "afficheSession")),
             new \Twig\TwigFunction("server", array($this, "afficheServer"))
