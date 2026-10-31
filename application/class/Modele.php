@@ -12,10 +12,10 @@ namespace MVC\Classe;
 class Modele
 {
     /**
-     * Ligne « cle : valeur » d'un .model. La valeur admet les lettres accentuées,
-     * les tableaux {…} et les sous-tableaux […] (avec =).
+     * Ligne « cle : valeur » d'un .model : clé stricte, valeur libre (tout
+     * caractère hors retour à la ligne, le premier « : » sépare la clé).
      */
-    private const MOTIF_LIGNE = "#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)\[\]=]*[ ]*)#";
+    private const MOTIF_LIGNE = '#^[ \t]*([a-zA-Z_+]+)[ \t]*:([^\r\n]*)#';
 
     public $page;
 
@@ -31,7 +31,12 @@ class Modele
             foreach ($fichier as $ligne_num => $ligne) {
                 //on recherche le pattern des parametres
                 if (preg_match(self::MOTIF_LIGNE, $ligne, $matches)) {
-                    $this->page[trim($matches[1])] = self::analyserValeur($matches[2]);
+                    $cle = trim($matches[1]);
+                    $this->page[$cle] = self::analyserValeur($matches[2]);
+                    if (is_array($this->page[$cle]) && !self::crochetsEquilibres($matches[2])) {
+                        Logger::addLog('modele', '[Modele] ' . basename($modele)
+                            . ' : crochets mal formés dans la valeur de « ' . $cle . ' »');
+                    }
                 }
             }
 
@@ -85,6 +90,23 @@ class Modele
         }
 
         return $tableau;
+    }
+
+    /**
+     * Faux si un « ] » n'a pas de « [ » ouvrant ou si un « [ » reste ouvert.
+     */
+    private static function crochetsEquilibres(string $valeur): bool
+    {
+        $profondeur = 0;
+        foreach (str_split($valeur) as $octet) {
+            if ($octet === '[') {
+                $profondeur++;
+            } elseif ($octet === ']' && --$profondeur < 0) {
+                return false;
+            }
+        }
+
+        return $profondeur === 0;
     }
 
     /**

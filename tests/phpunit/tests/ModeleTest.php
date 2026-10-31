@@ -105,6 +105,61 @@ final class ModeleTest extends TestCase
         }
     }
 
+    public function testValeursAvecPonctuationNonTronquees(): void
+    {
+        $page = $this->lire(
+            "arianeparams : {[], [f=a.pdf]}\n"
+            . "liens : {[url=https://exemple.org/x?y=1]}\n"
+            . "prix : {[montant=5 €, note=l’été], 100%}\n"
+            . "devise : 5 € pour l’été\n"
+            . "page_title : Accueil : bienvenue\r\n"
+        );
+
+        $this->assertSame([[], ['f' => 'a.pdf']], $page['arianeparams']);
+        $this->assertSame([['url' => 'https://exemple.org/x?y=1']], $page['liens']);
+        $this->assertSame([['montant' => '5 €', 'note' => 'l’été'], '100%'], $page['prix']);
+        $this->assertSame('5 € pour l’été', $page['devise']);
+        $this->assertSame('Accueil : bienvenue', $page['page_title']);
+    }
+
+    /**
+     * @dataProvider crochetsMalFormes
+     */
+    public function testCrochetsMalFormesJournalisesValeurInchangee(string $valeur, array $attendu): void
+    {
+        $journal = LOG_PATH . DIRECTORY_SEPARATOR . 'app.modele.log';
+        $avant = is_file($journal) ? filesize($journal) : 0;
+
+        $page = $this->lire("cassee : $valeur\nname : essai\n");
+
+        clearstatcache();
+        $ajout = is_file($journal) ? substr((string) file_get_contents($journal), $avant) : '';
+        if ($avant === 0 && is_file($journal)) {
+            unlink($journal);
+        }
+        $this->assertSame($attendu, $page['cassee']);
+        $this->assertMatchesRegularExpression('/essai\.model.*« cassee »/', $ajout);
+    }
+
+    public function crochetsMalFormes(): array
+    {
+        return [
+            'crochet non fermé' => ['{[a, b}', ['[a, b']],
+            'crochet fermant isolé' => ['{[k=v], ]}', [['k' => 'v'], ']']],
+        ];
+    }
+
+    public function testCrochetsBienFormesNonJournalises(): void
+    {
+        $journal = LOG_PATH . DIRECTORY_SEPARATOR . 'app.modele.log';
+        $avant = is_file($journal) ? filesize($journal) : 0;
+
+        $this->lire("arianeparams : {[], [id=4]}\n");
+
+        clearstatcache();
+        $this->assertSame($avant, is_file($journal) ? filesize($journal) : 0);
+    }
+
     private function lire(string $contenu, array $params = []): array
     {
         file_put_contents($this->dossier . DIRECTORY_SEPARATOR . 'essai.model', $contenu);
