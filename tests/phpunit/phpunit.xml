@@ -2,6 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
          bootstrap="tests/amorce.php"
+         convertDeprecationsToExceptions="true"
          colors="true">
   <testsuites>
     <testsuite name="SAND Classes">
@@ -9,6 +10,7 @@
     </testsuite>
     <testsuite name="SAND Rendu">
       <file>./tests/RenduTest.php</file>
+      <file>./tests/VueTest.php</file>
     </testsuite>
   </testsuites>
 

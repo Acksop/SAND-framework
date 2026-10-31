@@ -60,6 +60,39 @@ final class RenduTest extends TestCase
         $this->assertSame('priorite-layout', trim($this->action->renderTwig('priorite', [])));
     }
 
+    public function testLaVuePasseAvantLeLayoutEtLeSysteme(): void
+    {
+        $this->assertSame('concurrent-view', trim($this->action->renderBlade('concurrent', [])));
+        $this->assertSame('concurrent-view', trim($this->action->renderTwig('concurrent', [])));
+    }
+
+    public function testBladeDoubleAccoladeAfficheSansEchapper(): void
+    {
+        $html = $this->action->renderBlade('echappement', []);
+
+        $this->assertStringContainsString('brut:<b>x</b>|', $html);
+    }
+
+    public function testBladeTripleAccoladeEchappe(): void
+    {
+        $html = $this->action->renderBlade('echappement', []);
+
+        $this->assertStringContainsString('|echappe:&lt;b&gt;x&lt;/b&gt;', $html);
+    }
+
+    public function testUnMoteurInconnuLeveUneException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('smarty');
+
+        \MVC\Classe\Rendu::rendre('smarty', 'page', [], __DIR__ . '/gabarits', \TestAction::$cache);
+    }
+
+    public function testAucuneDepreciationAuChargement(): void
+    {
+        $this->assertSame([], $GLOBALS['SAND_DEPRECIATIONS'] ?? []);
+    }
+
     public function testUneVueBladeAppelleUneAction(): void
     {
         $html = $this->action->renderBlade('page-action', ['qui' => 'Ana']);

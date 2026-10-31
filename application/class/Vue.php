@@ -13,9 +13,26 @@ class Vue
 {
     public $ecran;
     public $block_body;
-    
-    public function __construct($page_params)
+
+    /** @var string Racine des gabarits (view, layout, system). */
+    private $racineVues;
+    /** @var string Dossier des contrôleurs de page. */
+    private $dossierControleurs;
+    /** @var string|null Cache Blade (null : racine des vues/cache). */
+    private $cacheBlade;
+
+    /**
+     * Les trois derniers paramètres sont facultatifs : par défaut VIEW_PATH,
+     * CONTROLLER_PATH et VIEW_PATH/cache (les tests y passent leurs dossiers).
+     */
+    public function __construct($page_params, $racineVues = null, $dossierControleurs = null, $cacheBlade = null)
     {
+        // Gardés en propriétés : extract() ci-dessous ne peut pas les écraser.
+        $this->racineVues = $racineVues ?? VIEW_PATH;
+        $this->dossierControleurs = $dossierControleurs ?? CONTROLLER_PATH;
+        $this->cacheBlade = $cacheBlade;
+        unset($racineVues, $dossierControleurs, $cacheBlade);
+
         //$templateData = array();
         $url_params = array();
         $templateData = $page_params;
@@ -33,13 +50,13 @@ class Vue
         $flag_exist = false;
         switch ($engine){
             case 'twig':
-                if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".html.twig")) {
+                if (file_exists($this->racineVues.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".html.twig")) {
                     $flag_exist = true;
                 }
                 break;
             case 'blade':
             default:
-                if (file_exists(VIEW_PATH.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
+                if (file_exists($this->racineVues.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR.$name.".blade.php")) {
                     $flag_exist = true;
                 }
         }
@@ -48,16 +65,22 @@ class Vue
 
         if($flag_exist){
             //l'inclusion du controlleur doit renvoyer le tableau $templateData
-            require CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
+            require $this->dossierControleurs . DIRECTORY_SEPARATOR . $name . '.php';
 
             foreach ($page_params as $key => $value) {
                 $templateData[$key] = $value;
             }
 
-            // Rendu windwalker/renderer 4 : view > layout > system, cache Blade dans VIEW_PATH/cache
-            echo Rendu::rendre($engine === 'twig' ? 'twig' : 'blade', $name, $templateData);
+            // Rendu windwalker/renderer 4 : view > layout > system, cache Blade
+            echo Rendu::rendre(
+                $engine === 'twig' ? 'twig' : 'blade',
+                $name,
+                $templateData,
+                $this->racineVues,
+                $this->cacheBlade
+            );
         } else {
-            include CONTROLLER_PATH . DIRECTORY_SEPARATOR . $name . '.php';
+            include $this->dossierControleurs . DIRECTORY_SEPARATOR . $name . '.php';
         }
         $this->ecran = ob_get_clean();
         return $this;

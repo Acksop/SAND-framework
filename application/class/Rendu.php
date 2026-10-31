@@ -26,9 +26,11 @@ use Windwalker\Renderer\TwigRenderer;
 class Rendu
 {
     /**
-     * Rend un gabarit avec le moteur demandé ('twig' ou, par défaut, 'blade').
+     * Rend un gabarit avec le moteur demandé : 'blade' ou 'twig'.
      *
      * Pour Twig, le nom est donné sans extension : « index » charge index.html.twig.
+     *
+     * @throws \InvalidArgumentException si le moteur est inconnu
      */
     public static function rendre(
         string $moteur,
@@ -37,11 +39,16 @@ class Rendu
         string $racine = VIEW_PATH,
         ?string $cache = null
     ): string {
-        if ($moteur === 'twig') {
-            return self::twig($racine)->render($nom . '.html.twig', $donnees);
+        switch ($moteur) {
+            case 'twig':
+                return self::twig($racine)->render($nom . '.html.twig', $donnees);
+            case 'blade':
+                return self::blade($racine, $cache)->render($nom, $donnees);
+            default:
+                throw new \InvalidArgumentException(
+                    sprintf('Moteur de rendu inconnu « %s » : attendu « blade » ou « twig ».', $moteur)
+                );
         }
-
-        return self::blade($racine, $cache)->render($nom, $donnees);
     }
 
     /**
