@@ -13,10 +13,15 @@ class Modele
 {
     public $page;
     
-    public function __construct($base_param)
+    /**
+     * @param array       $base_param nom de la page (`name`) et paramètres d'URL (`params`)
+     * @param string|null $dossier    dossier des .model (défaut : MODELS_PATH)
+     */
+    public function __construct($base_param, ?string $dossier = null)
     {
-        if (file_exists(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model')) {
-            $fichier = file(MODELS_PATH.DIRECTORY_SEPARATOR.$base_param['name'].'.model');
+        $modele = ($dossier ?? MODELS_PATH) . DIRECTORY_SEPARATOR . $base_param['name'] . '.model';
+        if (file_exists($modele)) {
+            $fichier = file($modele);
             foreach ($fichier as $ligne_num => $ligne) {
                 //on recherche le pattern des parametres
                 if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)]*[ ]*)#", $ligne, $matches)) {
@@ -26,15 +31,15 @@ class Modele
                         if (preg_match_all("#(?<capture>[0-9a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- ']*)#", $matches[2], $arrayMatches)) {
                             $array = array();
                             foreach ($arrayMatches['capture'] as $val) {
-                                if ($val != '') {
-                                    $array[] = $val;
+                                if (trim($val) !== '') {
+                                    $array[] = trim($val);
                                 }
                             }
-                            $this->page[$matches[1]] = $array;
+                            $this->page[trim($matches[1])] = $array;
                             continue;
                         }
                     }
-                    $this->page[$matches[1]] = $matches[2];
+                    $this->page[trim($matches[1])] = trim($matches[2]);
                 }
             }
 

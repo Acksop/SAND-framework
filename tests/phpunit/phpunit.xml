@@ -25,6 +25,9 @@
       <file>./tests/TwigEchappementTest.php</file>
       <file>./tests/ActionInsertionTest.php</file>
     </testsuite>
+    <testsuite name="SAND Divers">
+      <file>./tests/ModeleTest.php</file>
+    </testsuite>
   </testsuites>
 
   <logging>
