@@ -3,7 +3,7 @@
 
 namespace MVC\Classe\Implement;
 
-use MVC\Classe\Implement\Contrat\HttpReponseInterface;
+use MVC\Classe\Implement\Contract\HttpReponseInterface;
 
 class HttpReponse extends Action implements HttpReponseInterface
 {

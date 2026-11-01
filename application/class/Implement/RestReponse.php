@@ -6,7 +6,7 @@ namespace MVC\Classe\Implement;
 use MVC\Classe\Dumper;
 use MVC\Classe\Url;
 use MVC\Classe\HttpMethod;
-use MVC\Classe\Implement\Contrat\RestReponseInterface;
+use MVC\Classe\Implement\Contract\RestReponseInterface;
 
 class RestReponse implements RestReponseInterface
 {
