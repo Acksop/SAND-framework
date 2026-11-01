@@ -42,6 +42,8 @@
  
 > Des commandes consoles faciles à mettre en place pour les applications nécessitant de la maintenance journalière automatisée
 
+> Une API REST au format `wp-json` (dossier `api/`), servie avant le routage MVC, avec des clés d'API pour les écritures
+
 </p>
 </details>
 
@@ -75,6 +77,7 @@ cela permettra de stabiliser les ressources publiques tierces, pour que tout fon
 ### Afin de créer une nouvelle page vous devez instancier trois fichiers contenant diverses variables, dont voici les adresses:
 
 `application > include > controlleurs > le_nom_de_mapage.php` contenant:
+
  - les commandes permettant de gérer un formulaire
  - un ou plusieurs accès à la base de données
  - des variables instanciées dans le tableau `$templateData` permettant l'affichage dans la vue blade ou twig
@@ -83,6 +86,7 @@ cela permettra de stabiliser les ressources publiques tierces, pour que tout fon
 
 `application > include > modeles > le_nom_de_mapage.model` contenant
  les variables spécifiques à la page de l'application. soit par exemple:
+
 ```
 name : le_nom_de_mapage
 page_title : le title du head de la page html rendue
@@ -93,6 +97,7 @@ ariane : {acceuil, test d'acceuil}
 arianelink : {index, le_nom_de_mapage}
 paramsN : tout(s) paramètre(s) supplémentaire(s)
 ```
+
 avec en plus de cela : 
 `engine : blade` pour un layout blade ou `engine : twig` pour un layout twig. Dans le cas où l'engine est a `none` alors vous pouvez tout à fait afficher la page directement dans le controlleur,
 seulement il vous faudra réaliser à la main le template l'affichant en recréant un systeme de chargement complet.
@@ -113,6 +118,36 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 > Mais bon, vous pouvez aussi tout à fait utiliser la commande:
 > 
 > `php console/bin.php module:add`
+
+## 🔌 Nouveauté de la version 4 : l'API REST `api/`
+
+SAND embarque une API REST, dans le dossier `api/` à la racine (espace de noms `SAND\Api\…`), dont les adresses imitent celles de WordPress. Toute requête dont le chemin commence par `/wp-json` ou `/api` est traitée par `SAND\Api\Component\Router` **avant** le routage MVC et la maintenance. La réponse est toujours en JSON, erreurs comprises.
+
+| Requête | Action du contrôleur |
+|---|---|
+| `GET /wp-json/wp/v2/posts` | `wp\v2\Posts::getItems()` |
+| `GET /wp-json/wp/v2/posts/45` | `wp\v2\Posts::getItem('45')` |
+| `POST /wp-json/v1/ereferer` (ou `/api/v1/ereferer`) | `v1\Ereferer::createItem($body)` |
+| `PUT` ou `PATCH /api/v1/<ressource>/45` | `updateItem('45', $body)` |
+| `DELETE /api/v1/<ressource>/45` | `deleteItem('45')` |
+| `OPTIONS …` | `schema()` |
+
+- **Ressources livrées :** `wp/v2/{posts,pages,categories,comments,tags}`, qui répondent proprement aux robots qui sondent un WordPress (404 en JSON), et `v1/ereferer`, qui reçoit les articles du réseau ereferer.com. Le stockage de ces articles est confié à l'application, qui implémente `SAND\Api\Contract\DepotSoumissions` et la déclare dans la constante `API_DEPOT_SOUMISSIONS` ; sans elle, la route répond 501.
+- **Clés d'API :** `GET`, `HEAD` et `OPTIONS` sont publics. Les autres méthodes exigent `Authorization: Bearer <clé>` ; sinon, 401.
+
+  ```bash
+  cp api/config/api_keys.php.skel api/config/api_keys.php   # jamais versionné
+  php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"         # clé à transmettre au client
+  ```
+
+  Dans `api_keys.php`, enregistrez de préférence l'empreinte SHA-256 de la clé plutôt que la clé elle-même.
+- **Routes explicites :** une adresse hors convention se déclare dans `api/config/routes.php`.
+- **Limites :** corps limité à `API_TAILLE_MAX_CORPS` (1 Mo par défaut, sinon 413) ; JSON invalide : 400 ; méthode non prise en charge : 405 avec l'en-tête `Allow`.
+- **Maintenance :** l'API reste joignable pendant une maintenance du site. Pour la fermer elle aussi, `define('API_PENDANT_MAINTENANCE', false);` : elle répond alors 503.
+- **Apache :** `public/.htaccess` transmet l'en-tête `Authorization` à PHP pour les chemins de l'API.
+- **Votre propre ressource :** un contrôleur `api/controller/v1/<Ressource>.php` (`SAND\Api\Controller\v1\<Ressource>`) qui étend `AbstractController` et définit les actions voulues (`getItems`, `getItem`, `createItem`, `updateItem`, `deleteItem`).
+
+L'API REST est le seul endroit du framework où d'autres verbes que `GET` et `POST` sont admis (voir l'annexe 20). Documentation complète : [18. API wp-json et Ereferer](<data/docs/18. API wp-json et Ereferer.md>). Pour migrer une application existante vers la version 4 (PHP 8.2 ou plus, espaces de noms `SAND\…`, API) : [UPGRADE.md](UPGRADE.md).
 
 ## Documentation
 
