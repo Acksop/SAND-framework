@@ -1,6 +1,6 @@
 # Migration vers SAND-framework pour PHP 8.3
 
-Ce guide liste les ruptures introduites par la branche `feature/convention-php83` et ce qu'il faut faire dans une application ou un module existant. Sur les branches `devel` et `4.x-dev`, les espaces de noms du framework sont `SAND\…` (voir le § 17) ; les exemples ci-dessous les emploient.
+Ce guide liste les ruptures introduites par la branche `feature/convention-php83` et ce qu'il faut faire dans une application ou un module existant. Les espaces de noms du framework sont désormais `SAND\…` (voir le § 17) ; les exemples ci-dessous les emploient.
 
 ## 1. PHP 8.2 minimum
 
@@ -169,9 +169,9 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **Piste d'évolution :** une aide commune `Chemin::segments()` (découpage du chemin de la requête, aujourd'hui répété dans `Url` et dans le routeur de l'API) n'a pas été faite ; c'est un refactoring plus large, à envisager dans une version ultérieure.
 - Voir `data/docs/18. API wp-json et Ereferer.md`.
 
-## 17. Espaces de noms `MVC\…` → `SAND\…` (branches `devel` et `4.x-dev`)
+## 17. Espaces de noms `MVC\…` → `SAND\…`
 
-La branche `devel` avait commencé, en 2022, à renommer les espaces de noms du framework ; la fusion avec le travail PHP 8.3 termine ce renommage. La branche `main` garde `MVC\…`.
+La branche `devel` avait commencé, en 2022, à renommer les espaces de noms du framework ; la fusion avec le travail PHP 8.3 termine ce renommage. Depuis le 01/11/2026, `main`, `devel` et `4.x-dev` partent de cet espace de noms ; le dernier état de `main` en `MVC\…` est le commit `29b12d3`.
 
 | Avant | Après |
 |---|---|
