@@ -10,7 +10,7 @@ namespace Tests;
  * Les constantes de test (fichier de clés, dépôt, maintenance...) sont définies
  * par un script routeur temporaire qui inclut ensuite public/index.php (php -S
  * n'applique pas auto_prepend_file à son routeur) : tout est écrit dans un
- * dossier temporaire, jamais dans Api/config/. Un fichier note à la fin de
+ * dossier temporaire, jamais dans api/config/. Un fichier note à la fin de
  * chaque requête si la classe Controlleur a été chargée.
  */
 final class ServeurPhpIntegre

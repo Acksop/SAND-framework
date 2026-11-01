@@ -29,7 +29,7 @@ final class ApiHttpTest extends TestCase
 
     /**
      * Le fichier de clés est écrit par ServeurPhpIntegre dans son dossier temporaire
-     * (constante API_FICHIER_CLES), jamais dans Api/config/.
+     * (constante API_FICHIER_CLES), jamais dans api/config/.
      */
     private function demarrerAvecCles(array $ajouts = []): ServeurPhpIntegre
     {

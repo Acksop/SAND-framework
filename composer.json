@@ -14,9 +14,10 @@
           "MVC\\Domain\\" : "./domain",
           "MVC\\Command\\": "./console/command",
           "MVC\\Component\\" : "./console/component",
-          "MVC\\Api\\Component\\" : "./Api/component",
-          "MVC\\Api\\Controller\\" : "./Api/controller",
-          "MVC\\Api\\" : "./Api"
+          "MVC\\Api\\Component\\" : "./api/component",
+          "MVC\\Api\\Controller\\" : "./api/controller",
+          "MVC\\Api\\Contract\\" : "./api/contract",
+          "MVC\\Api\\" : "./api"
       }
     },
 

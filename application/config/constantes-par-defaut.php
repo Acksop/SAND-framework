@@ -25,12 +25,12 @@ defined('PAGE_IDENTIFICATION') or define('PAGE_IDENTIFICATION', 'index');
 // tout autre nom est refusé, même si ses constantes DSN_BDD_<NOM> existent
 defined('BDD_CONNEXIONS_AUTORISEES') or define('BDD_CONNEXIONS_AUTORISEES', ['default', 'bdd1', 'bdd2']);
 
-// API wp-json (Api/) : fichier des clés (empreintes SHA-256, jamais versionné,
-// modèle Api/config/api_keys.php.skel) et fichier des routes explicites
-defined('API_FICHIER_CLES') or define('API_FICHIER_CLES', dirname(__DIR__, 2) . '/Api/config/api_keys.php');
-defined('API_FICHIER_ROUTES') or define('API_FICHIER_ROUTES', dirname(__DIR__, 2) . '/Api/config/routes.php');
+// API wp-json (api/) : fichier des clés (empreintes SHA-256, jamais versionné,
+// modèle api/config/api_keys.php.skel) et fichier des routes explicites
+defined('API_FICHIER_CLES') or define('API_FICHIER_CLES', dirname(__DIR__, 2) . '/api/config/api_keys.php');
+defined('API_FICHIER_ROUTES') or define('API_FICHIER_ROUTES', dirname(__DIR__, 2) . '/api/config/routes.php');
 
-// Classe de l'hôte qui implémente MVC\Api\Contrat\DepotSoumissions (route Ereferer) ;
+// Classe de l'hôte qui implémente MVC\Api\Contract\DepotSoumissions (route Ereferer) ;
 // null : la route /wp-json/v1/ereferer répond 501
 defined('API_DEPOT_SOUMISSIONS') or define('API_DEPOT_SOUMISSIONS', null);
 

@@ -10,8 +10,8 @@ namespace MVC\Api\Controller\v1;
 
 use MVC\Api\Component\FabriqueDepot;
 use MVC\Api\Component\Response;
-use MVC\Api\Contrat\DepotSoumissions;
-use MVC\Api\Contrat\SoumissionNonModifiable;
+use MVC\Api\Contract\DepotSoumissions;
+use MVC\Api\Contract\SoumissionNonModifiable;
 use MVC\Api\Controller\AbstractController;
 
 /**

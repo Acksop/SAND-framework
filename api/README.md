@@ -1,4 +1,4 @@
-# API REST de SAND (`Api/`)
+# API REST de SAND (`api/`)
 
 Dispatcher HTTP calqué sur `wp-json` de WordPress. Toute requête dont le chemin commence par `/wp-json` ou `/api` est traitée par `MVC\Api\Component\Router`, **avant** le routage MVC et la maintenance (`Application`). La réponse est toujours en JSON, erreurs comprises.
 
@@ -7,9 +7,9 @@ Documentation complète : `data/docs/18. API wp-json et Ereferer.md`.
 ## Arborescence
 
 ```
-Api/
+api/
 ├── component/      MVC\Api\Component\   Router, Requete, Response, Auth, RouteRegistry, Arguments, FabriqueDepot, ApiException
-├── Contrat/        MVC\Api\Contrat\     DepotSoumissions (à implémenter par l'hôte), SoumissionNonModifiable
+├── contract/       MVC\Api\Contract\    DepotSoumissions (à implémenter par l'hôte), SoumissionNonModifiable
 ├── controller/     MVC\Api\Controller\  AbstractController, v1\Ereferer, wp\v2\{Posts,Pages,Categories,Comments,Tags}
 └── config/         routes.php (aucune route active), api_keys.php.skel (modèle, la copie n'est jamais versionnée)
 ```
@@ -32,7 +32,7 @@ Une action absente donne 405, avec l'en-tête `Allow`. Une ressource inconnue do
 `GET`, `HEAD` et `OPTIONS` sont publics. Les autres méthodes exigent `Authorization: Bearer <clé>`. Une clé absente ou invalide donne un 401, avec le même message dans les deux cas.
 
 ```bash
-cp Api/config/api_keys.php.skel Api/config/api_keys.php
+cp api/config/api_keys.php.skel api/config/api_keys.php
 php -r "echo bin2hex(random_bytes(32)), PHP_EOL;"   # clé à transmettre au client
 ```
 

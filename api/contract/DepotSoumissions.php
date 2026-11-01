@@ -6,7 +6,7 @@
  * @license  MIT-licence (open source)
  */
 
-namespace MVC\Api\Contrat;
+namespace MVC\Api\Contract;
 
 /**
  * Stockage des soumissions reçues par la route Ereferer.

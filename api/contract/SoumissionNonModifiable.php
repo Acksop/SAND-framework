@@ -6,7 +6,7 @@
  * @license  MIT-licence (open source)
  */
 
-namespace MVC\Api\Contrat;
+namespace MVC\Api\Contract;
 
 /**
  * Levée par un dépôt quand la soumission est déjà publiée et non forcée :

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use MVC\Api\Contrat\DepotSoumissions;
-use MVC\Api\Contrat\SoumissionNonModifiable;
+use MVC\Api\Contract\DepotSoumissions;
+use MVC\Api\Contract\SoumissionNonModifiable;
 
 /**
  * Dépôt de soumissions des tests : garde en mémoire ce qu'il reçoit.

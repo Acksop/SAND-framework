@@ -147,13 +147,13 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
 - **`neitanod/forceutf8` retiré** : `Caracter::normalise_ChaineDeCaracteres()` et `normalise_ChaineDeCaracteresUpload()` (appelées par `Bdd::faireBindRequete()` pour chaque paramètre et par `exploiterResultat()`) passent par la nouvelle `Caracter::corrigerUtf8()`, écrite avec `mb_check_encoding()` et `mb_convert_encoding()`. `ForceUTF8\Encoding::fixUTF8()` appelait `utf8_decode()`, dépréciée depuis PHP 8.2 : toute requête avec paramètres émettait une dépréciation. Même résultat pour l'UTF-8 et l'ISO-8859-1/Windows-1252 (converti en UTF-8), et le double encodage (« Ã© ») est toujours corrigé, même répété. **Différence voulue :** sous PHP 8, `fixUTF8()` remplaçait par `?` tout caractère hors Latin-1 (`œ`, `€`, `—`, idéogrammes, emoji) ; ils sont désormais conservés. **À faire :** une application qui utilise elle-même `ForceUTF8\Encoding` doit ajouter `neitanod/forceutf8` à son propre `composer.json`, ou passer par `Caracter::corrigerUtf8()`.
 - **`Logger::addLog()` en ligne de commande** : sans `$_SERVER['HTTP_USER_AGENT']`, le User-Agent journalisé vaut `inconnu`, sans avertissement (le constructeur de `Browser` applique le même repli).
 
-## 16. API REST `Api/` (wp-json et Ereferer)
+## 16. API REST `api/` (wp-json et Ereferer)
 
-- **Nouveau dossier `Api/`** à la racine (`MVC\Api\…`, déclaré en PSR-4 dans `composer.json`). **À faire :** lancer `composer dump-autoload`.
+- **Nouveau dossier `api/`** à la racine (`MVC\Api\…`, déclaré en PSR-4 dans `composer.json`). **À faire :** lancer `composer dump-autoload`.
 - **Ordre dans `Application` :** une requête dont le chemin commence par `/wp-json` ou `/api` (après `BASE_SERVER_DIRECTORY`) est confiée à `MVC\Api\Component\Router`, **avant** la maintenance, `Url`, `Dispacher` et `Controlleur`. Elle reçoit toujours une réponse JSON. `Application::$api` vaut alors `true` et `$controlleur` reste `null`. **À faire :** si l'application a une page MVC nommée `api` (ou `wp-json`), la renommer, car elle n'est plus atteignable. L'API reste joignable pendant une maintenance.
 - **`public/.htaccess`** recopie l'en-tête `Authorization` dans `HTTP_AUTHORIZATION` (règle `E=HTTP_AUTHORIZATION`), pour les seuls chemins `^(wp-json|api)/`. **À faire :** reporter ces deux lignes (`RewriteCond` et `RewriteRule`) dans un `.htaccess` ou un vhost personnalisé, ou utiliser `CGIPassAuth On`.
-- **Clés :** copier `Api/config/api_keys.php.skel` en `Api/config/api_keys.php` (ignoré par git) et y mettre une clé générée par `bin2hex(random_bytes(32))`, ou son empreinte SHA-256. Sans ce fichier, toute écriture (`POST`, `PUT`, `PATCH`, `DELETE`) répond 401.
-- **Nouvelles constantes** (dans `constantes-par-defaut.php`) : `API_FICHIER_CLES`, `API_FICHIER_ROUTES` et `API_DEPOT_SOUMISSIONS` (défaut `null`). **À faire :** pour recevoir les articles d'ereferer.com, implémenter `MVC\Api\Contrat\DepotSoumissions` et déclarer la classe dans `API_DEPOT_SOUMISSIONS`. Sans cela, `/wp-json/v1/ereferer` répond 501.
+- **Clés :** copier `api/config/api_keys.php.skel` en `api/config/api_keys.php` (ignoré par git) et y mettre une clé générée par `bin2hex(random_bytes(32))`, ou son empreinte SHA-256. Sans ce fichier, toute écriture (`POST`, `PUT`, `PATCH`, `DELETE`) répond 401.
+- **Nouvelles constantes** (dans `constantes-par-defaut.php`) : `API_FICHIER_CLES`, `API_FICHIER_ROUTES` et `API_DEPOT_SOUMISSIONS` (défaut `null`). **À faire :** pour recevoir les articles d'ereferer.com, implémenter `MVC\Api\Contract\DepotSoumissions` et déclarer la classe dans `API_DEPOT_SOUMISSIONS`. Sans cela, `/wp-json/v1/ereferer` répond 501.
 - **Reprise depuis l'ancienne API de B25 (`application/__api`) :** espaces de noms `B25\Api\…` → `MVC\Api\…` ; actions `get_items`, `get_item`, `create_item`, `update_item`, `delete_item` → `getItems`, `getItem`, `createItem`, `updateItem`, `deleteItem` (PSR-1). Un contrôleur renvoie un tableau ou une `Response`, sans `echo` ni `die()`. Une clé invalide donne 401 (et non plus 403). Il n'y a plus de sortie HTML (`?format=html`). Les routes explicites s'écrivent `$registre->register(...)`.
 - **Limites et validations de l'API :**
   - le corps n'est lu qu'après l'authentification ;
@@ -164,7 +164,7 @@ Les éléments suivants ne sont plus compatibles avec PHP 8.3 et ne doivent pas 
   - empreintes normalisées en minuscules ;
   - message 405 sans la méthode, `OPTIONS` sans nom de classe, journal limité à la classe et au message tronqué.
 - **Maintenance :** la nouvelle constante **`API_PENDANT_MAINTENANCE`** vaut `true` par défaut, et l'API reste joignable pendant une maintenance. **À faire :** pour la fermer, la mettre à `false` dans `app-parameters.php` ; elle répond alors 503 en JSON.
-- **Routes explicites :** une route `GET` de `Api/config/routes.php` est publique, sans clé.
+- **Routes explicites :** une route `GET` de `api/config/routes.php` est publique, sans clé.
 - **Piste d'évolution :** une aide commune `Chemin::segments()` (découpage du chemin de la requête, aujourd'hui répété dans `Url` et dans le routeur de l'API) n'a pas été faite ; c'est un refactoring plus large, à envisager dans une version ultérieure.
 - Voir `data/docs/18. API wp-json et Ereferer.md`.
 

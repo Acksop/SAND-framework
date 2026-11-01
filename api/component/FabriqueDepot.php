@@ -8,7 +8,7 @@
 
 namespace MVC\Api\Component;
 
-use MVC\Api\Contrat\DepotSoumissions;
+use MVC\Api\Contract\DepotSoumissions;
 
 /**
  * Instancie le dépôt de soumissions déclaré par la constante API_DEPOT_SOUMISSIONS.

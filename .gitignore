@@ -12,7 +12,7 @@ application/config/hybrid-authentification-config.php
 application/config/soap-constantes.php
 application/config/console-parameters.php
 application/config/ldap-parameters.php
-Api/config/api_keys.php
+api/config/api_keys.php
 
 domain/Component/*
 

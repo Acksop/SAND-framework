@@ -16,7 +16,7 @@ namespace MVC\Api\Component;
  * (POST, PUT, PATCH, DELETE) exigent une clé valide.
  *
  * Les clés ne sont jamais stockées en clair : seule leur empreinte SHA-256
- * est connue (constante API_KEYS, voir Api/config/api_keys.php.skel) et
+ * est connue (constante API_KEYS, voir api/config/api_keys.php.skel) et
  * comparée avec hash_equals(). Clé absente ou invalide : même 401, même message.
  */
 final class Auth
