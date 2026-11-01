@@ -8,7 +8,7 @@
 
 **Tech Stack :** PHP 8.3, Composer 2, twig/twig 3, illuminate/view (version PHP 8.3), windwalker/renderer (ou adaptateur), PHPUnit 9.6.
 
-Spec : `docs/superpowers/specs/2026-10-31-sand-framework-convention-php83-design.md` (copie dans le dépôt SAND, ajoutée par Emmanuel le 01/11/2026).
+Spec : `data/superpowers/specs/2026-10-31-sand-framework-convention-php83-design.md` (copie dans le dépôt SAND, ajoutée par Emmanuel le 01/11/2026).
 
 ## Global Constraints
 
@@ -95,7 +95,7 @@ Spec : `docs/superpowers/specs/2026-10-31-sand-framework-convention-php83-design
 
 ### Task 4 : tableau de classement des différences B25 → framework (B1, sans report)
 
-**Files :** Create `B25_FR/ACTUAL/docs/superpowers/specs/2026-10-31-sand-report-b25-classement.md` (copie dans `docs/superpowers/specs/` du dépôt SAND depuis le 01/11/2026).
+**Files :** Create `B25_FR/ACTUAL/docs/superpowers/specs/2026-10-31-sand-report-b25-classement.md` (copie dans `data/superpowers/specs/` du dépôt SAND depuis le 01/11/2026).
 
 - [x] **Step 1** : copier `B25_FR/ACTUAL/application/__sand/application/{class,objets}` et `<clone>/application/{class,objets}` dans le scratchpad, supprimer les `\r`, normaliser `B25\SAND_Module\Classe` → `MVC\Classe` et `B25\SAND_Module\Object` → `MVC\Object`, comparer fichier par fichier (`diff -w`).
 - [x] **Step 2** : pour chaque différence (25 fichiers : `class/{Asynchonous,Bdd,Browser,Caracter,Controlleur,ControlleurAction,Dispacher,Dumper,HttpMethod,Logger,Modele,Modular,ModularRegister,TwigControlleurAction,Url,Vue}.php`, `class/Implement/{Action,Conduit,HttpReponse,RestReponse}.php`, `objets/{Environment,Ldap,Session,XssToken}.php`, `objets/Guard.php` absent du framework), une ligne : fichier, extrait résumé, classement **à reporter / propre à B25 / à discuter**, justification. Tenir compte de la task 2 (fichiers déjà réécrits).
