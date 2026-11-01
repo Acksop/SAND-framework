@@ -10,15 +10,23 @@ class Browser
 
     public function __construct()
     {
-        $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $this->userAgent = self::userAgent();
         $this->user = $this->get_browser_name();
         //Logger::addLog('http.browser',$this->user);
+    }
+
+    /**
+     * User-Agent de la requête ; « inconnu » s'il manque (ligne de commande).
+     */
+    private static function userAgent(): string
+    {
+        return (string) ($_SERVER['HTTP_USER_AGENT'] ?? 'inconnu');
     }
 
     public static function get()
     {
         // Make case insensitive.
-        $t = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $t = strtolower(self::userAgent());
 
         // If the string *starts* with the string, strpos returns 0 (i.e., FALSE). Do a ghetto hack and start with a space.
         // "[strpos()] may return Boolean FALSE, but may also return a non-Boolean value which evaluates to FALSE."
@@ -43,7 +51,7 @@ class Browser
 
     public static function get_firefox_version() {
         // Make case insensitive.
-        $t = strtolower($_SERVER['HTTP_USER_AGENT']);
+        $t = strtolower(self::userAgent());
 
         // If the string *starts* with the string, strpos returns 0 (i.e., FALSE). Do a ghetto hack and start with a space.
         // "[strpos()] may return Boolean FALSE, but may also return a non-Boolean value which evaluates to FALSE."
@@ -52,7 +60,7 @@ class Browser
 
         // Firefox Users
         if (strpos($t, 'firefox')) {
-            preg_match('/rv:(.*)\)/', $_SERVER['HTTP_USER_AGENT'], $matches, PREG_OFFSET_CAPTURE);
+            preg_match('/rv:(.*)\)/', self::userAgent(), $matches, PREG_OFFSET_CAPTURE);
             if(isset($matches[1])) {
                 return intval($matches[1][0]);
             }else{
@@ -78,7 +86,7 @@ class Browser
     }
 
     public static function get_os() {
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $user_agent = self::userAgent();
         $os_platform  = "Inconnu";
         $os_array     = array(
             '/windows nt 10/i'      =>  'Windows 10',
@@ -111,6 +119,42 @@ class Browser
             }
         }
         return $os_platform;
+    }
+
+    /**
+     * Vrai si la requête vient d'un appareil mobile : en-têtes WAP, puis
+     * User-Agent « Mobile » ou « Opera Mini », puis get_browser() seulement
+     * si browscap est configuré dans php.ini. Sans browscap, seuls les
+     * en-têtes et le User-Agent comptent. Aucun service externe n'est appelé.
+     */
+    public static function detectionMobile(): bool
+    {
+        if (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
+            return true;
+        }
+        if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'wap') !== false) {
+            return true;
+        }
+
+        $userAgent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
+        if (preg_match('/Mobile|Opera Mini/', $userAgent)) {
+            return true;
+        }
+        if ($userAgent === '' || !ini_get('browscap')) {
+            return false;
+        }
+
+        $infos = get_browser($userAgent, true);
+
+        return is_array($infos) && !empty($infos['ismobiledevice']);
+    }
+
+    /**
+     * Ancien nom (compatibilité avec B25) : délègue à detectionMobile().
+     */
+    public static function detection_mobile(): bool
+    {
+        return self::detectionMobile();
     }
 
     protected function get_browser_name()

@@ -1,30 +1,116 @@
 <?php
 
-
 namespace SAND\Classe;
+
+use SAND\Object\Environment;
 
 class ControlleurAction
 {
+    /** Longueur maximale d'un message d'exception journalisé. */
+    private const LONGUEUR_MESSAGE_JOURNAL = 200;
+
+    /**
+     * Appelle une action depuis un gabarit : 'nom' appelle NomAction::default(),
+     * 'nom.methode' appelle NomAction::methode(), avec $data comme arguments.
+     *
+     * La classe est chargée depuis ACTION_PATH, sauf si elle est déjà définie.
+     * Action introuvable (ou nom invalide) : journalisée dans app.error.log,
+     * renvoie ''. Action qui lève une exception : journalisée, relancée en mode
+     * débogage (Environment::debug()), sinon renvoie ''.
+     */
     public static function inserer($action, $data = array())
     {
         //on extrait la classe d'appel de l'action
-        $action = explode('.', $action);
+        $action = explode('.', (string) $action);
         $class = ucfirst($action[0]) . "Action";
-        //TODO: use try ... catch with \MVC\Classe\Logger to log error
-        if (is_file(ACTION_PATH . DIRECTORY_SEPARATOR . $class . ".php")) {
-            require_once ACTION_PATH . DIRECTORY_SEPARATOR . $class . ".php";
-            //On charge la classe Action de façon réflextive
-            $slot = new $class();
-            //si l'action passé en parametre est fournit avec une methode pointée on charge celle demandée sinon on charge celle par defaut
-            if (isset($action[1])) {
-                $method = $action[1];
-                //On appel la méthode de la classe action de manière reflextive
-                return $slot->$method(...$data);
-            } else {
-                return $slot->default(...$data);
-            }
-        } else {
-            /*HandleError*/
+        //méthode pointée (« nom.methode ») si fournie, sinon la méthode default()
+        $method = $action[1] ?? 'default';
+        $appel = $class . '::' . $method;
+
+        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/D', $class)) {
+            self::journaliser('action « ' . $appel . ' » introuvable : nom invalide');
+            return '';
         }
+        if (!self::methodeAutorisee($method)) {
+            self::journaliser('action « ' . $appel . ' » : méthode refusée');
+            return '';
+        }
+
+        $niveauTampon = ob_get_level();
+        try {
+            $fichier = ACTION_PATH . DIRECTORY_SEPARATOR . $class . ".php";
+            if (!class_exists($class, false) && is_file($fichier)) {
+                require_once $fichier;
+            }
+            if (!class_exists($class, false)) {
+                $detail = Environment::debug() ? ' : ' . $fichier : '';
+                self::journaliser('action « ' . $appel . ' » introuvable' . $detail);
+                return '';
+            }
+            //On charge la classe Action de façon réflexive
+            $slot = new $class();
+
+            return $slot->$method(...$data);
+        } catch (\Throwable $e) {
+            // tampons de sortie laissés ouverts par l'action
+            while (ob_get_level() > $niveauTampon) {
+                ob_end_clean();
+            }
+            try {
+                $message = 'action « ' . $appel . ' » : ' . get_class($e) . ' : ' . self::assainir($e->getMessage());
+                if (Environment::debug()) {
+                    $message .= ' (' . $e->getFile() . ':' . $e->getLine() . ')';
+                }
+                self::journaliser($message);
+            } catch (\Throwable $echecJournal) {
+                // le journal ne doit jamais masquer l'exception d'origine
+            }
+            if (Environment::debug()) {
+                throw $e;
+            }
+
+            return '';
+        }
+    }
+
+    /**
+     * Une méthode appelable depuis un gabarit commence par une minuscule
+     * (pas de méthode magique « __ ») et n'est pas déclarée par
+     * Implement\Action (render, renderTwig, renderBlade, renderJSON…).
+     */
+    private static function methodeAutorisee(string $methode): bool
+    {
+        static $methodesDuParent = null;
+        if (!preg_match('/^[a-z][A-Za-z0-9_]*$/D', $methode)) {
+            return false;
+        }
+        if ($methodesDuParent === null) {
+            $methodesDuParent = [];
+            foreach ((new \ReflectionClass(Implement\Action::class))->getMethods() as $reflexion) {
+                $methodesDuParent[strtolower($reflexion->getName())] = true;
+            }
+        }
+
+        return !isset($methodesDuParent[strtolower($methode)]);
+    }
+
+    /**
+     * Message d'exception sur une ligne, tronqué, sans la racine du projet.
+     */
+    private static function assainir(string $message): string
+    {
+        $message = str_replace(dirname(APPLICATION_PATH), '…', $message);
+
+        return mb_substr(self::surUneLigne($message), 0, self::LONGUEUR_MESSAGE_JOURNAL);
+    }
+
+    private static function surUneLigne(string $message): string
+    {
+        return (string) preg_replace('/[\x00-\x1F\x7F]+/', ' ', $message);
+    }
+
+    private static function journaliser(string $message): void
+    {
+        Logger::addLog('error', '[ControlleurAction::inserer] ' . self::surUneLigne($message));
     }
 }

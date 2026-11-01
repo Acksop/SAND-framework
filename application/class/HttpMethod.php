@@ -11,7 +11,10 @@ class HttpMethod
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
-        Logger::addLog('http.method', $this->method);
+        // Une ligne par requête : seulement en mode débogage
+        if (\SAND\Object\Environment::debug()) {
+            Logger::addLog('http.method', $this->method);
+        }
         $this->acceptResponse();
     }
 

@@ -4,7 +4,7 @@ namespace SAND\Command\Sand;
 /**
  * Class Cache
  * Commande Système du Framework permettant de gérer le cache
- * @package MVC\Command\Sand
+ * @package SAND\Command\Sand
  */
 class Cache
 {

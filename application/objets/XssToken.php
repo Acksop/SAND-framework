@@ -5,9 +5,15 @@ namespace SAND\Object;
 class XssToken
 {
 
-    public static function getNew($title,$message,$type)
+    /**
+     * Crée un jeton, le range dans $_SESSION['xss_token'] et le renvoie.
+     */
+    public static function getNew(): string
     {
-        $_SESSION['xss_token'] = self::generateUniqueToken('xss',25);
+        $jeton = self::generateUniqueToken('xss', 25);
+        $_SESSION['xss_token'] = $jeton;
+
+        return $jeton;
     }
 
     public static function remove(){
@@ -21,7 +27,7 @@ class XssToken
             } elseif (function_exists("openssl_random_pseudo_bytes")) {
                 $bytes = openssl_random_pseudo_bytes(ceil($length / 2));
             } else {
-                throw new Exception("no cryptographically secure random function available");
+                throw new \Exception("no cryptographically secure random function available");
             }
             return $prefix . substr(bin2hex($bytes), 0, $length);
     }

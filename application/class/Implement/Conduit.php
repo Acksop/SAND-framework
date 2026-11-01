@@ -3,8 +3,19 @@
 
 namespace SAND\Classe\Implement;
 
+/**
+ * Conduit appelé par une route Symfony (application/config/files/routing.yml).
+ *
+ * Les paramètres de la route (ex. {id}) deviennent des propriétés du conduit
+ * ($this->id) sans être déclarés : les propriétés dynamiques sont donc
+ * autorisées (dépréciées sinon depuis PHP 8.2).
+ */
+#[\AllowDynamicProperties]
 class Conduit extends Action
 {
+    /** @var array Données de la page transmises aux gabarits. */
+    public $templateData = [];
+
     public function initialize($application)
     {
 

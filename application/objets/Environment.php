@@ -4,6 +4,14 @@ namespace SAND\Object;
 
 class Environment
 {
+    /**
+     * Mode débogage : vrai seulement si DEBUG vaut le booléen true
+     * (une chaîne comme "false" ou "1" ne l'active pas).
+     */
+    public static function debug(): bool
+    {
+        return defined('DEBUG') && DEBUG === true;
+    }
 
     public static  function getColorMenuFromEnv()
     {

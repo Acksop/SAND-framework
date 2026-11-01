@@ -4,7 +4,7 @@ namespace SAND\Command\Sand;
 /**
  * Class Action
  * Commande Système du Framework permettant de gérer les actions
- * @package MVC\Command\Sand
+ * @package SAND\Command\Sand
  */
 class Action
 {

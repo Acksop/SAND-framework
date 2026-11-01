@@ -11,7 +11,7 @@ namespace SAND\Command\Sand;
 /**
  * Class Page
  * Commande Système du Framework permettant de gérer les pages
- * @package MVC\Command\Sand
+ * @package SAND\Command\Sand
  */
 class Page
 {

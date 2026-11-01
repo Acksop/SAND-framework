@@ -15,14 +15,22 @@ class Dumper
         echo "</pre>";
     }
     /**
-     * Fonction Statique permettant d'initialiser les valeurs de php lors du script courant
+     * Fonction Statique permettant d'initialiser les valeurs de php lors du script courant.
+     * Erreurs affichées seulement en débogage ; sinon journalisées, sans
+     * affichage (les messages contiennent les chemins du serveur).
      *
      * @return void
      */
     public static function setPHPvalues()
     {
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
+        if (\SAND\Object\Environment::debug()) {
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+        } else {
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            ini_set('log_errors', 1);
+        }
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 0);
         ini_set('default_socket_timeout', -1);
@@ -46,8 +54,8 @@ class Dumper
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         ini_set('xdebug.max_nesting_level', -1);
-        //error_reporting(E_ALL);
-        error_reporting(E_ALL & ~E_NOTICE);
+        // E_ALL : notices et dépréciations comprises (migration vers PHP 8.3)
+        error_reporting(E_ALL);
         return;
     }
     public static function needMoreTime($parsecs){

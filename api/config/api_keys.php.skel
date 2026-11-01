@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Clés d'API (modèle). Copier en api_keys.php (jamais versionné) et remplacer
+ * la valeur factice par une vraie clé, générée par : php -r "echo bin2hex(random_bytes(32));"
+ *
+ * Seule l'empreinte SHA-256 est comparée ; le client envoie la clé en clair
+ * dans l'en-tête « Authorization: Bearer <clé> ». On peut aussi écrire
+ * directement l'empreinte (hash('sha256', clé) calculé hors du dépôt).
+ */
+
+define('API_KEYS', [
+    hash('sha256', 'remplacer-par-une-cle-generee-par-bin2hex-random_bytes-32') => 'ereferer',
+]);

@@ -1,6 +1,6 @@
 <?php
 
-class %%ACTION%%Action extends MVC\Classe\Implement\Action
+class %%ACTION%%Action extends SAND\Classe\Implement\Action
 {
 
     public function render()

@@ -6,10 +6,10 @@
             "./application/config/bdd-parameters.php"
         ],
         "psr-4": {
-            "MVC\\Classe\\" : "./application/class",
-            "MVC\\Object\\" : "./application/objets",
-            "MVC\\Domain\\" : "./domain",
-            "MVC\\Command\\": "./console/command"
+            "SAND\\Classe\\" : "./application/class",
+            "SAND\\Object\\" : "./application/objets",
+            "APP\\Domain\\" : "./domain",
+            "SAND\\Command\\": "./console/command"
         }
     },
 

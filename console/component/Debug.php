@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Component;
+namespace SAND\Component;
 
 /**
  *  Composant permettant de debugger et d'initialiser certaines valeurs de php

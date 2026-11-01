@@ -4,7 +4,7 @@ namespace SAND\Command\Sand;
 /**
  * Class Module
  * Commande Système du Framework permettant de gérer les modules
- * @package MVC\Command\Sand
+ * @package SAND\Command\Sand
  */
 class Module
 {
@@ -659,7 +659,7 @@ class Module
         $git_checkout = shell_exec('cd '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist && git checkout tags/'.$version.' -b actual-dev');
         print $git_checkout;
         //add skel rewriting path of module
-        /*if (!\MVC\Component\Copy::rcopy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'*', MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist')) {
+        /*if (!\SAND\Component\Copy::rcopy(CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'*', MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist')) {
             echo "failed to copy gitlist controlleur skeleton...\n";
         }*/
         $git_stabilise = shell_exec('cp -Rf '.CONSOLE_PATH.DIRECTORY_SEPARATOR.'skel'.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR.'* '.MODULES_PATH.DIRECTORY_SEPARATOR.'gitlist'.DIRECTORY_SEPARATOR);

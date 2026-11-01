@@ -1,7 +1,7 @@
 <?php
 
 
-namespace MVC\Component;
+namespace SAND\Component;
 
 
 class Copy

@@ -5,7 +5,7 @@
 $path = PATH_URL;
 $bdd = new \SAND\Classe\Bdd();
 
-\SAND\Domain\Host::addHost($bdd, $_POST['ip'], $_POST['nom']);
+\APP\Domain\Host::addHost($bdd, $_POST['ip'], $_POST['nom']);
 
 switch ($_POST['from']) {
     case "vlan-zone+":

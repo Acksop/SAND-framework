@@ -1,6 +1,6 @@
 <?php
 
-namespace MVC\Component;
+namespace SAND\Component;
 
 use Tests\Behat\Gherkin\Loader\DirectoryLoaderTest;
 

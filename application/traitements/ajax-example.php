@@ -5,11 +5,11 @@ header("Content-Type: text/plain");
 \SAND\Object\Session::createAndTestSession();
 
 $bdd = new Bdd();
-$dns = \MVC\Domain\Dns::getDNS($bdd, $url_params['ip']);
+$dns = \APP\Domain\Dns::getDNS($bdd, $url_params['ip']);
 $alias = array();
-$reverseDns = \MVC\Domain\Dns::getReverseDNS($bdd, $url_params['ip']);
+$reverseDns = \APP\Domain\Dns::getReverseDNS($bdd, $url_params['ip']);
 foreach ($reverseDns as $row) {
-    $tab = \MVC\Domain\Dns::getAliasFromDNS($bdd, $row['valeur2_dns']);
+    $tab = \APP\Domain\Dns::getAliasFromDNS($bdd, $row['valeur2_dns']);
     $alias[] = $tab;
 }
 

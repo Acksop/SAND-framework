@@ -12,3 +12,11 @@ define('PASS_BDD1', "pass1");
 define('DSN_BDD2', "mysql:host=localhost;dbname=db2");
 define('USER_BDD2', "user2");
 define('PASS_BDD2', "pass2");
+
+// Connexion nommée supplémentaire : new \SAND\Classe\Bdd('annuaire') lit DSN_BDD_ANNUAIRE,
+// USER_BDD_ANNUAIRE et PASS_BDD_ANNUAIRE, si le nom figure dans la liste blanche
+// BDD_CONNEXIONS_AUTORISEES (voir data/docs/01.j).
+//define('BDD_CONNEXIONS_AUTORISEES', ['default', 'bdd1', 'bdd2', 'annuaire']);
+//define('DSN_BDD_ANNUAIRE', "mysql:host=localhost;dbname=annuaire");
+//define('USER_BDD_ANNUAIRE', "user_annuaire");
+//define('PASS_BDD_ANNUAIRE', "pass_annuaire");

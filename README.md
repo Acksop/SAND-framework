@@ -7,6 +7,26 @@
 <br />
 
 <details>
+<summary>↗️ A quelle utilisation se destine le framework SAND ?</summary>
+<p>
+
+> Voici quelques exemples de projets pour lesquels SAND a été ou pourrait être utilisé :
+>
+> - Un site comprenant une documentation interne en MARKDOWN et un depot git privé (https://code-source.sand-framework.app)
+> - Un outil full console pour partager les accès entre un LDAP et une grosse application de droits et de paiement de salariés
+> - Une application permettant de communiquer avec un LDAP pour une gestion des droits de personnels exterieurs à une université comprenant logs et multiples droits accès
+> - Une application web de newsletter avec envoi en mode console par tache CRON
+> - Une application web de curriculum vitae
+> - Une application web de créations de pages dynamiques
+> - Une application web comprenant un wordpress, un phplist et un site reliés sur le même domaine
+> - Une application comprennant un ou plusieurs module symfony avec gestion des droits d'accès par SAND
+> - Une applications comprennant un ou plusieurs module laravel avec gestion des droits d'accès par SAND
+> - Une application REST comprennant des appels dynamique injectés en curl 
+
+</p>
+</details>
+
+<details>
 <summary>💪 Les points forts du projet SAND-framework dans sa version actuelle</summary>
 <p>
 
@@ -14,7 +34,7 @@
  
 > A building metrics toujours disponible  
  
-> Plusieurs modules déjà disponible (Worpress, PHPList, Gitlist, ...)
+> Plusieurs modules déjà disponible (WordPress, PHPList, Gitlist, ...)
  
 > Possibilité de créer des modules SAND pour un Projet SAND (plusieurs modules SAND-view-symfony pour un projet SAND-blade, par exemple)
  
@@ -29,7 +49,7 @@
 <summary>👌 Trouvez-vous que ce projet soit assez mature ?</summary>
 <p>
 
-> N'hésitez pas à commenter dans les Discussions.
+> N'hésitez pas à commenter dans les discussions.
 
 </p>
 </details>
@@ -93,6 +113,10 @@ et faire correspondre le nom du controlleur frontal du module avec le registre.
 > Mais bon, vous pouvez aussi tout à fait utiliser la commande:
 > 
 > `php console/bin.php module:add`
+
+## Documentation
+
+La documentation est dans `data/docs/`. La convention de nommage des fichiers et le choix des méthodes HTTP sont décrits dans [l'annexe 20](<data/docs/20. Annexe - Convention de nommage et méthodes HTTP.md>).
 
 ## 🙏 Montrez votre support
 

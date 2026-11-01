@@ -5,30 +5,34 @@
         "./application/config/define-constantes.php",
         "./application/config/app-parameters.php",
         "./application/config/bdd-parameters.php",
-        "./application/config/console-parameters.php"
+        "./application/config/console-parameters.php",
+        "./application/config/constantes-par-defaut.php"
       ],
       "psr-4": {
           "SAND\\Classe\\" : "./application/class",
           "SAND\\Object\\" : "./application/objets",
           "APP\\Domain\\" : "./domain",
           "SAND\\Command\\": "./console/command",
-          "SAND\\Component\\" : "./console/component"
+          "SAND\\Component\\" : "./console/component",
+          "SAND\\Api\\Component\\" : "./api/component",
+          "SAND\\Api\\Controller\\" : "./api/controller",
+          "SAND\\Api\\Contract\\" : "./api/contract",
+          "SAND\\Api\\" : "./api"
       }
     },
 
     "require": {
-      "windwalker/renderer": "3.*",
-      "illuminate/view": "9.*",
-      "twig/twig": "2.*",
-
-      "neitanod/forceutf8": "^2.0",
-
-      "symfony/routing": "3.4.36",
-      "symfony/http-foundation": "~2.8",
-      "symfony/yaml": "~4.0",
-      "symfony/expression-language": "~3.0",
-      "symfony/config": "3.3.2"
-
+      "php": "^8.2",
+      "windwalker/renderer": "~4.1.8",
+      "illuminate/view": "^12.0",
+      "psr/container": "^2.0",
+      "symfony/cache": "^6.4",
+      "symfony/config": "^6.4",
+      "symfony/expression-language": "^6.4",
+      "symfony/http-foundation": "^6.4",
+      "symfony/routing": "^6.4",
+      "symfony/yaml": "^6.4",
+      "twig/twig": "^3.30"
     },
 
     "require-dev": {

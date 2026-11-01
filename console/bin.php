@@ -2,7 +2,7 @@
 <?php
 /**
  * Controlleur central du lancement des commandes
- * Package MVC\Command
+ * Package SAND\Command
  * @author Emmanuel ROY
  * @todo protect by chosen licence between an CC-licensed or MIT-licenced (open source)
  * @version 3.5
@@ -11,7 +11,7 @@
 global $argv;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "autoload.php";
-\MVC\Component\Debug::setPHPvalues();
+\SAND\Component\Debug::setPHPvalues();
 
 function appel_cmd($class,$static_method,$argv){
     if(method_exists($class,$static_method)) {

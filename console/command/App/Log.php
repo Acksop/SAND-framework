@@ -5,7 +5,7 @@ namespace SAND\Command\App;
 /**
  * Class Log
  * Commande Console permettant de manipuler les logs de la base de donnée
- * @package MVC\Command\GPeX
+ * @package SAND\Command\GPeX
  */
 class Log
 {
@@ -29,7 +29,7 @@ class Log
         $olderThan = $olderThan->format('Y-m-d');
 
         //connection à la base de données
-        /*$bdd = new \MVC\Classe\Bdd('bdd1');
+        /*$bdd = new \SAND\Classe\Bdd('bdd1');
         $sql = "DELETE FROM logs WHERE date_creation < {$olderThan};";
         $bdd->faireSQLRequete($sql);*/
 

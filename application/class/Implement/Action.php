@@ -1,13 +1,21 @@
 <?php
 
-
 namespace SAND\Classe\Implement;
+
+use SAND\Classe\Rendu;
 
 class Action
 {
-    public function render($view, $data)
+    /**
+     * Rend un gabarit d'action ; Blade par défaut, Twig si $engine vaut 'twig'.
+     */
+    public function render($view, $data, $engine = 'blade')
     {
-        return $this->renderBlade($view,$data);
+        if ($engine === 'twig') {
+            return $this->renderTwig($view, $data);
+        }
+
+        return $this->renderBlade($view, $data);
     }
 
     public function renderJSON($json)
@@ -16,30 +24,41 @@ class Action
         return json_encode($json, JSON_HEX_APOS);
     }
 
-    public function renderTwig($view, $data)
+    /**
+     * Rend un gabarit Twig. $dir (facultatif) remplace racineVues() pour cet
+     * appel : par exemple le dossier « vues » d'un module.
+     */
+    public function renderTwig($view, $data, ?string $dir = null)
     {
-        $paths = new \SplPriorityQueue;
-
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
-
-        $renderer = new \Windwalker\Renderer\TwigRenderer($paths);
-        $view .= '.html';
-
-        return $renderer->render($view, $data);
+        return Rendu::rendre('twig', $view, $data, $dir ?? $this->racineVues());
     }
 
-    public function renderBlade($view, $data)
+    /**
+     * Rend un gabarit Blade. Avec $dir, les gabarits sont lus sous $dir et
+     * compilés dans $dir/cache ; sans $dir, racineVues() et cheminCache().
+     */
+    public function renderBlade($view, $data, ?string $dir = null)
     {
-        $paths = new \SplPriorityQueue;
+        if ($dir !== null) {
+            return Rendu::rendre('blade', $view, $data, $dir, $dir . DIRECTORY_SEPARATOR . 'cache');
+        }
 
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "system", 100);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "layout", 200);
-        $paths->insert(VIEW_PATH . DIRECTORY_SEPARATOR . "view", 300);
+        return Rendu::rendre('blade', $view, $data, $this->racineVues(), $this->cheminCache());
+    }
 
-        $renderer = new \Windwalker\Renderer\BladeRenderer($paths, array('cache_path' => VIEW_PATH . DIRECTORY_SEPARATOR . "cache"));
+    /**
+     * Racine des gabarits (sous-dossiers view, layout, system).
+     */
+    protected function racineVues(): string
+    {
+        return VIEW_PATH;
+    }
 
-        return $renderer->render($view, $data);
+    /**
+     * Dossier de cache de compilation Blade.
+     */
+    protected function cheminCache(): string
+    {
+        return VIEW_PATH . DIRECTORY_SEPARATOR . 'cache';
     }
 }

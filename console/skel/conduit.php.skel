@@ -1,6 +1,6 @@
 <?php
 
-use MVC\Classe\Implement\Conduit;
+use SAND\Classe\Implement\Conduit;
 
 class %%CONDUIT%%Conduit extends Conduit
 {
@@ -8,10 +8,10 @@ class %%CONDUIT%%Conduit extends Conduit
     public function getService()
     {
 
-        \MVC\Object\Session::checkACL_heberges();
+        \SAND\Object\Session::checkACL_heberges();
 
         if ($this->id != 'undefined') {
-            $bdd = new \MVC\Classe\Bdd();
+            $bdd = new \SAND\Classe\Bdd();
             $sql = "SELECT * FROM table WHERE id = '{$this->id}';";
             $req = $bdd->faireSQLRequete($sql);
             $data = $bdd->exploiterResultat($req);

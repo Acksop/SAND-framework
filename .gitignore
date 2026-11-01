@@ -12,6 +12,7 @@ application/config/hybrid-authentification-config.php
 application/config/soap-constantes.php
 application/config/console-parameters.php
 application/config/ldap-parameters.php
+api/config/api_keys.php
 
 domain/Component/*
 
@@ -22,3 +23,7 @@ application/include/vues/cache/*
 application/modules/*
 
 data/doc-prince-book-generation
+
+.env
+.env.*
+application/config/cas-parameters.php
